@@ -1,5 +1,6 @@
 package com.football.freekick;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
@@ -18,7 +19,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Typeface typeface=Typeface.createFromAsset(getAssets(),"fonts/iconfont.ttf");
         TextView tvtest = (TextView) findViewById(R.id.tv_test);
+        tvtest.setTypeface(typeface);
+//        tvtest.setText(R.string.test);
 
         Register          register = new Register();
         Register.UserBean userBean = new Register.UserBean();
@@ -44,5 +48,13 @@ public class MainActivity extends AppCompatActivity {
                         Logger.d(e.getMessage());
                     }
                 });
+
+
+//        int largeMemoryClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE)).getLargeMemoryClass();
+//        Logger.d("largeMemoryClass--->"+largeMemoryClass);
+//        Bitmap bitmap[] = new Bitmap[10000];
+//        for (int i=0; i<bitmap.length; i++) {
+//            bitmap[i] = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+//        }
     }
 }
