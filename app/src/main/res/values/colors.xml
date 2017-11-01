@@ -3,4 +3,58 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!--字体蓝色-->
+    <color name="text_color_bule">#50A2B5</color>
+    <!--浅灰-->
+    <color name="gary_line">#D2D3D4</color>
+    <!-- 深黑 -->
+    <color name="black_dark">#111111</color>
+    <!--中黑-->
+    <color name="black_mid">#757575</color>
+    <!-- 浅黑 -->
+    <color name="black">#000000</color>
+    <!-- 浅黑 -->
+    <color name="black_light">#333333</color>
+    <!-- 透明 -->
+    <color name="transparent">#00000000</color>
+    <!-- 深灰 -->
+    <color name="gray_dark">#444444</color>
+    <!-- 中灰 -->
+    <color name="gray_mid">#c3c3c3</color>
+    <!-- 浅灰 -->
+    <color name="gray_light">#e2e2e2</color>
+    <!-- 浅灰 -->
+    <color name="gray_disable">#d7d7d7</color>
+    <!-- 白 -->
+    <color name="white">#ffffff</color>
+    <!-- 浅白 -->
+    <color name="white_light">#f7f7f7</color>
+    <!-- 白 -->
+    <color name="white_20">#33ffffff</color>
+    <!--灰-->
+    <color name="huide">#CCCCCC</color>
+    <!-- 浅橙 -->
+    <color name="orange_light">#de523d</color>
+    <!-- 深橙 -->
+    <color name="orange_dark">#c54431</color>
+    <!-- 黄 -->
+    <color name="yello">#f2a820</color>
+    <!-- 浅绿 -->
+    <color name="green_light">#96d458</color>
+    <!-- 紫 -->
+    <color name="purple">#9d5adc</color>
+    <!-- 中蓝 -->
+    <color name="blue_mid">#13B8F5</color>
+    <!-- 浅蓝 -->
+    <color name="blue_light">#21b7c2</color>
+    <!--红-->
+    <color name="red">#ff0000</color>
+    <!--蓝绿-->
+    <color name="blue_green">#2D90A5</color>
+    <!-- 透明白 -->
+    <color name="trans_white_login">#3fff</color>
+
+    <color name="bottom_blue_bg">#15549e</color>
+    <color name="status_bar_color">#334b64</color>
 </resources>

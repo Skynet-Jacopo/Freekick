@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Freekick</string>
     <string name="test">&#xe643;</string>
+    <string name="testword">This is the test words</string>
+
+
+    <string name="establish">Create Match</string>
+    <string name="partake">Join Match</string>
+    <string name="record">Record</string>
+    <string name="mine">My Wall</string>
+    <string name="set_up">Setting</string>
+
+
 </resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_marginTop="18px"
+        android:id="@+id/bar_iv"
+        android:layout_width="48px"
+        android:layout_height="32px"
+        android:layout_centerHorizontal="true"
+        android:focusable="false"
+        android:src="@mipmap/ic_launcher"
+        >
+    </ImageView>
+
+    <TextView
+        android:layout_marginBottom="12px"
+        android:layout_marginTop="14px"
+        android:id="@+id/bar_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bar_iv"
+        android:gravity="center_horizontal"
+        android:text="aaa"
+        android:textColor="@color/white"
+        android:textSize="22px"
+        >
+    </TextView>
+
+</com.zhy.autolayout.AutoRelativeLayout>

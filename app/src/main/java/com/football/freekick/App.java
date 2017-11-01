@@ -3,12 +3,12 @@ package com.football.freekick;
 import android.app.Application;
 import android.content.Context;
 
+import com.football.freekick.language.LanguageCountry;
+import com.football.freekick.language.LanguageSwitcher;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.HttpHeaders;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
-
-import org.xutils.x;
 
 
 /**
@@ -16,16 +16,18 @@ import org.xutils.x;
  */
 public class App extends Application {
     public static final String FREEKICK = "FREEKICK";
-    public static Context     APP_CONTEXT;
+    public static Context APP_CONTEXT;
     public static    HttpHeaders headers;
+    public static final String[] PROJECT_LANGUAGES = {
+            LanguageCountry.LANGUAGE_OPTION_EN,
+            LanguageCountry.LANGUAGE_OPTION_ZH_TW
+    };
     @Override
     public void onCreate() {
         APP_CONTEXT = this;
         super.onCreate();
-
+        LanguageSwitcher.getInstance().initLanguage(getApplicationContext(),PROJECT_LANGUAGES);
         initOkGo();
-        x.Ext.init(this);//初始化xUtils
-        x.Ext.setDebug(org.xutils.BuildConfig.DEBUG); // 开启debug会影响性能
         Logger
                 .init(FREEKICK)                 // 自定义TAG名称
                 .methodCount(3)                 // 方法栈打印的个数,默认为2

@@ -1,60 +1,101 @@
 package com.football.freekick;
 
-import android.graphics.Typeface;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.StringCallback;
-import com.orhanobut.logger.Logger;
+import com.football.freekick.app.BaseActivity;
+import com.football.freekick.commons.FragmentTabHost;
+import com.football.freekick.fragment.EstablishFragment;
+import com.football.freekick.fragment.MineFragment;
+import com.football.freekick.fragment.PartakeFragment;
+import com.football.freekick.fragment.RecordFragment;
+import com.football.freekick.fragment.SetUpFragment;
 
-import okhttp3.Call;
-import okhttp3.Response;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
+    @Bind(R.id.realtabcontent)
+    FrameLayout     mRealtabcontent;
+    @Bind(R.id.fth_tabhost)
+    FragmentTabHost mFthTabhost;
+    @Bind(R.id.main_activity_linear)
+    LinearLayout    mMainActivityLinear;
+
+    /**
+     * Fragment数组界面
+     */
+    private Class mFragmentArray[] = {EstablishFragment.class, PartakeFragment.class,
+            RecordFragment.class, MineFragment.class, SetUpFragment.class};
+
+    /**
+     * 布局填充器
+     */
+    private LayoutInflater mLayoutInflater;
+
+    /**
+     * 存放图片数组
+     */
+    private int    mImageArray[] = {R.drawable.selector_establish,
+            R.drawable.selector_partake, R.drawable.selector_record,
+            R.drawable.selector_mine,R.drawable.selector_set_up};
+    /**
+     * 选项卡文字
+     */
+//    private String mTextArray[]  = {"建立球賽", "參與球賽", "作賽記錄", "我的球賽", "設定"};
+    private int mTextArray[]  = {R.string.establish, R.string.partake, R.string.record, R.string.mine, R.string.set_up};
+    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Typeface typeface=Typeface.createFromAsset(getAssets(),"fonts/iconfont.ttf");
-        TextView tvtest = (TextView) findViewById(R.id.tv_test);
-        tvtest.setTypeface(typeface);
-//        tvtest.setText(R.string.test);
-
-        Register          register = new Register();
-        Register.UserBean userBean = new Register.UserBean();
-        userBean.setEmail("905169916@qq.com");
-        userBean.setMobile_no("18613614028");
-        userBean.setPassword("123456");
-        userBean.setPassword_confirmation("123456");
-        userBean.setRegister_type("mobile");
-        register.setUser(userBean);
-        Gson gson = new Gson();
-        Logger.json(gson.toJson(register));
-        OkGo.post("http://localhost:3000/api/auth")
-                .upJson(gson.toJson(register))
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(String s, Call call, Response response) {
-                        Logger.json(s);
-                    }
-
-                    @Override
-                    public void onError(Call call, Response response, Exception e) {
-                        super.onError(call, response, e);
-                        Logger.d(e.getMessage());
-                    }
-                });
-
-
-//        int largeMemoryClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE)).getLargeMemoryClass();
-//        Logger.d("largeMemoryClass--->"+largeMemoryClass);
-//        Bitmap bitmap[] = new Bitmap[10000];
-//        for (int i=0; i<bitmap.length; i++) {
-//            bitmap[i] = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-//        }
+        ButterKnife.bind(this);
+        mLayoutInflater = LayoutInflater.from(this);
+        initView();
     }
+
+    private void initView() {
+        // 找到TabHost
+        mFthTabhost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+        // 得到fragment的个数
+        final int count = mFragmentArray.length;
+        for (int i = 0; i < count; i++) {
+            // 给每个Tab按钮设置图标、文字和内容
+            TabHost.TabSpec tabSpec = mFthTabhost.newTabSpec(getResources().getString(mTextArray[i])).setIndicator(
+                    getTabItemView(i));
+            // 将Tab按钮添加进Tab选项卡中
+            mFthTabhost.addTab(tabSpec, mFragmentArray[i], null);
+            // 设置Tab按钮的背景
+//            mFthTabhost.getTabWidget().getChildAt(i)
+//             .setBackgroundResource(R.color.cardview_light_background);
+            mFthTabhost.getTabWidget().setDividerDrawable(R.color.white);
+
+        }
+        mFthTabhost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+
+            }
+        });
+    }
+    /**
+     * 给每个Tab按钮设置图标和文字
+     */
+    private View getTabItemView(int index) {
+        View      view      = mLayoutInflater.inflate(R.layout.tab_item_view, null);
+        ImageView imageView = (ImageView) view.findViewById(R.id.bar_iv);
+        imageView.setImageResource(mImageArray[index]);
+        TextView textView = (TextView) view.findViewById(R.id.bar_tv);
+        textView.setText(mTextArray[index]);
+        return view;
+    }
+
 }

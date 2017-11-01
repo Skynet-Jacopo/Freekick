@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="app_name">約戰</string>
+    <string name="test">&#xe643;</string>
+    <string name="testword">這是測試文本</string>
+
+    <string name="establish">建立球賽</string>
+    <string name="partake">參與球賽</string>
+    <string name="record">作賽記錄</string>
+    <string name="mine">我的球賽</string>
+    <string name="set_up">設定</string>
+</resources>
