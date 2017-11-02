@@ -1,14 +1,191 @@
 package com.football.freekick;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.beiing.monthcalendar.MonthCalendar;
+import com.beiing.monthcalendar.bean.Day;
+import com.beiing.monthcalendar.listener.GetViewHelper;
+import com.beiing.monthcalendar.listener.OnDateSelectListener;
+import com.beiing.monthcalendar.listener.OnMonthChangeListener;
+import com.beiing.monthcalendar.utils.CalendarUtil;
 import com.zhy.autolayout.AutoLayoutActivity;
 
+import org.joda.time.DateTime;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class CalenderActivity extends AutoLayoutActivity {
+
+    @Bind(R.id.tv_left)
+    TextView mTvLeft;
+    @Bind(R.id.tv_month)
+    TextView mTvMonth;
+    @Bind(R.id.tv_year)
+    TextView mTvYear;
+    @Bind(R.id.tv_right)
+    TextView mTvRight;
+    @Bind(R.id.month_calendar)
+    MonthCalendar monthCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calender);
+        ButterKnife.bind(this);
+        initMonthCalendar();
+    }
+
+    private void initMonthCalendar() {
+        DateTime dateTime = new DateTime();
+        int monthOfYear = dateTime.getMonthOfYear();
+        int year = dateTime.getYear();
+        mTvMonth.setText(getMonth(monthOfYear));
+        mTvYear.setText(" "+year);
+        monthCalendar.setGetViewHelper(new GetViewHelper() {
+            @Override
+            public View getDayView(int position, View convertView, ViewGroup parent, Day day) {
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(CalenderActivity.this).inflate(R.layout.item_day, parent, false);
+                }
+                TextView tvDay = (TextView) convertView.findViewById(R.id.tv_day);
+                DateTime dateTime = day.getDateTime();
+                tvDay.setText(dateTime.toString("d"));
+                boolean select = day.isSelect();
+                if (CalendarUtil.isToday(dateTime) && select) {
+                    tvDay.setTextColor(Color.WHITE);
+                    tvDay.setBackgroundResource(R.drawable.retangle_blue);
+                } else if (CalendarUtil.isToday(dateTime)) {
+                    tvDay.setTextColor(getResources().getColor(R.color.colorTodayText));
+                    tvDay.setBackgroundColor(Color.TRANSPARENT);
+                } else if (select) {
+                    tvDay.setTextColor(Color.WHITE);
+                    tvDay.setBackgroundResource(R.drawable.retangle_blue);
+                } else {
+                    tvDay.setBackgroundColor(Color.TRANSPARENT);
+                    if (day.isOtherMonth()) {
+                        tvDay.setTextColor(Color.LTGRAY);
+                    } else {
+                        tvDay.setTextColor(Color.BLACK);
+                    }
+                }
+                return convertView;
+            }
+
+            @Override
+            public View getWeekView(int position, View convertView, ViewGroup parent, String week) {
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(CalenderActivity.this).inflate(R.layout.item_week, parent, false);
+                }
+                TextView tvWeek = (TextView) convertView.findViewById(R.id.tv_week);
+                switch (position) {
+                    case 0:
+                        week = "日";
+                        tvWeek.setTextColor(getResources().getColor(R.color.colorAccent));
+                        break;
+                    case 1:
+                        week = "一";
+                        break;
+                    case 2:
+                        week = "二";
+                        break;
+                    case 3:
+                        week = "三";
+                        break;
+                    case 4:
+                        week = "四";
+                        break;
+                    case 5:
+                        week = "五";
+                        break;
+                    case 6:
+                        week = "六";
+                        tvWeek.setTextColor(getResources().getColor(R.color.colorAccent));
+                        break;
+                }
+                tvWeek.setText(week);
+                return convertView;
+            }
+        });
+        monthCalendar.setOnMonthChangeListener(new OnMonthChangeListener() {
+            @Override
+            public void onMonthChanged(int currentYear, int currentMonth) {
+                mTvMonth.setText(getMonth(currentMonth));
+                mTvYear.setText(" " + currentYear);
+            }
+        });
+
+        monthCalendar.setOnDateSelectListener(new OnDateSelectListener() {
+            @Override
+            public void onDateSelect(DateTime selectDate) {
+                int dayOfWeek = selectDate.getDayOfMonth();
+                int monthOfYear = selectDate.getMonthOfYear();
+                int year = selectDate.getYear();
+//                tvSelectDate.setText("你选择的日期：" + selectDate.toString("yyyy-MM-dd"));
+//                tvSelectDate.setText("你选择的日期：" +year+"年"+monthOfYear+"月"+dayOfWeek+"日" );
+            }
+        });
+    }
+
+    private String getMonth(int month) {
+        String text = null;
+        switch (month) {
+            case 1:
+                text = getResources().getText(R.string.January).toString();
+                break;
+            case 2:
+                text = getResources().getText(R.string.February).toString();
+                break;
+            case 3:
+                text = getResources().getText(R.string.March).toString();
+                break;
+            case 4:
+                text = getResources().getText(R.string.April).toString();
+                break;
+            case 5:
+                text = getResources().getText(R.string.May).toString();
+                break;
+            case 6:
+                text = getResources().getText(R.string.June).toString();
+                break;
+            case 7:
+                text = getResources().getText(R.string.July).toString();
+                break;
+            case 8:
+                text = getResources().getText(R.string.August).toString();
+                break;
+            case 9:
+                text = getResources().getText(R.string.September).toString();
+                break;
+            case 10:
+                text = getResources().getText(R.string.October).toString();
+                break;
+            case 11:
+                text = getResources().getText(R.string.November).toString();
+                break;
+            case 12:
+                text = getResources().getText(R.string.December).toString();
+                break;
+        }
+        return text;
+    }
+
+    @OnClick({R.id.tv_left, R.id.tv_right})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_left:
+                monthCalendar.goToPreMonth();
+                break;
+            case R.id.tv_right:
+                monthCalendar.goToNextMonth();
+                break;
+        }
     }
 }

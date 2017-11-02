@@ -9,6 +9,6 @@
         android:id="@+id/tv_set"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="設置語言"/>
+        android:text="@string/set_language"/>
 
 </FrameLayout>

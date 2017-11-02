@@ -23,7 +23,7 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <style name="MyDialogStyleRight" parent="TranslucentTheme">
+    <style name="MyCalendar" parent="TranslucentTheme">
         <!--<item name="android:windowAnimationStyle">@style/AnimRight</item>-->
         <item name="android:windowFrame">@null</item>
         <!-- 边框 -->
