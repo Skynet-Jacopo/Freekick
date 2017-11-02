@@ -48,7 +48,6 @@
             android:value="1334"/>
 
         <activity android:name=".TestActivity">
-
         </activity>
         <activity android:name=".RegisterLoginActivity">
         </activity>
@@ -62,6 +61,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".CalenderActivity">
         </activity>
     </application>
 
