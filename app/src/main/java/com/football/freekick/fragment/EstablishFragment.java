@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.football.freekick.R;
+import com.football.freekick.RegisterLoginActivity;
 import com.football.freekick.language.SelectLanguageActivity;
 
 import butterknife.Bind;
@@ -24,6 +25,8 @@ public class EstablishFragment extends Fragment {
 
     @Bind(R.id.tv_set)
     TextView mTvSet;
+    @Bind(R.id.tv_start_login)
+    TextView mTvStartLogin;
 
     public EstablishFragment() {
         // Required empty public constructor
@@ -45,8 +48,15 @@ public class EstablishFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
-    @OnClick(R.id.tv_set)
-    public void onViewClicked() {
-        startActivityForResult(new Intent(getActivity(), SelectLanguageActivity.class),1);
+    @OnClick({R.id.tv_set, R.id.tv_start_login})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_set:
+                startActivityForResult(new Intent(getActivity(), SelectLanguageActivity.class), 1);
+                break;
+            case R.id.tv_start_login:
+                startActivity(new Intent(getActivity(), RegisterLoginActivity.class));
+                break;
+        }
     }
 }

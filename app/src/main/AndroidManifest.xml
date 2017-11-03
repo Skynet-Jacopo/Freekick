@@ -46,15 +46,6 @@
         <meta-data
             android:name="design_height"
             android:value="1334"/>
-
-        <activity android:name=".TestActivity">
-        </activity>
-        <activity android:name=".RegisterLoginActivity">
-        </activity>
-        <activity
-            android:name=".language.SelectLanguageActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -62,8 +53,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".CalenderActivity"
+        <activity android:name=".TestActivity">
+        </activity>
+        <activity android:name=".RegisterLoginActivity">
+
+        </activity>
+        <activity
+            android:name=".language.SelectLanguageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"/>
+        <activity
+            android:name=".CalenderActivity"
             android:theme="@style/MyCalendar">
+        </activity>
+        <activity android:name=".activity.registerlogin.RegisterPager1Activity">
+        </activity>
+        <activity android:name=".activity.registerlogin.RegisterPager2Activity">
         </activity>
     </application>
 

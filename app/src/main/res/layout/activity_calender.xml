@@ -69,7 +69,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            app:mc_calendarHeight="460px"
+            app:mc_calendarHeight="@dimen/calender_content_height"
             app:mc_show_week="true"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="30px"/>
     </LinearLayout>
 </LinearLayout>

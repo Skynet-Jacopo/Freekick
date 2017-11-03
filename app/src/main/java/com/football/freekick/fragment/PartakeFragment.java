@@ -12,10 +12,13 @@ import android.widget.TextView;
 
 import com.football.freekick.CalenderActivity;
 import com.football.freekick.R;
+import com.football.freekick.utils.ToastUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * 參與球賽頁.
@@ -53,4 +56,14 @@ public class PartakeFragment extends Fragment {
         startActivityForResult(new Intent(mContext, CalenderActivity.class),1);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1&&resultCode == RESULT_OK){
+            String day = data.getStringExtra("day");
+            String month = data.getStringExtra("month");
+            String year = data.getStringExtra("year");
+            ToastUtil.toastShort(year+"年"+month+"月"+day+"日");
+        }
+    }
 }

@@ -25,4 +25,22 @@
     <string name="October">10 月</string>
     <string name="November">11 月</string>
     <string name="December">12 月</string>
+    <!--一星期-->
+    <string name="Monday">一</string>
+    <string name="Tuesday">二</string>
+    <string name="Wednesday">三</string>
+    <string name="Thursday">四</string>
+    <string name="Friday">五</string>
+    <string name="Saturday">六</string>
+    <string name="Sunday">日</string>
+
+    <string name="login">登錄</string>
+    <string name="register_by_facebook">FaceBook 註冊</string>
+    <string name="register_by_email">電郵註冊</string>
+    <string name="user_name">用戶名</string>
+    <string name="please_enter_your_name">請輸入您的用戶名</string>
+    <string name="phone_number">電話</string>
+    <string name="please_enter_your_phone">請輸入您的電話號碼</string>
+    <string name="next">下一步</string>
+
 </resources>

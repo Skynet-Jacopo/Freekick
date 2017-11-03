@@ -1,26 +1,64 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:fitsSystemWindows="true"
-              android:id="@+id/main_activity_linear"
-              tools:context=".MainActivity"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/rl_content"
+                android:fitsSystemWindows="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#fff">
 
-    >
-
-    <FrameLayout
-        android:id="@+id/realtabcontent"
+    <View
+        android:id="@+id/xian"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1" />
+        android:layout_height="1px"
+        android:layout_above="@+id/main_radiogroup"
+        android:background="#e5e5e5"/>
 
-    <com.football.freekick.commons.FragmentTabHost
-        android:id="@+id/fth_tabhost"
+    <RadioGroup
+        android:id="@+id/main_radiogroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bottom_blue_bg"
-        >
-    </com.football.freekick.commons.FragmentTabHost>
+        android:layout_alignParentBottom="true"
+        android:background="#fff"
+        android:orientation="horizontal">
 
-</LinearLayout>
+        <RadioButton
+            android:id="@+id/main_establish"
+            style="@style/tab_style"
+            android:drawableTop="@drawable/selector_establish"
+            android:text="@string/establish"/>
+
+        <RadioButton
+            android:id="@+id/main_partake"
+            style="@style/tab_style"
+            android:drawableTop="@drawable/selector_partake"
+            android:text="@string/partake"/>
+
+        <RadioButton
+            android:id="@+id/main_record"
+            style="@style/tab_style"
+            android:drawableTop="@drawable/selector_record"
+            android:text="@string/record"/>
+
+        <RadioButton
+            android:id="@+id/main_mine"
+            style="@style/tab_style"
+            android:drawableTop="@drawable/selector_mine"
+            android:text="@string/mine"/>
+
+        <RadioButton
+            android:id="@+id/main_set_up"
+            style="@style/tab_style"
+            android:drawableTop="@drawable/selector_set_up"
+            android:text="@string/set_up"/>
+    </RadioGroup>
+
+
+    <FrameLayout
+        android:id="@+id/main_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/xian">
+    </FrameLayout>
+
+</RelativeLayout>

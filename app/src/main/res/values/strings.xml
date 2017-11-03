@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Freekick</string>
     <string name="test">&#xe643;</string>
+    <string name="user_icon">&#xe62a;</string>
+    <string name="phone_icon">&#xe618;</string>
     <string name="testword">This is the test words</string>
 
 
@@ -25,5 +27,22 @@
     <string name="October">October</string>
     <string name="November">November</string>
     <string name="December">December</string>
+    <!--一星期-->
+    <string name="Monday">Mon</string>
+    <string name="Tuesday">Tues</string>
+    <string name="Wednesday">Wed</string>
+    <string name="Thursday">Thur</string>
+    <string name="Friday">Fri</string>
+    <string name="Saturday">Sat</string>
+    <string name="Sunday">Sun</string>
 
+
+    <string name="login">Login</string>
+    <string name="register_by_facebook">Login with FaceBook</string>
+    <string name="register_by_email">Login with Email</string>
+    <string name="user_name">User Name</string>
+    <string name="please_enter_your_name">Please enter your user name</string>
+    <string name="phone_number">Phone</string>
+    <string name="please_enter_your_phone">Please enter your phone number</string>
+    <string name="next">Next</string>
 </resources>

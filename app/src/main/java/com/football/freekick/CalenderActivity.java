@@ -1,11 +1,11 @@
 package com.football.freekick;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.beiing.monthcalendar.MonthCalendar;
@@ -14,6 +14,7 @@ import com.beiing.monthcalendar.listener.GetViewHelper;
 import com.beiing.monthcalendar.listener.OnDateSelectListener;
 import com.beiing.monthcalendar.listener.OnMonthChangeListener;
 import com.beiing.monthcalendar.utils.CalendarUtil;
+import com.orhanobut.logger.Logger;
 import com.zhy.autolayout.AutoLayoutActivity;
 
 import org.joda.time.DateTime;
@@ -22,6 +23,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 日曆選擇器
+ */
 public class CalenderActivity extends AutoLayoutActivity {
 
     @Bind(R.id.tv_left)
@@ -87,26 +91,26 @@ public class CalenderActivity extends AutoLayoutActivity {
                 TextView tvWeek = (TextView) convertView.findViewById(R.id.tv_week);
                 switch (position) {
                     case 0:
-                        week = "日";
+                        week = getResources().getString(R.string.Sunday);
                         tvWeek.setTextColor(getResources().getColor(R.color.colorAccent));
                         break;
                     case 1:
-                        week = "一";
+                        week = getResources().getString(R.string.Monday);
                         break;
                     case 2:
-                        week = "二";
+                        week = getResources().getString(R.string.Tuesday);
                         break;
                     case 3:
-                        week = "三";
+                        week = getResources().getString(R.string.Wednesday);
                         break;
                     case 4:
-                        week = "四";
+                        week = getResources().getString(R.string.Thursday);
                         break;
                     case 5:
-                        week = "五";
+                        week = getResources().getString(R.string.Friday);
                         break;
                     case 6:
-                        week = "六";
+                        week = getResources().getString(R.string.Saturday);
                         tvWeek.setTextColor(getResources().getColor(R.color.colorAccent));
                         break;
                 }
@@ -125,9 +129,16 @@ public class CalenderActivity extends AutoLayoutActivity {
         monthCalendar.setOnDateSelectListener(new OnDateSelectListener() {
             @Override
             public void onDateSelect(DateTime selectDate) {
-                int dayOfWeek = selectDate.getDayOfMonth();
+                int dayOfMonth = selectDate.getDayOfMonth();
                 int monthOfYear = selectDate.getMonthOfYear();
                 int year = selectDate.getYear();
+                Logger.d(year+"年"+monthOfYear+"月"+dayOfMonth+"日");
+                Intent intent = getIntent();
+                intent.putExtra("day",dayOfMonth+"");
+                intent.putExtra("month",monthOfYear+"");
+                intent.putExtra("year",year+"");
+                setResult(RESULT_OK,intent);
+                finish();
 //                tvSelectDate.setText("你选择的日期：" + selectDate.toString("yyyy-MM-dd"));
 //                tvSelectDate.setText("你选择的日期：" +year+"年"+monthOfYear+"月"+dayOfWeek+"日" );
             }

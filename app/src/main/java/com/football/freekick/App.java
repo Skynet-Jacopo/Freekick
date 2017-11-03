@@ -2,6 +2,7 @@ package com.football.freekick;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Typeface;
 
 import com.football.freekick.language.LanguageCountry;
 import com.football.freekick.language.LanguageSwitcher;
@@ -22,11 +23,14 @@ public class App extends Application {
             LanguageCountry.LANGUAGE_OPTION_EN,
             LanguageCountry.LANGUAGE_OPTION_ZH_TW
     };
+    public static Typeface mTypeface;
+
     @Override
     public void onCreate() {
         APP_CONTEXT = this;
         super.onCreate();
         LanguageSwitcher.getInstance().initLanguage(getApplicationContext(),PROJECT_LANGUAGES);
+        mTypeface = Typeface.createFromAsset(getAssets(),"fonts/iconfont.ttf");
         initOkGo();
         Logger
                 .init(FREEKICK)                 // 自定义TAG名称
