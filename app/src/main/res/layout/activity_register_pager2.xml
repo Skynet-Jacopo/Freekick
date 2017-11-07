@@ -1,10 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dark_blue_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.football.freekick.activity.registerlogin.RegisterPager2Activity">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="100px"
+            android:paddingRight="100px">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="216px"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="left"
+                    android:text="@string/team_logo"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_36"/>
+
+                <TextView
+                    android:id="@+id/tv_upload_pic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/shape_oval"
+                    android:gravity="center"
+                    android:text="@string/upload_pic"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_48"/>
+
+                <com.football.freekick.views.RoundImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="120px"
+                    android:layout_height="120px"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/team_name"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_36"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="bottom"
+                android:hint="@string/please_enter_your_team_name"
+                android:inputType="text"
+                android:paddingTop="@dimen/text_48"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#88beff"
+                android:textSize="@dimen/text_24"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="16px"
+                android:background="@color/white"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56px"
+                android:gravity="left"
+                android:text="@string/area"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_36"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="bottom"
+                android:hint="@string/please_enter_your_team_area"
+                android:inputType="text"
+                android:paddingTop="@dimen/text_48"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#88beff"
+                android:textSize="@dimen/text_24"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="16px"
+                android:background="@color/white"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:paddingTop="56px"
+                    android:text="成立年份"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_36"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32px"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingLeft="40px"
+                            android:paddingRight="40px"
+                            android:paddingTop="56px"
+                            android:text="-"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_36"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="今年"
+                            android:textColor="#88beff"
+                            android:textSize="30px"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingLeft="40px"
+                            android:paddingRight="40px"
+                            android:paddingTop="56px"
+                            android:text="+"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_36"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginTop="2px"
+                        android:background="@color/white"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+    <TextView
+        android:id="@+id/tv_next"
+        android:layout_width="match_parent"
+        android:layout_height="80px"
+        android:layout_marginLeft="115px"
+        android:layout_marginRight="115px"
+        android:layout_marginTop="336px"
+        android:background="@drawable/shape_corner_blue"
+        android:gravity="center"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:textSize="30px"/>
+
+</LinearLayout>
