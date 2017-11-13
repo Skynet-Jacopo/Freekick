@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.football.freekick.activity.registerlogin.LoginPage1Activity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="140px"
+            android:text="尋找你的愛好"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_36"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32px"
+            android:text="Get access to over 29787 activities"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_24"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20px"
+            android:text="in Hong Kong daily"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_24"/>
+
+        <FrameLayout
+            android:id="@+id/fl_login_by_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="64px"
+            android:layout_marginRight="64px"
+            android:layout_marginTop="480px"
+            android:background="@drawable/selector_corner_blue_gray"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="88px"
+                android:gravity="center"
+                android:text="使用facebook登入"
+                android:textColor="@color/white"
+                android:textSize="30px"/>
+
+            <ImageView
+                android:layout_width="40px"
+                android:layout_height="40px"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="24px"
+                android:src="@drawable/icon_facebook_white"/>
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32px"
+            android:text="或"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_30"/>
+
+        <TextView
+            android:id="@+id/tv_login_by_email"
+            android:layout_width="match_parent"
+            android:layout_height="88px"
+            android:layout_marginLeft="64px"
+            android:layout_marginRight="64px"
+            android:layout_marginTop="32px"
+            android:background="@drawable/selector_corner_transparent_gray"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="使用電子郵件進行註冊"
+            android:textColor="@color/white"
+            android:textSize="30px"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:paddingBottom="50px"
+        android:paddingLeft="30px"
+        android:paddingRight="80px"
+        android:paddingTop="30px"
+        android:text="@string/back"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_36"/>
+
+    <TextView
+        android:id="@+id/tv_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:paddingBottom="46px"
+        android:paddingLeft="30px"
+        android:paddingRight="30px"
+        android:paddingTop="30px"
+        android:text="已經是會員了嗎? 登入"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_24"/>
+</RelativeLayout>

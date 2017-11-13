@@ -96,6 +96,12 @@
         </activity>
         <activity android:name=".activity.registerlogin.OneTimePagerActivity">
         </activity>
+        <activity android:name=".activity.registerlogin.LoginPage1Activity">
+        </activity>
+        <activity android:name=".activity.registerlogin.LoginPager2Activity">
+        </activity>
+        <activity android:name=".activity.registerlogin.RegisterByEmailActivity">
+        </activity>
     </application>
 
 </manifest>

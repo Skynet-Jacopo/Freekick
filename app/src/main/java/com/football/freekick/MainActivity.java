@@ -108,23 +108,23 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         //因切圖尺寸不一,故而設置drawable邊界
         Drawable drawableEstablish = getResources().getDrawable(R.drawable.selector_establish);
-        drawableEstablish.setBounds(0, 0, 48, 32);
+        drawableEstablish.setBounds(0, 0, 52, 40);
         mMainEstablish.setCompoundDrawables(null, drawableEstablish, null, null);
 
         Drawable drawablePartake = getResources().getDrawable(R.drawable.selector_partake);
-        drawablePartake.setBounds(0, 0, 32, 32);
+        drawablePartake.setBounds(0, 0, 40, 40);
         mMainPartake.setCompoundDrawables(null, drawablePartake, null, null);
 
         Drawable drawableRecord = getResources().getDrawable(R.drawable.selector_record);
-        drawableRecord.setBounds(0, 0, 48, 32);
+        drawableRecord.setBounds(0, 0, 52, 40);
         mMainRecord.setCompoundDrawables(null, drawableRecord, null, null);
 
         Drawable drawableMine = getResources().getDrawable(R.drawable.selector_mine);
-        drawableMine.setBounds(0, 0, 32, 32);
+        drawableMine.setBounds(0, 0, 40, 40);
         mMainMine.setCompoundDrawables(null, drawableMine, null, null);
 
         Drawable drawableSetUp = getResources().getDrawable(R.drawable.selector_set_up);
-        drawableSetUp.setBounds(0, 0, 32, 32);
+        drawableSetUp.setBounds(0, 0, 40, 40);
         mMainSetUp.setCompoundDrawables(null, drawableSetUp, null, null);
     }
 
