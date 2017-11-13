@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="dark_blue_bg">#042745</color>
+    <color name="dark_blue_bg">#070c44</color>
     <color name="text_black">#282828</color>
     <color name="black_blue">#0b3d72</color>
     <color name="colorDateSelect">#45dfb6</color>
@@ -61,5 +61,5 @@
     <color name="trans_white_login">#3fff</color>
 
     <color name="bottom_blue_bg">#15549e</color>
-    <color name="status_bar_color">#334b64</color>
+    <color name="status_bar_color">#182175</color>
 </resources>

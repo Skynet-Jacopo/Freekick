@@ -46,18 +46,17 @@
         <meta-data
             android:name="design_height"
             android:value="1334"/>
-        <activity android:name=".MainActivity">
 
-        </activity>
-        <activity android:name=".TestActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".TestActivity">
+        </activity>
         <activity android:name=".RegisterLoginActivity">
-
         </activity>
         <activity
             android:name=".language.SelectLanguageActivity"
@@ -70,6 +69,32 @@
         <activity android:name=".activity.registerlogin.RegisterPager1Activity">
         </activity>
         <activity android:name=".activity.registerlogin.RegisterPager2Activity">
+        </activity>
+        <activity android:name=".activity.registerlogin.FirstPageActivity">
+        </activity>
+
+        <!-- 注册 存储照的容器 -->
+        <!--
+        name:属性值，固定写法
+        authorities:组件标识，按照江湖规矩,都以包名开头,避免和其它应用发生冲突。和FileProvider.getUriForFile()方法的第二个参数一致
+        exported:要求必须为false，为true则会报安全异常。
+        grantUriPermissions:true，表示授予 URI 临时访问权限。
+        -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.football.freekick.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <!-- 指定Uri的共享路径 -->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
+        <activity android:name=".activity.registerlogin.RegisterPager3Activity">
+        </activity>
+        <activity android:name=".activity.registerlogin.OneTimePagerActivity">
         </activity>
     </application>
 

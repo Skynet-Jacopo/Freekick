@@ -1,5 +1,6 @@
 package com.football.freekick;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -57,19 +58,54 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private SetUpFragment     mSetUpFragment;
 
     private int save;
-
+    private Context mContext;
+//    private static String[] PERMISSIONS_STORAGE = {
+//            Manifest.permission.READ_EXTERNAL_STORAGE,
+//            Manifest.permission.RECORD_AUDIO,
+//            Manifest.permission.WRITE_SETTINGS,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//    private static final int REQUEST_EXTERNAL_STORAGE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = MainActivity.this;
         ButterKnife.bind(this);
         initView();
+//        /**
+//         * 权限判断
+//         */
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            int permission = ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE);
+//            int permission1 = ContextCompat.checkSelfPermission(mContext, Manifest.permission.RECORD_AUDIO);
+//            int permission2 = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_SETTINGS);
+//            if (permission != PackageManager.PERMISSION_GRANTED || permission1 != PackageManager.PERMISSION_GRANTED||
+//                    permission2 != PackageManager.PERMISSION_GRANTED){
+//                ActivityCompat.requestPermissions(MainActivity.this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+//            }
+//        }
+
     }
 
     private void initView() {
         fm = getSupportFragmentManager();
         mainRadiogroup.setOnCheckedChangeListener(this);
-        mainRadiogroup.check(R.id.main_establish);
+        int which = getIntent().getIntExtra("which", 1);
+        switch (which){
+            case 1:
+                mainRadiogroup.check(R.id.main_establish);
+                break;
+            case 2:
+                mainRadiogroup.check(R.id.main_partake);
+                break;
+            case 3:
+                mainRadiogroup.check(R.id.main_record);
+                break;
+            case 4:
+                mainRadiogroup.check(R.id.main_mine);
+                break;
+        }
+
         //因切圖尺寸不一,故而設置drawable邊界
         Drawable drawableEstablish = getResources().getDrawable(R.drawable.selector_establish);
         drawableEstablish.setBounds(0, 0, 48, 32);

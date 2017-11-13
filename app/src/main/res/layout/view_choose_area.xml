@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="640px"
+        android:layout_height="620px"
+        android:background="@drawable/shape_corner_white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="80px"
+            android:layout_marginBottom="100px"
+            android:background="@drawable/shape_top_corner_blue"
+            android:gravity="center"
+            android:text="@string/please_choose_your_district"
+            android:textColor="@color/white"
+            android:textSize="36px"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300px">
+
+            <com.football.freekick.views.loopview.LoopView
+                android:id="@+id/loop_view1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:awv_isLoop="false"
+                app:awv_itemsVisibleCount="7"
+                app:awv_textsize="13"/>
+
+            <com.football.freekick.views.loopview.LoopView
+                android:id="@+id/loop_view2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:awv_isLoop="false"
+                app:awv_itemsVisibleCount="7"
+                app:awv_textsize="13"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="40px"
+            android:paddingBottom="30px"
+            android:paddingLeft="100px"
+            android:paddingRight="32px"
+            android:paddingTop="30px"
+            android:text="@string/confirm"
+            android:textColor="#0b3d72"
+            android:textSize="30px"/>
+    </LinearLayout>
+</com.zhy.autolayout.AutoFrameLayout>

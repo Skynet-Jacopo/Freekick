@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.football.freekick.R;
-import com.football.freekick.RegisterLoginActivity;
+import com.football.freekick.activity.registerlogin.FirstPageActivity;
 import com.football.freekick.language.SelectLanguageActivity;
 
 import butterknife.Bind;
@@ -55,7 +55,7 @@ public class EstablishFragment extends Fragment {
                 startActivityForResult(new Intent(getActivity(), SelectLanguageActivity.class), 1);
                 break;
             case R.id.tv_start_login:
-                startActivity(new Intent(getActivity(), RegisterLoginActivity.class));
+                startActivity(new Intent(getActivity(), FirstPageActivity.class));
                 break;
         }
     }

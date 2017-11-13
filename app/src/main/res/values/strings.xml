@@ -3,7 +3,10 @@
     <string name="test">&#xe643;</string>
     <string name="user_icon">&#xe62a;</string>
     <string name="phone_icon">&#xe618;</string>
-    <string name="upload_pic">&#xe6ba;</string>
+    <string name="back">&#xe604;</string>
+    <string name="icon_upload_pic">&#xe6ba;</string>
+    <string name="icon_change">&#xe6c3;</string>
+
 
     <string name="testword">This is the test words</string>
 
@@ -40,16 +43,138 @@
 
 
     <string name="login">Login</string>
+    <string name="register">Register</string>
+
     <string name="register_by_facebook">Login with FaceBook</string>
     <string name="register_by_email">Login with Email</string>
     <string name="user_name">User Name</string>
     <string name="please_enter_your_name">Please enter your user name</string>
     <string name="phone_number">Phone</string>
     <string name="please_enter_your_phone">Please enter your phone number</string>
-    <string name="next">Next</string>
-    <string name="team_logo">球隊標誌</string>
-    <string name="team_name">球隊名稱</string>
-    <string name="please_enter_your_team_name">請輸入您的球隊名稱</string>
-    <string name="area">地區</string>
-    <string name="please_enter_your_team_area">請輸入您的球隊地區</string>
+    <string name="go_on">Go on</string>
+    <string name="main_attack">main attack</string>
+    <string name="long_pass">long pass</string>
+    <string name="short_pass">short pass</string>
+    <string name="for_fun">for fun</string>
+    <string name="become_strong">become strong</string>
+
+    <string name="team_logo">Team Logo</string>
+    <string name="team_name">Team Name</string>
+    <string name="please_enter_your_team_name">Please enter your team name</string>
+    <string name="area">District</string>
+    <string name="please_enter_your_team_area">Please enter your team district</string>
+    <string name="confirm">Confirm</string>
+    <string name="please_choose_your_district">Please choose your district</string>
+    <string name="vs_hobby">VS Hobby</string>
+    <string name="choose_style">Choose style</string>
+    <string name="select_the_year">Select the year</string>
+    <string name="choose_the_picture">Choose the picture</string>
+    <string name="local_album">Local album</string>
+    <string name="by_camera">By Camera</string>
+    <string name="cancel">Cancel</string>
+    <string name="establish_time">Establish time</string>
+    <string name="people_num">People num</string>
+    <string name="team_age">Team age</string>
+    <string name="average_height">Average height</string>
+    <string name="under_160cm">Under 160cm</string>
+    <string name="above_180cm">Above 180cm</string>
+    <string name="team_style">Style</string>
+    <string name="open">Create\nMatch</string>
+    <string name="join">Join\nMatch</string>
+    <string name="game_record">Record</string>
+    <string name="my_page">Mine</string>
+
+    <!--<string name="text_area">{"regions":[{"region":"Hong Kong","districts":[{"district":"Central and Western","district_id":"19"},{"district":"Eastern","district_id":"20"},{"district":"Southern","district_id":"21"},{"district":"Wan Chai","district_id":"22"}]},{"region":"Kowloon","districts":[{"district":"Kowloon City","district_id":"23"},{"district":"Kwun Tong","district_id":"24"},{"district":"Sham Shui Po","district_id":"25"},{"district":"Wong Tai Sin","district_id":"26"},{"district":"Yau Tsim Mong","district_id":"27"}]},{"region":"New Territories","districts":[{"district":"Islands","district_id":"28"},{"district":"Kwai Tsing","district_id":"29"},{"district":"North","district_id":"30"},{"district":"Sai Kung","district_id":"31"},{"district":"Sha Tin","district_id":"32"},{"district":"Tai Po","district_id":"33"},{"district":"Tsuen Wan","district_id":"34"},{"district":"Tuen Mun","district_id":"35"},{"district":"Yuen Long","district_id":"36"}]}]}</string>-->
+    <string name="text_area">{
+    "regions": [
+        {
+            "region": "Hong$Kong",
+            "districts": [
+                {
+                    "district": "Central$and$Western",
+                    "district_id": "19"
+                },
+                {
+                    "district": "Eastern",
+                    "district_id": "20"
+                },
+                {
+                    "district": "Southern",
+                    "district_id": "21"
+                },
+                {
+                    "district": "Wan$Chai",
+                    "district_id": "22"
+                }
+            ]
+        },
+        {
+            "region": "Kowloon",
+            "districts": [
+                {
+                    "district": "Kowloon$City",
+                    "district_id": "23"
+                },
+                {
+                    "district": "Kwun$Tong",
+                    "district_id": "24"
+                },
+                {
+                    "district": "Sham$Shui$Po",
+                    "district_id": "25"
+                },
+                {
+                    "district": "Wong$Tai$Sin",
+                    "district_id": "26"
+                },
+                {
+                    "district": "Yau$Tsim$Mong",
+                    "district_id": "27"
+                }
+            ]
+        },
+        {
+            "region": "New$Territories",
+            "districts": [
+                {
+                    "district": "Islands",
+                    "district_id": "28"
+                },
+                {
+                    "district": "Kwai$Tsing",
+                    "district_id": "29"
+                },
+                {
+                    "district": "North",
+                    "district_id": "30"
+                },
+                {
+                    "district": "Sai$Kung",
+                    "district_id": "31"
+                },
+                {
+                    "district": "Sha$Tin",
+                    "district_id": "32"
+                },
+                {
+                    "district": "Tai$Po",
+                    "district_id": "33"
+                },
+                {
+                    "district": "Tsuen$Wan",
+                    "district_id": "34"
+                },
+                {
+                    "district": "Tuen$Mun",
+                    "district_id": "35"
+                },
+                {
+                    "district": "Yuen$Long",
+                    "district_id": "36"
+                }
+            ]
+        }
+    ]
+}</string>
+
 </resources>
