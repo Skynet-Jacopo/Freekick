@@ -1,13 +1,334 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.football.freekick.fragment.SetUpFragment">
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                     xmlns:tools="http://schemas.android.com/tools"
+                                     android:layout_width="match_parent"
+                                     android:layout_height="match_parent"
+                                     android:background="@drawable/register_login_bg"
+                                     android:fitsSystemWindows="true"
+                                     android:orientation="vertical"
+                                     tools:context="com.football.freekick.fragment.SetUpFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="88px"
+        android:background="#070D44"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/set_up"
+            android:textColor="@color/white"
+            android:textSize="36px"/>
+
+        <TextView
+            android:id="@+id/tv_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="24px"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="@string/icon_notice"
+            android:textColor="@color/white"
+            android:textSize="36px"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="260px">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="90px"
+            android:layout_height="118px"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="32px"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_football"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="24px"
+            android:layout_toRightOf="@+id/iv_logo"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_team_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_36"
+                tools:text="這是名字"/>
+
+            <TextView
+                android:id="@+id/tv_team_area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24px"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_24"
+                tools:text="這是地區"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <ImageView
+            android:layout_width="40px"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_notification"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:layout_weight="1"
+            android:text="@string/notification"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/text_30"/>
+
+        <com.football.freekick.views.ToggleButton
+            android:id="@+id/toggle_button"
+            android:layout_width="45dp"
+            android:layout_height="26dp"
+            app:tbOffBorderColor="#15549E"
+            app:tbOffColor="#15549E"
+            app:tbOnColor="#15549E"
+            app:tbSpotColor="@color/white"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+    <LinearLayout
+        android:id="@+id/ll_change_language"
+        android:layout_width="match_parent"
+        android:layout_height="90px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <ImageView
+            android:layout_width="40px"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_change_language"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:layout_weight="1"
+            android:text="@string/change_language"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/text_30"/>
+
+        <TextView
+            android:id="@+id/tv_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:text="繁體中文(香港)"
+            android:textColor="#6c6c6c"
+            android:textSize="@dimen/text_24"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+    <LinearLayout
+        android:id="@+id/ll_clause"
+        android:layout_width="match_parent"
+        android:layout_height="90px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <ImageView
+            android:layout_width="40px"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_clause"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:layout_weight="1"
+            android:text="@string/clause"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/text_30"/>
+
+        <TextView
+            android:id="@+id/tv_right1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:text="@string/icon_right_big"
+            android:textColor="#6c6c6c"
+            android:textSize="@dimen/text_24"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+
+    <LinearLayout
+        android:id="@+id/ll_support"
+        android:layout_width="match_parent"
+        android:layout_height="90px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <ImageView
+            android:layout_width="40px"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_support"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:layout_weight="1"
+            android:text="@string/support"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/text_30"/>
+
+        <TextView
+            android:id="@+id/tv_right2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:text="@string/icon_right_big"
+            android:textColor="#6c6c6c"
+            android:textSize="@dimen/text_24"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+    <LinearLayout
+        android:id="@+id/ll_about_us"
+        android:layout_width="match_parent"
+        android:layout_height="90px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <ImageView
+            android:layout_width="40px"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_about_us"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:layout_weight="1"
+            android:text="@string/about_us"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/text_30"/>
+
+        <TextView
+            android:id="@+id/tv_right3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:text="@string/icon_right_big"
+            android:textColor="#6c6c6c"
+            android:textSize="@dimen/text_24"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+    <LinearLayout
+        android:id="@+id/ll_contact_us"
+        android:layout_width="match_parent"
+        android:layout_height="90px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <ImageView
+            android:layout_width="40px"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_contact_us"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:layout_weight="1"
+            android:text="@string/contact_us"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/text_30"/>
+
+        <TextView
+            android:id="@+id/tv_right4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32px"
+            android:text="@string/icon_right_big"
+            android:textColor="#6c6c6c"
+            android:textSize="@dimen/text_24"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text=""/>
+        android:background="@color/white">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/tv_logout"
+            android:layout_width="match_parent"
+            android:layout_height="88px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="89px"
+            android:layout_marginLeft="65px"
+            android:layout_marginRight="65px"
+            android:background="@drawable/selector_corner_green_gray_bg"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/logout"
+            android:textColor="@color/white"
+            android:textSize="36px"/>
+    </RelativeLayout>
+</com.zhy.autolayout.AutoLinearLayout>

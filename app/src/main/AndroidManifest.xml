@@ -102,6 +102,9 @@
         </activity>
         <activity android:name=".activity.registerlogin.RegisterByEmailActivity">
         </activity>
+        <activity android:name=".activity.ChooseTimeActivity"
+                  android:theme="@style/MyCalendar">
+        </activity>
     </application>
 
 </manifest>

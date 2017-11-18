@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context="com.football.freekick.fragment.ChooseTimeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <com.football.freekick.views.loopview.LoopView
+            android:id="@+id/loop_view1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:awv_isLoop="false"
+            app:awv_itemsVisibleCount="7"
+            app:awv_textsize="13"/>
+        <TextView
+            android:layout_marginTop="2dp"
+            android:textSize="@dimen/text_24"
+            android:gravity="center"
+            android:text=":"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+        <com.football.freekick.views.loopview.LoopView
+            android:id="@+id/loop_view2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:awv_isLoop="false"
+            app:awv_itemsVisibleCount="7"
+            app:awv_textsize="13"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</LinearLayout>

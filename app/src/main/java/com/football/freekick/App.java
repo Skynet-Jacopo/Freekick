@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Typeface;
 
+import com.football.freekick.language.LanguageConfig;
 import com.football.freekick.language.LanguageCountry;
 import com.football.freekick.language.LanguageSwitcher;
 import com.lzy.okgo.OkGo;
@@ -27,6 +28,7 @@ public class App extends Application {
             LanguageCountry.LANGUAGE_OPTION_ZH_TW
     };
     public static Typeface mTypeface;
+    public static LanguageConfig mConfig;
 
     @Override
     public void onCreate() {
@@ -43,6 +45,8 @@ public class App extends Application {
                 .logLevel(LogLevel.FULL);    // default LogLevel.FULL
 //                .methodOffset(3);             // 设置调用堆栈的函数偏移值,默认为0
 //                .logAdapter(new AndroidLogAdapter()); //自顶一个打印适配器
+        mConfig = LanguageConfig.newInstance(APP_CONTEXT);
+
     }
 
     private void initOkGo() {

@@ -17,6 +17,7 @@
     <color name="black_dark">#111111</color>
     <!--中黑-->
     <color name="black_mid">#757575</color>
+    <color name="black_text">#282828</color>
     <!-- 浅黑 -->
     <color name="black">#000000</color>
     <!-- 浅黑 -->

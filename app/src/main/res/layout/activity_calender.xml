@@ -10,60 +10,66 @@
     tools:context="com.football.freekick.CalenderActivity">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="580px"
+        android:layout_height="620px"
         android:layout_marginBottom="30dp"
         android:background="@drawable/shape_corner_white"
-        android:layout_width="580px"
-        android:layout_height="580px">
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="104px">
+
             <TextView
-                android:padding="10dp"
-                android:gravity="center_vertical"
                 android:id="@+id/tv_left"
-                android:textColor="#8a8a8a"
-                android:textSize="36px"
-                android:text="左"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:text="@string/icon_left_big"
+                android:textColor="#8a8a8a"
+                android:textSize="36px"/>
+
             <LinearLayout
-                android:paddingTop="36px"
-                android:gravity="center_horizontal"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:gravity="center_horizontal"
+                android:paddingTop="36px">
 
                 <TextView
                     android:id="@+id/tv_month"
-                    android:textColor="@color/text_black"
-                    android:textSize="36px"
-                    android:text="10 月"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="10 月"
+                    android:textColor="@color/text_black"
+                    android:textSize="36px"/>
+
                 <TextView
                     android:id="@+id/tv_year"
-                    android:textColor="@color/text_black"
-                    android:textSize="24px"
-                    android:text=" 2017"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="\u30002017"
+                    android:textColor="@color/text_black"
+                    android:textSize="24px"/>
             </LinearLayout>
+
             <TextView
-                android:padding="10dp"
-                android:gravity="center_vertical"
                 android:id="@+id/tv_right"
-                android:textColor="#8a8a8a"
-                android:textSize="36px"
-                android:text="右"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:text="@string/icon_right_big"
+                android:textColor="#8a8a8a"
+                android:textSize="36px"/>
         </LinearLayout>
 
         <View
-            android:background="@color/black_blue"
             android:layout_width="match_parent"
-            android:layout_height="16px"/>
+            android:layout_height="16px"
+            android:background="@color/black_blue"/>
+
         <com.beiing.monthcalendar.MonthCalendar
             android:id="@+id/month_calendar"
             android:layout_width="match_parent"
@@ -71,8 +77,20 @@
             android:background="@android:color/white"
             app:mc_calendarHeight="@dimen/calender_content_height"
             app:mc_show_week="true"/>
-        <View
+
+        <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="30px"/>-->
+
+        <TextView
+            android:id="@+id/tv_confirm"
             android:layout_width="match_parent"
-            android:layout_height="30px"/>
+            android:layout_height="match_parent"
+            android:gravity="right|bottom"
+            android:paddingBottom="31px"
+            android:paddingRight="32px"
+            android:text="@string/confirm"
+            android:textColor="@color/bottom_blue_bg"
+            android:textSize="30px"/>
     </LinearLayout>
 </LinearLayout>

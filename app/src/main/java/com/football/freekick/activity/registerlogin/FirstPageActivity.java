@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
+import com.orhanobut.logger.Logger;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,6 +32,9 @@ public class FirstPageActivity extends BaseActivity {
         setContentView(R.layout.activity_firstpage);
         mContext = FirstPageActivity.this;
         ButterKnife.bind(this);
+        Logger.d( "getCountryNameValue--->"+App.mConfig.getCountryNameValue());
+        Logger.d( "getLanguageValue--->"+App.mConfig.getLanguageValue());
+
     }
 
     @OnClick({R.id.tv_login, R.id.tv_register})

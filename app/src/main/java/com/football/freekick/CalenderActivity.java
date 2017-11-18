@@ -29,37 +29,43 @@ import butterknife.OnClick;
 public class CalenderActivity extends AutoLayoutActivity {
 
     @Bind(R.id.tv_left)
-    TextView mTvLeft;
+    TextView      mTvLeft;
     @Bind(R.id.tv_month)
-    TextView mTvMonth;
+    TextView      mTvMonth;
     @Bind(R.id.tv_year)
-    TextView mTvYear;
+    TextView      mTvYear;
     @Bind(R.id.tv_right)
-    TextView mTvRight;
+    TextView      mTvRight;
     @Bind(R.id.month_calendar)
     MonthCalendar monthCalendar;
+    @Bind(R.id.tv_confirm)
+    TextView      mTvConfirm;
+    private DateTime mSelectDate;
+    private boolean isClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calender);
         ButterKnife.bind(this);
+        mTvLeft.setTypeface(App.mTypeface);
+        mTvRight.setTypeface(App.mTypeface);
         initMonthCalendar();
     }
 
     private void initMonthCalendar() {
-        DateTime dateTime = new DateTime();
-        int monthOfYear = dateTime.getMonthOfYear();
-        int year = dateTime.getYear();
+        DateTime dateTime    = new DateTime();
+        int      monthOfYear = dateTime.getMonthOfYear();
+        int      year        = dateTime.getYear();
         mTvMonth.setText(getMonth(monthOfYear));
-        mTvYear.setText(" "+year);
+        mTvYear.setText(" " + year);
         monthCalendar.setGetViewHelper(new GetViewHelper() {
             @Override
             public View getDayView(int position, View convertView, ViewGroup parent, Day day) {
                 if (convertView == null) {
                     convertView = LayoutInflater.from(CalenderActivity.this).inflate(R.layout.item_day, parent, false);
                 }
-                TextView tvDay = (TextView) convertView.findViewById(R.id.tv_day);
+                TextView tvDay    = (TextView) convertView.findViewById(R.id.tv_day);
                 DateTime dateTime = day.getDateTime();
                 tvDay.setText(dateTime.toString("d"));
                 boolean select = day.isSelect();
@@ -129,18 +135,8 @@ public class CalenderActivity extends AutoLayoutActivity {
         monthCalendar.setOnDateSelectListener(new OnDateSelectListener() {
             @Override
             public void onDateSelect(DateTime selectDate) {
-                int dayOfMonth = selectDate.getDayOfMonth();
-                int monthOfYear = selectDate.getMonthOfYear();
-                int year = selectDate.getYear();
-                Logger.d(year+"年"+monthOfYear+"月"+dayOfMonth+"日");
-                Intent intent = getIntent();
-                intent.putExtra("day",dayOfMonth+"");
-                intent.putExtra("month",monthOfYear+"");
-                intent.putExtra("year",year+"");
-                setResult(RESULT_OK,intent);
-                finish();
-//                tvSelectDate.setText("你选择的日期：" + selectDate.toString("yyyy-MM-dd"));
-//                tvSelectDate.setText("你选择的日期：" +year+"年"+monthOfYear+"月"+dayOfWeek+"日" );
+                isClicked = true;
+                mSelectDate = selectDate;
             }
         });
     }
@@ -188,7 +184,7 @@ public class CalenderActivity extends AutoLayoutActivity {
         return text;
     }
 
-    @OnClick({R.id.tv_left, R.id.tv_right})
+    @OnClick({R.id.tv_left, R.id.tv_right, R.id.tv_confirm})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_left:
@@ -196,6 +192,29 @@ public class CalenderActivity extends AutoLayoutActivity {
                 break;
             case R.id.tv_right:
                 monthCalendar.goToNextMonth();
+                break;
+            case R.id.tv_confirm:
+                Intent intent = getIntent();
+                if (!isClicked) {
+                    DateTime dateTime    = new DateTime();
+                    int      monthOfYear = dateTime.getMonthOfYear();
+                    int      year        = dateTime.getYear();
+                    int      day         = dateTime.getDayOfMonth();
+                    intent.putExtra("day", day + "");
+                    intent.putExtra("month", monthOfYear + "");
+                    intent.putExtra("year", year + "");
+                } else {
+                    int dayOfMonth  = mSelectDate.getDayOfMonth();
+                    int monthOfYear = mSelectDate.getMonthOfYear();
+                    int year        = mSelectDate.getYear();
+                    Logger.d(year + "年" + monthOfYear + "月" + dayOfMonth + "日");
+
+                    intent.putExtra("day", dayOfMonth + "");
+                    intent.putExtra("month", monthOfYear + "");
+                    intent.putExtra("year", year + "");
+                }
+                setResult(RESULT_OK, intent);
+                finish();
                 break;
         }
     }

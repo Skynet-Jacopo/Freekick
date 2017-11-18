@@ -1,11 +1,78 @@
 <resources>
     <string name="app_name">Freekick</string>
     <string name="test">&#xe643;</string>
+    <!--我的(人形圖標)-->
     <string name="user_icon">&#xe62a;</string>
     <string name="phone_icon">&#xe618;</string>
     <string name="back">&#xe604;</string>
+    <!--上傳圖片-->
     <string name="icon_upload_pic">&#xe6ba;</string>
+    <!--切換-->
     <string name="icon_change">&#xe6c3;</string>
+    <!--加号-->
+    <string name="icon_invite">&#xe643;</string>
+    <!--分享-->
+    <string name="icon_share">&#xe715;</string>
+    <!--短信-->
+    <string name="icon_note">&#xe61c;</string>
+    <!--球赛奖杯-->
+    <string name="icon_match">&#xe614;</string>
+    <!--邀请人图标-->
+    <string name="icon_invite_people">&#xe609;</string>
+    <!--电话-->
+    <string name="icon_phone">&#xe618;</string>
+    <!--左右三角向下指（大）-->
+    <string name="icon_triangle_big">&#xe629;</string>
+    <!--动态线条-->
+    <string name="icon_lines">&#xe68b;</string>
+    <!--分享(粗)-->
+    <string name="icon_share_bold">&#xe628;</string>
+    <!--錯誤(帶圓圈)-->
+    <string name="icon_error_oval">&#xe655;</string>
+    <!--使用记录-->
+    <string name="icon_record">&#xe661;</string>
+    <!--错(不帶圓圈)-->
+    <string name="icon_error">&#xe63e;</string>
+    <!--地點圖標-->
+    <string name="icon_location">&#xe60a;</string>
+    <!--设置(帶足球)-->
+    <string name="icon_setting">&#xe606;</string>
+    <!--更多(三個點)-->
+    <string name="icon_more">&#xe61d;</string>
+    <!--筛选-->
+    <string name="icon_filtrate">&#xe607;</string>
+    <!--设置(正常)-->
+    <string name="icon_normal">&#xe615;</string>
+    <!--定位(比那個要小)-->
+    <string name="icon_set_location">&#xe6b0;</string>
+    <!--返回(向右指)-->
+    <string name="icon_back_right">&#xe62b;</string>
+    <!--语音-->
+    <string name="icon_voice">&#xe603;</string>
+    <!--消息-->
+    <string name="icon_notice">&#xe699;</string>
+    <!--通知(鈴鐺)-->
+    <string name="icon_bell">&#xe60d;</string>
+    <!--箭頭(大-左)-->
+    <string name="icon_left_big">&#xe604;</string>
+    <!--箭頭(大-右)-->
+    <string name="icon_right_big">&#xe633;</string>
+    <!--日期-->
+    <string name="icon_day">&#xe608;</string>
+    <!--好友(兩個小人)-->
+    <string name="icon_friend">&#xe64a;</string>
+    <!--搜索(放大鏡)-->
+    <string name="icon_search">&#xe600;</string>
+    <!--三角(向下)-->
+    <string name="icon_down_small">&#xe77a;</string>
+    <!--热点聚焦-->
+    <string name="icon_focus">&#xe63d;</string>
+    <!--建议(燈泡)-->
+    <string name="icon_advice">&#xe61f;</string>
+    <!--三角(向右)-->
+    <string name="icon_right_small">&#xe601;</string>
+    <!--三角(向左)-->
+    <string name="icon_left_small">&#xe602;</string>
 
 
     <string name="testword">This is the test words</string>
@@ -176,5 +243,21 @@
         }
     ]
 }</string>
+    <string name="notification">通知</string>
+    <string name="change_language">切換語言</string>
+    <string name="clause">條款和條約</string>
+    <string name="support">幫助和支持</string>
+    <string name="about_us">關於我們</string>
+    <string name="contact_us">聯繫我們</string>
+    <string name="logout">登出</string>
+    <string name="to">至</string>
+    <string name="from">由</string>
+    <string name="start_time">開始時間</string>
+    <string name="end_time">結束時間</string>
+    <string name="pitch_size">球場大小</string>
+    <string name="pitch_size_5">5人場</string>
+    <string name="pitch_size_7">7人場</string>
+    <string name="pitch_size_11">11人場</string>
+    <string name="peoson">人</string>
 
 </resources>

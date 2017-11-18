@@ -1,20 +1,266 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-              android:orientation="vertical"
-             tools:context="com.football.freekick.fragment.EstablishFragment">
+<com.zhy.autolayout.AutoLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ECECEC"
+    android:fitsSystemWindows="true"
+    android:id="@+id/ll_parent"
+    android:orientation="vertical"
+    tools:context="com.football.freekick.fragment.SetUpFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tv_set"
+    <LinearLayout
+        android:id="@+id/ll_match_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/set_language"/>
-    <TextView
-        android:id="@+id/tv_start_login"
-        android:gravity="center"
-        android:text="開始登錄"
+        android:layout_height="94px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="球賽日期"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_30"
+            android:textStyle="bold"/>
+        <TextView
+            android:paddingRight="10px"
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_24"/>
+        <TextView
+            android:id="@+id/tv_icon_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/icon_day"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_30"/>
+    </LinearLayout>
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="100dp"/>
-</LinearLayout>
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+    <LinearLayout
+        android:id="@+id/ll_match_time"
+        android:layout_width="match_parent"
+        android:layout_height="94px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="球賽時間"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_30"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="請選擇時間"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_24"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+    <LinearLayout
+        android:id="@+id/ll_pitch_size"
+        android:layout_width="match_parent"
+        android:layout_height="94px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="球場大小"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_30"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_pitch_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7人場"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_24"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+    <LinearLayout
+        android:id="@+id/ll_area"
+        android:layout_width="match_parent"
+        android:layout_height="94px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="地區"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_30"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="九龍區"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_24"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+    <LinearLayout
+        android:id="@+id/ll_pitch_name"
+        android:layout_width="match_parent"
+        android:layout_height="94px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="球場名稱"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_30"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_pitch_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="廣州恆大"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_24"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#bcbcbc"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="94px"
+        android:layout_marginBottom="16px"
+        android:background="@color/white"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24px"
+        android:paddingRight="24px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="預計作賽人數"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_30"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_reduce"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="-"
+                android:textColor="@color/text_black"
+                android:textSize="50px"
+                />
+
+            <TextView
+                android:id="@+id/tv_people_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="7人"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_30"/>
+
+            <TextView
+                android:id="@+id/tv_add"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="+"
+                android:textColor="@color/text_black"
+                android:textSize="50px"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--這裡添加廣告-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_establish"
+            android:layout_width="match_parent"
+            android:layout_height="88px"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="24dp"
+            android:layout_marginLeft="65px"
+            android:layout_marginRight="65px"
+            android:background="@drawable/selector_corner_green_gray_bg"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/establish"
+            android:textColor="@color/white"
+            android:textSize="36px"/>
+    </RelativeLayout>
+</com.zhy.autolayout.AutoLinearLayout>
