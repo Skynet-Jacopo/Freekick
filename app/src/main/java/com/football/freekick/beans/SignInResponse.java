@@ -1,5 +1,7 @@
 package com.football.freekick.beans;
 
+import java.util.List;
+
 /**
  * Created by LiuQun on 2017/11/7.
  */
@@ -11,6 +13,8 @@ public class SignInResponse {
      */
 
     private DataBean data;
+    private List<String> errors;
+
 
     public DataBean getData() {
         return data;
@@ -18,6 +22,14 @@ public class SignInResponse {
 
     public void setData(DataBean data) {
         this.data = data;
+    }
+
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<String> errors) {
+        this.errors = errors;
     }
 
     public static class DataBean {

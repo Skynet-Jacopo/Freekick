@@ -48,42 +48,21 @@ public class TestActivity extends BaseActivity {
         register.setUser(userBean);
 //        Gson gson = new Gson();
 //        Logger.json(gson.toJson(register));
-//        JsonObject object = new JsonObject();
-//
-//        JsonObject object1 = new JsonObject();
-//        object1.addProperty("email", "test@yopmail.com");
-//        object1.addProperty("password", "123456");
-//        object1.addProperty("password_confirmation", "123456");
-//        object1.addProperty("username", "test");
-//        object1.addProperty("register_type", "mobile");
-//        object1.addProperty("mobile_no", "11111111111");
-//        object.add("user", object1);
-//
-//        Gson gson = new Gson();
-//        Logger.json(gson.toJson(object));
-//        Logger.d(object.toString());
-//        OkGo.post("http://api.freekick.hk/api/en/auth")
-//                .upJson(object.toString())
-//                .execute(new StringCallback() {
-//                    @Override
-//                    public void onSuccess(String s, Call call, Response response) {
-//                        Logger.json(s);
-//                    }
-//
-//                    @Override
-//                    public void onError(Call call, Response response, Exception e) {
-//                        super.onError(call, response, e);
-//                        Logger.d(e.getMessage());
-//                    }
-//                });
         JsonObject object = new JsonObject();
+
         JsonObject object1 = new JsonObject();
-        object1.addProperty("email","test@yopmail.com");
-        object1.addProperty("password","123456");
-        object.add("user",object1);
+        object1.addProperty("email", "test@yopmail.com");
+        object1.addProperty("password", "123456");
+        object1.addProperty("password_confirmation", "123456");
+        object1.addProperty("username", "test");
+        object1.addProperty("register_type", "mobile");
+        object1.addProperty("mobile_no", "11111111111");
+        object.add("user", object1);
+
         Gson gson = new Gson();
         Logger.json(gson.toJson(object));
-        OkGo.post("http://api.freekick.hk/api/en/auth/sign_in")
+        Logger.d(object.toString());
+        OkGo.post("http://api.freekick.hk/api/en/auth")
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
@@ -97,6 +76,27 @@ public class TestActivity extends BaseActivity {
                         Logger.d(e.getMessage());
                     }
                 });
+//        JsonObject object = new JsonObject();
+//        JsonObject object1 = new JsonObject();
+//        object1.addProperty("email","test@yopmail.com");
+//        object1.addProperty("password","123456");
+//        object.add("user",object1);
+//        Gson gson = new Gson();
+//        Logger.json(gson.toJson(object));
+//        OkGo.post("http://api.freekick.hk/api/en/auth/sign_in")
+//                .upJson(object.toString())
+//                .execute(new StringCallback() {
+//                    @Override
+//                    public void onSuccess(String s, Call call, Response response) {
+//                        Logger.json(s);
+//                    }
+//
+//                    @Override
+//                    public void onError(Call call, Response response, Exception e) {
+//                        super.onError(call, response, e);
+//                        Logger.d(e.getMessage());
+//                    }
+//                });
 
 
 //        int largeMemoryClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE)).getLargeMemoryClass();

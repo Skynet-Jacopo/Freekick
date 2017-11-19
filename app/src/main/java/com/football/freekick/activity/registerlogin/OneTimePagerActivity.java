@@ -55,5 +55,6 @@ public class OneTimePagerActivity extends BaseActivity {
                 break;
         }
         startActivity(intent);
+        finish();
     }
 }

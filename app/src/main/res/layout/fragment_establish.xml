@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="球賽日期"
+            android:text="@string/match_date"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_30"
             android:textStyle="bold"/>
@@ -64,16 +64,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="球賽時間"
+            android:text="@string/match_time"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_30"
             android:textStyle="bold"/>
 
         <TextView
+            android:textColorHint="@color/text_black"
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="請選擇時間"
+            android:hint="@string/please_choose_match_time"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"/>
     </LinearLayout>
@@ -97,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="球場大小"
+            android:text="@string/pitch_size"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_30"
             android:textStyle="bold"/>
@@ -130,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="地區"
+            android:text="@string/area"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_30"
             android:textStyle="bold"/>
@@ -139,7 +140,7 @@
             android:id="@+id/tv_area"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="九龍區"
+            android:text="@string/please_choose_the_district"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"/>
     </LinearLayout>
@@ -163,7 +164,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="球場名稱"
+            android:text="@string/pitch_name"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_30"
             android:textStyle="bold"/>
@@ -172,7 +173,8 @@
             android:id="@+id/tv_pitch_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="廣州恆大"
+            android:hint="@string/please_choose_pitch"
+            android:textColorHint="@color/text_black"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"/>
     </LinearLayout>
@@ -196,7 +198,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="預計作賽人數"
+            android:text="@string/expected_number_of_matches"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_30"
             android:textStyle="bold"/>

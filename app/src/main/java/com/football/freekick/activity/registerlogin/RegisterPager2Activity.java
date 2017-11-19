@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -34,6 +35,9 @@ import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.Area;
+import com.football.freekick.utils.ImageUtil;
+import com.football.freekick.utils.PrefUtils;
+import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.RangeSeekBar;
 import com.football.freekick.views.RoundImageView;
@@ -55,68 +59,68 @@ import butterknife.OnClick;
 
 public class RegisterPager2Activity extends BaseActivity {
 
-    private static final int RESULT_LOAD_IMAGE   = 0x1235;
+    private static final int RESULT_LOAD_IMAGE = 0x1235;
     private static final int RESULT_CAMERA_IMAGE = 0x4322;
     @Bind(R.id.tv_upload_pic)
-    TextView         mTvUploadPic;
+    TextView mTvUploadPic;
     @Bind(R.id.tv_next)
-    TextView         mTvNext;
+    TextView mTvNext;
     @Bind(R.id.tv_back)
-    TextView         mTvBack;
+    TextView mTvBack;
     @Bind(R.id.iv_logo)
-    RoundImageView   mIvLogo;
+    RoundImageView mIvLogo;
     @Bind(R.id.seek_bar)
-    RangeSeekBar     mSeekBar;
+    RangeSeekBar mSeekBar;
     @Bind(R.id.nestedScrollView)
     NestedScrollView mNestedScrollView;
     @Bind(R.id.tv_height_1)
-    TextView         mTvHeight1;
+    TextView mTvHeight1;
     @Bind(R.id.tv_height_2)
-    TextView         mTvHeight2;
+    TextView mTvHeight2;
     @Bind(R.id.tv_height_3)
-    TextView         mTvHeight3;
+    TextView mTvHeight3;
     @Bind(R.id.tv_height_4)
-    TextView         mTvHeight4;
+    TextView mTvHeight4;
     @Bind(R.id.tv_change)
-    TextView         mTvChange;
+    TextView mTvChange;
     @Bind(R.id.ll_btn)
-    LinearLayout     mLlBtn;
+    LinearLayout mLlBtn;
     @Bind(R.id.edt_team_name)
-    EditText         mEdtTeamName;
+    EditText mEdtTeamName;
     @Bind(R.id.tv_team_area)
-    TextView         mTvTeamArea;
+    TextView mTvTeamArea;
     @Bind(R.id.tv_year)
-    TextView         mTvYear;
+    TextView mTvYear;
     @Bind(R.id.ll_year)
-    LinearLayout     mLlYear;
+    LinearLayout mLlYear;
     @Bind(R.id.tv_reduce)
-    TextView         mTvReduce;
+    TextView mTvReduce;
     @Bind(R.id.tv_people_num)
-    TextView         mTvPeopleNum;
+    TextView mTvPeopleNum;
     @Bind(R.id.tv_add)
-    TextView         mTvAdd;
+    TextView mTvAdd;
     @Bind(R.id.tv_team_style)
-    TextView         mTvTeamStyle;
+    TextView mTvTeamStyle;
     @Bind(R.id.ll_team_style)
-    LinearLayout     mLlTeamStyle;
+    LinearLayout mLlTeamStyle;
     @Bind(R.id.tv_team_like)
-    TextView         mTvTeamLike;
+    TextView mTvTeamLike;
     @Bind(R.id.ll_team_like)
-    LinearLayout     mLlTeamLike;
+    LinearLayout mLlTeamLike;
     @Bind(R.id.rl_parent)
-    RelativeLayout   mRlParent;
-    private Context      mContext;
-    private int          num;
+    RelativeLayout mRlParent;
+    private Context mContext;
+    private int num;
     private List<String> mYears;
     private List<String> mTeamStyle;
     private List<String> mTeamLike;
-    private int          mYearPos;
-    private int          mTeamStylePos;
-    private int          mLikePos;
-    private String       mPicLoaclUrl;
+    private int mYearPos;
+    private int mTeamStylePos;
+    private int mLikePos;
+    private String mPicLoaclUrl;
     //权限标示
     private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 3;
-    private static final int CAMERA                            = 4;
+    private static final int CAMERA = 4;
     private Uri imageUri;
     private List<String> mRegions;//大區
     private List<Area.RegionsBean> mAreaRegions;//解析出的大區
@@ -124,6 +128,13 @@ public class RegisterPager2Activity extends BaseActivity {
     private List<String> districtList;//小區
     private int regionPos;
     private int districtPos;
+
+    private String average_height = "";
+    private String age_range_min = "";
+    private String age_range_max = "";
+    private String image = "";
+    private String district="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +142,10 @@ public class RegisterPager2Activity extends BaseActivity {
         mContext = RegisterPager2Activity.this;
         ButterKnife.bind(this);
         initView();
-
+        Logger.d("access-token--->"+ PrefUtils.getString(App.APP_CONTEXT, "access_token", null));
+        Logger.d("client--->"+PrefUtils.getString(App.APP_CONTEXT, "client", null));
+        Logger.d("uid--->"+PrefUtils.getString(App.APP_CONTEXT, "uid", null));
+        Logger.d("expiry--->"+PrefUtils.getString(App.APP_CONTEXT, "expiry", null));
     }
 
     private void initView() {
@@ -139,18 +153,22 @@ public class RegisterPager2Activity extends BaseActivity {
         mTvUploadPic.setTypeface(App.mTypeface);
         mTvBack.setTypeface(App.mTypeface);
         mTvChange.setTypeface(App.mTypeface);
+        age_range_min = "12";
+        age_range_max = "85";
         mSeekBar.setValue(12, 85);
         mSeekBar.setOnRangeChangedListener(new RangeSeekBar.OnRangeChangedListener() {
             @Override
             public void onRangeChanged(RangeSeekBar view, float min, float max, boolean isFromUser) {
                 ToastUtil.toastShort("小值" + (int) min + ",大值" + (int) max);
+                age_range_min = (int) min + "";
+                age_range_max = (int) max + "";
             }
         });
         mTvPeopleNum.setText(num + "");
 
         mYears = new ArrayList<>();//年份
         DateTime dateTime = new DateTime();
-        int      year     = dateTime.getYear() - 30;
+        int year = dateTime.getYear() - 30;
         for (int i = 0; i < 30; i++) {
             mYears.add((year + i) + " 年");
         }
@@ -166,17 +184,17 @@ public class RegisterPager2Activity extends BaseActivity {
         mTeamLike.add(getString(R.string.become_strong));
 
         String string = getString(R.string.text_area).trim();
-        Gson   gson   = new Gson();
-        Area area= gson.fromJson(string, Area.class);
+        Gson gson = new Gson();
+        Area area = gson.fromJson(string, Area.class);
         mRegions = new ArrayList<>();
         mAreaRegions = area.getRegions();
         for (int i = 0; i < mAreaRegions.size(); i++) {
             String region = mAreaRegions.get(i).getRegion();
-            String s      = null;
-            if (region.contains("$")){
+            String s = null;
+            if (region.contains("$")) {
                 s = region.replace("$", " ");
                 mRegions.add(s);
-            }else {
+            } else {
                 mRegions.add(region);
             }
 
@@ -184,8 +202,9 @@ public class RegisterPager2Activity extends BaseActivity {
         mDistricts = mAreaRegions.get(0).getDistricts();
     }
 
-    @OnClick({R.id.tv_back,R.id.tv_team_area, R.id.tv_upload_pic, R.id.iv_logo, R.id.ll_year, R.id.tv_reduce, R.id
-            .tv_add, R.id.tv_height_1, R.id.tv_height_2, R.id.tv_height_3, R.id.tv_height_4, R.id.ll_team_style, R.id.ll_team_like, R.id.tv_next})
+    @OnClick({R.id.tv_back, R.id.tv_team_area, R.id.tv_upload_pic, R.id.iv_logo, R.id.ll_year, R.id.tv_reduce, R.id
+            .tv_add, R.id.tv_height_1, R.id.tv_height_2, R.id.tv_height_3, R.id.tv_height_4, R.id.ll_team_style, R.id
+            .ll_team_like, R.id.tv_next})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_back:
@@ -223,6 +242,7 @@ public class RegisterPager2Activity extends BaseActivity {
                 mTvHeight2.setTextColor(Color.BLACK);
                 mTvHeight3.setTextColor(Color.BLACK);
                 mTvHeight4.setTextColor(Color.BLACK);
+                average_height = "1";
                 break;
             case R.id.tv_height_2:
                 mTvHeight1.setBackgroundResource(R.drawable.shape_corner_white);
@@ -233,6 +253,7 @@ public class RegisterPager2Activity extends BaseActivity {
                 mTvHeight2.setTextColor(Color.WHITE);
                 mTvHeight3.setTextColor(Color.BLACK);
                 mTvHeight4.setTextColor(Color.BLACK);
+                average_height = "2";
                 break;
             case R.id.tv_height_3:
                 mTvHeight1.setBackgroundResource(R.drawable.shape_corner_white);
@@ -243,6 +264,7 @@ public class RegisterPager2Activity extends BaseActivity {
                 mTvHeight2.setTextColor(Color.BLACK);
                 mTvHeight3.setTextColor(Color.WHITE);
                 mTvHeight4.setTextColor(Color.BLACK);
+                average_height = "3";
                 break;
             case R.id.tv_height_4:
                 mTvHeight1.setBackgroundResource(R.drawable.shape_corner_white);
@@ -253,6 +275,7 @@ public class RegisterPager2Activity extends BaseActivity {
                 mTvHeight2.setTextColor(Color.BLACK);
                 mTvHeight3.setTextColor(Color.BLACK);
                 mTvHeight4.setTextColor(Color.WHITE);
+                average_height = "4";
                 break;
             case R.id.ll_team_style:
                 chooseStyle();
@@ -261,9 +284,70 @@ public class RegisterPager2Activity extends BaseActivity {
                 chooseLike();
                 break;
             case R.id.tv_next:
-                startActivity(new Intent(mContext,RegisterPager3Activity.class));
+                next();
                 break;
         }
+    }
+
+    /**
+     * 將數據傳到下一個界面請求接口
+     */
+    private void next() {
+        if (StringUtils.isEmpty(mEdtTeamName)) {
+            ToastUtil.toastShort(getString(R.string.please_enter_your_team_name));
+            return;
+        }
+        if (StringUtils.isEmpty(mTvTeamArea)) {
+            ToastUtil.toastShort(getString(R.string.please_enter_your_team_area));
+            return;
+        }
+        if (StringUtils.isEmpty(mTvYear)) {
+            ToastUtil.toastShort(getString(R.string.please_choose_the_year_established));
+            return;
+        }
+        if (StringUtils.isEmpty(average_height)) {
+            ToastUtil.toastShort(getString(R.string.please_select_a_team_average_height));
+            return;
+        }
+
+        String team_name = StringUtils.getEditText(mEdtTeamName);
+        String establish_year;
+        // TODO: 2017/11/19 是否要把這裡的漢字改成雙語言?
+        if (StringUtils.getEditText(mTvYear).equals("今年")){
+            DateTime time = new DateTime();
+            establish_year = time.getYear()+"";
+        }else {
+            establish_year = StringUtils.getEditText(mTvYear).replace(" 年","");
+        }
+        String style = "";
+        if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.short_pass))) {
+            style = "short_pass";
+        } else if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.long_pass))) {
+            style = "long_pass";
+        } else if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.main_attack))) {
+            style = "main_attack";
+        }
+        String battle_preference = "";
+        if (StringUtils.getEditText(mTvTeamLike).equals(getString(R.string.for_fun))) {
+            battle_preference = "for_fun";
+        } else if (StringUtils.getEditText(mTvTeamLike).equals(getString(R.string.become_strong))) {
+            battle_preference = "become_strong";
+        }
+        String size = StringUtils.getEditText(mTvPeopleNum);
+
+        Intent intent = new Intent(mContext, RegisterPager3Activity.class);
+        intent.putExtra("team_name",team_name);
+        intent.putExtra("district",district);
+        intent.putExtra("establish_year",establish_year);
+        intent.putExtra("average_height",average_height);
+        intent.putExtra("age_range_min",age_range_min);
+        intent.putExtra("age_range_max",age_range_max);
+        intent.putExtra("style",style);
+        intent.putExtra("battle_preference",battle_preference);
+        intent.putExtra("size",size);
+        intent.putExtra("status","a");//?這是個什麼東東??
+        intent.putExtra("image",image);
+        startActivity(intent);
     }
 
     /**
@@ -274,9 +358,9 @@ public class RegisterPager2Activity extends BaseActivity {
                 R.layout.view_choose_area, null);
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        LoopView       loopView1 = (LoopView) contentView.findViewById(R.id.loop_view1);
+        LoopView loopView1 = (LoopView) contentView.findViewById(R.id.loop_view1);
         final LoopView loopView2 = (LoopView) contentView.findViewById(R.id.loop_view2);
-        TextView       tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
+        TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
 
         loopView1.setItems(mRegions);
         loopView1.setListener(new OnItemSelectedListener() {
@@ -287,11 +371,11 @@ public class RegisterPager2Activity extends BaseActivity {
                 mDistricts = mAreaRegions.get(index).getDistricts();
                 for (int i = 0; i < mDistricts.size(); i++) {
                     String district = mDistricts.get(i).getDistrict();
-                    String s      = null;
-                    if (district.contains("$")){
+                    String s = null;
+                    if (district.contains("$")) {
                         s = district.replace("$", " ");
                         districtList.add(s);
-                    }else {
+                    } else {
                         districtList.add(district);
                     }
                 }
@@ -302,11 +386,11 @@ public class RegisterPager2Activity extends BaseActivity {
         mDistricts = mAreaRegions.get(0).getDistricts();
         for (int i = 0; i < mDistricts.size(); i++) {
             String district = mDistricts.get(i).getDistrict();
-            String s      = null;
-            if (district.contains("$")){
+            String s = null;
+            if (district.contains("$")) {
                 s = district.replace("$", " ");
                 districtList.add(s);
-            }else {
+            } else {
                 districtList.add(district);
             }
         }
@@ -322,7 +406,8 @@ public class RegisterPager2Activity extends BaseActivity {
             public void onClick(View view) {
                 popupWindow.dismiss();
                 String district_id = mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict_id();
-                ToastUtil.toastShort(district_id);
+                mTvTeamArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict());
+                district = district_id;
             }
         });
         popupWindow.setTouchable(true);
@@ -356,16 +441,17 @@ public class RegisterPager2Activity extends BaseActivity {
                 R.layout.view_take_pic, null);
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        Button btnChooseImg   = (Button) contentView.findViewById(R.id.btn_choose_img);
+        Button btnChooseImg = (Button) contentView.findViewById(R.id.btn_choose_img);
         Button btnChoosePhone = (Button) contentView.findViewById(R.id.btn_choose_phone);
-        Button btnCancel      = (Button) contentView.findViewById(R.id.btn_choose_cancel);
+        Button btnCancel = (Button) contentView.findViewById(R.id.btn_choose_cancel);
         btnChooseImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
                 //权限检查
-                if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager
-                        .PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                        PackageManager
+                                .PERMISSION_GRANTED) {
                     //没有权限，请求权限
                     ActivityCompat.requestPermissions(RegisterPager2Activity.this, new String[]{Manifest.permission
                                     .WRITE_EXTERNAL_STORAGE},
@@ -423,7 +509,7 @@ public class RegisterPager2Activity extends BaseActivity {
      */
     private void getImageFromCamera() {
         //创建一个File对象用于存储拍照后的照片
-        mPicLoaclUrl = getExternalCacheDir() + "/output_image.jpg";
+        mPicLoaclUrl = getExternalCacheDir() + "/" + System.currentTimeMillis() + ".jpg";
         File outputImage = new File(mPicLoaclUrl);
         try {
             if (outputImage.exists()) {
@@ -435,7 +521,8 @@ public class RegisterPager2Activity extends BaseActivity {
         }
         //判断Android版本是否是Android7.0以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            imageUri = FileProvider.getUriForFile(RegisterPager2Activity.this, "com.football.freekick.fileprovider", outputImage);
+            imageUri = FileProvider.getUriForFile(RegisterPager2Activity.this, "com.football.freekick.fileprovider",
+                    outputImage);
         } else {
             imageUri = Uri.fromFile(outputImage);
         }
@@ -446,9 +533,11 @@ public class RegisterPager2Activity extends BaseActivity {
 //                    || ContextCompat.checkSelfPermission(this, permission1) != PackageManager.PERMISSION_GRANTED
                     ) {  //先判断是否被赋予权限，没有则申请权限
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {  //给出权限申请说明
-                    ActivityCompat.requestPermissions(RegisterPager2Activity.this, new String[]{Manifest.permission.CAMERA}, 1);
+                    ActivityCompat.requestPermissions(RegisterPager2Activity.this, new String[]{Manifest.permission
+                            .CAMERA}, 1);
                 } else { //直接申请权限
-                    ActivityCompat.requestPermissions(RegisterPager2Activity.this, new String[]{Manifest.permission.CAMERA}, CAMERA); //申请权限，可同时申请多个权限，并根据用户是否赋予权限进行判断
+                    ActivityCompat.requestPermissions(RegisterPager2Activity.this, new String[]{Manifest.permission
+                            .CAMERA}, CAMERA); //申请权限，可同时申请多个权限，并根据用户是否赋予权限进行判断
                 }
             } else {  //赋予过权限，则直接调用相机拍照
                 //启动相机程序
@@ -472,7 +561,7 @@ public class RegisterPager2Activity extends BaseActivity {
                 R.layout.view_choose_year, null);
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        LoopView loopView  = (LoopView) contentView.findViewById(R.id.loop_view);
+        LoopView loopView = (LoopView) contentView.findViewById(R.id.loop_view);
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
 
         loopView.setListener(new OnItemSelectedListener() {
@@ -522,7 +611,7 @@ public class RegisterPager2Activity extends BaseActivity {
                 R.layout.view_choose_team_style, null);
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        LoopView loopView  = (LoopView) contentView.findViewById(R.id.loop_view);
+        LoopView loopView = (LoopView) contentView.findViewById(R.id.loop_view);
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
 
         loopView.setListener(new OnItemSelectedListener() {
@@ -572,7 +661,7 @@ public class RegisterPager2Activity extends BaseActivity {
                 R.layout.view_choose_like, null);
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        LoopView loopView  = (LoopView) contentView.findViewById(R.id.loop_view);
+        LoopView loopView = (LoopView) contentView.findViewById(R.id.loop_view);
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
 
         loopView.setListener(new OnItemSelectedListener() {
@@ -632,11 +721,11 @@ public class RegisterPager2Activity extends BaseActivity {
                 && resultCode == Activity.RESULT_OK) {
             Logger.d(mPicLoaclUrl);
             ImageLoaderUtils.displayImage("file:/" + mPicLoaclUrl, mIvLogo);
-            uploadImage(mPicLoaclUrl);
+            uploadImageToBase64(mPicLoaclUrl);
 
         } else if (requestCode == RESULT_LOAD_IMAGE
                 && resultCode == Activity.RESULT_OK && null != data) {
-            Uri      selectedImage  = data.getData();
+            Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
@@ -667,8 +756,8 @@ public class RegisterPager2Activity extends BaseActivity {
                 cursor.close();
             }
             if (picturePath != null && !picturePath.equals("")) {
-                ImageLoaderUtils.displayImage("file:/"+picturePath,mIvLogo);
-                uploadImage(picturePath);
+                ImageLoaderUtils.displayImage("file:/" + picturePath, mIvLogo);
+                uploadImageToBase64(picturePath);
             } else {
                 ToastUtil.toastShort("获取图片失败");
             }
@@ -677,16 +766,19 @@ public class RegisterPager2Activity extends BaseActivity {
     }
 
     /**
-     * 上傳圖片操作
+     * 操作圖片toBase64
      *
      * @param picLoaclUrl
      */
-    private void uploadImage(String picLoaclUrl) {
+    private void uploadImageToBase64(String picLoaclUrl) {
+        Bitmap bitmap = ImageUtil.getimage(picLoaclUrl);
+        image = ImageUtil.bitmapToBase64(bitmap);
 
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_WRITE_EXTERNAL_STORAGE:

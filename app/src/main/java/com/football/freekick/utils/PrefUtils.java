@@ -16,7 +16,7 @@ import android.content.SharedPreferences;
  */
 public class PrefUtils {
 
-    private static final String SHARE_PREFS_NAME = "yuanmi";
+    private static final String SHARE_PREFS_NAME = "freekick";
 
     public static void putBoolean(Context ctx, String key, boolean value) {
         SharedPreferences pref = ctx.getSharedPreferences(SHARE_PREFS_NAME,

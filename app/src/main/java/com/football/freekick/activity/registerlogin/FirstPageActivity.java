@@ -34,6 +34,11 @@ public class FirstPageActivity extends BaseActivity {
         ButterKnife.bind(this);
         Logger.d( "getCountryNameValue--->"+App.mConfig.getCountryNameValue());
         Logger.d( "getLanguageValue--->"+App.mConfig.getLanguageValue());
+        if (App.mConfig.getLanguageValue().equals("zh")){
+            App.isChinese = true;
+        }else {
+            App.isChinese = false;
+        }
 
     }
 
@@ -41,10 +46,11 @@ public class FirstPageActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_login:
-                startActivity(new Intent(mContext,LoginPage1Activity.class));
+//                startActivity(new Intent(mContext,LoginPage1Activity.class));
+                startActivity(new Intent(mContext,LoginPager2Activity.class));
                 break;
             case R.id.tv_register:
-                startActivity(new Intent(mContext,RegisterPager1Activity.class));
+                startActivity(new Intent(mContext,LoginPage1Activity.class));
                 break;
         }
     }

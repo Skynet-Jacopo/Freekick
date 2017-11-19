@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="128px"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/iv_pic"
+            android:layout_width="50px"
+            android:layout_height="80px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="24px"
+            android:layout_marginRight="24px"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_football"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="32px"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_team_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="廣州恆大"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_30"/>
+
+            <TextView
+                android:id="@+id/tv_district"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
+                android:text="中西區"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_18"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_invite"
+            android:layout_width="128px"
+            android:layout_height="48px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="12px"
+            android:background="@drawable/selector_corner_green_gray_bg"
+            android:gravity="center"
+            android:text="@string/invite"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_24"/>
+
+        <TextView
+            android:id="@+id/tv_attention"
+            android:layout_width="128px"
+            android:layout_height="48px"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="24px"
+            android:background="@drawable/selector_corner_gray_gray_bg"
+            android:gravity="center"
+            android:text="@string/attention"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_24"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#c5c5c5"/>
+</LinearLayout>

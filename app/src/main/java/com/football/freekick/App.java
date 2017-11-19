@@ -3,11 +3,19 @@ package com.football.freekick;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 
+import com.football.freekick.beans.Advertisements;
+import com.football.freekick.beans.Pitches;
+import com.football.freekick.http.Url;
 import com.football.freekick.language.LanguageConfig;
 import com.football.freekick.language.LanguageCountry;
 import com.football.freekick.language.LanguageSwitcher;
+import com.football.freekick.utils.PrefUtils;
+import com.football.freekick.utils.SPUtil;
+import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpHeaders;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -15,13 +23,18 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
+
 
 /**
  * Created by liuqun on 11/23/2016.
  */
 public class App extends Application {
     public static final String FREEKICK = "FREEKICK";
-    public static Context     APP_CONTEXT;
+    public static Context APP_CONTEXT;
     public static HttpHeaders headers;
     public static final String[] PROJECT_LANGUAGES = {
             LanguageCountry.LANGUAGE_OPTION_EN,
@@ -29,6 +42,9 @@ public class App extends Application {
     };
     public static Typeface mTypeface;
     public static LanguageConfig mConfig;
+    public static boolean isChinese = false;
+    public static List<Advertisements.AdvertisementsBean> mAdvertisementsBean;
+    public static List<Pitches.PitchesBean> mPitchesBeanList;
 
     @Override
     public void onCreate() {
@@ -46,13 +62,66 @@ public class App extends Application {
 //                .methodOffset(3);             // 设置调用堆栈的函数偏移值,默认为0
 //                .logAdapter(new AndroidLogAdapter()); //自顶一个打印适配器
         mConfig = LanguageConfig.newInstance(APP_CONTEXT);
+        getAdvertisements();//獲取廣告
+        getPitches();//獲取場地
+    }
 
+    /**
+     * 獲取場地
+     */
+    private void getPitches() {
+        OkGo.get(Url.PITCHES)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Pitches pitches = gson.fromJson(s, Pitches.class);
+                        mPitchesBeanList = pitches.getPitches();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
+    }
+
+    /**
+     * 獲取廣告
+     */
+    private void getAdvertisements() {
+        OkGo.get(Url.ADVERTISEMENTS)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Advertisements advertisements = gson.fromJson(s, Advertisements.class);
+                        mAdvertisementsBean = advertisements.getAdvertisements();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.json(e.getMessage());
+                    }
+                });
     }
 
     private void initOkGo() {
         OkGo.init(this);
         headers = new HttpHeaders();
         headers.put("Content-Type", "application/json");
+        headers.put("access-token", PrefUtils.getString(App.APP_CONTEXT, "access_token", null));
+        headers.put("client", PrefUtils.getString(App.APP_CONTEXT, "client", null));
+        headers.put("uid", PrefUtils.getString(App.APP_CONTEXT, "uid", null));
+        headers.put("expiry", PrefUtils.getString(App.APP_CONTEXT, "expiry", null));
+        Logger.d("access-token--->" + PrefUtils.getString(App.APP_CONTEXT, "access_token", null));
+        Logger.d("client--->" + PrefUtils.getString(App.APP_CONTEXT, "client", null));
+        Logger.d("uid--->" + PrefUtils.getString(App.APP_CONTEXT, "uid", null));
+        Logger.d("expiry--->" + PrefUtils.getString(App.APP_CONTEXT, "expiry", null));
         OkGo.getInstance().addCommonHeaders(headers);
     }
 

@@ -75,7 +75,39 @@
     <string name="join">搵場</string>
     <string name="game_record">作賽\n記錄</string>
     <string name="my_page">我的\n主牆</string>
-
+    <string name="notification">通知</string>
+    <string name="change_language">切換語言</string>
+    <string name="clause">條款和條約</string>
+    <string name="support">幫助和支持</string>
+    <string name="about_us">關於我們</string>
+    <string name="contact_us">聯繫我們</string>
+    <string name="logout">登出</string>
+    <string name="to">至</string>
+    <string name="from">由</string>
+    <string name="start_time">開始時間</string>
+    <string name="end_time">結束時間</string>
+    <string name="pitch_size">球場大小</string>
+    <string name="pitch_size_5">5人場</string>
+    <string name="pitch_size_7">7人場</string>
+    <string name="pitch_size_11">11人場</string>
+    <string name="peoson">人</string>
+    <string name="please_enter_your_email">請輸入您的電郵地址</string>
+    <string name="please_enter_your_password">請輸入您的密碼</string>
+    <string name="loading">加载中..</string>
+    <string name="please_choose_the_year_established">請選擇成立年份</string>
+    <string name="please_select_a_team_average_height">請選擇球隊平均高度</string>
+    <string name="create_team_success">創建球隊成功</string>
+    <string name="match_invite">球賽邀請</string>
+    <string name="invite">邀請</string>
+    <string name="attention">關注</string>
+    <string name="please_choose_match_date">請選擇球賽日期</string>
+    <string name="please_choose_match_time">請選擇球賽時間</string>
+    <string name="please_choose_pitch">請選擇球場</string>
+    <string name="match_date">球賽日期</string>
+    <string name="match_time">球賽時間</string>
+    <string name="please_choose_the_district">請選擇區域</string>
+    <string name="pitch_name">球場名稱</string>
+    <string name="expected_number_of_matches">預計作賽人數</string>
     <string name="text_area">{
     "regions": [
         {

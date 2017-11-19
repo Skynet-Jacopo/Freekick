@@ -217,17 +217,17 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
         save = i;
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        // super.onSaveInstanceState(outState);
-        outState.putInt("fragment", save);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        showFragment(savedInstanceState.getInt("fragment"));
-    }
+//
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        // super.onSaveInstanceState(outState);
+//        outState.putInt("fragment", save);
+//    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        showFragment(savedInstanceState.getInt("fragment"));
+//    }
 
 }

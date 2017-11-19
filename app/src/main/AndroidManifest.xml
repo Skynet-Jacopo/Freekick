@@ -48,11 +48,6 @@
             android:value="1334"/>
 
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".TestActivity">
         </activity>
@@ -71,6 +66,11 @@
         <activity android:name=".activity.registerlogin.RegisterPager2Activity">
         </activity>
         <activity android:name=".activity.registerlogin.FirstPageActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
         <!-- 注册 存储照的容器 -->
@@ -99,11 +99,15 @@
         <activity android:name=".activity.registerlogin.LoginPage1Activity">
         </activity>
         <activity android:name=".activity.registerlogin.LoginPager2Activity">
+
         </activity>
         <activity android:name=".activity.registerlogin.RegisterByEmailActivity">
         </activity>
-        <activity android:name=".activity.ChooseTimeActivity"
-                  android:theme="@style/MyCalendar">
+        <activity
+            android:name=".activity.ChooseTimeActivity"
+            android:theme="@style/MyCalendar">
+        </activity>
+        <activity android:name=".activity.MatchInviteActivity">
         </activity>
     </application>
 

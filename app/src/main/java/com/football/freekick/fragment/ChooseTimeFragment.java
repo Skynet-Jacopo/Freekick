@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.football.freekick.R;
 import com.football.freekick.activity.ChooseTimeActivity;
+import com.football.freekick.utils.ToastUtil;
+import com.football.freekick.utils.Validate;
 import com.football.freekick.views.loopview.LoopView;
 import com.football.freekick.views.loopview.OnItemSelectedListener;
 
@@ -76,27 +78,37 @@ public class ChooseTimeFragment extends Fragment {
             @Override
             public void onItemSelected(int index) {
                 hour = hours.get(index);
-                switch (mState) {
-                    case "1":
-                        ((ChooseTimeActivity) getActivity()).mTvStartTime.setText(hour + ":"+minute);
-                        break;
-                    case "2":
-                        ((ChooseTimeActivity) getActivity()).mTvEndTime.setText(hour + ":"+minute);
-                        break;
+                minute = minutes.get(index);
+                if (Validate.noNull(hour) && Validate.noNull(minute)){
+                    switch (mState) {
+                        case "1":
+                            ((ChooseTimeActivity) getActivity()).mTvStartTime.setText(hour + ":"+minute);
+                            break;
+                        case "2":
+                            ((ChooseTimeActivity) getActivity()).mTvEndTime.setText(hour + ":"+minute);
+                            break;
+                    }
+                } else {
+                    ToastUtil.toastLong("请选择有效时间");
                 }
             }
         });
         mLoopView2.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
+                hour = hours.get(index);
                 minute = minutes.get(index);
-                switch (mState) {
-                    case "1":
-                        ((ChooseTimeActivity) getActivity()).mTvStartTime.setText(hour + ":"+minute);
-                        break;
-                    case "2":
-                        ((ChooseTimeActivity) getActivity()).mTvEndTime.setText(hour + ":"+minute);
-                        break;
+                if (Validate.noNull(hour) && Validate.noNull(minute)){
+                    switch (mState) {
+                        case "1":
+                            ((ChooseTimeActivity) getActivity()).mTvStartTime.setText(hour + ":"+minute);
+                            break;
+                        case "2":
+                            ((ChooseTimeActivity) getActivity()).mTvEndTime.setText(hour + ":"+minute);
+                            break;
+                    }
+                }else {
+                    ToastUtil.toastLong("请选择有效时间");
                 }
             }
         });

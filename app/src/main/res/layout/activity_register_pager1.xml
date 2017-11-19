@@ -46,6 +46,7 @@
                 android:textSize="30px"/>
 
             <EditText
+                android:id="@+id/edt_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
@@ -100,6 +101,7 @@
                 android:textSize="30px"/>
 
             <EditText
+                android:id="@+id/edt_phone_num"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"

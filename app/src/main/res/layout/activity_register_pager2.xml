@@ -220,7 +220,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="人"
+                                    android:text="@string/peoson"
                                     android:textColor="#88beff"
                                     android:textSize="30px"/>
                             </LinearLayout>
@@ -403,7 +403,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginBottom="400px"
+                    android:layout_marginBottom="100px"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -457,6 +457,20 @@
                     </LinearLayout>
 
                 </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="88px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="240px"
+                    android:layout_marginLeft="64px"
+                    android:layout_marginRight="64px"
+                    android:background="@drawable/shape_corner_green"
+                    android:gravity="center"
+                    android:text="@string/go_on"
+                    android:textColor="@color/white"
+                    android:textSize="36px"
+                    android:visibility="visible"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -473,26 +487,14 @@
         android:textColor="@color/white"
         android:textSize="@dimen/text_36"/>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_btn"
         android:orientation="vertical"
         android:background="@color/dark_blue_bg"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/tv_next"
-            android:layout_width="match_parent"
-            android:layout_height="88px"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="240px"
-            android:layout_marginLeft="64px"
-            android:layout_marginRight="64px"
-            android:background="@drawable/shape_corner_green"
-            android:gravity="center"
-            android:text="@string/go_on"
-            android:textColor="@color/white"
-            android:textSize="36px"
-            android:visibility="visible"/>
+
     </LinearLayout>
 
 

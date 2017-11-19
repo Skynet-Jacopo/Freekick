@@ -1,5 +1,6 @@
 package com.football.freekick.app;
 
+import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.annotation.Nullable;
 import com.football.freekick.R;
 import com.football.freekick.language.LanguageObservable;
 import com.football.freekick.utils.ActyUtil;
+import com.football.freekick.utils.LoadingDialogUtil;
 import com.football.freekick.utils.SystemBarTintManager;
 import com.zhy.autolayout.AutoLayoutActivity;
 
@@ -19,6 +21,7 @@ import java.util.Observer;
  */
 
 public class BaseActivity extends AutoLayoutActivity implements Observer {
+    private Dialog mLoadingDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,5 +69,19 @@ public class BaseActivity extends AutoLayoutActivity implements Observer {
     @Override
     public void update(Observable observable, Object o) {
         recreate();
+    }
+
+    /**
+     * Progress   Dialog
+     */
+    protected void loadingShow(String title) {
+        mLoadingDialog = LoadingDialogUtil.createLoadingDialog(this, title);
+    }
+    protected void loadingShow() {
+        mLoadingDialog = LoadingDialogUtil.createLoadingDialog(this, getString(R.string.loading));
+    }
+
+    protected void loadingDismiss() {
+        LoadingDialogUtil.closeDialog(mLoadingDialog);
     }
 }
