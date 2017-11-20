@@ -6,14 +6,13 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
@@ -25,6 +24,7 @@ import com.football.freekick.R;
 import com.football.freekick.activity.ChooseTimeActivity;
 import com.football.freekick.activity.MatchInviteActivity;
 import com.football.freekick.app.BaseFragment;
+import com.football.freekick.beans.Advertisements;
 import com.football.freekick.beans.Area;
 import com.football.freekick.beans.Matches;
 import com.football.freekick.http.Url;
@@ -32,6 +32,7 @@ import com.football.freekick.utils.DateUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
+import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.football.freekick.views.loopview.LoopView;
 import com.football.freekick.views.loopview.OnItemSelectedListener;
 import com.google.gson.Gson;
@@ -40,8 +41,6 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 import com.zhy.autolayout.AutoLinearLayout;
-
-import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +93,14 @@ public class EstablishFragment extends BaseFragment {
     TextView mTvDate;
     @Bind(R.id.ll_parent)
     AutoLinearLayout mLlParent;
+    @Bind(R.id.iv_advertisement1)
+    ImageView mIvAdvertisement1;
+    @Bind(R.id.iv_advertisement2)
+    ImageView mIvAdvertisement2;
+    @Bind(R.id.iv_advertisement3)
+    ImageView mIvAdvertisement3;
+    @Bind(R.id.iv_advertisement4)
+    ImageView mIvAdvertisement4;
     private Context mContext;
     private String mStartTime;
     private String mEndTime;
@@ -109,6 +116,7 @@ public class EstablishFragment extends BaseFragment {
     private int pitch_id;
     private String home_team_id;
     private String home_team_color;
+    private List<Advertisements.AdvertisementsBean> mAdvertisementsList;//广告列表
 
     public EstablishFragment() {
         // Required empty public constructor
@@ -129,8 +137,83 @@ public class EstablishFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mTvIconDate.setTypeface(App.mTypeface);
+        initView();
         initData();
+    }
 
+    /**
+     * 初始化View
+     */
+    private void initView() {
+        initAdvertisements();
+    }
+
+    /**
+     * 初始化广告位图片
+     */
+    private void initAdvertisements() {
+        if (App.mAdvertisementsBean.size() == 0) {
+            getAdvertisements();
+        } else {
+            mAdvertisementsList = App.mAdvertisementsBean;
+            String image = mAdvertisementsList.get(0).getImage();
+            for (int i = 0; i < mAdvertisementsList.size(); i++) {
+                if (mAdvertisementsList.get(i).getScreen().equals("create_1")) {
+                    ImageLoaderUtils.displayImage(mAdvertisementsList.get(i).getImage(), mIvAdvertisement1);
+                } else if (mAdvertisementsList.get(i).getScreen().equals("create_2")) {
+                    ImageLoaderUtils.displayImage(mAdvertisementsList.get(i).getImage(), mIvAdvertisement2);
+                } else if (mAdvertisementsList.get(i).getScreen().equals("create_3")) {
+                    ImageLoaderUtils.displayImage(mAdvertisementsList.get(i).getImage(), mIvAdvertisement3);
+                } else if (mAdvertisementsList.get(i).getScreen().equals("create_4")) {
+                    ImageLoaderUtils.displayImage(mAdvertisementsList.get(i).getImage(), mIvAdvertisement4);
+                } else {
+                    ImageLoaderUtils.displayImage(image, mIvAdvertisement1);
+                    ImageLoaderUtils.displayImage(image, mIvAdvertisement2);
+                    ImageLoaderUtils.displayImage(image, mIvAdvertisement3);
+                    ImageLoaderUtils.displayImage(image, mIvAdvertisement4);
+                }
+            }
+        }
+    }
+
+    /**
+     * (如果App中未能获取到)获取广告列表
+     */
+    private void getAdvertisements() {
+        OkGo.get(Url.ADVERTISEMENTS)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Advertisements advertisements = gson.fromJson(s, Advertisements.class);
+                        mAdvertisementsList = advertisements.getAdvertisements();
+
+                        String image = mAdvertisementsList.get(0).getImage();
+                        for (int i = 0; i < mAdvertisementsList.size(); i++) {
+                            if (mAdvertisementsList.get(i).getScreen().equals("create_1")) {
+                                ImageLoaderUtils.displayImage(mAdvertisementsList.get(i).getImage(), mIvAdvertisement1);
+                            } else if (mAdvertisementsList.get(i).getScreen().equals("create_2")) {
+                                ImageLoaderUtils.displayImage(mAdvertisementsList.get(i).getImage(), mIvAdvertisement2);
+                            } else if (mAdvertisementsList.get(i).getScreen().equals("create_3")) {
+                                ImageLoaderUtils.displayImage(mAdvertisementsList.get(i).getImage(), mIvAdvertisement3);
+                            } else if (mAdvertisementsList.get(i).getScreen().equals("create_4")) {
+                                ImageLoaderUtils.displayImage(mAdvertisementsList.get(i).getImage(), mIvAdvertisement4);
+                            } else {
+                                ImageLoaderUtils.displayImage(image, mIvAdvertisement1);
+                                ImageLoaderUtils.displayImage(image, mIvAdvertisement2);
+                                ImageLoaderUtils.displayImage(image, mIvAdvertisement3);
+                                ImageLoaderUtils.displayImage(image, mIvAdvertisement4);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.json(e.getMessage());
+                    }
+                });
     }
 
     private void initData() {
@@ -168,7 +251,8 @@ public class EstablishFragment extends BaseFragment {
     }
 
     @OnClick({R.id.ll_pitch_name, R.id.ll_match_date, R.id.ll_match_time, R.id.ll_pitch_size, R.id.ll_area, R.id
-            .tv_reduce, R.id.tv_add, R.id.tv_establish})
+            .tv_reduce, R.id.tv_add, R.id.tv_establish, R.id.iv_advertisement1, R.id.iv_advertisement2, R.id
+            .iv_advertisement3, R.id.iv_advertisement4})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_match_date:
@@ -195,6 +279,18 @@ public class EstablishFragment extends BaseFragment {
             case R.id.tv_add:
                 defaultNum += 1;
                 mTvPeopleNum.setText(defaultNum + getString(R.string.peoson));
+                break;
+            case R.id.iv_advertisement1:
+                ToastUtil.toastShort("广告1");
+                break;
+            case R.id.iv_advertisement2:
+                ToastUtil.toastShort("广告2");
+                break;
+            case R.id.iv_advertisement3:
+                ToastUtil.toastShort("广告3");
+                break;
+            case R.id.iv_advertisement4:
+                ToastUtil.toastShort("广告4");
                 break;
             case R.id.tv_establish:
                 submitEstablish();

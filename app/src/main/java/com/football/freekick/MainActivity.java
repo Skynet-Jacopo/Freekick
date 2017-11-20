@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -13,11 +14,17 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.football.freekick.app.BaseActivity;
+import com.football.freekick.event.MainEvent;
 import com.football.freekick.fragment.EstablishFragment;
 import com.football.freekick.fragment.MineFragment;
 import com.football.freekick.fragment.PartakeFragment;
+import com.football.freekick.fragment.PartakeListFragment;
 import com.football.freekick.fragment.RecordFragment;
 import com.football.freekick.fragment.SetUpFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,38 +35,42 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
 
     @Bind(R.id.xian)
-    View           mXian;
+    View mXian;
     @Bind(R.id.main_establish)
-    RadioButton    mMainEstablish;
+    RadioButton mMainEstablish;
     @Bind(R.id.main_partake)
-    RadioButton    mMainPartake;
+    RadioButton mMainPartake;
     @Bind(R.id.main_record)
-    RadioButton    mMainRecord;
+    RadioButton mMainRecord;
     @Bind(R.id.main_mine)
-    RadioButton    mMainMine;
+    RadioButton mMainMine;
     @Bind(R.id.main_set_up)
-    RadioButton    mMainSetUp;
+    RadioButton mMainSetUp;
     @Bind(R.id.main_radiogroup)
-    RadioGroup     mainRadiogroup;
+    RadioGroup mainRadiogroup;
     @Bind(R.id.main_group)
-    FrameLayout    mMainGroup;
+    FrameLayout mMainGroup;
     @Bind(R.id.rl_content)
     RelativeLayout mRlContent;
 
-    private FragmentManager     fm;
+    private FragmentManager fm;
     private FragmentTransaction ft;
 
     private String TAG = "MainActivity";
 
     private EstablishFragment mEstablishFragment;
-    private PartakeFragment   mPartakeFragment;
-    private RecordFragment    mRecordFragment;
-    private MineFragment      mMineFragment;
-    private SetUpFragment     mSetUpFragment;
+    private PartakeFragment mPartakeFragment;
+    private RecordFragment mRecordFragment;
+    private MineFragment mMineFragment;
+    private SetUpFragment mSetUpFragment;
+    private PartakeListFragment mPartakeListFragment;
 
     private int save;
     private Context mContext;
-//    private static String[] PERMISSIONS_STORAGE = {
+    private String msg;
+    private int mEventType;
+
+    //    private static String[] PERMISSIONS_STORAGE = {
 //            Manifest.permission.READ_EXTERNAL_STORAGE,
 //            Manifest.permission.RECORD_AUDIO,
 //            Manifest.permission.WRITE_SETTINGS,
@@ -71,6 +82,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         initView();
 //        /**
 //         * 权限判断
@@ -91,7 +103,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         fm = getSupportFragmentManager();
         mainRadiogroup.setOnCheckedChangeListener(this);
         int which = getIntent().getIntExtra("which", 1);
-        switch (which){
+        switch (which) {
             case 1:
                 mainRadiogroup.check(R.id.main_establish);
                 break;
@@ -141,12 +153,26 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 }
                 break;
             case R.id.main_partake:
-                if (mPartakeFragment == null) {
-                    mPartakeFragment = new PartakeFragment();
-                    ft.add(R.id.main_group, mPartakeFragment);
-                } else {
-                    ft.show(mPartakeFragment);
+                if (mPartakeFragment != null) {
+                    ft.hide(mPartakeFragment);
                 }
+                if (mEventType == 1) {
+                    if (mPartakeListFragment == null) {
+                        mPartakeListFragment = new PartakeListFragment();
+                        ft.remove(mPartakeFragment);
+                        ft.add(R.id.main_group, mPartakeListFragment);
+                    } else {
+                        ft.show(mPartakeListFragment);
+                    }
+                } else {
+                    if (mPartakeFragment == null) {
+                        mPartakeFragment = new PartakeFragment();
+                        ft.add(R.id.main_group, mPartakeFragment);
+                    } else {
+                        ft.show(mPartakeFragment);
+                    }
+                }
+
                 break;
             case R.id.main_record:
                 if (mRecordFragment == null) {
@@ -178,6 +204,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     private void hideFragment() {
         ft = fm.beginTransaction();
+        if (mPartakeListFragment != null) {
+            ft.hide(mPartakeListFragment);
+        }
         if (mEstablishFragment != null) {
             ft.hide(mEstablishFragment);
         }
@@ -217,7 +246,33 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
         save = i;
     }
-//
+
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onDataSynEvent(MainEvent event) {
+        Log.e(TAG, "onDataSynEvent: " + event.getType());
+        switch (event.getType()) {
+            case 1:
+                mEventType = event.getType();
+                mainRadiogroup.check(R.id.main_establish);
+                mainRadiogroup.check(R.id.main_partake);
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+    //
 //    @Override
 //    protected void onSaveInstanceState(Bundle outState) {
 //        // super.onSaveInstanceState(outState);

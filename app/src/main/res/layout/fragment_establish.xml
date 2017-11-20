@@ -2,13 +2,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ECECEC"
     android:fitsSystemWindows="true"
-    android:id="@+id/ll_parent"
     android:orientation="vertical"
-    tools:context="com.football.freekick.fragment.SetUpFragment">
+    tools:context="com.football.freekick.fragment.EstablishFragment">
 
     <LinearLayout
         android:id="@+id/ll_match_date"
@@ -28,14 +28,16 @@
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_30"
             android:textStyle="bold"/>
+
         <TextView
-            android:paddingRight="10px"
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="10px"
             android:text=""
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"/>
+
         <TextView
             android:id="@+id/tv_icon_date"
             android:layout_width="wrap_content"
@@ -70,12 +72,12 @@
             android:textStyle="bold"/>
 
         <TextView
-            android:textColorHint="@color/text_black"
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/please_choose_match_time"
             android:textColor="@color/text_black"
+            android:textColorHint="@color/text_black"
             android:textSize="@dimen/text_24"/>
     </LinearLayout>
 
@@ -174,8 +176,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/please_choose_pitch"
-            android:textColorHint="@color/text_black"
             android:textColor="@color/text_black"
+            android:textColorHint="@color/text_black"
             android:textSize="@dimen/text_24"/>
     </LinearLayout>
 
@@ -249,13 +251,73 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tv_establish"
+            android:layout_marginBottom="56px"
+            android:orientation="vertical"
+            android:paddingLeft="24px"
+            android:paddingRight="24px"
+            android:paddingTop="24px">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="15px"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_advertisement1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15px"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@color/bottom_blue_bg"/>
+
+                <ImageView
+                    android:id="@+id/iv_advertisement2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@color/bottom_blue_bg"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_advertisement3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15px"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@color/bottom_blue_bg"/>
+
+                <ImageView
+                    android:id="@+id/iv_advertisement4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@color/bottom_blue_bg"/>
+            </LinearLayout>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/tv_establish"
             android:layout_width="match_parent"
             android:layout_height="88px"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="49px"
             android:layout_marginLeft="65px"
             android:layout_marginRight="65px"
             android:background="@drawable/selector_corner_green_gray_bg"

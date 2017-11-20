@@ -81,7 +81,8 @@ public class MatchInviteActivity extends BaseActivity {
             mList.clear();
         }
         String match_id = getIntent().getStringExtra("match_id");
-        Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id + "/get_recommended_joiner");
+        Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id +
+                "/get_recommended_joiner");
         OkGo.get(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id + "/get_recommended_joiner")
                 .execute(new StringCallback() {
                     @Override
@@ -92,7 +93,7 @@ public class MatchInviteActivity extends BaseActivity {
                                 "\"image\":{\"url\":\"/uploads/team/image/19/upload-image-8843737-1509546403.\"}}]}";
                         Gson gson = new Gson();
                         Recommended recommended = gson.fromJson(str, Recommended.class);
-                        if (recommended.getTeams()!=null){
+                        if (recommended.getTeams() != null) {
                             List<Recommended.TeamsBean> teams = recommended.getTeams();
                             mList.addAll(teams);
                             mAdapter.notifyDataSetChanged();
@@ -129,8 +130,8 @@ public class MatchInviteActivity extends BaseActivity {
             public void convert(ViewHolder holder, Recommended.TeamsBean teamsBean) {
                 final int itemPosition = holder.getItemPosition();
                 ImageView ivPic = holder.getView(R.id.iv_pic);
-                ImageLoaderUtils.displayImage(teamsBean.getImage().getUrl(),ivPic);
-                holder.setText(R.id.tv_team_name,teamsBean.getTeam_name());
+                ImageLoaderUtils.displayImage(teamsBean.getImage().getUrl(), ivPic);
+                holder.setText(R.id.tv_team_name, teamsBean.getTeam_name());
                 holder.setOnClickListener(R.id.tv_invite, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -151,19 +152,51 @@ public class MatchInviteActivity extends BaseActivity {
 
     /**
      * 關注
-     * @param itemPosition
+     *
+     * @param position
      */
     // TODO: 2017/11/19 這裡是不是缺少字段(判斷是否已關注的)
-    private void payAttention(int itemPosition) {
+    private void payAttention(int position) {
+        Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mList.get(position).getId() +
+                "/follow");
+        OkGo.post(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mList.get(position).getId() +
+                "/follow")
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                    }
 
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
     }
 
     /**
      * 邀請
-     * @param itemPosition
+     *
+     * @param position
      */
-    private void invite(int itemPosition) {
+    private void invite(int position) {
+        Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mList.get(position).getId() +
+                "/unfollow");
+        OkGo.delete(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mList.get(position).getId() +
+                "/unfollow")
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                    }
 
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
     }
 
     @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location})
