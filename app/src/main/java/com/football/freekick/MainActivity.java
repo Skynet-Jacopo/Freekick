@@ -272,6 +272,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+    public int getData(){
+        return mEventType;
+    }
     //
 //    @Override
 //    protected void onSaveInstanceState(Bundle outState) {
