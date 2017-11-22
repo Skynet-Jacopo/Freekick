@@ -138,6 +138,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         Drawable drawableSetUp = getResources().getDrawable(R.drawable.selector_set_up);
         drawableSetUp.setBounds(0, 0, 40, 40);
         mMainSetUp.setCompoundDrawables(null, drawableSetUp, null, null);
+        mMainPartake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEventType = -1;
+                mainRadiogroup.check(R.id.main_establish);
+                mainRadiogroup.check(R.id.main_partake);
+            }
+        });
     }
 
     private void showFragment(int id) {
@@ -153,21 +161,18 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 }
                 break;
             case R.id.main_partake:
-                if (mPartakeFragment != null) {
-                    ft.hide(mPartakeFragment);
-                }
                 if (mEventType == 1) {
                     if (mPartakeListFragment == null) {
                         mPartakeListFragment = new PartakeListFragment();
-                        ft.remove(mPartakeFragment);
-                        ft.add(R.id.main_group, mPartakeListFragment);
+                        ft.add(R.id.main_group, mPartakeListFragment,"PartakeListFragment");
                     } else {
                         ft.show(mPartakeListFragment);
                     }
+
                 } else {
                     if (mPartakeFragment == null) {
                         mPartakeFragment = new PartakeFragment();
-                        ft.add(R.id.main_group, mPartakeFragment);
+                        ft.add(R.id.main_group, mPartakeFragment,"PartakeFragment");
                     } else {
                         ft.show(mPartakeFragment);
                     }
@@ -199,6 +204,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 }
                 break;
         }
+        ft.setCustomAnimations(R.anim.in_from_right,R.anim.out_to_left,R.anim.in_from_left,R.anim.out_to_right);
         ft.commitAllowingStateLoss();
     }
 
@@ -271,9 +277,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-    public int getData(){
-        return mEventType;
     }
     //
 //    @Override

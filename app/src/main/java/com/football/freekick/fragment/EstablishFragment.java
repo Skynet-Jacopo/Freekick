@@ -111,12 +111,14 @@ public class EstablishFragment extends BaseFragment {
     private int regionPos;
     private int districtPos;
 
+    private int pitch_size = 7;//默認球場大小
     private int defaultNum = 7;//默認作賽人數
     private int mPitchPos;//球場pos
     private int pitch_id;
     private String home_team_id;
     private String home_team_color;
     private List<Advertisements.AdvertisementsBean> mAdvertisementsList;//广告列表
+    private String district_id = "";
 
     public EstablishFragment() {
         // Required empty public constructor
@@ -218,7 +220,7 @@ public class EstablishFragment extends BaseFragment {
 
     private void initData() {
         //初始人數
-        mTvPeopleNum.setText(defaultNum + getString(R.string.peoson));
+        mTvPeopleNum.setText(defaultNum + getString(R.string.person));
         //初始化地區數據
         String string = getString(R.string.text_area).trim();
         Gson gson = new Gson();
@@ -274,11 +276,11 @@ public class EstablishFragment extends BaseFragment {
                 if (defaultNum > 1) {
                     defaultNum -= 1;
                 }
-                mTvPeopleNum.setText(defaultNum + getString(R.string.peoson));
+                mTvPeopleNum.setText(defaultNum + getString(R.string.person));
                 break;
             case R.id.tv_add:
                 defaultNum += 1;
-                mTvPeopleNum.setText(defaultNum + getString(R.string.peoson));
+                mTvPeopleNum.setText(defaultNum + getString(R.string.person));
                 break;
             case R.id.iv_advertisement1:
                 ToastUtil.toastShort("广告1");
@@ -398,7 +400,13 @@ public class EstablishFragment extends BaseFragment {
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
         List<String> pitches = new ArrayList<>();
         for (int i = 0; i < App.mPitchesBeanList.size(); i++) {
-            pitches.add(App.mPitchesBeanList.get(i).getName());
+            if (App.mPitchesBeanList.get(i).getSize() == pitch_size){
+                if (district_id.equals("")){
+                    pitches.add(App.mPitchesBeanList.get(i).getName());
+                }else if ((App.mPitchesBeanList.get(i).getDistrict().getId()+"").equals(district_id)){
+                    pitches.add(App.mPitchesBeanList.get(i).getName());
+                }
+            }
         }
 
         loopView.setListener(new OnItemSelectedListener() {
@@ -407,7 +415,12 @@ public class EstablishFragment extends BaseFragment {
                 mPitchPos = index;
             }
         });
-        loopView.setItems(pitches);
+        if (pitches.size()<=0){
+            ToastUtil.toastShort(getString(R.string.no_qualified_pitches));
+            return;
+        }else {
+            loopView.setItems(pitches);
+        }
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -495,9 +508,10 @@ public class EstablishFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
-                String district_id = mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict_id();
-                mTvArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict());
-                ToastUtil.toastShort(district_id);
+                district_id = mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict_id();
+                mTvArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace("$", " "));
+                mTvPitchName.setText("");
+//                ToastUtil.toastShort(district_id);
             }
         });
         popupWindow.setTouchable(true);
@@ -542,10 +556,13 @@ public class EstablishFragment extends BaseFragment {
                 popupWindow.dismiss();
                 if (radio5.isChecked()) {
                     mTvPitchSize.setText(radio5.getText());
+                    pitch_size = 5;
                 } else if (radio7.isChecked()) {
                     mTvPitchSize.setText(radio7.getText());
+                    pitch_size = 7;
                 } else if (radio11.isChecked()) {
                     mTvPitchSize.setText(radio11.getText());
+                    pitch_size = 11;
                 }
                 mTvPitchName.setText("");
             }

@@ -35,15 +35,15 @@ public class LoginPager2Activity extends BaseActivity {
     @Bind(R.id.fl_login_by_facebook)
     FrameLayout mFlLoginByFacebook;
     @Bind(R.id.edt_email)
-    EditText    mEdtEmail;
+    EditText mEdtEmail;
     @Bind(R.id.edt_pass_word)
-    EditText    mEdtPassWord;
+    EditText mEdtPassWord;
     @Bind(R.id.tv_login)
-    TextView    mTvLogin;
+    TextView mTvLogin;
     @Bind(R.id.tv_forget_pass_word)
-    TextView    mTvForgetPassWord;
+    TextView mTvForgetPassWord;
     @Bind(R.id.tv_back)
-    TextView    mTvBack;
+    TextView mTvBack;
     private Context mContext;
 
     @Override
@@ -90,7 +90,7 @@ public class LoginPager2Activity extends BaseActivity {
             return;
         }
         loadingShow();
-        JsonObject object  = new JsonObject();
+        JsonObject object = new JsonObject();
         JsonObject object1 = new JsonObject();
         object1.addProperty("email", StringUtils.getEditText(mEdtEmail));
         object1.addProperty("password", StringUtils.getEditText(mEdtPassWord));
@@ -103,17 +103,17 @@ public class LoginPager2Activity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson  gson  = new Gson();
+                        Gson gson = new Gson();
                         Login login = gson.fromJson(s, Login.class);
                         if (login.getUser() != null) {
                             Login.UserBean user = login.getUser();
                             if (user.getLogin_fail() == 0) {
                                 //登錄成功
-                                Headers headers      = response.headers();
-                                String  access_token = headers.get("access-token");
-                                String  client       = headers.get("client");
-                                String  uid          = headers.get("uid");
-                                String  expiry       = headers.get("expiry");
+                                Headers headers = response.headers();
+                                String access_token = headers.get("access-token");
+                                String client = headers.get("client");
+                                String uid = headers.get("uid");
+                                String expiry = headers.get("expiry");
                                 Logger.d(access_token + "   " + client + "   " + uid + "   " + expiry);
                                 HttpHeaders header = new HttpHeaders();
                                 header.put("access-token", access_token);
@@ -125,19 +125,20 @@ public class LoginPager2Activity extends BaseActivity {
                                 PrefUtils.putString(App.APP_CONTEXT, "client", client);
                                 PrefUtils.putString(App.APP_CONTEXT, "uid", uid);
                                 PrefUtils.putString(App.APP_CONTEXT, "expiry", expiry);
-//                                if (user.getUsername() == null) {//沒有用戶名則去註冊三頁
+                                if (user.getTeams() != null && user.getTeams().size() <= 0) {//沒有球队則去註冊三頁
+//                                if (user.getUsername() == null) {
                                     Intent intent = new Intent(mContext, RegisterPager1Activity.class);
                                     intent.putExtra("email", StringUtils.getEditText(mEdtEmail));
                                     intent.putExtra("password", StringUtils.getEditText(mEdtPassWord));
                                     startActivity(intent);
-//                                } else {//有用戶名則直接進入應用
-//                                    startActivity(new Intent(mContext, OneTimePagerActivity.class));
-//                                }
+                                } else {//有用戶名則直接進入應用
+                                    startActivity(new Intent(mContext, OneTimePagerActivity.class));
+                                }
                             } else {
 
                             }
                         } else {//data為null,登錄失敗
-                            if (login.getErrors() != null){
+                            if (login.getErrors() != null) {
                                 ToastUtil.toastShort(login.getErrors().get(0));
                             }
                         }

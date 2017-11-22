@@ -325,7 +325,7 @@ public class RegisterPager2Activity extends BaseActivity {
         } else if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.long_pass))) {
             style = "long_pass";
         } else if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.main_attack))) {
-            style = "main_attack";
+            style = "attack";
         }
         String battle_preference = "";
         if (StringUtils.getEditText(mTvTeamLike).equals(getString(R.string.for_fun))) {
@@ -406,7 +406,7 @@ public class RegisterPager2Activity extends BaseActivity {
             public void onClick(View view) {
                 popupWindow.dismiss();
                 String district_id = mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict_id();
-                mTvTeamArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict());
+                mTvTeamArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace("$", " "));
                 district = district_id;
             }
         });

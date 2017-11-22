@@ -181,6 +181,8 @@ public class RegisterPager1Activity extends BaseActivity {
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
+                        ToastUtil.toastShort("請在郵箱驗證登錄");
+                        finish();
                         loadingDismiss();
                     }
                 });
