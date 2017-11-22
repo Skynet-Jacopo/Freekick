@@ -1,9 +1,12 @@
 package com.football.freekick.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +14,12 @@ import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
+import com.football.freekick.adapter.PartakeAdapter;
 import com.football.freekick.utils.ToastUtil;
 import com.orhanobut.logger.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,26 +31,29 @@ import butterknife.OnClick;
 public class PartakeListFragment extends Fragment {
     public static PartakeListFragment mPartakeListFragment;
     @Bind(R.id.text)
-    TextView mText;
+    TextView     mText;
     @Bind(R.id.tv_icon_filtrate)
-    TextView mTvIconFiltrate;
+    TextView     mTvIconFiltrate;
     @Bind(R.id.tv_friend)
-    TextView mTvFriend;
+    TextView     mTvFriend;
     @Bind(R.id.tv_notice)
-    TextView mTvNotice;
+    TextView     mTvNotice;
     @Bind(R.id.tv_icon_left)
-    TextView mTvIconLeft;
+    TextView     mTvIconLeft;
     @Bind(R.id.tv_icon_date)
-    TextView mTvIconDate;
+    TextView     mTvIconDate;
     @Bind(R.id.tv_icon_right)
-    TextView mTvIconRight;
+    TextView     mTvIconRight;
     @Bind(R.id.tv_pitch_size)
-    TextView mTvPitchSize;
+    TextView     mTvPitchSize;
     @Bind(R.id.tv_icon_down)
-    TextView mTvIconDown;
+    TextView     mTvIconDown;
     @Bind(R.id.tv_date)
-    TextView mTvDate;
+    TextView     mTvDate;
+    @Bind(R.id.recycler_partake)
+    RecyclerView mRecyclerPartake;
     private PartakeFragment mPartakeFragment;
+    private Context         mContext;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +65,7 @@ public class PartakeListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_partake_list, container, false);
+        mContext = getActivity();
         ButterKnife.bind(this, view);
         return view;
     }
@@ -65,6 +76,33 @@ public class PartakeListFragment extends Fragment {
         mPartakeFragment = (PartakeFragment) getFragmentManager().findFragmentByTag("PartakeFragment");
 
         initView();
+        initData();
+    }
+
+    private void initData() {
+        List<String> datas = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            datas.add("我是球隊" + i);
+        }
+        PartakeAdapter adapter = new PartakeAdapter(datas, mContext);
+        mRecyclerPartake.setLayoutManager(new LinearLayoutManager(mContext));
+        if (mTvIconRight != null) {
+            mRecyclerPartake.setHasFixedSize(true);
+        }
+        mRecyclerPartake.setAdapter(adapter);
+        adapter.setClick(new PartakeAdapter.Click() {
+            @Override
+            public void Clike(View view, int position) {
+                switch (view.getId()){
+                    case R.id.ll_content:
+                        ToastUtil.toastShort("點擊了item");
+                        break;
+                    case R.id.tv_state:
+                        view.setBackground(getResources().getDrawable(R.drawable.selector_round_red_gray_bg));
+                        break;
+                }
+            }
+        });
     }
 
     private void initView() {
