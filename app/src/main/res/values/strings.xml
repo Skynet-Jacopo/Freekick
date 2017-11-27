@@ -299,6 +299,11 @@
     <string name="invited_match">已收到邀請</string>
     <string name="trends">動態</string>
     <string name="focus">焦點</string>
+    <string name="attack">進攻</string>
+    <string name="defend">防守</string>
+    <string name="punctuality">準時</string>
+    <string name="ability">球技</string>
+    <string name="quality">球品</string>
 
 
 </resources>

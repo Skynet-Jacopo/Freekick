@@ -66,11 +66,7 @@
         <activity android:name=".activity.registerlogin.RegisterPager2Activity">
         </activity>
         <activity android:name=".activity.registerlogin.FirstPageActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <!-- 注册 存储照的容器 -->
@@ -113,6 +109,13 @@
             android:theme="@style/MyDialogStyleLeft">
         </activity>
         <activity android:name=".activity.ArticleActivity">
+        </activity>
+        <activity android:name=".activity.MatchContentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 

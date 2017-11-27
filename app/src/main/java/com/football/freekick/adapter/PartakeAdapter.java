@@ -16,11 +16,8 @@ import com.football.freekick.beans.AvailableMatches;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.PrefUtils;
-import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.zhy.autolayout.utils.AutoUtils;
-
-import java.util.List;
 
 /**
  * Created by 90516 on 2017/11/22.
@@ -71,6 +68,7 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (holder instanceof MyHolder1) {
             final MyHolder1 myHolder1 = (MyHolder1) holder;
+            myHolder1.tvIconShare.setTypeface(App.mTypeface);
             myHolder1.tvPitchName.setText(mPitchName);
             myHolder1.tvLocation.setText(mLocation);
             String start = JodaTimeUtil.getTimeHourMinutes(mMatchesBean.getPlay_start());
@@ -121,7 +119,7 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     click.Clike(1, myHolder1.lLContent, position);
                 }
             });
-            myHolder1.ivShare.setOnClickListener(new View.OnClickListener() {
+            myHolder1.lLShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     click.Clike(4, myHolder1.lLContent, position);
@@ -148,13 +146,13 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public static class MyHolder1 extends RecyclerView.ViewHolder {
-        private TextView tvPitchName, tvHomeName, tvVisitorName;
+        private TextView tvPitchName, tvHomeName, tvVisitorName,tvIconShare;
         private TextView tvLocation;
         private TextView tvIconLocation;
         private TextView tvTime;
         private TextView tvState;
-        private LinearLayout lLContent;
-        private ImageView ivPic,ivShare;
+        private LinearLayout lLContent,lLShare;
+        private ImageView ivPic;
         private ImageView ivDressHome;
         private ImageView ivDressVisitor;
 
@@ -167,10 +165,11 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvHomeName = (TextView) itemView.findViewById(R.id.tv_home_name);
             tvVisitorName = (TextView) itemView.findViewById(R.id.tv_visitor_name);
             ivPic = (ImageView) itemView.findViewById(R.id.iv_pic);
-            ivShare = (ImageView) itemView.findViewById(R.id.iv_share);
+            tvIconShare = (TextView) itemView.findViewById(R.id.tv_icon_share);
             ivDressHome = (ImageView) itemView.findViewById(R.id.iv_dress_home);
             ivDressVisitor = (ImageView) itemView.findViewById(R.id.iv_dress_visitor);
             tvState = (TextView) itemView.findViewById(R.id.tv_state);
+            lLShare = (LinearLayout) itemView.findViewById(R.id.ll_share);
             lLContent = (LinearLayout) itemView.findViewById(R.id.ll_content);
         }
     }
