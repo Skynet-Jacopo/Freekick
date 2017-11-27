@@ -13,12 +13,26 @@
         android:paddingLeft="24px"
         android:paddingTop="32px">
 
-        <ImageView
-            android:id="@+id/iv_pic"
+        <FrameLayout
             android:layout_width="340px"
             android:layout_height="250px"
-            android:scaleType="fitXY"
-            android:src="@drawable/one_time_bg"/>
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/iv_pic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/one_time_bg"/>
+
+            <ImageView
+                android:id="@+id/iv_share"
+                android:layout_width="58px"
+                android:layout_height="40px"
+                android:layout_marginTop="15px"
+                android:src="@color/bottom_blue_bg"/>
+        </FrameLayout>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -85,13 +99,30 @@
                 android:paddingLeft="40px"
                 android:paddingRight="40px">
 
-                <ImageView
-                    android:id="@+id/iv_dress_home"
-                    android:layout_width="70px"
-                    android:layout_height="80px"
-                    android:background="@color/black"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_dress_home"/>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_dress_home"
+                        android:layout_width="70px"
+                        android:layout_height="80px"
+                        android:background="@color/black"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_dress_home"/>
+
+                    <TextView
+                        android:id="@+id/tv_home_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/iv_dress_home"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6px"
+                        android:text="名字"
+                        android:textColor="@color/text_black"
+                        android:textSize="14px"/>
+                </RelativeLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -103,17 +134,33 @@
                     android:textSize="@dimen/text_24"
                     android:textStyle="bold"/>
 
-                <ImageView
-                    android:id="@+id/iv_dress_visitor"
-                    android:layout_width="70px"
-                    android:layout_height="80px"
-                    android:background="@color/black"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_dress_visitor"/>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_dress_visitor"
+                        android:layout_width="70px"
+                        android:layout_height="80px"
+                        android:background="@color/black"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_dress_visitor"/>
+
+                    <TextView
+                        android:id="@+id/tv_visitor_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/iv_dress_visitor"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6px"
+                        android:text="名字"
+                        android:textColor="@color/text_black"
+                        android:textSize="14px"/>
+                </RelativeLayout>
+
             </LinearLayout>
 
             <TextView
-                android:clickable="true"
                 android:id="@+id/tv_state"
                 android:layout_width="120px"
                 android:layout_height="32px"
@@ -121,6 +168,7 @@
                 android:layout_below="@id/ll_dress"
                 android:layout_marginTop="8px"
                 android:background="@drawable/selector_round_green_gray_bg"
+                android:clickable="true"
                 android:gravity="center"
                 android:text="參與約賽"
                 android:textColor="@color/white"

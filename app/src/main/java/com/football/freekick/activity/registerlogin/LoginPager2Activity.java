@@ -126,7 +126,6 @@ public class LoginPager2Activity extends BaseActivity {
                                 PrefUtils.putString(App.APP_CONTEXT, "uid", uid);
                                 PrefUtils.putString(App.APP_CONTEXT, "expiry", expiry);
                                 if (user.getTeams() != null && user.getTeams().size() <= 0) {//沒有球队則去註冊三頁
-//                                if (user.getUsername() == null) {
                                     Intent intent = new Intent(mContext, RegisterPager1Activity.class);
                                     intent.putExtra("email", StringUtils.getEditText(mEdtEmail));
                                     intent.putExtra("password", StringUtils.getEditText(mEdtPassWord));

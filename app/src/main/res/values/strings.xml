@@ -279,6 +279,26 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_qualified_pitches">您選擇的條件內沒有符合條件的球場!</string>
+    <string name="people_under_5">5人以下</string>
+    <string name="people_6_10">6人-10人</string>
+    <string name="people_11_20">11人-20人</string>
+    <string name="people_above_20">20人以上</string>
+    <string name="age_under_20">20歲以下</string>
+    <string name="age_21_30">21歲-30歲</string>
+    <string name="age_31_40">31歲-40歲</string>
+    <string name="age_above_41">41歲以上</string>
+    <string name="search_team">搜索球隊</string>
+    <string name="join_match">參與約賽</string>
+    <string name="match_success">成功約賽</string>
+    <string name="same_area_team">同區球隊</string>
+    <string name="more">更多</string>
+    <string name="already_attention">已關注球隊</string>
+    <string name="my_match">我的球賽</string>
+    <string name="implemented_match">已落實球賽</string>
+    <string name="not_mplement_match">未落實球賽</string>
+    <string name="invited_match">已收到邀請</string>
+    <string name="trends">動態</string>
+    <string name="focus">焦點</string>
 
 
 </resources>

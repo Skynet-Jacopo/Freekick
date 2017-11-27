@@ -29,6 +29,7 @@ import com.football.freekick.beans.Area;
 import com.football.freekick.event.MainEvent;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.PrefUtils;
+import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.football.freekick.views.loopview.LoopView;
@@ -40,7 +41,9 @@ import com.orhanobut.logger.Logger;
 import com.zhy.autolayout.AutoLinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
+import org.joda.time.DateTime;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,8 +94,7 @@ public class PartakeFragment extends Fragment {
     AutoLinearLayout mLlParent;
 
     private Context mContext;
-    private String mStartTime;
-    private String mEndTime;
+
     private List<String> mRegions;//大區
     private List<Area.RegionsBean> mAreaRegions;//解析出的大區
     private List<Area.RegionsBean.DistrictsBean> mDistricts;//解析出的小區
@@ -107,6 +109,15 @@ public class PartakeFragment extends Fragment {
     private String home_team_color;
     private List<Advertisements.AdvertisementsBean> mAdvertisementsList;//广告列表
     public String mStr;
+
+    public String mStartTime = "00:00";//默認
+    public String mEndTime = "00:00";//默認
+    public DateTime dateTime =null;
+    public String pitch_size = "7";//默認為7
+    public String district_id = "";
+
+    public boolean isPartake;//模擬點擊跳轉到球隊搜索頁面 true 獲取數據,false不獲取數據,主要是在onResume中應用
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -263,9 +274,23 @@ public class PartakeFragment extends Fragment {
             case R.id.tv_partake:
                 EventBus.getDefault().post(new MainEvent(1));
                 mStr = "你吃飯了么";
+                getDataToNextPage();
                 break;
         }
     }
+
+    private void getDataToNextPage() {
+
+        isPartake = true;
+        if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_5))) {
+            pitch_size = "5";
+        } else if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_7))) {
+            pitch_size = "7";
+        } else if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_11))) {
+            pitch_size = "11";
+        }
+    }
+
     /**
      * 選擇地區
      */
@@ -321,9 +346,9 @@ public class PartakeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
-                String district_id = mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict_id();
+                district_id = mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict_id();
                 mTvArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace("$", " "));
-                ToastUtil.toastShort(district_id);
+//                ToastUtil.toastShort(district_id);
             }
         });
         popupWindow.setTouchable(true);
@@ -405,6 +430,7 @@ public class PartakeFragment extends Fragment {
             String day = data.getStringExtra("day");
             String month = data.getStringExtra("month");
             String year = data.getStringExtra("year");
+            dateTime = (DateTime) data.getSerializableExtra("dateTime");
 //            ToastUtil.toastShort(year + "年" + month + "月" + day + "日");
             mTvDate.setText(year + "-" + month + "-" + day);
         } else if (requestCode == CHOOSE_TIME && resultCode == RESULT_OK) {

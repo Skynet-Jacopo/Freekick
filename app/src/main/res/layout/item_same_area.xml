@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingBottom="32px"
+        android:paddingTop="32px"
+        android:paddingRight="20px"
+        android:paddingLeft="20px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:scaleType="fitXY"
+            tools:src="@color/black"
+            android:layout_width="52px"
+            android:layout_height="61px"/>
+        <TextView
+            android:id="@+id/tv_team_name"
+            tools:text="我是名字"
+            android:layout_marginTop="10px"
+            android:textSize="20px"
+            android:textColor="@color/text_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

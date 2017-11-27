@@ -203,6 +203,7 @@ public class CalenderActivity extends AutoLayoutActivity {
                     intent.putExtra("day", day + "");
                     intent.putExtra("month", monthOfYear + "");
                     intent.putExtra("year", year + "");
+                    intent.putExtra("dateTime", dateTime);
                 } else {
                     int dayOfMonth  = mSelectDate.getDayOfMonth();
                     int monthOfYear = mSelectDate.getMonthOfYear();
@@ -212,6 +213,7 @@ public class CalenderActivity extends AutoLayoutActivity {
                     intent.putExtra("day", dayOfMonth + "");
                     intent.putExtra("month", monthOfYear + "");
                     intent.putExtra("year", year + "");
+                    intent.putExtra("dateTime", mSelectDate);
                 }
                 setResult(RESULT_OK, intent);
                 finish();

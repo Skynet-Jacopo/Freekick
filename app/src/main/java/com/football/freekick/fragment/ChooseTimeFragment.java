@@ -23,7 +23,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * A simple {@link Fragment} subclass.
+ * 選擇開始時間和結束時間界面
  */
 public class ChooseTimeFragment extends Fragment {
 

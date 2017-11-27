@@ -1,13 +1,179 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.football.freekick.fragment.RecordFragment">
+<com.zhy.autolayout.AutoLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ECECEC"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.football.freekick.fragment.RecordFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
+        android:focusable="false"
+        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text=""/>
+        android:layout_height="88px"
+        android:background="#070D44"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <RelativeLayout
+            android:layout_width="520px"
+            android:layout_height="56px"
+            android:layout_centerInParent="true"
+            android:background="@drawable/shape_round_blue_bg">
+
+            <TextView
+                android:id="@+id/tv_icon_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20px"
+                android:text="@string/icon_search"
+                android:textColor="@color/white"
+                android:textSize="24px"/>
+
+            <EditText
+                android:id="@+id/edt_search_team"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20px"
+                android:layout_toRightOf="@+id/tv_icon_search"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/search_team"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#B8BDFF"
+                android:textSize="24px"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_pic"
+                android:layout_width="match_parent"
+                android:layout_height="320px"
+                android:scaleType="fitXY"
+                android:src="@color/black_blue"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingBottom="32px"
+                android:paddingLeft="24px"
+                android:paddingTop="32px"
+                android:text="@string/record"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_30"
+                android:textStyle="bold"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_record"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24px"
+                android:background="@color/white">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:id="@+id/ll_same_area_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_rectangle_white_gray_bg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingBottom="32px"
+                    android:paddingLeft="24px"
+                    android:paddingTop="32px"
+                    android:text="@string/same_area_team"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_30"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="32px"
+                    android:paddingLeft="24px"
+                    android:paddingRight="24px"
+                    android:paddingTop="32px"
+                    android:text="@string/more"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_24"/>
+
+            </LinearLayout>
+            <View
+                android:background="#ececec"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+            <android.support.v7.widget.RecyclerView
+                android:paddingLeft="4px"
+                android:paddingRight="4px"
+                android:layout_marginBottom="24px"
+                android:id="@+id/recycler_same_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"/>
+            <LinearLayout
+                android:id="@+id/ll_attention_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_rectangle_white_gray_bg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingBottom="32px"
+                    android:paddingLeft="24px"
+                    android:paddingTop="32px"
+                    android:text="@string/already_attention"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_30"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="32px"
+                    android:paddingLeft="24px"
+                    android:paddingRight="24px"
+                    android:paddingTop="32px"
+                    android:text="@string/more"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_24"/>
+
+            </LinearLayout>
+            <View
+                android:background="#ececec"
+                android:layout_width="match_parent"
+                android:layout_height="1px"/>
+            <android.support.v7.widget.RecyclerView
+                android:paddingLeft="4px"
+                android:paddingRight="4px"
+                android:layout_marginBottom="24px"
+                android:id="@+id/recycler_attention"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"/>
+            <View
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="150px"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</com.zhy.autolayout.AutoLinearLayout>

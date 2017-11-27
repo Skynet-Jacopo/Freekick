@@ -53,12 +53,13 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">11sp</item>
     </style>
-    !--圆形头像属性-->
+    <!--&#45;&#45;圆形头像属性&#45;&#45;-->
     <declare-styleable name="roundedimageview">
-        <attr name="border_thickness" format="dimension" />
-        <attr name="border_inside_color" format="color" />
+        <attr name="border_thickness" format="dimension"/>
+        <attr name="border_inside_color" format="color"/>
         <attr name="border_outside_color" format="color"/>
     </declare-styleable>
+
     <style name="MyDialogStyle">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowFrame">@null</item>
@@ -68,5 +69,34 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="MyDialogStyleLeft" parent="TranslucentTheme">
+        <item name="android:windowAnimationStyle">@style/AnimLeft</item>
+        <item name="android:windowFrame">@null</item>
+        <!-- 边框 -->
+        <!--   <item name="android:windowIsFloating">true</item> -->
+        <!-- 是否浮现在activity之上 -->
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 是否允许对话框的背景变暗 -->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="AnimLeft" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/in_from_left</item>
+        <item name="android:windowExitAnimation">@anim/out_to_left</item>
+    </style>
+
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#ECECEC</item>
+        <item name="colorControlActivated">@color/blue_green</item>
+    </style>
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">15sp</item>
     </style>
 </resources>
