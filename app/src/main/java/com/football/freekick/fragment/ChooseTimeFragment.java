@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 
 import com.football.freekick.R;
 import com.football.freekick.activity.ChooseTimeActivity;
-import com.football.freekick.utils.ToastUtil;
-import com.football.freekick.utils.Validate;
 import com.football.freekick.views.loopview.LoopView;
 import com.football.freekick.views.loopview.OnItemSelectedListener;
 
@@ -37,6 +35,8 @@ public class ChooseTimeFragment extends Fragment {
     private String mState;
     private String hour = "00";
     private String minute = "00";
+    private int mPosition1 = 0;
+    private int mPosition2 = 0;
 
     public ChooseTimeFragment() {
         // Required empty public constructor
@@ -77,9 +77,10 @@ public class ChooseTimeFragment extends Fragment {
         mLoopView1.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                hour = hours.get(index);
-                minute = minutes.get(index);
-                if (Validate.noNull(hour) && Validate.noNull(minute)){
+                mPosition1 = index;
+                hour = hours.get(mPosition1);
+                minute = minutes.get(mPosition2);
+
                     switch (mState) {
                         case "1":
                             ((ChooseTimeActivity) getActivity()).mTvStartTime.setText(hour + ":"+minute);
@@ -88,17 +89,14 @@ public class ChooseTimeFragment extends Fragment {
                             ((ChooseTimeActivity) getActivity()).mTvEndTime.setText(hour + ":"+minute);
                             break;
                     }
-                } else {
-                    ToastUtil.toastLong("请选择有效时间");
-                }
             }
         });
         mLoopView2.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                hour = hours.get(index);
-                minute = minutes.get(index);
-                if (Validate.noNull(hour) && Validate.noNull(minute)){
+                mPosition2 = index;
+                hour = hours.get(mPosition1);
+                minute = minutes.get(mPosition2);
                     switch (mState) {
                         case "1":
                             ((ChooseTimeActivity) getActivity()).mTvStartTime.setText(hour + ":"+minute);
@@ -107,9 +105,6 @@ public class ChooseTimeFragment extends Fragment {
                             ((ChooseTimeActivity) getActivity()).mTvEndTime.setText(hour + ":"+minute);
                             break;
                     }
-                }else {
-                    ToastUtil.toastLong("请选择有效时间");
-                }
             }
         });
     }

@@ -778,4 +778,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#afafaf"/>
+    <View
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="200px"/>
 </LinearLayout>

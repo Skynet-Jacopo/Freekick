@@ -66,6 +66,11 @@
         <activity android:name=".activity.registerlogin.RegisterPager2Activity">
         </activity>
         <activity android:name=".activity.registerlogin.FirstPageActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
         <!-- 注册 存储照的容器 -->
@@ -115,11 +120,7 @@
 
         </activity>
         <activity android:name=".activity.TeamDetailActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 

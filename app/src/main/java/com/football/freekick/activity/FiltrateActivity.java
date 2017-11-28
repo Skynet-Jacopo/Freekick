@@ -21,6 +21,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 篩選界面
+ */
 public class FiltrateActivity extends BaseActivity {
 
     @Bind(R.id.text1)

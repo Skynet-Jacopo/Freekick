@@ -140,9 +140,20 @@
         android:layout_height="94px">
 
         <TextView
+            android:clickable="true"
             android:gravity="center"
-            android:text="約戰"
-            android:background="#f95e5f"
+            android:text="@string/yue_zhan"
+            android:background="@drawable/selector_rectangle_green_gray_bg"
+            android:textSize="36px"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/attention"
+            android:background="@drawable/selector_rectangle_blue_gray_bg"
             android:textSize="36px"
             android:textColor="@color/white"
             android:layout_weight="1"
