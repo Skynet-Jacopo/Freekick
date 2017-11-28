@@ -133,7 +133,7 @@ public class RegisterPager2Activity extends BaseActivity {
     private String age_range_min = "";
     private String age_range_max = "";
     private String image = "";
-    private String district="";
+    private String district = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,10 +142,10 @@ public class RegisterPager2Activity extends BaseActivity {
         mContext = RegisterPager2Activity.this;
         ButterKnife.bind(this);
         initView();
-        Logger.d("access-token--->"+ PrefUtils.getString(App.APP_CONTEXT, "access_token", null));
-        Logger.d("client--->"+PrefUtils.getString(App.APP_CONTEXT, "client", null));
-        Logger.d("uid--->"+PrefUtils.getString(App.APP_CONTEXT, "uid", null));
-        Logger.d("expiry--->"+PrefUtils.getString(App.APP_CONTEXT, "expiry", null));
+        Logger.d("access-token--->" + PrefUtils.getString(App.APP_CONTEXT, "access_token", null));
+        Logger.d("client--->" + PrefUtils.getString(App.APP_CONTEXT, "client", null));
+        Logger.d("uid--->" + PrefUtils.getString(App.APP_CONTEXT, "uid", null));
+        Logger.d("expiry--->" + PrefUtils.getString(App.APP_CONTEXT, "expiry", null));
     }
 
     private void initView() {
@@ -313,11 +313,11 @@ public class RegisterPager2Activity extends BaseActivity {
         String team_name = StringUtils.getEditText(mEdtTeamName);
         String establish_year;
         // TODO: 2017/11/19 是否要把這裡的漢字改成雙語言?
-        if (StringUtils.getEditText(mTvYear).equals("今年")){
+        if (StringUtils.getEditText(mTvYear).equals("今年")) {
             DateTime time = new DateTime();
-            establish_year = time.getYear()+"";
-        }else {
-            establish_year = StringUtils.getEditText(mTvYear).replace(" 年","");
+            establish_year = time.getYear() + "";
+        } else {
+            establish_year = StringUtils.getEditText(mTvYear).replace(" 年", "");
         }
         String style = "";
         if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.short_pass))) {
@@ -336,17 +336,17 @@ public class RegisterPager2Activity extends BaseActivity {
         String size = StringUtils.getEditText(mTvPeopleNum);
 
         Intent intent = new Intent(mContext, RegisterPager3Activity.class);
-        intent.putExtra("team_name",team_name);
-        intent.putExtra("district",district);
-        intent.putExtra("establish_year",establish_year);
-        intent.putExtra("average_height",average_height);
-        intent.putExtra("age_range_min",age_range_min);
-        intent.putExtra("age_range_max",age_range_max);
-        intent.putExtra("style",style);
-        intent.putExtra("battle_preference",battle_preference);
-        intent.putExtra("size",size);
-        intent.putExtra("status","a");//?這是個什麼東東??
-        intent.putExtra("image",image);
+        intent.putExtra("team_name", team_name);
+        intent.putExtra("district", district);
+        intent.putExtra("establish_year", establish_year);
+        intent.putExtra("average_height", average_height);
+        intent.putExtra("age_range_min", age_range_min);
+        intent.putExtra("age_range_max", age_range_max);
+        intent.putExtra("style", style);
+        intent.putExtra("battle_preference", battle_preference);
+        intent.putExtra("size", size);
+        intent.putExtra("status", "a");//?這是個什麼東東??
+        intent.putExtra("image", image);
         startActivity(intent);
     }
 
@@ -406,7 +406,8 @@ public class RegisterPager2Activity extends BaseActivity {
             public void onClick(View view) {
                 popupWindow.dismiss();
                 String district_id = mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict_id();
-                mTvTeamArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace("$", " "));
+                mTvTeamArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace
+                        ("$", " "));
                 district = district_id;
             }
         });
@@ -563,7 +564,7 @@ public class RegisterPager2Activity extends BaseActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         LoopView loopView = (LoopView) contentView.findViewById(R.id.loop_view);
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
-
+        mYearPos = mYears.size() - 1;
         loopView.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {

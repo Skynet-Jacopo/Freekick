@@ -304,6 +304,9 @@
     <string name="punctuality">準時</string>
     <string name="ability">球技</string>
     <string name="quality">球品</string>
+    <string name="decide_to_play">決定作賽</string>
+    <string name="basic_information">基本資料</string>
+    <string name="finished_match">已完成球賽</string>
 
 
 </resources>
