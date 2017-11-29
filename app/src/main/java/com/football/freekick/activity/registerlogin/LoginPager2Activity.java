@@ -23,12 +23,16 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpHeaders;
 import com.orhanobut.logger.Logger;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.Response;
+
+import static android.R.attr.id;
 
 public class LoginPager2Activity extends BaseActivity {
 
@@ -52,6 +56,7 @@ public class LoginPager2Activity extends BaseActivity {
         setContentView(R.layout.activity_login_pager2);
         mContext = LoginPager2Activity.this;
         ButterKnife.bind(this);
+//        mEdtEmail.setText("huo@yopmail.com");
         mEdtEmail.setText("yue@yopmail.com");
         mEdtPassWord.setText("123456");
         initView();
@@ -131,6 +136,15 @@ public class LoginPager2Activity extends BaseActivity {
                                     intent.putExtra("password", StringUtils.getEditText(mEdtPassWord));
                                     startActivity(intent);
                                 } else {//有用戶名則直接進入應用
+                                    List<Login.UserBean.TeamsBean> teams = user.getTeams();
+                                    Login.UserBean.TeamsBean teamsBean = teams.get(teams.size() - 1);
+                                    PrefUtils.putString(App.APP_CONTEXT, "team_id", teamsBean.getId() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "color1", teamsBean.getColor1() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "color2", teamsBean.getColor2() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "logourl", teamsBean.getImage().getUrl() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "team_name", teamsBean.getTeam_name() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "size", teamsBean.getSize() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "district", teamsBean.getDistrict() + "");
                                     startActivity(new Intent(mContext, OneTimePagerActivity.class));
                                 }
                             } else {

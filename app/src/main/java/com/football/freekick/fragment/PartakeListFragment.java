@@ -171,6 +171,7 @@ public class PartakeListFragment extends Fragment {
         object1.addProperty("style", style);
         object.add("get_available_match_input", object1);
         Logger.json(object.toString());
+        Logger.d(Url.AVAILABLE_MATCHES + PrefUtils.getString(App.APP_CONTEXT, "team_id", null) + "/available_matches");
         OkGo.post(Url.AVAILABLE_MATCHES + PrefUtils.getString(App.APP_CONTEXT, "team_id", null) + "/available_matches")
                 .upJson(object.toString())
                 .execute(new StringCallback() {
@@ -237,10 +238,12 @@ public class PartakeListFragment extends Fragment {
                                             ToastUtil.toastShort("點擊了item");
                                             break;
                                         case 2:
-                                            view.setBackground(getResources().getDrawable(R.drawable.selector_round_red_gray_bg));
+                                            view.setBackground(getResources().getDrawable(R.drawable
+                                                    .selector_round_red_gray_bg));
                                             break;
                                         case 3:
-                                            view.setBackground(getResources().getDrawable(R.drawable.selector_round_green_gray_bg));
+                                            view.setBackground(getResources().getDrawable(R.drawable
+                                                    .selector_round_green_gray_bg));
                                             break;
                                         case 4://分享
                                             ToastUtil.toastShort("分享");
@@ -407,13 +410,21 @@ public class PartakeListFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILTRATE_REQUEST_CODE && resultCode == RESULT_OK) {//篩選返回數據
-            mStartTime = data.getStringExtra("mStartTime");
-            mEndTime = data.getStringExtra("mEndTime");
-            district_id = data.getStringExtra("district_id");
-            size = data.getStringExtra("size");
-            average_height = data.getStringExtra("average_height");
-            age_range = data.getStringExtra("age_range");
-            style = data.getStringExtra("style");
+            if (!StringUtils.isEmpty(data.getStringExtra("mStartTime"))) {
+                mStartTime = data.getStringExtra("mStartTime");
+            }
+            if (!StringUtils.isEmpty(data.getStringExtra("mEndTime")))
+                mEndTime = data.getStringExtra("mEndTime");
+            if (!StringUtils.isEmpty(data.getStringExtra("district_id")))
+                district_id = data.getStringExtra("district_id");
+            if (!StringUtils.isEmpty(data.getStringExtra("size")))
+                size = data.getStringExtra("size");
+            if (!StringUtils.isEmpty(data.getStringExtra("average_height")))
+                average_height = data.getStringExtra("average_height");
+            if (!StringUtils.isEmpty(data.getStringExtra("age_range")))
+                age_range = data.getStringExtra("age_range");
+            if (!StringUtils.isEmpty(data.getStringExtra("style")))
+                style = data.getStringExtra("style");
 
         } else if (requestCode == CHOOSE_DATE && resultCode == RESULT_OK) {
             String day = data.getStringExtra("day");

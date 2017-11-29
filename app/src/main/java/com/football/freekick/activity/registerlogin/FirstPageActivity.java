@@ -9,6 +9,11 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.orhanobut.logger.Logger;
 
 import butterknife.Bind;
@@ -39,7 +44,9 @@ public class FirstPageActivity extends BaseActivity {
         }else {
             App.isChinese = false;
         }
-
+        Logger.d("google可用么"+GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext()));
+//        Logger.d("getToken---->"+ FirebaseInstanceId.getInstance().getToken());
+        int success = ConnectionResult.SUCCESS;
     }
 
     @OnClick({R.id.tv_login, R.id.tv_register})
@@ -53,5 +60,15 @@ public class FirstPageActivity extends BaseActivity {
                 startActivity(new Intent(mContext,LoginPage1Activity.class));
                 break;
         }
+    }
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+//        int resultCode = apiAvailability.isGooglePlayServicesAvailable(app);
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+        if (resultCode != ConnectionResult.SUCCESS) {
+            //TODO track user's device not support play service. should use pull to get msg.
+            return false;
+        }
+        return true;
     }
 }

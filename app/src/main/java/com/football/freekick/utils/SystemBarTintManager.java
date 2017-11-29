@@ -42,6 +42,7 @@ import java.lang.reflect.Method;
  * translucent system UI modes.
  *
  */
+@SuppressWarnings("ResourceType")
 public class SystemBarTintManager {
 
     static {
@@ -353,6 +354,7 @@ public class SystemBarTintManager {
      * device configuration.
      *
      */
+
     public static class SystemBarConfig {
 
         private static final String STATUS_BAR_HEIGHT_RES_NAME        = "status_bar_height";

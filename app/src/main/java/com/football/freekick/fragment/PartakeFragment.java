@@ -112,7 +112,7 @@ public class PartakeFragment extends Fragment {
 
     public String mStartTime = "00:00";//默認
     public String mEndTime = "00:00";//默認
-    public DateTime dateTime =null;
+    public DateTime dateTime = null;
     public String pitch_size = "7";//默認為7
     public String district_id = "";
 
@@ -272,13 +272,29 @@ public class PartakeFragment extends Fragment {
                 ToastUtil.toastShort("广告4");
                 break;
             case R.id.tv_partake:
-                EventBus.getDefault().post(new MainEvent(1));
-                mStr = "你吃飯了么";
-                getDataToNextPage();
+                goToNextPager();
                 break;
         }
     }
 
+    private void goToNextPager() {
+        if (StringUtils.isEmpty(mTvDate)) {
+            ToastUtil.toastShort(getString(R.string.please_choose_match_date));
+            return;
+        }
+        if (StringUtils.isEmpty(mTvTime)) {
+            ToastUtil.toastShort(getString(R.string.please_choose_match_time));
+            return;
+        }
+        if (StringUtils.isEmpty(mTvArea)) {
+            ToastUtil.toastShort(getString(R.string.please_choose_the_district));
+            return;
+        }
+        EventBus.getDefault().post(new MainEvent(1));
+        mStr = "你吃飯了么";
+        getDataToNextPage();
+    }
+    //將數據獲取給下個頁面
     private void getDataToNextPage() {
 
         isPartake = true;
@@ -347,7 +363,8 @@ public class PartakeFragment extends Fragment {
             public void onClick(View view) {
                 popupWindow.dismiss();
                 district_id = mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict_id();
-                mTvArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace("$", " "));
+                mTvArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace
+                        ("$", " "));
 //                ToastUtil.toastShort(district_id);
             }
         });

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 26
@@ -11,6 +12,18 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+    }
+    signingConfigs {
+        config {
+            keyAlias 'freekick'
+            keyPassword '123456'
+            storeFile file('freekick.jks')
+            storePassword '123456'
+        }
+    }
+    lintOptions{
+        checkReleaseBuilds false
+        abortOnError false
     }
     buildTypes {
         release {
@@ -41,5 +54,8 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.android.support:cardview-v7:26.0.0-alpha1'
+//    compile "com.google.android.gms:play-services-gcm:9.0.0"
+    compile "com.google.firebase:firebase-messaging:9.0.0"
+//    compile 'com.google.firebase:firebase-messaging:11.0.4'
     testCompile 'junit:junit:4.12'
 }

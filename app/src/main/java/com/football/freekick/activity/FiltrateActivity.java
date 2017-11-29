@@ -70,14 +70,14 @@ public class FiltrateActivity extends BaseActivity {
     TextView mTvStyle2;
     @Bind(R.id.tv_confirm)
     TextView mTvConfirm;
-    private String mStartTime = "00:00";
-    private String mEndTime = "00:00";
-    private String size = "2";//默認球隊人數
-    private String average_height = "2";//默認平均高度
-    private String age_range = "2";//默認球隊年齡
-    private String style = "1";//默認風格
+    private String mStartTime = "";
+    private String mEndTime = "";
+    private String size = "";//默認球隊人數
+    private String average_height = "";//默認平均高度
+    private String age_range = "";//默認球隊年齡
+    private String style = "";//默認風格
     private List<Area.RegionsBean> mRegions;
-    private String district_id;
+    private String district_id = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

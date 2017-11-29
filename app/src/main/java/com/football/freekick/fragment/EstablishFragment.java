@@ -312,10 +312,10 @@ public class EstablishFragment extends BaseFragment {
             ToastUtil.toastShort(getString(R.string.please_choose_match_time));
             return;
         }
-        if (StringUtils.isEmpty(mTvPitchName)) {
-            ToastUtil.toastShort(getString(R.string.please_choose_pitch));
-            return;
-        }
+//        if (StringUtils.isEmpty(mTvPitchName)) {
+//            ToastUtil.toastShort(getString(R.string.please_choose_pitch));
+//            return;
+//        }
         String size = "";
         if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_5))) {
             size = "5";
@@ -338,7 +338,12 @@ public class EstablishFragment extends BaseFragment {
         object1.addProperty("play_start", play_start);
         object1.addProperty("play_end", play_end);
         object1.addProperty("confirm_end", confirm_end);
-        object1.addProperty("pitch_id", pitch_id);
+        if (StringUtils.isEmpty(mTvPitchName)) {
+            // TODO: 2017/11/29 這裡other_pitch應該怎麼傳
+            object1.addProperty("other_pitch", "other_pitch");//if pitch_id is NULL, other_pitch is required to fill
+        }else {
+            object1.addProperty("pitch_id", pitch_id);
+        }
         object.add("match", object1);
         Logger.json(object.toString());
         OkGo.post(Url.MATCHES)

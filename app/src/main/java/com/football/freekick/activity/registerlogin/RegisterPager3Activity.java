@@ -146,6 +146,7 @@ public class RegisterPager3Activity extends BaseActivity {
         object1.addProperty("color2", color2);
         object1.addProperty("status", status);
         object1.addProperty("image", image);
+        object1.addProperty("prefer_district_id", district);
         object.add("team", object1);
         Logger.json(object.toString());
         Logger.d(App.headers.toString());
