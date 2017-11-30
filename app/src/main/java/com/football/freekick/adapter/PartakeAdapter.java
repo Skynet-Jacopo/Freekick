@@ -78,7 +78,7 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             myHolder1.tvTime.setText(start + "-" + end);
             myHolder1.ivDressHome.setBackgroundColor(Color.parseColor("#" + matchesBean.getHome_team_color()));
-            myHolder1.tvHomeName.setText(PrefUtils.getString(App.APP_CONTEXT, "team_name", null));
+            myHolder1.tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
             // TODO: 2017/11/30 球場圖 還未有
             ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),myHolder1.ivPic);
 
@@ -149,10 +149,19 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        if (position % 3 != 0) {
-            return TYPE_1;
-        } else {
-//            return TYPE_2;
+        if (mMatchList.size()>=3){
+            if (position ==2){
+                return TYPE_2;
+            }else {
+                return TYPE_1;
+            }
+        }else if (mMatchList.size() == 2){
+            if (position ==1){
+                return TYPE_2;
+            }else {
+                return TYPE_1;
+            }
+        }else {
             return TYPE_1;
         }
     }

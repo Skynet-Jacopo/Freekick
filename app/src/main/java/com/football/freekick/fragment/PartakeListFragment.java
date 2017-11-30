@@ -130,13 +130,50 @@ public class PartakeListFragment extends Fragment {
     }
 
     private void initData() {
-
         mMatchList = new ArrayList<>();
-        List<String> datas = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            datas.add("我是球隊" + i);
+        mAdapter = new PartakeAdapter(mMatchList, mContext);
+        mRecyclerPartake.setLayoutManager(new LinearLayoutManager(mContext));
+        if (mTvIconRight != null) {
+            mRecyclerPartake.setHasFixedSize(true);
         }
+        mRecyclerPartake.setAdapter(mAdapter);
+        mAdapter.setClick(new PartakeAdapter.Click() {
+            @Override
+            public void Clike(int state, View view, int position) {
+                //1.點擊item,2.點擊參與約賽;3.點擊成功約賽
+                Intent intent = new Intent();
+                AvailableMatches.MatchesBean matchesBean = mMatchList.get(position);
+                switch (state) {
+                    case 1:
+                        String status = matchesBean.getStatus();
+                        switch (status) {
+                            case "i"://已邀請
+                            case "w"://不展示右側以及Button
 
+                                break;
+                            case "m"://展示或者(如果參與對是自己的話,是不是應該有退出比賽)
+
+                                break;
+                        }
+                        intent.setClass(mContext, MatchContentActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        intent.setClass(mContext, JoinMatchActivity.class);
+                        intent.putExtra("matchesBean", matchesBean);
+                        startActivity(intent);
+//                                            joinMatch(position);//參與球賽
+                        break;
+                    case 3://成功約賽的,應該是沒啥用了
+
+                        break;
+                    case 4://分享
+                        // TODO: 2017/11/30 分享
+                        ToastUtil.toastShort("分享");
+                        break;
+                }
+            }
+        });
     }
 
     private void initView() {
@@ -197,7 +234,8 @@ public class PartakeListFragment extends Fragment {
                                 "            \"home_team\": {\n" +
                                 "                \"id\": 33,\n" +
                                 "                \"image\": {\n" +
-                                "                    \"url\": \"/uploads/team/image/33/upload-image-9724761-1510149726.\"\n" +
+                                "                    \"url\": " +
+                                "\"/uploads/team/image/33/upload-image-9724761-1510149726.\"\n" +
                                 "                }\n" +
                                 "            },\n" +
                                 "            \"join_matches\": [\n" +
@@ -296,50 +334,18 @@ public class PartakeListFragment extends Fragment {
                         if (matches.getMatches().size() <= 0) {
                             ToastUtil.toastShort("No records found.");
                         } else {
-                            mMatchList = matches.getMatches();
-                            mAdapter = new PartakeAdapter(mMatchList, mContext);
-                            mRecyclerPartake.setLayoutManager(new LinearLayoutManager(mContext));
-                            if (mTvIconRight != null) {
-                                mRecyclerPartake.setHasFixedSize(true);
+                            mMatchList.addAll(matches.getMatches());
+                            AvailableMatches.MatchesBean matchesBean = new AvailableMatches.MatchesBean();
+                            matchesBean.setDefault_image("http:\\/\\/api.freekick" +
+                                    ".hk\\/uploads\\/advertisement\\/image\\/2\\/gotravel.jpg");
+                            if (mMatchList.size()>=2){
+                                mMatchList.add(1,matchesBean);
+                            }else if (mMatchList.size() == 1){
+                                mMatchList.add(matchesBean);
+                            }else if (mMatchList.size() == 0){
+
                             }
-                            mRecyclerPartake.setAdapter(mAdapter);
-                            mAdapter.setClick(new PartakeAdapter.Click() {
-                                @Override
-                                public void Clike(int state, View view, int position) {
-                                    //1.點擊item,2.點擊參與約賽;3.點擊成功約賽
-                                    Intent intent = new Intent();
-                                    AvailableMatches.MatchesBean matchesBean = mMatchList.get(position);
-                                    switch (state) {
-                                        case 1:
-                                            String status = matchesBean.getStatus();
-                                            switch (status){
-                                                case "i"://已邀請
-                                                case "w"://不展示右側以及Button
-
-                                                    break;
-                                                case "m"://展示或者(如果參與對是自己的話,是不是應該有退出比賽)
-
-                                                    break;
-                                            }
-                                            intent.setClass(mContext, MatchContentActivity.class);
-                                            startActivity(intent);
-                                            break;
-                                        case 2:
-                                            intent.setClass(mContext, JoinMatchActivity.class);
-                                            intent.putExtra("matchesBean",matchesBean);
-                                            startActivity(intent);
-//                                            joinMatch(position);//參與球賽
-                                            break;
-                                        case 3://成功約賽的,應該是沒啥用了
-
-                                            break;
-                                        case 4://分享
-                                            // TODO: 2017/11/30 分享
-                                            ToastUtil.toastShort("分享");
-                                            break;
-                                    }
-                                }
-                            });
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
 
@@ -353,16 +359,17 @@ public class PartakeListFragment extends Fragment {
 
     /**
      * 參與約賽
+     *
      * @param position
      */
     private void joinMatch(int position) {
         JsonObject object = new JsonObject();
         JsonObject object1 = new JsonObject();
-        object1.addProperty("match_id",mMatchList.get(position).getId()+"");
-        object1.addProperty("join_team_id",PrefUtils.getString(App.APP_CONTEXT,"team_id",null));
-        object1.addProperty("join_team_color",PrefUtils.getString(App.APP_CONTEXT,"color2",null));
-        object1.addProperty("size",PrefUtils.getString(App.APP_CONTEXT,"size",null));
-        object.add("join_match",object1);
+        object1.addProperty("match_id", mMatchList.get(position).getId() + "");
+        object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
+        object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));
+        object1.addProperty("size", PrefUtils.getString(App.APP_CONTEXT, "size", null));
+        object.add("join_match", object1);
         Logger.json(object.toString());
         OkGo.post(Url.JOIN_MATCHES)
                 .upJson(object.toString())
@@ -372,9 +379,9 @@ public class PartakeListFragment extends Fragment {
                         Logger.json(s);
                         Gson gson = new Gson();
                         JoinMatch joinMatch = gson.fromJson(s, JoinMatch.class);
-                        if (joinMatch.getJoin_match()!=null){
+                        if (joinMatch.getJoin_match() != null) {
                             ToastUtil.toastShort(R.string.match_success);
-                        }else {
+                        } else {
 
                         }
 

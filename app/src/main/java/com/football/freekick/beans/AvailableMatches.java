@@ -41,6 +41,7 @@ public class AvailableMatches {
         private String home_team_color;
         private String status;
         private String size;
+        private String default_image;
 
         public String getPitch_name() {
             return pitch_name;
@@ -135,6 +136,14 @@ public class AvailableMatches {
             this.join_matches = join_matches;
         }
 
+        public String getDefault_image() {
+            return default_image;
+        }
+
+        public void setDefault_image(String default_image) {
+            this.default_image = default_image;
+        }
+
         public static class HomeTeamBean  implements Serializable {
             /**
              * id : 33
@@ -142,6 +151,7 @@ public class AvailableMatches {
              */
 
             private int id;
+            private String team_name;
             private ImageBean image;
 
             public int getId() {
@@ -158,6 +168,14 @@ public class AvailableMatches {
 
             public void setImage(ImageBean image) {
                 this.image = image;
+            }
+
+            public String getTeam_name() {
+                return team_name;
+            }
+
+            public void setTeam_name(String team_name) {
+                this.team_name = team_name;
             }
 
             public static class ImageBean implements Serializable {
