@@ -1,8 +1,6 @@
 package com.football.freekick.utils;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +20,8 @@ public class JodaTimeUtil {
 //        return str;
 //    }
     public static String getTimeHourMinutes(String time) {
-
+        if (time == null)
+            return "";
         time = time.replace("Z", " UTC");//注意是空格+UTC
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");//注意格式化的表达式
 
@@ -32,10 +31,11 @@ public class JodaTimeUtil {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        long time1 = d.getTime();
+        long     time1    = d.getTime();
         DateTime dateTime = new DateTime(time1);
         return dateTime.toString("HH:mm");
     }
+
     public static String getDate(String time) {
         time = time.replace("Z", " UTC");//注意是空格+UTC
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");//注意格式化的表达式
@@ -46,10 +46,11 @@ public class JodaTimeUtil {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        long time1 = d.getTime();
+        long     time1    = d.getTime();
         DateTime dateTime = new DateTime(time1);
         return dateTime.toString("yyyy-MM-dd");
     }
+
     public static String getTime(String time) {
         time = time.replace("Z", " UTC");//注意是空格+UTC
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");//注意格式化的表达式
@@ -60,7 +61,7 @@ public class JodaTimeUtil {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        long time1 = d.getTime();
+        long     time1    = d.getTime();
         DateTime dateTime = new DateTime(time1);
         return dateTime.toString("yyyy-MM-dd HH:mm");
     }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.football.freekick.activity.JoinMatchActivity">
+    tools:context="com.football.freekick.activity.ShowMatchActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -323,6 +323,7 @@
                     android:textSize="@dimen/text_24"/>
 
                 <LinearLayout
+                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -330,6 +331,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/tv_reduce"
                         android:layout_width="0dp"
                         android:layout_height="48px"
@@ -351,6 +353,7 @@
                         android:textSize="20px"/>
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/tv_add"
                         android:layout_width="0dp"
                         android:layout_height="48px"
@@ -366,6 +369,7 @@
         </LinearLayout>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_confirm"
             android:layout_width="520px"
             android:layout_height="80px"

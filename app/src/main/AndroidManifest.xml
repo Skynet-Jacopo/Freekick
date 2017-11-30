@@ -148,6 +148,8 @@
 
         <activity android:name=".activity.JoinMatchActivity">
         </activity>
+        <activity android:name=".activity.ShowMatchActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -13,9 +13,8 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.beans.AvailableMatches;
-import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.JodaTimeUtil;
-import com.football.freekick.utils.PrefUtils;
+import com.football.freekick.utils.MyUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -134,11 +133,24 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             myHolder1.lLShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    click.Clike(4, myHolder1.lLContent, position);
+                    click.Clike(4, myHolder1.lLShare, position);
+                }
+            });
+            myHolder1.tvIconShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    click.Clike(4, myHolder1.tvIconShare, position);
                 }
             });
         } else if (holder instanceof MyHolder2) {
-            MyHolder2 myHolder2 = (MyHolder2) holder;
+            final MyHolder2 myHolder2 = (MyHolder2) holder;
+            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getDefault_image()), myHolder2.ivAdvertisement);
+            myHolder2.lLContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    click.Clike(5,myHolder2.lLContent,position);
+                }
+            });
         }
     }
 

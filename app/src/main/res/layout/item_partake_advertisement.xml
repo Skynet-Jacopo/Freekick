@@ -12,6 +12,7 @@
         android:paddingTop="32px">
 
         <ImageView
+            android:scaleType="centerCrop"
             android:id="@+id/iv_advertisement"
             android:layout_width="match_parent"
             android:layout_height="160px"

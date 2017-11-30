@@ -3,14 +3,12 @@ package com.football.freekick.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,11 +23,13 @@ import com.football.freekick.CalenderActivity;
 import com.football.freekick.R;
 import com.football.freekick.activity.FiltrateActivity;
 import com.football.freekick.activity.JoinMatchActivity;
-import com.football.freekick.activity.MatchContentActivity;
+import com.football.freekick.activity.ShowMatchActivity;
 import com.football.freekick.adapter.PartakeAdapter;
+import com.football.freekick.app.BaseFragment;
 import com.football.freekick.beans.AvailableMatches;
 import com.football.freekick.beans.JoinMatch;
 import com.football.freekick.http.Url;
+import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
@@ -52,14 +52,11 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 import static android.app.Activity.RESULT_OK;
-import static com.football.freekick.R.string.average_height;
-import static com.football.freekick.R.string.cancel;
-import static com.football.freekick.R.string.join;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PartakeListFragment extends Fragment {
+public class PartakeListFragment extends BaseFragment {
     public static final int CHOOSE_DATE = 2;
     public static final int FILTRATE_REQUEST_CODE = 1;
 
@@ -103,7 +100,7 @@ public class PartakeListFragment extends Fragment {
     private String age_range = "2";//默認球隊年齡
     private String style = "1";//默認風格
     private PartakeAdapter mAdapter;
-    private List<AvailableMatches.MatchesBean> mMatchList;
+    private List<AvailableMatches.MatchesBean> mMatchList =new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,54 +123,6 @@ public class PartakeListFragment extends Fragment {
         mPartakeFragment = (PartakeFragment) getFragmentManager().findFragmentByTag("PartakeFragment");
 
         initView();
-        initData();
-    }
-
-    private void initData() {
-        mMatchList = new ArrayList<>();
-        mAdapter = new PartakeAdapter(mMatchList, mContext);
-        mRecyclerPartake.setLayoutManager(new LinearLayoutManager(mContext));
-        if (mTvIconRight != null) {
-            mRecyclerPartake.setHasFixedSize(true);
-        }
-        mRecyclerPartake.setAdapter(mAdapter);
-        mAdapter.setClick(new PartakeAdapter.Click() {
-            @Override
-            public void Clike(int state, View view, int position) {
-                //1.點擊item,2.點擊參與約賽;3.點擊成功約賽
-                Intent intent = new Intent();
-                AvailableMatches.MatchesBean matchesBean = mMatchList.get(position);
-                switch (state) {
-                    case 1:
-                        String status = matchesBean.getStatus();
-                        switch (status) {
-                            case "i"://已邀請
-                            case "w"://不展示右側以及Button
-
-                                break;
-                            case "m"://展示或者(如果參與對是自己的話,是不是應該有退出比賽)
-
-                                break;
-                        }
-                        intent.setClass(mContext, MatchContentActivity.class);
-                        startActivity(intent);
-                        break;
-                    case 2:
-                        intent.setClass(mContext, JoinMatchActivity.class);
-                        intent.putExtra("matchesBean", matchesBean);
-                        startActivity(intent);
-//                                            joinMatch(position);//參與球賽
-                        break;
-                    case 3://成功約賽的,應該是沒啥用了
-
-                        break;
-                    case 4://分享
-                        // TODO: 2017/11/30 分享
-                        ToastUtil.toastShort("分享");
-                        break;
-                }
-            }
-        });
     }
 
     private void initView() {
@@ -189,7 +138,7 @@ public class PartakeListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mPartakeFragment.isPartake) {
+        if (mPartakeFragment.isPartake) {//因為有可能回退到上個界面修改數據,然後這個Fragment只是被隱藏了,不是被銷毀了,所以在onResume里執行此操作
             mText.performClick();
             mPartakeFragment.isPartake = false;
         }
@@ -197,6 +146,9 @@ public class PartakeListFragment extends Fragment {
     }
 
     private void getAvailableAatches() {
+        if (mMatchList != null) {
+            mMatchList.clear();
+        }
         Logger.d("image--->" + PrefUtils.getString(App.APP_CONTEXT, "logourl", null));
 
         String play_start = StringUtils.getEditText(mTvDate) + " " + mStartTime + ":00";
@@ -215,11 +167,13 @@ public class PartakeListFragment extends Fragment {
         object.add("get_available_match_input", object1);
         Logger.json(object.toString());
         Logger.d(Url.AVAILABLE_MATCHES + PrefUtils.getString(App.APP_CONTEXT, "team_id", null) + "/available_matches");
+        loadingShow();
         OkGo.post(Url.AVAILABLE_MATCHES + PrefUtils.getString(App.APP_CONTEXT, "team_id", null) + "/available_matches")
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
                         Logger.json(s);
                         String str = "{\n" +
                                 "    \"matches\": [\n" +
@@ -228,14 +182,14 @@ public class PartakeListFragment extends Fragment {
                                 "            \"play_start\": \"2017-11-20T06:00:00.000Z\",\n" +
                                 "            \"play_end\": \"2017-11-20T09:00:00.000Z\",\n" +
                                 "            \"pitch_id\": 1,\n" +
-                                "            \"home_team_color\": \"ffffff\",\n" +
+                                "            \"home_team_color\": \"ff00ff\",\n" +
                                 "            \"status\": \"w\",\n" +
                                 "            \"size\": \"5\",\n" +
                                 "            \"home_team\": {\n" +
                                 "                \"id\": 33,\n" +
                                 "                \"image\": {\n" +
                                 "                    \"url\": " +
-                                "\"/uploads/team/image/33/upload-image-9724761-1510149726.\"\n" +
+                                "\"/uploads/team/image/46/image.jpeg\"\n" +
                                 "                }\n" +
                                 "            },\n" +
                                 "            \"join_matches\": [\n" +
@@ -328,7 +282,7 @@ public class PartakeListFragment extends Fragment {
                                 "        }\n" +
                                 "    ]\n" +
                                 "}";
-
+                        Logger.json(str);
                         Gson gson = new Gson();
                         AvailableMatches matches = gson.fromJson(str, AvailableMatches.class);
                         if (matches.getMatches().size() <= 0) {
@@ -336,16 +290,63 @@ public class PartakeListFragment extends Fragment {
                         } else {
                             mMatchList.addAll(matches.getMatches());
                             AvailableMatches.MatchesBean matchesBean = new AvailableMatches.MatchesBean();
-                            matchesBean.setDefault_image("http:\\/\\/api.freekick" +
-                                    ".hk\\/uploads\\/advertisement\\/image\\/2\\/gotravel.jpg");
+                            matchesBean.setDefault_image(MyUtil.getImageUrl(App.mAdvertisementsBean.get(0).getImage()));
                             if (mMatchList.size()>=2){
-                                mMatchList.add(1,matchesBean);
+                                mMatchList.add(2,matchesBean);
                             }else if (mMatchList.size() == 1){
                                 mMatchList.add(matchesBean);
                             }else if (mMatchList.size() == 0){
 
                             }
-                            mAdapter.notifyDataSetChanged();
+
+                            mAdapter = new PartakeAdapter(mMatchList, mContext);
+                            mRecyclerPartake.setLayoutManager(new LinearLayoutManager(mContext));
+                            if (mTvIconRight != null) {
+                                mRecyclerPartake.setHasFixedSize(true);
+                            }
+                            mRecyclerPartake.setAdapter(mAdapter);
+                            mAdapter.setClick(new PartakeAdapter.Click() {
+                                @Override
+                                public void Clike(int state, View view, int position) {
+                                    //1.點擊item,2.點擊參與約賽;3.點擊成功約賽
+                                    Intent intent = new Intent();
+                                    AvailableMatches.MatchesBean matchesBean = mMatchList.get(position);
+                                    switch (state) {
+                                        case 1:
+                                            String status = matchesBean.getStatus();
+                                            switch (status) {
+                                                case "i"://已邀請
+                                                case "w"://不展示右側以及Button
+                                                    intent.setClass(mContext, JoinMatchActivity.class);
+                                                    intent.putExtra("matchesBean", matchesBean);
+                                                    break;
+                                                case "m"://展示或者(如果參與對是自己的話,是不是應該有退出比賽)
+                                                    intent.setClass(mContext, ShowMatchActivity.class);
+                                                    intent.putExtra("matchesBean", matchesBean);
+                                                    break;
+                                            }
+                                            startActivity(intent);
+                                            break;
+                                        case 2:
+                                            intent.setClass(mContext, JoinMatchActivity.class);
+                                            intent.putExtra("matchesBean", matchesBean);
+                                            startActivity(intent);
+//                                            joinMatch(position);//參與球賽
+                                            break;
+                                        case 3://成功約賽的,應該是沒啥用了
+
+                                            break;
+                                        case 4://分享
+                                            // TODO: 2017/11/30 分享
+                                            ToastUtil.toastShort("分享");
+                                            break;
+                                        case 5://廣告
+                                            // TODO: 2017/11/30 分享
+                                            ToastUtil.toastShort("廣告,暫時沒有Url");
+                                            break;
+                                    }
+                                }
+                            });
                         }
                     }
 
@@ -353,6 +354,7 @@ public class PartakeListFragment extends Fragment {
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
+                        loadingDismiss();
                     }
                 });
     }
@@ -422,6 +424,7 @@ public class PartakeListFragment extends Fragment {
                 dateTime = DateTime.parse(StringUtils.getEditText(mTvDate));
                 dateTime = dateTime.minusDays(1);
                 mTvDate.setText(dateTime.toString("yyyy-MM-dd"));
+                getAvailableAatches();
                 break;
             case R.id.tv_date:
             case R.id.tv_icon_date:
@@ -433,6 +436,7 @@ public class PartakeListFragment extends Fragment {
                 dateTime = DateTime.parse(StringUtils.getEditText(mTvDate));
                 dateTime = dateTime.plusDays(1);
                 mTvDate.setText(dateTime.toString("yyyy-MM-dd"));
+                getAvailableAatches();
                 break;
             case R.id.tv_pitch_size:
             case R.id.tv_icon_down:
@@ -521,6 +525,7 @@ public class PartakeListFragment extends Fragment {
         mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
+                getAvailableAatches();
             }
         });
         // 设置好参数之后再show

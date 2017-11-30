@@ -24,6 +24,8 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -31,9 +33,9 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 /**
- * 參與球賽界面(球賽內容頁風格)
+ * 瀏覽球賽內容頁
  */
-public class JoinMatchActivity extends BaseActivity {
+public class ShowMatchActivity extends BaseActivity {
 
     @Bind(R.id.tv_back)
     TextView     mTvBack;
@@ -99,7 +101,7 @@ public class JoinMatchActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_join_match);
+        setContentView(R.layout.activity_show_match);
         ButterKnife.bind(this);
         mMatchesBean = (AvailableMatches.MatchesBean) getIntent().getSerializableExtra("matchesBean");
         initView();
@@ -117,11 +119,16 @@ public class JoinMatchActivity extends BaseActivity {
 
         mTvHomeNum.setText(mMatchesBean.getSize() + "");
         mIvHomeDress.setBackgroundColor(MyUtil.getColorInt(mMatchesBean.getHome_team_color()));
-        mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(PrefUtils.getString(App.APP_CONTEXT, "color2", null)));
-        mTvVisitorName.setText(PrefUtils.getString(App.APP_CONTEXT, "team_name", null));
-        mTvVisitorNum.setText(PrefUtils.getString(App.APP_CONTEXT, "size", null));
-
+        List<AvailableMatches.MatchesBean.JoinMatchesBean> join_matches = mMatchesBean.getJoin_matches();
+        for (int i = 0; i < join_matches.size(); i++) {
+            if (join_matches.get(i).getStatus().equals("confirmed")) {
+                mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(join_matches.get(i).getJoin_team_color()));
+                mTvVisitorName.setText(join_matches.get(i).getTeam().getTeam_name());
+                mTvVisitorNum.setText(join_matches.get(i).getTeam().getSize() + "");
+            }
+        }
         visitorNum = Integer.parseInt(StringUtils.getEditText(mTvVisitorNum));
+
         String image = App.mAdvertisementsBean.get(0).getImage();
         ImageLoaderUtils.displayImage(image, mIvTop1);
         ImageLoaderUtils.displayImage(image, mIvTop2);
@@ -222,5 +229,5 @@ public class JoinMatchActivity extends BaseActivity {
                     }
                 });
     }
-
 }
+
