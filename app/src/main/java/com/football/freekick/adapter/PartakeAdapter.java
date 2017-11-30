@@ -13,36 +13,38 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.beans.AvailableMatches;
-import com.football.freekick.http.Url;
+import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.zhy.autolayout.utils.AutoUtils;
+
+import java.util.List;
 
 /**
  * Created by 90516 on 2017/11/22.
  */
 
 public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private AvailableMatches.MatchesBean mMatchesBean;
+    private List<AvailableMatches.MatchesBean> mMatchList;
     private Context mContext;
     private static final int TYPE_1 = 1111;//搵場列表
     private static final int TYPE_2 = 2222;//廣告
 
     private String picUrl = "http://www.cnr.cn/china/xwwgf/201111/W020111128658021231674.jpg";
-    private String mPitchName;
-    private String mLocation;
 
-    public PartakeAdapter(AvailableMatches.MatchesBean mMatchesBean, Context mContext) {
-        this.mMatchesBean = mMatchesBean;
+
+    public PartakeAdapter(List<AvailableMatches.MatchesBean> mMatchList, Context mContext) {
+        this.mMatchList = mMatchList;
         this.mContext = mContext;
         for (int i = 0; i < App.mPitchesBeanList.size(); i++) {
-            if (App.mPitchesBeanList.get(i).getId() == mMatchesBean.getPitch_id()) {
-                mPitchName = App.mPitchesBeanList.get(i).getName();
-                mLocation = App.mPitchesBeanList.get(i).getLocation();
+            for (int j = 0; j < mMatchList.size(); j++) {
+                if (App.mPitchesBeanList.get(i).getId() == mMatchList.get(j).getPitch_id()) {
+                    mMatchList.get(j).setPitch_name(App.mPitchesBeanList.get(i).getName());
+                    mMatchList.get(j).setLocation(App.mPitchesBeanList.get(i).getLocation());
+                }
             }
         }
-        mMatchesBean.getPitch_id();
     }
 
     @Override
@@ -63,26 +65,30 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        AvailableMatches.MatchesBean.JoinMatchesBean joinMatchesBean = mMatchesBean.getJoin_matches().get(position);
+        AvailableMatches.MatchesBean matchesBean = mMatchList.get(position);
 
 
         if (holder instanceof MyHolder1) {
             final MyHolder1 myHolder1 = (MyHolder1) holder;
             myHolder1.tvIconShare.setTypeface(App.mTypeface);
-            myHolder1.tvPitchName.setText(mPitchName);
-            myHolder1.tvLocation.setText(mLocation);
-            String start = JodaTimeUtil.getTimeHourMinutes(mMatchesBean.getPlay_start());
-            String end = JodaTimeUtil.getTimeHourMinutes(mMatchesBean.getPlay_end());
+            myHolder1.tvPitchName.setText(matchesBean.getPitch_name());
+            myHolder1.tvLocation.setText(matchesBean.getLocation());
+            String start = JodaTimeUtil.getTimeHourMinutes(matchesBean.getPlay_start());
+            String end = JodaTimeUtil.getTimeHourMinutes(matchesBean.getPlay_end());
 
             myHolder1.tvTime.setText(start + "-" + end);
-            myHolder1.ivDressHome.setBackgroundColor(Color.parseColor("#" + mMatchesBean.getHome_team_color()));
-            myHolder1.ivDressVisitor.setBackgroundColor(Color.parseColor("#" + joinMatchesBean.getJoin_team_color()));
+            myHolder1.ivDressHome.setBackgroundColor(Color.parseColor("#" + matchesBean.getHome_team_color()));
             myHolder1.tvHomeName.setText(PrefUtils.getString(App.APP_CONTEXT, "team_name", null));
-            myHolder1.tvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
-            ImageLoaderUtils.displayImage(Url.BaseImageUrl+mMatchesBean.getHome_team().getImage().getUrl(),myHolder1.ivPic);
-            String status = joinMatchesBean.getStatus();
-            switch (status) {
+            // TODO: 2017/11/30 球場圖 還未有
+            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),myHolder1.ivPic);
+
+            String status = matchesBean.getStatus();
+            switch (status){
+                case "i"://已邀請
                 case "w":
+                    myHolder1.ivDressVisitor.setImageResource(R.drawable.ic_dress_unknow);
+                    myHolder1.ivDressVisitor.setBackgroundResource(R.color.black);
+                    myHolder1.tvVisitorName.setText("");
                     myHolder1.tvState.setText(R.string.join_match);
                     myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_green_gray_bg);
                     myHolder1.tvState.setOnClickListener(new View.OnClickListener() {
@@ -93,9 +99,18 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     });
                     break;
                 case "m":
+                    List<AvailableMatches.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
+                    for (int i = 0; i < join_matches.size(); i++) {
+                        if (join_matches.get(i).getStatus().equals("confirmed")){
+                            myHolder1.ivDressVisitor.setBackgroundColor(Color.parseColor("#" + join_matches.get(i).getJoin_team_color()));
+                            myHolder1.tvVisitorName.setText(join_matches.get(i).getTeam().getTeam_name());
+
+                        }
+                    }
                     myHolder1.tvState.setText(R.string.match_success);
-                    myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_red_gray_bg);
-                    myHolder1.tvState.setOnClickListener(new View.OnClickListener() {
+//                    myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_red_gray_bg);
+                    myHolder1.tvState.setBackgroundResource(R.drawable.shape_corner_light_red);
+                    myHolder1.tvState.setOnClickListener(new View.OnClickListener() {//應該是沒用了
                         @Override
                         public void onClick(View view) {
                             click.Clike(3, myHolder1.tvState, position);
@@ -108,11 +123,8 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 case "c":
 
                     break;
-                case "i":
 
-                    break;
             }
-
             myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -132,7 +144,7 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mMatchesBean.getJoin_matches().size() == 0 ? 0 : mMatchesBean.getJoin_matches().size();
+        return mMatchList.size() == 0 ? 0 : mMatchList.size();
     }
 
     @Override

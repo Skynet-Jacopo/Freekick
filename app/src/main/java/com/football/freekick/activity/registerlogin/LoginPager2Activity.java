@@ -11,7 +11,9 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
+import com.football.freekick.beans.Advertisements;
 import com.football.freekick.beans.Login;
+import com.football.freekick.beans.Pitches;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
@@ -50,20 +52,23 @@ public class LoginPager2Activity extends BaseActivity {
     TextView mTvBack;
     private Context mContext;
 
+    private boolean isSecondRun;//記錄是否已登錄,以獲取廣告,場地等信息
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_pager2);
         mContext = LoginPager2Activity.this;
         ButterKnife.bind(this);
-//        mEdtEmail.setText("huo@yopmail.com");
-        mEdtEmail.setText("yue@yopmail.com");
+        mEdtEmail.setText("huo@yopmail.com");
+//        mEdtEmail.setText("yue@yopmail.com");
         mEdtPassWord.setText("123456");
         initView();
     }
 
     private void initView() {
         mTvBack.setTypeface(App.mTypeface);
+        isSecondRun = PrefUtils.getBoolean(App.APP_CONTEXT, "isSecondRun", false);
     }
 
     @OnClick({R.id.fl_login_by_facebook, R.id.tv_login, R.id.tv_forget_pass_word, R.id.tv_back})
@@ -130,6 +135,13 @@ public class LoginPager2Activity extends BaseActivity {
                                 PrefUtils.putString(App.APP_CONTEXT, "client", client);
                                 PrefUtils.putString(App.APP_CONTEXT, "uid", uid);
                                 PrefUtils.putString(App.APP_CONTEXT, "expiry", expiry);
+
+                                if (!isSecondRun) {
+                                    //如果是第一次登錄或者卸載重裝過,獲取廣告,場地等信息
+                                    getPitches();
+                                    getAdvertisements();
+                                    PrefUtils.putBoolean(App.APP_CONTEXT, "isSecondRun", true);
+                                }
                                 if (user.getTeams() != null && user.getTeams().size() <= 0) {//沒有球队則去註冊三頁
                                     Intent intent = new Intent(mContext, RegisterPager1Activity.class);
                                     intent.putExtra("email", StringUtils.getEditText(mEdtEmail));
@@ -162,6 +174,51 @@ public class LoginPager2Activity extends BaseActivity {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
                         loadingDismiss();
+                    }
+                });
+    }
+
+
+    /**
+     * 獲取場地
+     */
+    private void getPitches() {
+        OkGo.get(Url.PITCHES)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Pitches pitches = gson.fromJson(s, Pitches.class);
+                        App.mPitchesBeanList = pitches.getPitches();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
+    }
+
+    /**
+     * 獲取廣告
+     */
+    private void getAdvertisements() {
+        OkGo.get(Url.ADVERTISEMENTS)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Advertisements advertisements = gson.fromJson(s, Advertisements.class);
+                        App.mAdvertisementsBean = advertisements.getAdvertisements();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.json(e.getMessage());
                     }
                 });
     }

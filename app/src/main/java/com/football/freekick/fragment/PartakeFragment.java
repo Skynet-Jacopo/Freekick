@@ -363,6 +363,8 @@ public class PartakeFragment extends Fragment {
             public void onClick(View view) {
                 popupWindow.dismiss();
                 district_id = mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict_id();
+                Logger.d(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace
+                        ("$", " ").length());
                 mTvArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace
                         ("$", " "));
 //                ToastUtil.toastShort(district_id);

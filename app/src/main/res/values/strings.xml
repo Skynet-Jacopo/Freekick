@@ -308,6 +308,9 @@
     <string name="basic_information">基本資料</string>
     <string name="finished_match">已完成球賽</string>
     <string name="yue_zhan">約戰</string>
+    <string name="invite_team_in">邀請球隊參與...</string>
+    <string name="partake_this_match">是否參與這場球賽</string>
+    <string name="new_match">新球賽</string>
 
 
 </resources>

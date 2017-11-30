@@ -3,12 +3,14 @@ package com.football.freekick.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,8 +24,11 @@ import com.football.freekick.App;
 import com.football.freekick.CalenderActivity;
 import com.football.freekick.R;
 import com.football.freekick.activity.FiltrateActivity;
+import com.football.freekick.activity.JoinMatchActivity;
+import com.football.freekick.activity.MatchContentActivity;
 import com.football.freekick.adapter.PartakeAdapter;
 import com.football.freekick.beans.AvailableMatches;
+import com.football.freekick.beans.JoinMatch;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
@@ -49,6 +54,7 @@ import okhttp3.Response;
 import static android.app.Activity.RESULT_OK;
 import static com.football.freekick.R.string.average_height;
 import static com.football.freekick.R.string.cancel;
+import static com.football.freekick.R.string.join;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -96,8 +102,8 @@ public class PartakeListFragment extends Fragment {
     private String average_height = "2";//默認平均高度
     private String age_range = "2";//默認球隊年齡
     private String style = "1";//默認風格
-    private AvailableMatches.MatchesBean mMatchesBean;
     private PartakeAdapter mAdapter;
+    private List<AvailableMatches.MatchesBean> mMatchList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,7 +131,7 @@ public class PartakeListFragment extends Fragment {
 
     private void initData() {
 
-        mMatchesBean = new AvailableMatches.MatchesBean();
+        mMatchList = new ArrayList<>();
         List<String> datas = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             datas.add("我是球隊" + i);
@@ -182,8 +188,8 @@ public class PartakeListFragment extends Fragment {
                                 "    \"matches\": [\n" +
                                 "        {\n" +
                                 "            \"id\": 7,\n" +
-                                "            \"play_start\": \"2017-11-20T12:00:00.000Z\",\n" +
-                                "            \"play_end\": \"2017-11-22T01:00:00.000Z\",\n" +
+                                "            \"play_start\": \"2017-11-20T06:00:00.000Z\",\n" +
+                                "            \"play_end\": \"2017-11-20T09:00:00.000Z\",\n" +
                                 "            \"pitch_id\": 1,\n" +
                                 "            \"home_team_color\": \"ffffff\",\n" +
                                 "            \"status\": \"w\",\n" +
@@ -191,7 +197,7 @@ public class PartakeListFragment extends Fragment {
                                 "            \"home_team\": {\n" +
                                 "                \"id\": 33,\n" +
                                 "                \"image\": {\n" +
-                                "                    \"url\": \"/uploads/team/image/43/image.jpeg\"\n" +
+                                "                    \"url\": \"/uploads/team/image/33/upload-image-9724761-1510149726.\"\n" +
                                 "                }\n" +
                                 "            },\n" +
                                 "            \"join_matches\": [\n" +
@@ -203,7 +209,75 @@ public class PartakeListFragment extends Fragment {
                                 "                        \"team_name\": \"Lions9dd875\",\n" +
                                 "                        \"size\": 5,\n" +
                                 "                        \"image\": {\n" +
-                                "                            \"url\": \"/uploads/team/image/43/image.jpeg\"\n" +
+                                "                            \"url\": \"/uploads/team/image/46/image.jpeg\"\n" +
+                                "                        },\n" +
+                                "                        \"district\": {\n" +
+                                "                            \"id\": 72,\n" +
+                                "                            \"district\": \"Yuen Long\",\n" +
+                                "                            \"region\": \"New Territories\"\n" +
+                                "                        }\n" +
+                                "                    }\n" +
+                                "                }\n" +
+                                "            ]\n" +
+                                "        },\n" +
+                                "        {\n" +
+                                "            \"id\": 7,\n" +
+                                "            \"play_start\": \"2017-11-20T12:00:00.000Z\",\n" +
+                                "            \"play_end\": \"2017-11-20T01:00:00.000Z\",\n" +
+                                "            \"pitch_id\": 1,\n" +
+                                "            \"home_team_color\": \"ffffff\",\n" +
+                                "            \"status\": \"m\",\n" +
+                                "            \"size\": \"5\",\n" +
+                                "            \"home_team\": {\n" +
+                                "                \"id\": 33,\n" +
+                                "                \"image\": {\n" +
+                                "                    \"url\": \"/uploads/team/image/46/image.jpeg\"\n" +
+                                "                }\n" +
+                                "            },\n" +
+                                "            \"join_matches\": [\n" +
+                                "                {\n" +
+                                "                    \"join_team_id\": 48,\n" +
+                                "                    \"status\": \"confirmed\",\n" +
+                                "                    \"join_team_color\": \"ffc300\",\n" +
+                                "                    \"team\": {\n" +
+                                "                        \"team_name\": \"Lions9dd875\",\n" +
+                                "                        \"size\": 5,\n" +
+                                "                        \"image\": {\n" +
+                                "                            \"url\": \"/uploads/team/image/46/image.jpeg\"\n" +
+                                "                        },\n" +
+                                "                        \"district\": {\n" +
+                                "                            \"id\": 72,\n" +
+                                "                            \"district\": \"Yuen Long\",\n" +
+                                "                            \"region\": \"New Territories\"\n" +
+                                "                        }\n" +
+                                "                    }\n" +
+                                "                }\n" +
+                                "            ]\n" +
+                                "        },\n" +
+                                "        {\n" +
+                                "            \"id\": 7,\n" +
+                                "            \"play_start\": \"2017-11-20T12:00:00.000Z\",\n" +
+                                "            \"play_end\": \"2017-11-20T01:00:00.000Z\",\n" +
+                                "            \"pitch_id\": 1,\n" +
+                                "            \"home_team_color\": \"ffffff\",\n" +
+                                "            \"status\": \"m\",\n" +
+                                "            \"size\": \"5\",\n" +
+                                "            \"home_team\": {\n" +
+                                "                \"id\": 33,\n" +
+                                "                \"image\": {\n" +
+                                "                    \"url\": \"/uploads/team/image/46/image.jpeg\"\n" +
+                                "                }\n" +
+                                "            },\n" +
+                                "            \"join_matches\": [\n" +
+                                "                {\n" +
+                                "                    \"join_team_id\": 48,\n" +
+                                "                    \"status\": \"confirmed\",\n" +
+                                "                    \"join_team_color\": \"ffc300\",\n" +
+                                "                    \"team\": {\n" +
+                                "                        \"team_name\": \"Lions9dd875\",\n" +
+                                "                        \"size\": 5,\n" +
+                                "                        \"image\": {\n" +
+                                "                            \"url\": \"/uploads/team/image/46/image.jpeg\"\n" +
                                 "                        },\n" +
                                 "                        \"district\": {\n" +
                                 "                            \"id\": 72,\n" +
@@ -222,8 +296,8 @@ public class PartakeListFragment extends Fragment {
                         if (matches.getMatches().size() <= 0) {
                             ToastUtil.toastShort("No records found.");
                         } else {
-                            mMatchesBean = matches.getMatches().get(0);
-                            mAdapter = new PartakeAdapter(mMatchesBean, mContext);
+                            mMatchList = matches.getMatches();
+                            mAdapter = new PartakeAdapter(mMatchList, mContext);
                             mRecyclerPartake.setLayoutManager(new LinearLayoutManager(mContext));
                             if (mTvIconRight != null) {
                                 mRecyclerPartake.setHasFixedSize(true);
@@ -233,25 +307,77 @@ public class PartakeListFragment extends Fragment {
                                 @Override
                                 public void Clike(int state, View view, int position) {
                                     //1.點擊item,2.點擊參與約賽;3.點擊成功約賽
+                                    Intent intent = new Intent();
+                                    AvailableMatches.MatchesBean matchesBean = mMatchList.get(position);
                                     switch (state) {
                                         case 1:
-                                            ToastUtil.toastShort("點擊了item");
+                                            String status = matchesBean.getStatus();
+                                            switch (status){
+                                                case "i"://已邀請
+                                                case "w"://不展示右側以及Button
+
+                                                    break;
+                                                case "m"://展示或者(如果參與對是自己的話,是不是應該有退出比賽)
+
+                                                    break;
+                                            }
+                                            intent.setClass(mContext, MatchContentActivity.class);
+                                            startActivity(intent);
                                             break;
                                         case 2:
-                                            view.setBackground(getResources().getDrawable(R.drawable
-                                                    .selector_round_red_gray_bg));
+                                            intent.setClass(mContext, JoinMatchActivity.class);
+                                            intent.putExtra("matchesBean",matchesBean);
+                                            startActivity(intent);
+//                                            joinMatch(position);//參與球賽
                                             break;
-                                        case 3:
-                                            view.setBackground(getResources().getDrawable(R.drawable
-                                                    .selector_round_green_gray_bg));
+                                        case 3://成功約賽的,應該是沒啥用了
+
                                             break;
                                         case 4://分享
+                                            // TODO: 2017/11/30 分享
                                             ToastUtil.toastShort("分享");
                                             break;
                                     }
                                 }
                             });
                         }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
+    }
+
+    /**
+     * 參與約賽
+     * @param position
+     */
+    private void joinMatch(int position) {
+        JsonObject object = new JsonObject();
+        JsonObject object1 = new JsonObject();
+        object1.addProperty("match_id",mMatchList.get(position).getId()+"");
+        object1.addProperty("join_team_id",PrefUtils.getString(App.APP_CONTEXT,"team_id",null));
+        object1.addProperty("join_team_color",PrefUtils.getString(App.APP_CONTEXT,"color2",null));
+        object1.addProperty("size",PrefUtils.getString(App.APP_CONTEXT,"size",null));
+        object.add("join_match",object1);
+        Logger.json(object.toString());
+        OkGo.post(Url.JOIN_MATCHES)
+                .upJson(object.toString())
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        JoinMatch joinMatch = gson.fromJson(s, JoinMatch.class);
+                        if (joinMatch.getJoin_match()!=null){
+                            ToastUtil.toastShort(R.string.match_success);
+                        }else {
+
+                        }
+
                     }
 
                     @Override

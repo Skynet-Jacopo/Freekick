@@ -172,6 +172,7 @@
             android:textStyle="bold"/>
 
         <TextView
+            android:gravity="right"
             android:id="@+id/tv_pitch_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

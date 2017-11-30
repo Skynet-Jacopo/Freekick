@@ -8,6 +8,11 @@ import com.football.freekick.App;
 
 public class Url {
 
+
+    public static final String NEWS = "news";
+    public static final String POINT_OF_VIEW = "point_of_view";
+
+
     public static final String BaseUrl = "http://api.freekick.hk/api/";
     public static final String BaseImageUrl = "http://www.freekick.hk";
     public static final String ZH_HK = "zh_HK/";
@@ -29,7 +34,8 @@ public class Url {
     public static final String AVAILABLE_MATCHES =  BaseUrl + (App.isChinese ? ZH_HK : EN) + "teams/";
     //文章
     public static final String ARTICLES = BaseUrl + (App.isChinese ? ZH_HK : EN) + "articles";
-
+    //參與約賽
+    public static final String JOIN_MATCHES = BaseUrl + (App.isChinese ? ZH_HK : EN) + "join_matches";
 
 
 

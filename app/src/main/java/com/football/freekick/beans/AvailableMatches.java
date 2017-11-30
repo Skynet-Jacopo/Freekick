@@ -1,5 +1,6 @@
 package com.football.freekick.beans;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class AvailableMatches {
         this.matches = matches;
     }
 
-    public static class MatchesBean {
+    public static class MatchesBean  implements Serializable {
         /**
          * id : 7
          * play_start : 2017-11-20T12:00:00.000Z
@@ -40,6 +41,25 @@ public class AvailableMatches {
         private String home_team_color;
         private String status;
         private String size;
+
+        public String getPitch_name() {
+            return pitch_name;
+        }
+
+        public void setPitch_name(String pitch_name) {
+            this.pitch_name = pitch_name;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        private String pitch_name;
+        private String location;
         private HomeTeamBean home_team;
         private List<JoinMatchesBean> join_matches;
 
@@ -115,7 +135,7 @@ public class AvailableMatches {
             this.join_matches = join_matches;
         }
 
-        public static class HomeTeamBean {
+        public static class HomeTeamBean  implements Serializable {
             /**
              * id : 33
              * image : {"url":"/uploads/team/image/33/upload-image-9724761-1510149726."}
@@ -140,7 +160,7 @@ public class AvailableMatches {
                 this.image = image;
             }
 
-            public static class ImageBean {
+            public static class ImageBean implements Serializable {
                 /**
                  * url : /uploads/team/image/33/upload-image-9724761-1510149726.
                  */
@@ -157,7 +177,7 @@ public class AvailableMatches {
             }
         }
 
-        public static class JoinMatchesBean {
+        public static class JoinMatchesBean implements Serializable {
             /**
              * join_team_id : 48
              * status : confirmation_pending
@@ -203,7 +223,7 @@ public class AvailableMatches {
                 this.team = team;
             }
 
-            public static class TeamBean {
+            public static class TeamBean  implements Serializable {
                 /**
                  * team_name : Lions9dd875
                  * size : 5
@@ -248,7 +268,7 @@ public class AvailableMatches {
                     this.district = district;
                 }
 
-                public static class ImageBeanX {
+                public static class ImageBeanX  implements Serializable {
                     /**
                      * url : null
                      */
@@ -264,7 +284,7 @@ public class AvailableMatches {
                     }
                 }
 
-                public static class DistrictBean {
+                public static class DistrictBean implements Serializable {
                     /**
                      * id : 72
                      * district : Yuen Long

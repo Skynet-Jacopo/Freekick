@@ -1,12 +1,20 @@
 package com.football.freekick.activity;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.football.freekick.App;
@@ -16,6 +24,7 @@ import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
 import com.football.freekick.beans.Recommended;
 import com.football.freekick.http.Url;
+import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
@@ -61,6 +70,12 @@ public class MatchInviteActivity extends BaseActivity {
     ImageView mIvDressVisitor;
     @Bind(R.id.recycler_recommended)
     RecyclerView mRecyclerRecommended;
+    @Bind(R.id.ll_parent)
+    LinearLayout mLlParent;
+    @Bind(R.id.tv_home_name)
+    TextView mTvHomeName;
+    @Bind(R.id.tv_visitor_name)
+    TextView mTvVisitorName;
 
     private Context mContext;
     private List<Recommended.TeamsBean> mList = new ArrayList<>();
@@ -113,6 +128,9 @@ public class MatchInviteActivity extends BaseActivity {
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
         mTvIconLocation.setTypeface(App.mTypeface);
+        mTvHomeName.setText(PrefUtils.getString(App.APP_CONTEXT,"team_name",null));
+        mIvDressHome.setBackgroundColor(Color.parseColor("#"+PrefUtils.getString(App.APP_CONTEXT,"color1",null)));
+        mIvDressVisitor.setImageDrawable(getResources().getDrawable(R.drawable.ic_dress_unknow));
 
         if (mRecyclerRecommended != null) {
             mRecyclerRecommended.setHasFixedSize(true);
@@ -135,7 +153,8 @@ public class MatchInviteActivity extends BaseActivity {
                 holder.setOnClickListener(R.id.tv_invite, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        invite(itemPosition);
+                        invitePopup(itemPosition);
+
                     }
                 });
                 holder.setOnClickListener(R.id.tv_attention, new View.OnClickListener() {
@@ -148,6 +167,64 @@ public class MatchInviteActivity extends BaseActivity {
 
         };
         mRecyclerRecommended.setAdapter(mAdapter);
+    }
+
+    /**
+     * 邀請球隊參與Pop
+     *
+     * @param itemPosition
+     */
+    private void invitePopup(final int itemPosition) {
+        View contentView = LayoutInflater.from(mContext).inflate(
+                R.layout.view_choose_invite, null);
+
+        final PopupWindow popupWindow = new PopupWindow(contentView,
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        TextView tviconclose = (TextView) contentView.findViewById(R.id.tv_icon_close);
+        tviconclose.setTypeface(App.mTypeface);
+        TextView tvnewmatch = (TextView) contentView.findViewById(R.id.tv_new_match);
+        TextView tvpartakethismatch = (TextView) contentView.findViewById(R.id.tv_partake_this_match);
+        tviconclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+        tvnewmatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                finish();
+            }
+        });
+        tvpartakethismatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                invite(itemPosition);
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.setTouchable(true);
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                backgroundAlpha(1f);
+            }
+        });
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(mLlParent, Gravity.CENTER, 0, 0);
+        backgroundAlpha(0.5f);
     }
 
     /**
@@ -212,5 +289,16 @@ public class MatchInviteActivity extends BaseActivity {
             case R.id.ll_location:
                 break;
         }
+    }
+
+    /**
+     * 设置添加屏幕的背景透明度
+     *
+     * @param bgAlpha
+     */
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
     }
 }

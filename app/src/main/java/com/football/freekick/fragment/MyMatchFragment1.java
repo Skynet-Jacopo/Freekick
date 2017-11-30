@@ -46,6 +46,7 @@ import okhttp3.Response;
 public class MyMatchFragment1 extends LazyLoadFragment {
 
 
+
     @Bind(R.id.recycler_my_match)
     RecyclerView mRecyclerMyMatch;
     @Bind(R.id.tv_icon_lines)
@@ -68,7 +69,8 @@ public class MyMatchFragment1 extends LazyLoadFragment {
     private LinearLayout mFragmentView;
 
 
-    private List<Article.ArticleBean> mArticleBeanList = new ArrayList<>();
+    private List<Article.ArticleBean> news = new ArrayList<>();
+    private List<Article.ArticleBean> point_of_view = new ArrayList<>();
     private Context mContext;
     private List<String> datas = new ArrayList<>();
     private String picUrl = "http://www.cnr.cn/china/xwwgf/201111/W020111128658021231674.jpg";
@@ -117,7 +119,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
         manager.setOrientation(GridLayoutManager.VERTICAL);
         mRecyclerFocus.setLayoutManager(manager);
         mRecyclerFocus.setNestedScrollingEnabled(false);
-        mFocusAdapter = new CommonAdapter<Article.ArticleBean>(mContext, R.layout.item_focus,mArticleBeanList) {
+        mFocusAdapter = new CommonAdapter<Article.ArticleBean>(mContext, R.layout.item_focus,point_of_view) {
 
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
@@ -136,7 +138,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 Intent intent = new Intent(mContext, ArticleActivity.class);
-                intent.putExtra("Article",mArticleBeanList.get(position));
+                intent.putExtra("Article",point_of_view.get(position));
                 startActivity(intent);
             }
 
@@ -153,7 +155,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
         manager.setOrientation(GridLayoutManager.VERTICAL);
         mRecyclerLines.setLayoutManager(manager);
         mRecyclerLines.setNestedScrollingEnabled(false);
-        mLineAdapter = new CommonAdapter<Article.ArticleBean>(mContext, R.layout.item_lines,mArticleBeanList) {
+        mLineAdapter = new CommonAdapter<Article.ArticleBean>(mContext, R.layout.item_lines,news) {
 
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
@@ -173,7 +175,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 Intent intent = new Intent(mContext, ArticleActivity.class);
-                intent.putExtra("Article",mArticleBeanList.get(position));
+                intent.putExtra("Article",news.get(position));
                 startActivity(intent);
             }
 
@@ -210,8 +212,11 @@ public class MyMatchFragment1 extends LazyLoadFragment {
         for (int i = 0; i < 3; i++) {
             datas.add("我是數據"+i);
         }
-        if (mArticleBeanList != null) {
-            mArticleBeanList.clear();
+        if (point_of_view != null) {
+            point_of_view.clear();
+        }
+        if (news != null) {
+            news.clear();
         }
         OkGo.get(Url.ARTICLES)
                 .execute(new StringCallback() {
@@ -220,7 +225,14 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                         Logger.json(s);
                         Gson gson = new Gson();
                         Article article = gson.fromJson(s, Article.class);
-                        mArticleBeanList.addAll(article.getArticle());
+                        List<Article.ArticleBean> articleList = article.getArticle();
+                        for (int i = 0; i < articleList.size(); i++) {
+                            if (articleList.get(i).getCategory().equals(Url.NEWS)){
+                                news.add(articleList.get(i));
+                            }else if (articleList.get(i).getCategory().equals(Url.POINT_OF_VIEW)){
+                                point_of_view.add(articleList.get(i));
+                            }
+                        }
                         mLineAdapter.notifyDataSetChanged();
                         mFocusAdapter.notifyDataSetChanged();
                     }
