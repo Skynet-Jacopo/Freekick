@@ -152,7 +152,7 @@
     <string name="my_page">Mine</string>
     <string name="notification">Notification</string>
     <string name="change_language">Change Language</string>
-    <string name="clause">Clauses and treaties</string>
+    <string name="clause">Terms and conditions</string>
     <string name="support">Help and support</string>
     <string name="about_us">About us</string>
     <string name="contact_us">Contact us</string>
@@ -311,6 +311,8 @@
     <string name="invite_team_in">邀請球隊參與...</string>
     <string name="partake_this_match">是否參與這場球賽</string>
     <string name="new_match">新球賽</string>
+    <string name="change_success">更改成功</string>
+    <string name="press_again_exit">再按一次退出程序</string>
 
 
 </resources>

@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue_bg"
+    android:fitsSystemWindows="true"
+    android:id="@+id/rl_parent"
+    android:orientation="vertical"
+    tools:context="com.football.freekick.activity.registerlogin.RegisterPager2Activity">
+
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="98px"
+                android:paddingRight="98px">
+
+                <RelativeLayout
+                    android:layout_width="120px"
+                    android:layout_height="120px"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40px">
+
+                    <TextView
+                        android:id="@+id/tv_upload_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/shape_oval"
+                        android:gravity="center"
+                        android:text="@string/icon_upload_pic"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_48"/>
+
+                    <com.football.freekick.views.RoundImageView
+                        android:id="@+id/iv_logo"
+                        android:layout_width="120px"
+                        android:layout_height="120px"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20px"
+                    android:gravity="left"
+                    android:text="@string/team_logo"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_24"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="56px"
+                    android:gravity="left"
+                    android:text="@string/team_name"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_36"/>
+
+                <EditText
+                    android:id="@+id/edt_team_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="bottom"
+                    android:hint="@string/please_enter_your_team_name"
+                    android:inputType="text"
+                    android:paddingTop="@dimen/text_48"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="#88beff"
+                    android:textSize="@dimen/text_24"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="16px"
+                    android:background="@color/white"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="56px"
+                    android:gravity="left"
+                    android:text="@string/area"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_36"/>
+
+                <TextView
+                    android:id="@+id/tv_team_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="bottom"
+                    android:hint="@string/please_enter_your_team_area"
+                    android:inputType="text"
+                    android:paddingTop="@dimen/text_48"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="#88beff"
+                    android:textSize="@dimen/text_24"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="16px"
+                    android:background="@color/white"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:paddingTop="56px"
+                        android:text="@string/establish_time"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_36"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_year"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32px"
+                        android:orientation="vertical"
+                        android:paddingTop="56px">
+
+                        <TextView
+                            android:id="@+id/tv_year"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="今年"
+                            android:textColor="#88beff"
+                            android:textSize="30px"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_marginTop="2px"
+                            android:background="@color/white"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:paddingTop="56px"
+                        android:text="@string/people_num"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_36"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32px"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+
+                            <TextView
+                                android:id="@+id/tv_reduce"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="left"
+                                android:paddingLeft="40px"
+                                android:paddingRight="40px"
+                                android:paddingTop="56px"
+                                android:text="-"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_36"
+                                android:textStyle="bold"/>
+                            <LinearLayout
+                                android:layout_gravity="bottom"
+                                android:gravity="center_horizontal|bottom"
+                                android:layout_weight="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:id="@+id/tv_people_num"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="7"
+                                    android:textColor="#88beff"
+                                    android:textSize="30px"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/person"
+                                    android:textColor="#88beff"
+                                    android:textSize="30px"/>
+                            </LinearLayout>
+                            <TextView
+                                android:id="@+id/tv_add"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="left"
+                                android:paddingLeft="40px"
+                                android:paddingRight="40px"
+                                android:paddingTop="56px"
+                                android:text="+"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_36"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_marginTop="2px"
+                            android:background="@color/white"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="98px"
+                android:paddingRight="50px">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:paddingTop="56px"
+                    android:text="@string/team_age"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_36"/>
+
+                <com.football.freekick.views.RangeSeekBar
+                    android:id="@+id/seek_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="26px"
+                    app:cellMode="other"
+                    app:hintBGHeight="20dp"
+                    app:hintBGWith="20dp"
+                    app:lineColorEdge="#88beff"
+                    app:lineColorSelected="@color/white"
+                    app:markTextArray="@array/markArray"
+                    app:max="85"
+                    app:min="12"
+                    app:seekBarHeight="4px"
+                    app:seekBarMode="range"
+                    app:textPadding="10dp"
+                    app:textSize="30px"
+                    app:thumbResId="@drawable/icon_football"
+                    app:thumbSize="14dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="98px"
+                android:paddingRight="98px">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="@string/average_height"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_36"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32px">
+
+                    <TextView
+                        android:id="@+id/tv_height_1"
+                        android:layout_width="200px"
+                        android:layout_height="50px"
+                        android:layout_marginRight="100px"
+                        android:background="@drawable/shape_corner_white"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:text="@string/under_160cm"
+                        android:textColor="@color/black"
+                        android:textSize="22px"/>
+
+                    <TextView
+                        android:id="@+id/tv_height_2"
+                        android:layout_width="200px"
+                        android:layout_height="50px"
+                        android:background="@drawable/shape_corner_white"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:text="161cm - 170cm"
+                        android:textColor="@color/black"
+                        android:textSize="22px"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20px">
+
+                    <TextView
+                        android:id="@+id/tv_height_3"
+                        android:layout_width="200px"
+                        android:layout_height="50px"
+                        android:layout_marginRight="100px"
+                        android:background="@drawable/shape_corner_white"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:text="171cm - 180cm"
+                        android:textColor="@color/black"
+                        android:textSize="22px"/>
+
+                    <TextView
+                        android:id="@+id/tv_height_4"
+                        android:layout_width="200px"
+                        android:layout_height="50px"
+                        android:background="@drawable/shape_corner_white"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:text="@string/above_180cm"
+                        android:textColor="@color/black"
+                        android:textSize="22px"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:paddingTop="56px"
+                        android:text="@string/team_style"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_36"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_team_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="24px"
+                        android:orientation="vertical"
+                        android:paddingTop="56px">
+
+                        <TextView
+                            android:id="@+id/tv_team_style"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="@string/short_pass"
+                            android:textColor="#88beff"
+                            android:textSize="30px"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_marginTop="2px"
+                            android:background="@color/white"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginBottom="100px"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:paddingTop="54px"
+                        android:text="@string/vs_hobby"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_36"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_team_like"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="24px"
+                        android:orientation="vertical"
+                        android:paddingTop="54px">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_team_like"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center_horizontal"
+                                android:text="@string/become_strong"
+                                android:textColor="#88beff"
+                                android:textSize="30px"/>
+
+                            <TextView
+                                android:id="@+id/tv_change"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/icon_change"
+                                android:textColor="@color/white"
+                                android:textSize="30px"/>
+                        </LinearLayout>
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_marginTop="2px"
+                            android:background="@color/white"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="88px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="240px"
+                    android:layout_marginLeft="64px"
+                    android:layout_marginRight="64px"
+                    android:background="@drawable/shape_corner_green"
+                    android:gravity="center"
+                    android:text="@string/go_on"
+                    android:textColor="@color/white"
+                    android:textSize="36px"
+                    android:visibility="visible"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+    <TextView
+        android:id="@+id/tv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="50px"
+        android:paddingLeft="24px"
+        android:paddingRight="80px"
+        android:paddingTop="26px"
+        android:text="@string/back"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_36"/>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_btn"
+        android:orientation="vertical"
+        android:background="@color/dark_blue_bg"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
+
+
+</RelativeLayout>

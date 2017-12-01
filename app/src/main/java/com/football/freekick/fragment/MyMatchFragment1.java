@@ -4,6 +4,7 @@ package com.football.freekick.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,6 +25,7 @@ import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
 import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
 import com.football.freekick.beans.Article;
+import com.football.freekick.beans.MatchesComing;
 import com.football.freekick.http.Url;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.gson.Gson;
@@ -76,6 +78,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
     private String picUrl = "http://www.cnr.cn/china/xwwgf/201111/W020111128658021231674.jpg";
     private CommonAdapter mLineAdapter;
     private CommonAdapter mFocusAdapter;
+    private ArrayList<MatchesComing.MatchesBean> mMatches;
 
     public MyMatchFragment1() {
         // Required empty public constructor
@@ -99,7 +102,6 @@ public class MyMatchFragment1 extends LazyLoadFragment {
         if (parent != null) parent.removeView(mFragmentView);
         ButterKnife.bind(this, mFragmentView);
         return mFragmentView;
-
     }
     @Override
     protected void lazyLoad() {
@@ -190,7 +192,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
     private void initMyMatches() {
         mRecyclerMyMatch.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerMyMatch.setNestedScrollingEnabled(false);
-        final MyMatchAdapter matchAdapter = new MyMatchAdapter(datas,mContext);
+        final MyMatchAdapter matchAdapter = new MyMatchAdapter(mMatches,mContext);
         mRecyclerMyMatch.setAdapter(matchAdapter);
         matchAdapter.setClick(new MyMatchAdapter.Click() {
             @Override
@@ -212,6 +214,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
         for (int i = 0; i < 3; i++) {
             datas.add("我是數據"+i);
         }
+        mMatches = getArguments().getParcelableArrayList("mMatches");
         if (point_of_view != null) {
             point_of_view.clear();
         }

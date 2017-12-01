@@ -36,8 +36,12 @@ public class Url {
     public static final String ARTICLES = BaseUrl + (App.isChinese ? ZH_HK : EN) + "articles";
     //參與約賽
     public static final String JOIN_MATCHES = BaseUrl + (App.isChinese ? ZH_HK : EN) + "join_matches";
-
-
+    //我的主牆http://api.freekick.hk/api/en/matches/coming
+    public static final String MATCHES_COMING = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/coming";
+    //登出
+    public static final String SIGN_OUT = BaseUrl + (App.isChinese ? ZH_HK : EN) + "auth/sign_out";
+    //設置
+    public static final String SETTINGS = BaseUrl + (App.isChinese ? ZH_HK : EN) + "settings";
 
 
 }

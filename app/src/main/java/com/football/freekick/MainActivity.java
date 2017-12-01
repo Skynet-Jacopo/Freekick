@@ -7,11 +7,13 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.event.MainEvent;
@@ -21,10 +23,14 @@ import com.football.freekick.fragment.PartakeFragment;
 import com.football.freekick.fragment.PartakeListFragment;
 import com.football.freekick.fragment.RecordFragment;
 import com.football.freekick.fragment.SetUpFragment;
+import com.football.freekick.utils.ActyUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -278,6 +284,44 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
+    /**
+     * 菜单、返回键响应
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+        if(keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            exitBy2Click();      //调用双击退出函数
+        }
+        return false;
+    }
+    /**
+     * 双击退出函数
+     */
+    private static Boolean isExit = false;
+
+    private void exitBy2Click() {
+        Timer tExit = null;
+        if (isExit == false) {
+            isExit = true; // 准备退出
+            Toast.makeText(this, R.string.press_again_exit, Toast.LENGTH_SHORT).show();
+            tExit = new Timer();
+            tExit.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isExit = false; // 取消退出
+                }
+            }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+
+        } else {
+            finish();
+//            System.exit(0);
+            ActyUtil.finishAllActivity();
+        }
+    }
+
     //
 //    @Override
 //    protected void onSaveInstanceState(Bundle outState) {

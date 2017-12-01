@@ -191,24 +191,50 @@ public class JoinMatchActivity extends BaseActivity {
      * 參與約
      */
     private void joinMatch() {
+//        {
+//            "id": 87,
+//                "play_end": "2017-12-05T09:00:00.000+08:00",
+//                "status": "w",
+//                "home_team_color": "1D00FF",
+//                "home_team": {
+//            "id": 49,
+//                    "image": {
+//                "url": "\/uploads\/team\/image\/49\/image.jpeg"
+//            },
+//            "team_name": "天空可了"
+//        },
+//            "join_matches": [],
+//            "play_start": "2017-12-05T06:00:00.000+08:00",
+//                "pitch_id": 1,
+//                "size": 7
+//        },
+        loadingShow();
         JsonObject object  = new JsonObject();
         JsonObject object1 = new JsonObject();
-        object1.addProperty("match_id", mMatchesBean.getId() + "");
+        object1.addProperty("match_id", "87");
         object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
         object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));
-        object1.addProperty("size", PrefUtils.getString(App.APP_CONTEXT, "size", null));
+        object1.addProperty("size", "7");
         object.add("join_match", object1);
+//        object1.addProperty("match_id", mMatchesBean.getId() + "");
+//        object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
+//        object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));
+//        object1.addProperty("size", PrefUtils.getString(App.APP_CONTEXT, "size", null));
+//        object.add("join_match", object1);
+
         Logger.json(object.toString());
         OkGo.post(Url.JOIN_MATCHES)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
                         Logger.json(s);
                         Gson      gson      = new Gson();
                         JoinMatch joinMatch = gson.fromJson(s, JoinMatch.class);
                         if (joinMatch.getJoin_match() != null) {
                             ToastUtil.toastShort(R.string.match_success);
+                            finish();
                         } else {
 
                         }
@@ -219,6 +245,7 @@ public class JoinMatchActivity extends BaseActivity {
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
+                        loadingDismiss();
                     }
                 });
     }

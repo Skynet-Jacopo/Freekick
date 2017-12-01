@@ -1,6 +1,7 @@
 package com.football.freekick.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,13 +15,29 @@ import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
+import com.football.freekick.activity.ChangeTeamInfoActivity1;
+import com.football.freekick.activity.SettingDetailActivity;
+import com.football.freekick.beans.Logout;
+import com.football.freekick.beans.Settings;
+import com.football.freekick.http.Url;
 import com.football.freekick.language.SelectLanguageActivity;
+import com.football.freekick.utils.MyUtil;
+import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.ToggleButton;
+import com.football.freekick.views.imageloader.ImageLoaderUtils;
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.orhanobut.logger.Logger;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Response;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -64,6 +81,11 @@ public class SetUpFragment extends Fragment {
     @Bind(R.id.toggle_button)
     ToggleButton mToggleButton;
 
+    private Context mContext;
+    private String about_us;
+    private String terms_and_conditions;
+    private String contact_us;
+
     public SetUpFragment() {
         // Required empty public constructor
     }
@@ -74,6 +96,7 @@ public class SetUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_set_up, container, false);
+        mContext = getActivity();
         ButterKnife.bind(this, view);
         return view;
     }
@@ -81,6 +104,44 @@ public class SetUpFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initView();
+        initData();
+    }
+
+    private void initData() {
+        OkGo.get(Url.SETTINGS)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Settings json = gson.fromJson(s, Settings.class);
+                        List<Settings.SettingBean> settingBeanList = json.getSetting();
+                        for (int i = 0; i < settingBeanList.size(); i++) {
+                            String s_key = settingBeanList.get(i).getS_key();
+                            switch (s_key){
+                                case "about_us":
+                                    about_us = settingBeanList.get(i).getS_value();
+                                    break;
+                                case "contact_us":
+                                    contact_us = settingBeanList.get(i).getS_value();
+                                    break;
+                                case "terms_and_conditions":
+                                    terms_and_conditions = settingBeanList.get(i).getS_value();
+                                    break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
+    }
+
+    private void initView() {
         mTvNotice.setTypeface(App.mTypeface);
         mTvRight1.setTypeface(App.mTypeface);
         mTvRight2.setTypeface(App.mTypeface);
@@ -92,6 +153,11 @@ public class SetUpFragment extends Fragment {
                 ToastUtil.toastShort(on+"");
             }
         });
+
+        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(PrefUtils.getString(App.APP_CONTEXT,"logourl",null)),mIvLogo);
+        mTvTeamName.setText(PrefUtils.getString(App.APP_CONTEXT,"team_name",null));
+        mTvTeamArea.setText(PrefUtils.getString(App.APP_CONTEXT,"district",null));
+
     }
 
     @Override
@@ -101,9 +167,16 @@ public class SetUpFragment extends Fragment {
     }
 
     @OnClick({R.id.tv_logout, R.id.tv_notice, R.id.ll_change_language, R.id.ll_clause, R.id.ll_support, R.id
-            .ll_about_us, R.id.ll_contact_us})
+            .ll_about_us, R.id.ll_contact_us,R.id.iv_logo,R.id.tv_team_name,R.id.tv_team_area})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
+            case R.id.iv_logo:
+            case R.id.tv_team_name:
+            case R.id.tv_team_area:
+                intent.setClass(mContext,ChangeTeamInfoActivity1.class);
+                startActivity(intent);
+                break;
             case R.id.tv_notice:
                 ToastUtil.toastShort("消息");
                 break;
@@ -111,21 +184,50 @@ public class SetUpFragment extends Fragment {
                 startActivityForResult(new Intent(getActivity(), SelectLanguageActivity.class), CHANGE_LANGUAGE);
                 break;
             case R.id.ll_clause:
-                ToastUtil.toastShort("條款和條約");
+                intent.setClass(mContext, SettingDetailActivity.class);
+                intent.putExtra("terms_and_conditions",terms_and_conditions);
+                startActivity(intent);
                 break;
             case R.id.ll_support:
                 ToastUtil.toastShort("幫助和支持");
                 break;
             case R.id.ll_about_us:
-                ToastUtil.toastShort("關於我們");
+                intent.setClass(mContext, SettingDetailActivity.class);
+                intent.putExtra("about_us",about_us);
+                startActivity(intent);
                 break;
             case R.id.ll_contact_us:
-                ToastUtil.toastShort("聯繫我們");
+                intent.setClass(mContext, SettingDetailActivity.class);
+                intent.putExtra("contact_us",contact_us);
+                startActivity(intent);
                 break;
             case R.id.tv_logout:
-                ToastUtil.toastShort("登出");
+                logout();
                 break;
         }
+    }
+    //登出
+    private void logout() {
+        OkGo.delete(Url.SIGN_OUT)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Logout logout = gson.fromJson(s, Logout.class);
+                        if (logout.isSuccess()){
+                            getActivity().finish();
+                        }else {
+                            ToastUtil.toastShort(logout.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
     }
 
     @Override

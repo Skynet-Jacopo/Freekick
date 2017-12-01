@@ -150,6 +150,12 @@
         </activity>
         <activity android:name=".activity.ShowMatchActivity">
         </activity>
+        <activity android:name=".activity.ChangeTeamInfoActivity1">
+        </activity>
+        <activity android:name=".activity.ChangeTeamInfoActivity2">
+        </activity>
+        <activity android:name=".activity.SettingDetailActivity">
+        </activity>
     </application>
 
 </manifest>

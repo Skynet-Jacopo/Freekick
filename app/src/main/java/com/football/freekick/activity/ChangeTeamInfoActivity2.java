@@ -1,19 +1,22 @@
-package com.football.freekick.activity.registerlogin;
+package com.football.freekick.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.football.freekick.App;
+import com.football.freekick.MainActivity;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.CreateTeam;
 import com.football.freekick.commons.colorpicker.ColorListener;
 import com.football.freekick.commons.colorpicker.ColorPickerView;
 import com.football.freekick.http.Url;
+import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.google.gson.Gson;
@@ -29,7 +32,7 @@ import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Response;
 
-public class RegisterPager3Activity extends BaseActivity {
+public class ChangeTeamInfoActivity2 extends BaseActivity {
 
     @Bind(R.id.tv_title)
     TextView mTvTitle;
@@ -65,14 +68,13 @@ public class RegisterPager3Activity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_pager3);
-        mContext = RegisterPager3Activity.this;
+        mContext = ChangeTeamInfoActivity2.this;
         ButterKnife.bind(this);
-        initData();
         initView();
+        initData();
     }
 
     private void initData() {
-
         Intent intent = getIntent();
         team_name = intent.getStringExtra("team_name");
         district = intent.getStringExtra("district");
@@ -84,7 +86,16 @@ public class RegisterPager3Activity extends BaseActivity {
         battle_preference = intent.getStringExtra("battle_preference");
         size = intent.getStringExtra("size");
         status = intent.getStringExtra("status");
-        image = "data:image/jpeg;base64,"+intent.getStringExtra("image");
+        if (intent.getStringExtra("image").equals("")){
+            image = "";
+        }else {
+            image = "data:image/jpeg;base64,"+intent.getStringExtra("image");
+        }
+        color1 = intent.getStringExtra("color1");
+        color2 = intent.getStringExtra("color2");
+        Logger.d("color1--->"+color1+"     color2--->"+color2);
+        mIvClothesHome.setBackgroundColor(MyUtil.getColorInt(color1));
+        mIvClothesVisitor.setBackgroundColor(MyUtil.getColorInt(color2));
     }
 
     private void initView() {
@@ -118,15 +129,15 @@ public class RegisterPager3Activity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_complete:
-                creatTeam();
+                changeTeam();
                 break;
         }
     }
 
     /**
-     * 創建球隊
+     * 修改球隊
      */
-    private void creatTeam() {
+    private void changeTeam() {
         loadingShow();
         JsonObject object = new JsonObject();
         JsonObject object1 = new JsonObject();
@@ -145,12 +156,17 @@ public class RegisterPager3Activity extends BaseActivity {
         object1.addProperty("color1", color1);
         object1.addProperty("color2", color2);
         object1.addProperty("status", status);
-        object1.addProperty("image", image);
+        if (image.equals("")){
+
+        }else {
+            object1.addProperty("image", image);
+        }
         object1.addProperty("prefer_district_id", district);
         object.add("team", object1);
         Logger.json(object.toString());
         Logger.d(App.headers.toString());
-        OkGo.post(Url.CREATE_TEAM)
+        Logger.d(Url.CREATE_TEAM+"/"+PrefUtils.getString(App.APP_CONTEXT,"team_id",null));
+        OkGo.put(Url.CREATE_TEAM+"/"+PrefUtils.getString(App.APP_CONTEXT,"team_id",null))
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
@@ -179,12 +195,12 @@ public class RegisterPager3Activity extends BaseActivity {
                             PrefUtils.putString(App.APP_CONTEXT,"age_range_min",team.getAge_range_min()+"");
                             PrefUtils.putString(App.APP_CONTEXT,"age_range_max",team.getAge_range_max()+"");
                             PrefUtils.putString(App.APP_CONTEXT,"establish_year",team.getEstablish_year()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"style",team.getStyle().get(0)+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"battle_preference",team.getBattle_preference().get(0)+"");
+                            PrefUtils.putString(App.APP_CONTEXT,"style",team.getStyle()+"");
+                            PrefUtils.putString(App.APP_CONTEXT,"battle_preference",team.getBattle_preference()+"");
                             PrefUtils.putString(App.APP_CONTEXT,"district",team.getDistrict().getDistrict()+"");
                             PrefUtils.putString(App.APP_CONTEXT,"district_id",team.getDistrict().getId()+"");
-                            ToastUtil.toastShort(getString(R.string.create_team_success));
-                            startActivity(new Intent(mContext, OneTimePagerActivity.class));
+                            ToastUtil.toastShort(getString(R.string.change_success));
+                            startActivity(new Intent(mContext, MainActivity.class));
                         } else if (createTeam.getTeam() == null && createTeam.getErrors() != null) {
                             ToastUtil.toastShort(createTeam.getErrors().get(0));
                         }

@@ -65,4 +65,33 @@ public class JodaTimeUtil {
         DateTime dateTime = new DateTime(time1);
         return dateTime.toString("yyyy-MM-dd HH:mm");
     }
+
+    public static String getDate2(String time) {
+        time = time.replace("Z", " UTC");//注意是空格+UTC
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");//注意格式化的表达式
+
+        Date d = null;
+        try {
+            d = format.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long     time1    = d.getTime();
+        DateTime dateTime = new DateTime(time1);
+        return dateTime.toString("d MMM yyyy");
+    }
+    public static String getTime2(String time) {
+        time = time.replace("Z", " UTC");//注意是空格+UTC
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");//注意格式化的表达式
+
+        Date d = null;
+        try {
+            d = format.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long     time1    = d.getTime();
+        DateTime dateTime = new DateTime(time1);
+        return dateTime.toString("HH:mm");
+    }
 }

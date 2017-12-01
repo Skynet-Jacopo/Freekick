@@ -60,8 +60,8 @@ public class LoginPager2Activity extends BaseActivity {
         setContentView(R.layout.activity_login_pager2);
         mContext = LoginPager2Activity.this;
         ButterKnife.bind(this);
-        mEdtEmail.setText("huo@yopmail.com");
-//        mEdtEmail.setText("yue@yopmail.com");
+//        mEdtEmail.setText("huo@yopmail.com");
+        mEdtEmail.setText("yue@yopmail.com");
         mEdtPassWord.setText("123456");
         initView();
     }
@@ -124,7 +124,7 @@ public class LoginPager2Activity extends BaseActivity {
                                 String client = headers.get("client");
                                 String uid = headers.get("uid");
                                 String expiry = headers.get("expiry");
-                                Logger.d(access_token + "   " + client + "   " + uid + "   " + expiry);
+                                Logger.d("access-token="+access_token + "   client=" + client + "   uid=" + uid + "   expiry=" + expiry);
                                 HttpHeaders header = new HttpHeaders();
                                 header.put("access-token", access_token);
                                 header.put("client", client);
@@ -156,7 +156,8 @@ public class LoginPager2Activity extends BaseActivity {
                                     PrefUtils.putString(App.APP_CONTEXT, "logourl", teamsBean.getImage().getUrl() + "");
                                     PrefUtils.putString(App.APP_CONTEXT, "team_name", teamsBean.getTeam_name() + "");
                                     PrefUtils.putString(App.APP_CONTEXT, "size", teamsBean.getSize() + "");
-                                    PrefUtils.putString(App.APP_CONTEXT, "district", teamsBean.getDistrict() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "district", teamsBean.getDistrict().getDistrict() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "district_id", teamsBean.getDistrict().getId() + "");
                                     startActivity(new Intent(mContext, OneTimePagerActivity.class));
                                 }
                             } else {

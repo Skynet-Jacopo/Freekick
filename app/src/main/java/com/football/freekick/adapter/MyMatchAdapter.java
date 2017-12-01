@@ -13,13 +13,16 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.beans.AvailableMatches;
+import com.football.freekick.beans.MatchesComing;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
+import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,13 +30,14 @@ import java.util.List;
  */
 
 public class MyMatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<String> datas;
+    //    private List<String> datas;
+    private ArrayList<MatchesComing.MatchesBean> mMatches;
     private Context mContext;
     private static final int TYPE_1 = 1111;//邀請
     private static final int TYPE_2 = 2222;//已邀請
 
-    public MyMatchAdapter(List<String> datas, Context mContext) {
-        this.datas = datas;
+    public MyMatchAdapter(ArrayList<MatchesComing.MatchesBean> datas, Context mContext) {
+        this.mMatches = datas;
         this.mContext = mContext;
     }
 
@@ -55,25 +59,41 @@ public class MyMatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        String s = datas.get(position);
+        MatchesComing.MatchesBean matchesBean = mMatches.get(position);
         if (holder instanceof MyHolder1) {
             final MyHolder1 myHolder1 = (MyHolder1) holder;
-            myHolder1.tvLocation.setText(s);
+            myHolder1.tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
+            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
+                    myHolder1.ivHomeLogo);
+
+            String date = JodaTimeUtil.getDate2(matchesBean.getPlay_start());
+            myHolder1.tvDate.setText(date);
+            String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
+            String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
+            myHolder1.tvTime.setText(start + " - " + end);
+            List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
+            myHolder1.tvLocation.setText(matchesBean.getLocation());
+            if (join_matches.size()>0){
+
+            }else {
+                myHolder1.tvState.setText(R.string.invite);
+            }
+
+
 
         } else if (holder instanceof MyHolder2) {
             final MyHolder2 myHolder2 = (MyHolder2) holder;
-            myHolder2.tvLocation.setText(s);
             myHolder2.tvIconDelete.setTypeface(App.mTypeface);
             myHolder2.tvIconDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    click.Clike(1,myHolder2.tvIconDelete,position);//刪除
+                    click.Clike(1, myHolder2.tvIconDelete, position);//刪除
                 }
             });
             myHolder2.lLContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    click.Clike(2,myHolder2.lLContent,position);//詳情
+                    click.Clike(2, myHolder2.lLContent, position);//詳情
                 }
             });
         }
@@ -81,7 +101,7 @@ public class MyMatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return datas.size() == 0 ? 0 : datas.size();
+        return mMatches.size() == 0 ? 0 : mMatches.size();
     }
 
     @Override
@@ -89,8 +109,8 @@ public class MyMatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (position % 2 != 0) {
             return TYPE_1;
         } else {
-            return TYPE_2;
-//            return TYPE_1;
+//            return TYPE_2;
+            return TYPE_1;
         }
     }
 

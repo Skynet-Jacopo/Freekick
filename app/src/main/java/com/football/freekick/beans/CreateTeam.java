@@ -6,7 +6,7 @@ import java.util.List;
  * Created by ly on 2017/11/19.
  */
 
-public class CreatTeam {
+public class CreateTeam {
 
     /**
      * team : {"average_height":3,"establish_year":2015,"status":"a","remark":null,"team_name":"天崩地裂",
@@ -64,7 +64,7 @@ public class CreatTeam {
         private int id;
         private int age_range_max;
         private int age_range_min;
-        private String district;
+        private District district;
         private String color2;
         private UserBean user;
         private String color1;
@@ -151,11 +151,11 @@ public class CreatTeam {
             this.age_range_min = age_range_min;
         }
 
-        public String getDistrict() {
+        public District getDistrict() {
             return district;
         }
 
-        public void setDistrict(String district) {
+        public void setDistrict(District district) {
             this.district = district;
         }
 
@@ -248,6 +248,39 @@ public class CreatTeam {
 
             public void setUsername(String username) {
                 this.username = username;
+            }
+        }
+        public static class District {
+            /**
+             * url : null
+             */
+
+            private String region;
+            private String district;
+            private String id;
+
+            public String getRegion() {
+                return region;
+            }
+
+            public void setRegion(String region) {
+                this.region = region;
+            }
+
+            public String getDistrict() {
+                return district;
+            }
+
+            public void setDistrict(String district) {
+                this.district = district;
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
             }
         }
     }

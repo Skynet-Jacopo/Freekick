@@ -227,7 +227,7 @@ public class Login {
             private int       age_range_max;
             private ImageBean image;
             private int       age_range_min;
-            private String    district;
+            private District    district;
             private String    color2;
             private String    color1;
             private int       size;
@@ -304,14 +304,6 @@ public class Login {
                 this.age_range_min = age_range_min;
             }
 
-            public String getDistrict() {
-                return district;
-            }
-
-            public void setDistrict(String district) {
-                this.district = district;
-            }
-
             public String getColor2() {
                 return color2;
             }
@@ -336,19 +328,60 @@ public class Login {
                 this.size = size;
             }
 
+            public District getDistrict() {
+                return district;
+            }
+
+            public void setDistrict(District district) {
+                this.district = district;
+            }
+
             public static class ImageBean {
                 /**
                  * url : null
                  */
 
-                private Object url;
+                private String url;
 
-                public Object getUrl() {
+                public String getUrl() {
                     return url;
                 }
 
-                public void setUrl(Object url) {
+                public void setUrl(String url) {
                     this.url = url;
+                }
+            }
+            public static class District {
+                /**
+                 * url : null
+                 */
+
+                private String region;
+                private String district;
+                private String id;
+
+                public String getRegion() {
+                    return region;
+                }
+
+                public void setRegion(String region) {
+                    this.region = region;
+                }
+
+                public String getDistrict() {
+                    return district;
+                }
+
+                public void setDistrict(String district) {
+                    this.district = district;
+                }
+
+                public String getId() {
+                    return id;
+                }
+
+                public void setId(String id) {
+                    this.id = id;
                 }
             }
         }

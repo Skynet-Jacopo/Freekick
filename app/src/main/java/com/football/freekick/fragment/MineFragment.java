@@ -16,8 +16,15 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.adapter.MyFragmentAdapter;
+import com.football.freekick.beans.MatchesComing;
+import com.football.freekick.http.Url;
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.orhanobut.logger.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -26,6 +33,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * 我的球賽頁.
@@ -44,13 +53,14 @@ public class MineFragment extends Fragment {
 
     private MyFragmentAdapter fragmentPagerAdapter;
     private List<Fragment> listFragments;//定义要装fragment的列表
-    private List<String>      listTitles; //tab名称列表
-
-    private MyMatchFragment1  mFragment1;//正常
-    private MyMatchFragment1  mFragment2;//正常
-    private MyMatchFragment1  mFragment3;//正常
+    private List<String> listTitles; //tab名称列表
 
     Context mContext;
+    private ArrayList<MatchesComing.MatchesBean> mMatches = new ArrayList<>();
+    private ArrayList<MatchesComing.MatchesBean> mListWait = new ArrayList<>();
+    private ArrayList<MatchesComing.MatchesBean> mListMatch = new ArrayList<>();
+    private ArrayList<MatchesComing.MatchesBean> mListInvite = new ArrayList<>();
+
     public MineFragment() {
         // Required empty public constructor
     }
@@ -69,7 +79,54 @@ public class MineFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initTabAndViewPager();
+        initData();
+    }
+
+    private void initData() {
+        if (mMatches != null) {
+            mMatches.clear();
+        }
+        if (mListWait != null) {
+            mListWait.clear();
+        }
+        if (mListMatch != null) {
+            mListMatch.clear();
+        }
+        if (mListInvite != null) {
+            mListInvite.clear();
+        }
+        OkGo.get(Url.MATCHES_COMING)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        MatchesComing json = gson.fromJson(s, MatchesComing.class);
+                        mMatches.addAll(json.getMatches());
+                        for (int i = 0; i < mMatches.size(); i++) {
+                            for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
+                                if (mMatches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()){
+                                    mMatches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
+                                    mMatches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
+                                }
+                            }
+                            if (mMatches.get(i).getStatus().equals("w")) {
+                                mListWait.add(mMatches.get(i));
+                            } else if (mMatches.get(i).getStatus().equals("m")) {
+                                mListMatch.add(mMatches.get(i));
+                            } else if (mMatches.get(i).getStatus().equals("i")) {
+                                mListInvite.add(mMatches.get(i));
+                            }
+                        }
+                        initTabAndViewPager();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
     }
 
     @Override
@@ -89,15 +146,26 @@ public class MineFragment extends Fragment {
     }
 
     private void initTabAndViewPager() {
-
-        mFragment1 = new MyMatchFragment1();
-        mFragment2 = new MyMatchFragment1();
-        mFragment3 = new MyMatchFragment1();
-
         listFragments = new ArrayList<>();
-        listFragments.add(mFragment1);
-        listFragments.add(mFragment2);
-        listFragments.add(mFragment3);
+        Fragment fragment;
+        Bundle bundle;
+        fragment = new MyMatchFragment1();
+        bundle = new Bundle();
+        bundle.putParcelableArrayList("mMatches", mListMatch);
+        fragment.setArguments(bundle);
+        listFragments.add(fragment);
+
+        fragment = new MyMatchFragment1();
+        bundle = new Bundle();
+        bundle.putParcelableArrayList("mMatches", mListWait);
+        fragment.setArguments(bundle);
+        listFragments.add(fragment);
+
+        fragment = new MyMatchFragment1();
+        bundle = new Bundle();
+        bundle.putParcelableArrayList("mMatches", mListInvite);
+        fragment.setArguments(bundle);
+        listFragments.add(fragment);
 
         //将名称加载tab名字列表，正常情况下，我们应该在values/arrays.xml中进行定义然后调用
         listTitles = new ArrayList<>();
@@ -137,7 +205,7 @@ public class MineFragment extends Fragment {
 
     public static void setIndicator(Context context, TabLayout tabs, int leftDip, int rightDip) {
         Class<?> tabLayout = tabs.getClass();
-        Field tabStrip  = null;
+        Field tabStrip = null;
         try {
             tabStrip = tabLayout.getDeclaredField("mTabStrip");
         } catch (NoSuchFieldException e) {
@@ -152,13 +220,14 @@ public class MineFragment extends Fragment {
             e.printStackTrace();
         }
 
-        int left  = (int) (getDisplayMetrics(context).density * leftDip);
+        int left = (int) (getDisplayMetrics(context).density * leftDip);
         int right = (int) (getDisplayMetrics(context).density * rightDip);
 
         for (int i = 0; i < ll_tab.getChildCount(); i++) {
             View child = ll_tab.getChildAt(i);
             child.setPadding(0, 0, 0, 0);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams
+                    .MATCH_PARENT, 1);
             params.leftMargin = left;
             params.rightMargin = right;
             child.setLayoutParams(params);
