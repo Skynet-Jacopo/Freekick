@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
+              android:background="@drawable/selector_rectangle_white_gray_bg"
+              android:clickable="true"
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="128px"
-        android:background="@drawable/selector_rectangle_white_gray_bg"
-        android:clickable="true">
+        >
 
         <ImageView
             android:id="@+id/iv_pic"
@@ -50,26 +51,26 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/tv_invite"
+            android:id="@+id/tv_attention"
             android:layout_width="128px"
             android:layout_height="48px"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="12px"
             android:background="@drawable/selector_corner_green_gray_bg"
             android:gravity="center"
-            android:text="@string/invite"
+            android:text="@string/follow"
             android:textColor="@color/white"
             android:textSize="@dimen/text_24"/>
 
         <TextView
-            android:id="@+id/tv_attention"
+            android:id="@+id/tv_fight"
             android:layout_width="128px"
             android:layout_height="48px"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="24px"
-            android:background="@drawable/selector_corner_gray_gray_bg"
+            android:background="@drawable/selector_corner_dark_blue_gray_bg"
             android:gravity="center"
-            android:text="@string/follow"
+            android:text="@string/yue_zhan"
             android:textColor="@color/white"
             android:textSize="@dimen/text_24"/>
     </LinearLayout>

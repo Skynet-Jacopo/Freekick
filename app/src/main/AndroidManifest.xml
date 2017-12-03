@@ -156,6 +156,10 @@
         </activity>
         <activity android:name=".activity.SettingDetailActivity">
         </activity>
+        <activity android:name=".activity.SameAreaTeamActivity">
+        </activity>
+        <activity android:name=".activity.ChangeTeamInfoActivity0">
+        </activity>
     </application>
 
 </manifest>

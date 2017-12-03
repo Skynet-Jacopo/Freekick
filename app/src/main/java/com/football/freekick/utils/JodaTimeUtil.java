@@ -50,7 +50,20 @@ public class JodaTimeUtil {
         DateTime dateTime = new DateTime(time1);
         return dateTime.toString("yyyy-MM-dd");
     }
+    public static String getDate3(String time) {
+        time = time.replace("Z", " UTC");//注意是空格+UTC
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");//注意格式化的表达式
 
+        Date d = null;
+        try {
+            d = format.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long     time1    = d.getTime();
+        DateTime dateTime = new DateTime(time1);
+        return dateTime.toString("d MMM yyyy");
+    }
     public static String getTime(String time) {
         time = time.replace("Z", " UTC");//注意是空格+UTC
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");//注意格式化的表达式
@@ -67,8 +80,9 @@ public class JodaTimeUtil {
     }
 
     public static String getDate2(String time) {
-        time = time.replace("Z", " UTC");//注意是空格+UTC
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");//注意格式化的表达式
+        time = time.substring(0,time.length()-6);
+//        time = time.replace("Z", " UTC");//注意是空格+UTC
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");//注意格式化的表达式
 
         Date d = null;
         try {
@@ -81,8 +95,9 @@ public class JodaTimeUtil {
         return dateTime.toString("d MMM yyyy");
     }
     public static String getTime2(String time) {
-        time = time.replace("Z", " UTC");//注意是空格+UTC
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");//注意格式化的表达式
+        time = time.substring(0,time.length()-6);
+//        time = time.replace("Z", " UTC");//注意是空格+UTC
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");//注意格式化的表达式
 
         Date d = null;
         try {

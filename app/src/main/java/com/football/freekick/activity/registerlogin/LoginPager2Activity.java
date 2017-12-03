@@ -61,8 +61,9 @@ public class LoginPager2Activity extends BaseActivity {
         mContext = LoginPager2Activity.this;
         ButterKnife.bind(this);
 //        mEdtEmail.setText("huo@yopmail.com");
-        mEdtEmail.setText("yue@yopmail.com");
-        mEdtPassWord.setText("123456");
+//        mEdtEmail.setText("yue@yopmail.com");
+//        mEdtEmail.setText("lei@yopmail.com");
+//        mEdtPassWord.setText("123456");
         initView();
     }
 
@@ -136,6 +137,8 @@ public class LoginPager2Activity extends BaseActivity {
                                 PrefUtils.putString(App.APP_CONTEXT, "uid", uid);
                                 PrefUtils.putString(App.APP_CONTEXT, "expiry", expiry);
 
+                                PrefUtils.putString(App.APP_CONTEXT, "mobile_no", user.getMobile_no() + "");
+                                PrefUtils.putString(App.APP_CONTEXT, "username", user.getUsername() + "");
                                 if (!isSecondRun) {
                                     //如果是第一次登錄或者卸載重裝過,獲取廣告,場地等信息
                                     getPitches();
@@ -156,8 +159,11 @@ public class LoginPager2Activity extends BaseActivity {
                                     PrefUtils.putString(App.APP_CONTEXT, "logourl", teamsBean.getImage().getUrl() + "");
                                     PrefUtils.putString(App.APP_CONTEXT, "team_name", teamsBean.getTeam_name() + "");
                                     PrefUtils.putString(App.APP_CONTEXT, "size", teamsBean.getSize() + "");
-                                    PrefUtils.putString(App.APP_CONTEXT, "district", teamsBean.getDistrict().getDistrict() + "");
-                                    PrefUtils.putString(App.APP_CONTEXT, "district_id", teamsBean.getDistrict().getId() + "");
+                                    if (teamsBean.getDistrict()!=null){
+                                        PrefUtils.putString(App.APP_CONTEXT, "district", teamsBean.getDistrict().getDistrict() + "");
+                                        PrefUtils.putString(App.APP_CONTEXT, "district_id", teamsBean.getDistrict().getId() + "");
+                                    }
+
                                     startActivity(new Intent(mContext, OneTimePagerActivity.class));
                                 }
                             } else {

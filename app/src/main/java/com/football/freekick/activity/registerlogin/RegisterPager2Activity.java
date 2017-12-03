@@ -722,7 +722,8 @@ public class RegisterPager2Activity extends BaseActivity {
                 && resultCode == Activity.RESULT_OK) {
             Logger.d(mPicLoaclUrl);
             ImageLoaderUtils.displayImage("file:/" + mPicLoaclUrl, mIvLogo);
-            uploadImageToBase64(mPicLoaclUrl);
+//            uploadImageToBase64(mPicLoaclUrl);
+            image = mPicLoaclUrl;
 
         } else if (requestCode == RESULT_LOAD_IMAGE
                 && resultCode == Activity.RESULT_OK && null != data) {
@@ -758,7 +759,8 @@ public class RegisterPager2Activity extends BaseActivity {
             }
             if (picturePath != null && !picturePath.equals("")) {
                 ImageLoaderUtils.displayImage("file:/" + picturePath, mIvLogo);
-                uploadImageToBase64(picturePath);
+//                uploadImageToBase64(picturePath);
+                image = picturePath;
             } else {
                 ToastUtil.toastShort("获取图片失败");
             }

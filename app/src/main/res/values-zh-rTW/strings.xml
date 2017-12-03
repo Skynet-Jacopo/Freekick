@@ -99,7 +99,8 @@
     <string name="create_team_success">創建球隊成功</string>
     <string name="match_invite">球賽邀請</string>
     <string name="invite">邀請</string>
-    <string name="attention">關注</string>
+    <string name="follow">關注</string>
+    <string name="unfollow">已關注</string>
     <string name="please_choose_match_date">請選擇球賽日期</string>
     <string name="please_choose_match_time">請選擇球賽時間</string>
     <string name="please_choose_pitch">請選擇球場</string>
@@ -199,5 +200,48 @@
         }
     ]
 }</string>
-
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_qualified_pitches">您選擇的條件內沒有符合條件的球場!</string>
+    <string name="people_under_5">5人以下</string>
+    <string name="people_6_10">6人-10人</string>
+    <string name="people_11_20">11人-20人</string>
+    <string name="people_above_20">20人以上</string>
+    <string name="age_under_20">20歲以下</string>
+    <string name="age_21_30">21歲-30歲</string>
+    <string name="age_31_40">31歲-40歲</string>
+    <string name="age_above_41">41歲以上</string>
+    <string name="search_team">搜索球隊</string>
+    <string name="join_match">參與約賽</string>
+    <string name="match_success">成功約賽</string>
+    <string name="same_area_team">同區球隊</string>
+    <string name="more">更多</string>
+    <string name="already_attention">已關注球隊</string>
+    <string name="my_match">我的球賽</string>
+    <string name="implemented_match">已落實球賽</string>
+    <string name="not_mplement_match">未落實球賽</string>
+    <string name="invited_match">已收到邀請</string>
+    <string name="trends">動態</string>
+    <string name="focus">焦點</string>
+    <string name="attack">進攻</string>
+    <string name="defend">防守</string>
+    <string name="punctuality">準時</string>
+    <string name="ability">球技</string>
+    <string name="quality">球品</string>
+    <string name="decide_to_play">決定作賽</string>
+    <string name="basic_information">基本資料</string>
+    <string name="finished_match">已完成球賽</string>
+    <string name="yue_zhan">約戰</string>
+    <string name="invite_team_in">邀請球隊參與...</string>
+    <string name="partake_this_match">是否參與這場球賽</string>
+    <string name="new_match">新球賽</string>
+    <string name="change_success">更改成功</string>
+    <string name="press_again_exit">再按一次退出程序</string>
+    <string name="same_district_teams">同區球隊</string>
+    <string name="team_detail">球隊詳情</string>
+    <string name="team_average_age">球隊平均年齡</string>
+    <string name="match_fail">約賽失敗</string>
+    <string name="please_verify_your_account_first">請在郵箱驗證登錄</string>
+    <string name="confirmation_pending">待確認</string>
+    <string name="invited_already">已邀請</string>
+    <string name="accept_the_invitation">接受</string>
 </resources>

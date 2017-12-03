@@ -2,6 +2,7 @@ package com.football.freekick.activity.registerlogin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.football.freekick.beans.CreateTeam;
 import com.football.freekick.commons.colorpicker.ColorListener;
 import com.football.freekick.commons.colorpicker.ColorPickerView;
 import com.football.freekick.http.Url;
+import com.football.freekick.utils.ImageUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.google.gson.Gson;
@@ -84,7 +86,9 @@ public class RegisterPager3Activity extends BaseActivity {
         battle_preference = intent.getStringExtra("battle_preference");
         size = intent.getStringExtra("size");
         status = intent.getStringExtra("status");
-        image = "data:image/jpeg;base64,"+intent.getStringExtra("image");
+        if (!intent.getStringExtra("image").equals("")){
+            uploadImageToBase64(intent.getStringExtra("image"));
+        }
     }
 
     private void initView() {
@@ -197,5 +201,15 @@ public class RegisterPager3Activity extends BaseActivity {
                         loadingDismiss();
                     }
                 });
+    }
+
+    /**
+     * 操作圖片toBase64
+     *
+     * @param picLoaclUrl
+     */
+    private void uploadImageToBase64(String picLoaclUrl) {
+        Bitmap bitmap = ImageUtil.getimage(picLoaclUrl);
+        image = "data:image/jpeg;base64,"+ImageUtil.bitmapToBase64(bitmap);
     }
 }

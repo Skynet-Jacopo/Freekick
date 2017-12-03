@@ -586,6 +586,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_district"
             android:text="我是地區"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
@@ -605,7 +606,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:text="@string/area"
+            android:text="@string/establish_time"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
             android:layout_width="wrap_content"
@@ -617,6 +618,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_establish_time"
             android:text="我是地區"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
@@ -636,7 +638,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:text="@string/area"
+            android:text="@string/people_num"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
             android:layout_width="wrap_content"
@@ -648,6 +650,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_team_num"
             android:text="我是地區"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
@@ -667,7 +670,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:text="@string/area"
+            android:text="@string/average_height"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
             android:layout_width="wrap_content"
@@ -679,6 +682,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_team_average_height"
             android:text="我是地區"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
@@ -698,7 +702,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:text="@string/area"
+            android:text="@string/team_average_age"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
             android:layout_width="wrap_content"
@@ -710,6 +714,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_team_average_age"
             android:text="我是地區"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
@@ -729,7 +734,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:text="@string/area"
+            android:text="@string/team_style"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
             android:layout_width="wrap_content"
@@ -741,6 +746,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_team_style"
             android:text="我是地區"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
@@ -760,7 +766,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:text="@string/area"
+            android:text="@string/vs_hobby"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"
             android:layout_width="wrap_content"
@@ -772,6 +778,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_vs_hobby"
             android:text="我是地區"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"

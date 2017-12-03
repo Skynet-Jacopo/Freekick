@@ -38,6 +38,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_team_info"
         android:layout_width="match_parent"
         android:layout_height="260px">
 

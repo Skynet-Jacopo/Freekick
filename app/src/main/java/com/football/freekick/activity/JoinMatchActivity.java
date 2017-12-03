@@ -211,7 +211,7 @@ public class JoinMatchActivity extends BaseActivity {
         loadingShow();
         JsonObject object  = new JsonObject();
         JsonObject object1 = new JsonObject();
-        object1.addProperty("match_id", "87");
+        object1.addProperty("match_id", "92");
         object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
         object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));
         object1.addProperty("size", "7");
@@ -246,6 +246,7 @@ public class JoinMatchActivity extends BaseActivity {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
                         loadingDismiss();
+                        ToastUtil.toastShort(getString(R.string.match_fail));
                     }
                 });
     }

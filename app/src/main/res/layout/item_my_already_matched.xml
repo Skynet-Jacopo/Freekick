@@ -4,6 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:id="@+id/ll_content"
+              android:clickable="true"
+              android:background="@drawable/selector_rectangle_white_gray_bg"
               android:orientation="vertical">
 
     <View

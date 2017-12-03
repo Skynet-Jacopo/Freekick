@@ -290,9 +290,9 @@ public class PartakeFragment extends Fragment {
             ToastUtil.toastShort(getString(R.string.please_choose_the_district));
             return;
         }
+        getDataToNextPage();
         EventBus.getDefault().post(new MainEvent(1));
         mStr = "你吃飯了么";
-        getDataToNextPage();
     }
     //將數據獲取給下個頁面
     private void getDataToNextPage() {

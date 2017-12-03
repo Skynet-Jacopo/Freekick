@@ -138,11 +138,12 @@ public class PartakeListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        Logger.d("onResume走了么");
         if (mPartakeFragment.isPartake) {//因為有可能回退到上個界面修改數據,然後這個Fragment只是被隱藏了,不是被銷毀了,所以在onResume里執行此操作
             mText.performClick();
             mPartakeFragment.isPartake = false;
+            getAvailableAatches();
         }
-        getAvailableAatches();
     }
 
     private void getAvailableAatches() {

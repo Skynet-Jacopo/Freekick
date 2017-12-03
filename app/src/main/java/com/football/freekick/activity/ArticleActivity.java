@@ -24,7 +24,7 @@ public class ArticleActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
         ButterKnife.bind(this);
-        Article.ArticleBean article = (Article.ArticleBean) getIntent().getSerializableExtra("Article");
+        Article.ArticleBean article =getIntent().getParcelableExtra("Article");
         mTvTitle.setText(article.getSubject());
         initWebView(article.getContent());
     }

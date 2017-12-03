@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.football.freekick.activity.registerlogin.RegisterPager1Activity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="76px"
+        android:layout_marginRight="76px"
+        android:layout_marginTop="168px"
+        android:background="#0F175D"
+        android:orientation="vertical"
+        android:paddingBottom="34px"
+        android:paddingLeft="32px"
+        android:paddingRight="32px"
+        android:paddingTop="34px">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/user_name"
+            android:textColor="@color/white"
+            android:textSize="48px"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48px">
+
+            <TextView
+                android:id="@+id/tv_user_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="24px"
+                android:text="@string/user_icon"
+                android:textColor="@color/white"
+                android:textSize="30px"/>
+
+            <EditText
+                android:id="@+id/edt_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="@string/please_enter_your_name"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#88befe"
+                android:textSize="30px"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16px"
+            android:background="@color/white"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="76px"
+        android:layout_marginRight="76px"
+        android:layout_marginTop="32px"
+        android:background="#0F175D"
+        android:orientation="vertical"
+        android:paddingBottom="34px"
+        android:paddingLeft="32px"
+        android:paddingRight="32px"
+        android:paddingTop="34px">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/phone_number"
+            android:textColor="@color/white"
+            android:textSize="48px"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48px">
+
+            <TextView
+                android:id="@+id/tv_phone_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="24px"
+                android:text="@string/phone_icon"
+                android:textColor="@color/white"
+                android:textSize="30px"/>
+
+            <EditText
+                android:id="@+id/edt_phone_num"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="@string/please_enter_your_phone"
+                android:inputType="phone"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#88befe"
+                android:textSize="30px"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16px"
+            android:background="@color/white"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_next"
+        android:layout_width="match_parent"
+        android:layout_height="88px"
+        android:layout_marginLeft="65px"
+        android:layout_marginRight="65px"
+        android:layout_marginTop="280px"
+        android:background="@drawable/shape_corner_green"
+        android:gravity="center"
+        android:text="@string/go_on"
+        android:textColor="@color/white"
+        android:textSize="36px"/>
+
+</LinearLayout>

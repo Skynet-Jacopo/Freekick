@@ -42,6 +42,8 @@ public class Url {
     public static final String SIGN_OUT = BaseUrl + (App.isChinese ? ZH_HK : EN) + "auth/sign_out";
     //設置
     public static final String SETTINGS = BaseUrl + (App.isChinese ? ZH_HK : EN) + "settings";
+    //邀請球隊
+    public static final String MATCHES_INVITE = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/invite";
 
 
 }

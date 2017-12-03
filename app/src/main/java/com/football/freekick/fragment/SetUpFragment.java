@@ -11,11 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
-import com.football.freekick.activity.ChangeTeamInfoActivity1;
+import com.football.freekick.activity.ChangeTeamInfoActivity0;
 import com.football.freekick.activity.SettingDetailActivity;
 import com.football.freekick.beans.Logout;
 import com.football.freekick.beans.Settings;
@@ -49,37 +50,39 @@ public class SetUpFragment extends Fragment {
 
     public static final int CHANGE_LANGUAGE = 1;
     @Bind(R.id.tv_notice)
-    TextView     mTvNotice;
+    TextView mTvNotice;
     @Bind(R.id.iv_logo)
-    ImageView    mIvLogo;
+    ImageView mIvLogo;
     @Bind(R.id.tv_team_name)
-    TextView     mTvTeamName;
+    TextView mTvTeamName;
     @Bind(R.id.tv_team_area)
-    TextView     mTvTeamArea;
+    TextView mTvTeamArea;
     @Bind(R.id.tv_language)
-    TextView     mTvLanguage;
+    TextView mTvLanguage;
     @Bind(R.id.ll_change_language)
     LinearLayout mLlChangeLanguage;
     @Bind(R.id.tv_right1)
-    TextView     mTvRight1;
+    TextView mTvRight1;
     @Bind(R.id.ll_clause)
     LinearLayout mLlClause;
     @Bind(R.id.tv_right2)
-    TextView     mTvRight2;
+    TextView mTvRight2;
     @Bind(R.id.ll_support)
     LinearLayout mLlSupport;
     @Bind(R.id.tv_right3)
-    TextView     mTvRight3;
+    TextView mTvRight3;
     @Bind(R.id.ll_about_us)
     LinearLayout mLlAboutUs;
     @Bind(R.id.tv_right4)
-    TextView     mTvRight4;
+    TextView mTvRight4;
     @Bind(R.id.ll_contact_us)
     LinearLayout mLlContactUs;
     @Bind(R.id.tv_logout)
-    TextView     mTvLogout;
+    TextView mTvLogout;
     @Bind(R.id.toggle_button)
     ToggleButton mToggleButton;
+    @Bind(R.id.rl_team_info)
+    RelativeLayout mRlTeamInfo;
 
     private Context mContext;
     private String about_us;
@@ -119,7 +122,7 @@ public class SetUpFragment extends Fragment {
                         List<Settings.SettingBean> settingBeanList = json.getSetting();
                         for (int i = 0; i < settingBeanList.size(); i++) {
                             String s_key = settingBeanList.get(i).getS_key();
-                            switch (s_key){
+                            switch (s_key) {
                                 case "about_us":
                                     about_us = settingBeanList.get(i).getS_value();
                                     break;
@@ -147,16 +150,18 @@ public class SetUpFragment extends Fragment {
         mTvRight2.setTypeface(App.mTypeface);
         mTvRight3.setTypeface(App.mTypeface);
         mTvRight4.setTypeface(App.mTypeface);
+        mTvLanguage.setText(App.isChinese ? "繁體中文(香港)" : "English");
         mToggleButton.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
             @Override
             public void onToggle(boolean on) {
-                ToastUtil.toastShort(on+"");
+                ToastUtil.toastShort(on + "");
             }
         });
 
-        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(PrefUtils.getString(App.APP_CONTEXT,"logourl",null)),mIvLogo);
-        mTvTeamName.setText(PrefUtils.getString(App.APP_CONTEXT,"team_name",null));
-        mTvTeamArea.setText(PrefUtils.getString(App.APP_CONTEXT,"district",null));
+        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(PrefUtils.getString(App.APP_CONTEXT, "logourl", null)),
+                mIvLogo);
+        mTvTeamName.setText(PrefUtils.getString(App.APP_CONTEXT, "team_name", null));
+        mTvTeamArea.setText(PrefUtils.getString(App.APP_CONTEXT, "district", null));
 
     }
 
@@ -167,14 +172,15 @@ public class SetUpFragment extends Fragment {
     }
 
     @OnClick({R.id.tv_logout, R.id.tv_notice, R.id.ll_change_language, R.id.ll_clause, R.id.ll_support, R.id
-            .ll_about_us, R.id.ll_contact_us,R.id.iv_logo,R.id.tv_team_name,R.id.tv_team_area})
+            .ll_about_us, R.id.ll_contact_us, R.id.iv_logo, R.id.tv_team_name, R.id.tv_team_area,R.id.rl_team_info})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.iv_logo:
             case R.id.tv_team_name:
             case R.id.tv_team_area:
-                intent.setClass(mContext,ChangeTeamInfoActivity1.class);
+            case R.id.rl_team_info:
+                intent.setClass(mContext, ChangeTeamInfoActivity0.class);
                 startActivity(intent);
                 break;
             case R.id.tv_notice:
@@ -185,7 +191,7 @@ public class SetUpFragment extends Fragment {
                 break;
             case R.id.ll_clause:
                 intent.setClass(mContext, SettingDetailActivity.class);
-                intent.putExtra("terms_and_conditions",terms_and_conditions);
+                intent.putExtra("terms_and_conditions", terms_and_conditions);
                 startActivity(intent);
                 break;
             case R.id.ll_support:
@@ -193,12 +199,12 @@ public class SetUpFragment extends Fragment {
                 break;
             case R.id.ll_about_us:
                 intent.setClass(mContext, SettingDetailActivity.class);
-                intent.putExtra("about_us",about_us);
+                intent.putExtra("about_us", about_us);
                 startActivity(intent);
                 break;
             case R.id.ll_contact_us:
                 intent.setClass(mContext, SettingDetailActivity.class);
-                intent.putExtra("contact_us",contact_us);
+                intent.putExtra("contact_us", contact_us);
                 startActivity(intent);
                 break;
             case R.id.tv_logout:
@@ -206,6 +212,7 @@ public class SetUpFragment extends Fragment {
                 break;
         }
     }
+
     //登出
     private void logout() {
         OkGo.delete(Url.SIGN_OUT)
@@ -215,9 +222,9 @@ public class SetUpFragment extends Fragment {
                         Logger.json(s);
                         Gson gson = new Gson();
                         Logout logout = gson.fromJson(s, Logout.class);
-                        if (logout.isSuccess()){
+                        if (logout.isSuccess()) {
                             getActivity().finish();
-                        }else {
+                        } else {
                             ToastUtil.toastShort(logout.getMessage());
                         }
                     }

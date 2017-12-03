@@ -1,7 +1,6 @@
 package com.football.freekick.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +11,12 @@ import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
-import com.football.freekick.beans.AvailableMatches;
 import com.football.freekick.beans.MatchesComing;
-import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
-import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
+import com.google.gson.Gson;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -29,16 +26,20 @@ import java.util.List;
  * Created by 90516 on 2017/11/22.
  */
 
-public class MyMatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MyMatchAdapter0 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //    private List<String> datas;
     private ArrayList<MatchesComing.MatchesBean> mMatches;
     private Context mContext;
     private static final int TYPE_1 = 1111;//邀請
     private static final int TYPE_2 = 2222;//已邀請
+    private final String team_id;
+    private final Gson gson;
 
-    public MyMatchAdapter(ArrayList<MatchesComing.MatchesBean> datas, Context mContext) {
+    public MyMatchAdapter0(ArrayList<MatchesComing.MatchesBean> datas, Context mContext) {
         this.mMatches = datas;
         this.mContext = mContext;
+        team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
+        gson = new Gson();
     }
 
     @Override
@@ -62,40 +63,77 @@ public class MyMatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         MatchesComing.MatchesBean matchesBean = mMatches.get(position);
         if (holder instanceof MyHolder1) {
             final MyHolder1 myHolder1 = (MyHolder1) holder;
-            myHolder1.tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
-            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
-                    myHolder1.ivHomeLogo);
-
-            String date = JodaTimeUtil.getDate2(matchesBean.getPlay_start());
-            myHolder1.tvDate.setText(date);
-            String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
-            String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
-            myHolder1.tvTime.setText(start + " - " + end);
-            List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
-            myHolder1.tvLocation.setText(matchesBean.getLocation());
-            if (join_matches.size()>0){
-
-            }else {
-                myHolder1.tvState.setText(R.string.invite);
-            }
-
-
-
         } else if (holder instanceof MyHolder2) {
             final MyHolder2 myHolder2 = (MyHolder2) holder;
             myHolder2.tvIconDelete.setTypeface(App.mTypeface);
-            myHolder2.tvIconDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    click.Clike(1, myHolder2.tvIconDelete, position);//刪除
+            myHolder2.tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
+            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
+                    myHolder2.ivHomeLogo);
+            String date = JodaTimeUtil.getDate2(matchesBean.getPlay_start());
+            myHolder2.tvDate.setText(date);
+            String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
+            String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
+            myHolder2.tvTime.setText(start + " - " + end);
+            List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
+            myHolder2.tvLocation.setText(matchesBean.getLocation());
+            if (matchesBean.getHome_team().getId() != Integer.parseInt(team_id)) {
+                //主隊位置不是自己,那自己應該在另一邊,屬於主動參與進來的
+                myHolder2.tvState.setText("已落實");
+                myHolder2.tvState.setBackgroundResource(R.drawable.shape_corner_green);
+                myHolder2.tvState.setClickable(false);
+                myHolder2.tvIconDelete.setVisibility(View.VISIBLE);
+                int secondPos = 0;
+                for (int i = 0; i < join_matches.size(); i++) {
+                    if (join_matches.get(i).getJoin_team_id() == Integer.parseInt(team_id)){
+                        secondPos = i;
+                    }
                 }
-            });
-            myHolder2.lLContent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    click.Clike(2, myHolder2.lLContent, position);//詳情
+                final int finalSecondPos = secondPos;
+                myHolder2.tvIconDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //客隊退出比賽
+                        click.Click(1, myHolder2.tvIconDelete, position, finalSecondPos);
+                    }
+                });
+                myHolder2.lLContent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //球賽內容頁
+                        click.Click(3, myHolder2.lLContent, position, 0);
+                    }
+                });
+            } else {
+                //主隊位置是自己
+                myHolder2.tvState.setText("已落實");
+                myHolder2.tvState.setBackgroundResource(R.drawable.shape_corner_green);
+                myHolder2.tvState.setClickable(false);
+                myHolder2.tvIconDelete.setVisibility(View.VISIBLE);
+                myHolder2.tvIconDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //主隊取消比賽
+                        click.Click(2, myHolder2.tvIconDelete, position, 0);
+                    }
+                });
+                myHolder2.lLContent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //球賽內容頁
+                        click.Click(4, myHolder2.lLContent, position, 0);
+                    }
+                });
+            }
+
+            for (int i = 0; i < join_matches.size(); i++) {
+                if (join_matches.get(i).getStatus().equals("confirmed")) {
+                    MatchesComing.MatchesBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
+                    MatchesComing.MatchesBean.JoinMatchesBean.TeamBean team = joinMatchesBean.getTeam();
+                    myHolder2.tvVisitorName.setText(team.getTeam_name());
+                    ImageLoaderUtils.displayImage(MyUtil.getImageUrl(team.getImage().getUrl()),
+                            myHolder2.ivVisitorLogo, R.drawable.icon_default);
                 }
-            });
+            }
         }
     }
 
@@ -107,15 +145,15 @@ public class MyMatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         if (position % 2 != 0) {
-            return TYPE_1;
+            return TYPE_2;
         } else {
 //            return TYPE_2;
-            return TYPE_1;
+            return TYPE_2;
         }
     }
 
     public static class MyHolder1 extends RecyclerView.ViewHolder {
-        private TextView tvDate, tvHomeName, tvLocation, tvTime, tvState;
+        private TextView tvDate, tvHomeName, tvLocation, tvTime, tvState, tvIconDelete;
         private LinearLayout lLContent;
         private ImageView ivHomeLogo;
 
@@ -128,6 +166,7 @@ public class MyMatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ivHomeLogo = (ImageView) itemView.findViewById(R.id.iv_home_logo);
             tvState = (TextView) itemView.findViewById(R.id.tv_state);
             lLContent = (LinearLayout) itemView.findViewById(R.id.ll_content);
+            tvIconDelete = (TextView) itemView.findViewById(R.id.tv_icon_delete);
         }
     }
 
@@ -158,7 +197,7 @@ public class MyMatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public interface Click {
-        void Clike(int state, View view, int position);
+        void Click(int state, View view, int position, int secondPos);
     }
 
 }

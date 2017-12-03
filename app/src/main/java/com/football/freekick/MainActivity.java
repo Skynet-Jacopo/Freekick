@@ -196,7 +196,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             case R.id.main_mine:
                 if (mMineFragment == null) {
                     mMineFragment = new MineFragment();
-                    ft.add(R.id.main_group, mMineFragment);
+                    ft.add(R.id.main_group, mMineFragment,"mMineFragment");
                 } else {
                     ft.show(mMineFragment);
                 }

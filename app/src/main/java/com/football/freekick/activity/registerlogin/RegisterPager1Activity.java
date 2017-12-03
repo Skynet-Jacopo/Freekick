@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
+import com.football.freekick.beans.Login;
 import com.football.freekick.beans.RegisterResponse;
 import com.football.freekick.beans.SignInResponse;
 import com.football.freekick.http.Url;
@@ -22,6 +23,8 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpHeaders;
 import com.orhanobut.logger.Logger;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,75 +72,73 @@ public class RegisterPager1Activity extends BaseActivity {
 
     @OnClick(R.id.tv_next)
     public void onViewClicked() {
-//        next();
-        putNameAndPhone();
+        next();
+//        putNameAndPhone();
 //        startActivity(new Intent(mContext, RegisterPager2Activity.class));
     }
 
     /**
      * 再請求一遍登錄接口
      */
-//    private void next() {
-//
-//        JsonObject object = new JsonObject();
-//        JsonObject object1 = new JsonObject();
-////        object1.addProperty("email", mEmail);
-//        object1.addProperty("email", mEmail);
-////        object1.addProperty("password", mPassword);
-//        object1.addProperty("password", mPassword);
-//        object.add("user", object1);
-//        Logger.json(object.toString());
-//        OkGo.post(Url.LOGINURL)
-//                .upJson(object.toString())
-//                .execute(new StringCallback() {
-//                    @Override
-//                    public void onSuccess(String s, Call call, Response response) {
-//                        Logger.json(s);
-//                        Gson gson = new Gson();
-//                        SignInResponse sigin = gson.fromJson(s, SignInResponse.class);
-//                        if (sigin.getData() != null) {
-//                            SignInResponse.DataBean data = sigin.getData();
-//                            if (data.getLogin_fail() == 0) {//登錄成功
-//                                Headers headers = response.headers();
-//                                String access_token = headers.get("access-token");
-//                                String client = headers.get("client");
-//                                String uid = headers.get("uid");
-//                                String expiry = headers.get("expiry");
-//                                Logger.d(access_token + "   " + client + "   " + uid + "   " + expiry);
-////                                if (PrefUtils.getBoolean(App.APP_CONTEXT, "isFirstLogin", false)) {
-//                                HttpHeaders header = new HttpHeaders();
-//                                header.put("access-token", access_token);
-//                                header.put("client", client);
-//                                header.put("uid", uid);
-//                                header.put("expiry", expiry);
-//                                OkGo.getInstance().addCommonHeaders(header);
-//                                PrefUtils.putString(App.APP_CONTEXT, "access_token", access_token);
-//                                PrefUtils.putString(App.APP_CONTEXT, "client", client);
-//                                PrefUtils.putString(App.APP_CONTEXT, "uid", uid);
-//                                PrefUtils.putString(App.APP_CONTEXT, "expiry", expiry);
-////                                } else {
-////                                    PrefUtils.putBoolean(App.APP_CONTEXT, "isFirstLogin", true);
-////                                }
-//
-//
-//                                putNameAndPhone();
-//                            } else {
-//
-//                            }
-//                        } else {//data為null,登錄失敗
-//                            if (sigin.getErrors() != null) {
-//                                ToastUtil.toastShort(sigin.getErrors().get(0));
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(Call call, Response response, Exception e) {
-//                        super.onError(call, response, e);
-//                        Logger.d(e.getMessage());
-//                    }
-//                });
-//    }
+    private void next() {
+
+        loadingShow();
+        JsonObject object = new JsonObject();
+        JsonObject object1 = new JsonObject();
+        object1.addProperty("email", mEmail);
+        object1.addProperty("password", mPassword);
+        object.add("user", object1);
+        Logger.json(object.toString());
+        OkGo.post(Url.LOGINURL)
+                .upJson(object.toString())
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Login login = gson.fromJson(s, Login.class);
+                        if (login.getUser() != null) {
+                            Login.UserBean user = login.getUser();
+                            if (user.getLogin_fail() == 0) {
+                                //登錄成功
+                                Headers headers = response.headers();
+                                String access_token = headers.get("access-token");
+                                String client = headers.get("client");
+                                String uid = headers.get("uid");
+                                String expiry = headers.get("expiry");
+                                Logger.d("access-token=" + access_token + "   client=" + client + "   uid=" + uid + "" +
+                                        "   expiry=" + expiry);
+                                HttpHeaders header = new HttpHeaders();
+                                header.put("access-token", access_token);
+                                header.put("client", client);
+                                header.put("uid", uid);
+                                header.put("expiry", expiry);
+                                OkGo.getInstance().addCommonHeaders(header);
+                                PrefUtils.putString(App.APP_CONTEXT, "access_token", access_token);
+                                PrefUtils.putString(App.APP_CONTEXT, "client", client);
+                                PrefUtils.putString(App.APP_CONTEXT, "uid", uid);
+                                PrefUtils.putString(App.APP_CONTEXT, "expiry", expiry);
+
+                                putNameAndPhone();
+                            } else {
+
+                            }
+                        } else {//data為null,登錄失敗
+                            if (login.getErrors() != null) {
+                                ToastUtil.toastShort(login.getErrors().get(0));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                    }
+                });
+    }
 
     /**
      * 提交用戶名和電話
@@ -181,8 +182,7 @@ public class RegisterPager1Activity extends BaseActivity {
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
-                        ToastUtil.toastShort("請在郵箱驗證登錄");
-                        finish();
+                        ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
                         loadingDismiss();
                     }
                 });

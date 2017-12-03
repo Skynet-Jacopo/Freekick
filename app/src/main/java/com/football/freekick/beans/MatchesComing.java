@@ -22,6 +22,14 @@ public class MatchesComing {
     }
 
     public static class MatchesBean implements Parcelable {
+        public boolean isInvited() {
+            return invited;
+        }
+
+        public void setInvited(boolean invited) {
+            this.invited = invited;
+        }
+
         /**
          * id : 5
          * play_start : 2017-11-18T12:00:00.000Z
@@ -35,6 +43,7 @@ public class MatchesComing {
          * Long","region":"New Territories"}}}]
          */
 
+        private boolean invited;//標識join_match中有沒有invited
         private int id;
         private String play_start;
         private String play_end;
@@ -538,6 +547,7 @@ public class MatchesComing {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
+            dest.writeByte(this.invited ? (byte) 1 : (byte) 0);
             dest.writeInt(this.id);
             dest.writeString(this.play_start);
             dest.writeString(this.play_end);
@@ -551,6 +561,7 @@ public class MatchesComing {
         }
 
         protected MatchesBean(Parcel in) {
+            this.invited = in.readByte() != 0;
             this.id = in.readInt();
             this.play_start = in.readString();
             this.play_end = in.readString();

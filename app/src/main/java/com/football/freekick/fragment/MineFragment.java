@@ -19,6 +19,9 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.adapter.MyFragmentAdapter;
+import com.football.freekick.adapter.MyMatchAdapter0;
+import com.football.freekick.app.BaseFragment;
+import com.football.freekick.beans.Article;
 import com.football.freekick.beans.MatchesComing;
 import com.football.freekick.http.Url;
 import com.google.gson.Gson;
@@ -39,7 +42,7 @@ import okhttp3.Response;
 /**
  * 我的球賽頁.
  */
-public class MineFragment extends Fragment {
+public class MineFragment extends BaseFragment {
 
 
     @Bind(R.id.tv_friend)
@@ -61,6 +64,9 @@ public class MineFragment extends Fragment {
     private ArrayList<MatchesComing.MatchesBean> mListMatch = new ArrayList<>();
     private ArrayList<MatchesComing.MatchesBean> mListInvite = new ArrayList<>();
 
+
+    private ArrayList<Article.ArticleBean> news = new ArrayList<>();
+    private ArrayList<Article.ArticleBean> point_of_view = new ArrayList<>();
     public MineFragment() {
         // Required empty public constructor
     }
@@ -79,43 +85,35 @@ public class MineFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initData();
+//        initData();
+        initDatas();//初始化動態和焦點
     }
 
-    private void initData() {
-        if (mMatches != null) {
-            mMatches.clear();
+    /**
+     * 初始化動態和焦點
+     */
+    private void initDatas() {
+        if (point_of_view != null) {
+            point_of_view.clear();
         }
-        if (mListWait != null) {
-            mListWait.clear();
+        if (news != null) {
+            news.clear();
         }
-        if (mListMatch != null) {
-            mListMatch.clear();
-        }
-        if (mListInvite != null) {
-            mListInvite.clear();
-        }
-        OkGo.get(Url.MATCHES_COMING)
+        loadingShow();
+        OkGo.get(Url.ARTICLES)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
                         Logger.json(s);
                         Gson gson = new Gson();
-                        MatchesComing json = gson.fromJson(s, MatchesComing.class);
-                        mMatches.addAll(json.getMatches());
-                        for (int i = 0; i < mMatches.size(); i++) {
-                            for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
-                                if (mMatches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()){
-                                    mMatches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
-                                    mMatches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
-                                }
-                            }
-                            if (mMatches.get(i).getStatus().equals("w")) {
-                                mListWait.add(mMatches.get(i));
-                            } else if (mMatches.get(i).getStatus().equals("m")) {
-                                mListMatch.add(mMatches.get(i));
-                            } else if (mMatches.get(i).getStatus().equals("i")) {
-                                mListInvite.add(mMatches.get(i));
+                        Article article = gson.fromJson(s, Article.class);
+                        List<Article.ArticleBean> articleList = article.getArticle();
+                        for (int i = 0; i < articleList.size(); i++) {
+                            if (articleList.get(i).getCategory().equals(Url.NEWS)) {
+                                news.add(articleList.get(i));
+                            } else if (articleList.get(i).getCategory().equals(Url.POINT_OF_VIEW)) {
+                                point_of_view.add(articleList.get(i));
                             }
                         }
                         initTabAndViewPager();
@@ -125,6 +123,7 @@ public class MineFragment extends Fragment {
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
+                        loadingDismiss();
                     }
                 });
     }
@@ -149,21 +148,24 @@ public class MineFragment extends Fragment {
         listFragments = new ArrayList<>();
         Fragment fragment;
         Bundle bundle;
-        fragment = new MyMatchFragment1();
+        fragment = new MyMatchFragment0();
         bundle = new Bundle();
-        bundle.putParcelableArrayList("mMatches", mListMatch);
+        bundle.putParcelableArrayList("news", news);
+        bundle.putParcelableArrayList("point_of_view", point_of_view);
         fragment.setArguments(bundle);
         listFragments.add(fragment);
 
         fragment = new MyMatchFragment1();
         bundle = new Bundle();
-        bundle.putParcelableArrayList("mMatches", mListWait);
+        bundle.putParcelableArrayList("news", news);
+        bundle.putParcelableArrayList("point_of_view", point_of_view);
         fragment.setArguments(bundle);
         listFragments.add(fragment);
 
-        fragment = new MyMatchFragment1();
+        fragment = new MyMatchFragment2();
         bundle = new Bundle();
-        bundle.putParcelableArrayList("mMatches", mListInvite);
+        bundle.putParcelableArrayList("news", news);
+        bundle.putParcelableArrayList("point_of_view", point_of_view);
         fragment.setArguments(bundle);
         listFragments.add(fragment);
 
@@ -245,5 +247,7 @@ public class MineFragment extends Fragment {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value,
                 context.getResources().getDisplayMetrics());
     }
-
+    public void setRefreshFragment1(){
+        ((MyMatchFragment0)listFragments.get(0)).setRefresh();
+    }
 }

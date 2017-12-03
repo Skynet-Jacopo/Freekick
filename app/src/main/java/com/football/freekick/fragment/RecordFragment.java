@@ -2,6 +2,7 @@ package com.football.freekick.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,13 +18,26 @@ import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
+import com.football.freekick.activity.SameAreaTeamActivity;
+import com.football.freekick.activity.TeamDetailActivity;
+import com.football.freekick.app.BaseFragment;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
 import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
+import com.football.freekick.beans.Followings;
+import com.football.freekick.beans.MatchHistory;
+import com.football.freekick.beans.SameArea;
 import com.football.freekick.http.Url;
+import com.football.freekick.utils.JodaTimeUtil;
+import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
+import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.orhanobut.logger.Logger;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -32,11 +46,13 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * 作賽記錄頁.
  */
-public class RecordFragment extends Fragment {
+public class RecordFragment extends BaseFragment {
 
 
     @Bind(R.id.tv_icon_search)
@@ -57,7 +73,14 @@ public class RecordFragment extends Fragment {
     RecyclerView mRecyclerAttention;
 
     private Context mContext;
+    private List<MatchHistory.MatchesBean> mMatches;
     private List<String> datas = new ArrayList<>();
+    private CommonAdapter mRecorAdapter;
+    private List<SameArea.TeamsBean> mTeams;
+    private CommonAdapter mSameAreaAdapter;
+    private List<Followings.TeamsBean> mFollowingTeams;
+    private CommonAdapter mAttentionAdapter;
+
     public RecordFragment() {
         // Required empty public constructor
     }
@@ -91,7 +114,7 @@ public class RecordFragment extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerAttention.setLayoutManager(manager);
-        CommonAdapter attentionAdapter = new CommonAdapter<String>(mContext,R.layout.item_same_area,datas) {
+        mAttentionAdapter = new CommonAdapter<Followings.TeamsBean>(mContext, R.layout.item_same_area, mFollowingTeams) {
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
@@ -99,16 +122,18 @@ public class RecordFragment extends Fragment {
             }
 
             @Override
-            public void convert(ViewHolder holder, String s) {
-                holder.setText(R.id.tv_team_name,s);
+            public void convert(ViewHolder holder, Followings.TeamsBean teamsBean) {
+                holder.setText(R.id.tv_team_name, teamsBean.getTeam_name());
                 ImageView ivLogo = holder.getView(R.id.iv_logo);
-                ImageLoaderUtils.displayImage(Url.BaseImageUrl+PrefUtils.getString(App.APP_CONTEXT,"logourl",null),ivLogo);
+                ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivLogo,R.drawable.icon_default);
             }
         };
-        attentionAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mAttentionAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                ToastUtil.toastShort("詳情");
+                Intent intent = new Intent(mContext, TeamDetailActivity.class);
+                intent.putExtra("id",mFollowingTeams.get(position).getId()+"");
+                startActivity(intent);
             }
 
             @Override
@@ -116,7 +141,7 @@ public class RecordFragment extends Fragment {
                 return false;
             }
         });
-        mRecyclerAttention.setAdapter(attentionAdapter);
+        mRecyclerAttention.setAdapter(mAttentionAdapter);
     }
 
     /**
@@ -129,7 +154,7 @@ public class RecordFragment extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerSameArea.setLayoutManager(manager);
-        CommonAdapter sameAreaAdapter = new CommonAdapter<String>(mContext,R.layout.item_same_area,datas) {
+        mSameAreaAdapter = new CommonAdapter<SameArea.TeamsBean>(mContext, R.layout.item_same_area, mTeams) {
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
@@ -137,16 +162,18 @@ public class RecordFragment extends Fragment {
             }
 
             @Override
-            public void convert(ViewHolder holder, String s) {
-                holder.setText(R.id.tv_team_name,s);
+            public void convert(ViewHolder holder, SameArea.TeamsBean teamsBean) {
+                holder.setText(R.id.tv_team_name, teamsBean.getTeam_name());
                 ImageView ivLogo = holder.getView(R.id.iv_logo);
-                ImageLoaderUtils.displayImage(Url.BaseImageUrl+PrefUtils.getString(App.APP_CONTEXT,"logourl",null),ivLogo);
+                ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()),ivLogo,R.drawable.icon_default);
             }
         };
-        sameAreaAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mSameAreaAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                ToastUtil.toastShort("詳情");
+                Intent intent = new Intent(mContext, TeamDetailActivity.class);
+                intent.putExtra("id",mTeams.get(position).getId()+"");
+                startActivity(intent);
             }
 
             @Override
@@ -154,7 +181,7 @@ public class RecordFragment extends Fragment {
                 return false;
             }
         });
-        mRecyclerSameArea.setAdapter(sameAreaAdapter);
+        mRecyclerSameArea.setAdapter(mSameAreaAdapter);
     }
 
     /**
@@ -166,7 +193,7 @@ public class RecordFragment extends Fragment {
         }
         mRecyclerRecord.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerRecord.setNestedScrollingEnabled(false);
-        CommonAdapter recorAdapter = new CommonAdapter<String>(mContext,R.layout.item_record,datas) {
+        mRecorAdapter = new CommonAdapter<MatchHistory.MatchesBean>(mContext, R.layout.item_record, mMatches) {
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
@@ -174,19 +201,24 @@ public class RecordFragment extends Fragment {
             }
 
             @Override
-            public void convert(ViewHolder holder, String s) {
-                holder.setText(R.id.tv_location,s);
-                holder.setText(R.id.tv_date,"17 Oct 2017");
-                holder.setText(R.id.tv_time,"21:00 - 23:00");
-                holder.setText(R.id.tv_home_name, PrefUtils.getString(App.APP_CONTEXT,"team_name",null));
-                holder.setText(R.id.tv_visitor_name,"客隊名字");
+            public void convert(ViewHolder holder, MatchHistory.MatchesBean matchesBean) {
+                holder.setText(R.id.tv_location, matchesBean.getLocation());
+
+                holder.setText(R.id.tv_date, JodaTimeUtil.getDate3(matchesBean.getPlay_start()));
+                String start = JodaTimeUtil.getTimeHourMinutes(matchesBean.getPlay_start());
+                String end = JodaTimeUtil.getTimeHourMinutes(matchesBean.getPlay_end());
+                holder.setText(R.id.tv_time, start+" - "+end);
+                holder.setText(R.id.tv_home_name, matchesBean.getHome_team().getTeam_name());
+                holder.setText(R.id.tv_visitor_name, matchesBean.getJoin_matches().get(0).getTeam().getTeam_name());
                 ImageView ivHomeLogo = holder.getView(R.id.iv_home_logo);
                 ImageView ivVisitorLogo = holder.getView(R.id.iv_visitor_logo);
-                ImageLoaderUtils.displayImage(Url.BaseImageUrl+PrefUtils.getString(App.APP_CONTEXT,"logourl",null),ivHomeLogo);
-                ImageLoaderUtils.displayImage(Url.BaseImageUrl+PrefUtils.getString(App.APP_CONTEXT,"logourl",null),ivVisitorLogo);
+                ImageLoaderUtils.displayImage(Url.BaseImageUrl + PrefUtils.getString(App.APP_CONTEXT, "logourl",
+                        null), ivHomeLogo);
+                ImageLoaderUtils.displayImage(Url.BaseImageUrl + PrefUtils.getString(App.APP_CONTEXT, "logourl",
+                        null), ivVisitorLogo);
             }
         };
-        recorAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mRecorAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 ToastUtil.toastShort("詳情");
@@ -197,18 +229,110 @@ public class RecordFragment extends Fragment {
                 return false;
             }
         });
-        mRecyclerRecord.setAdapter(recorAdapter);
+        mRecyclerRecord.setAdapter(mRecorAdapter);
     }
 
     private void initData() {
-        for (int i = 0; i < 10; i++) {
-            datas.add("我是數據"+i);
+        if (mMatches != null) {
+            mMatches.clear();
         }
+        if (mTeams != null) {
+            mTeams.clear();
+        }
+        if (mFollowingTeams != null) {
+            mFollowingTeams.clear();
+        }
+        loadingShow();
+        String team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
+        String url = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) +"teams/"+team_id+"/matches_history";
+        Logger.d(url);
+        OkGo.get(url)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        String str = "{\"matches\":[{\"id\":7,\"play_start\":\"2017-11-13T12:00:00.000Z\"," +
+                                "\"play_end\":\"2017-11-22T01:00:00.000Z\",\"pitch_id\":1," +
+                                "\"home_team_color\":\"ffffff\",\"status\":\"w\",\"home_team\":{\"id\":33,\"size\":5," +
+                                "\"image\":{\"url\":\"/uploads/team/image/33/upload-image-9724761-1510149726.\"}}," +
+                                "\"join_matches\":[{\"join_team_id\":48,\"status\":\"confirmation_pending\"," +
+                                "\"join_team_color\":\"ffc300\",\"team\":{\"team_name\":\"Lions9dd875\",\"size\":5," +
+                                "\"image\":{\"url\":null},\"district\":{\"id\":72,\"district\":\"Yuen Long\"," +
+                                "\"region\":\"New Territories\"}}}]}]}";
+                        Gson gson = new Gson();
+                        MatchHistory json = gson.fromJson(str, MatchHistory.class);
+                        mMatches.addAll(json.getMatches());
+                        if (mMatches.size()<=0){
+                            //無球賽記錄
+                        }else {
+                            for (int i = 0; i < mMatches.size(); i++) {
+                                for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
+                                    if (mMatches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()){
+                                        mMatches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
+                                        mMatches.get(i).setName(App.mPitchesBeanList.get(j).getName());
+                                    }
+                                }
+                            }
+                            mRecorAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                    }
+                });
+        String urlSameArea = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) +"teams/"+team_id+"/get_same_district_teams";
+        Logger.d(urlSameArea);
+        OkGo.get(urlSameArea)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        SameArea json = gson.fromJson(s, SameArea.class);
+                        mTeams.addAll(json.getTeams());
+                        mSameAreaAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
+
+        String urlAttention = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) +"users/"+team_id+"/followings";
+        Logger.d(urlAttention);
+        OkGo.get(urlAttention)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Followings fromJson = gson.fromJson(s, Followings.class);
+                        if (fromJson.getTeams().size()>0){
+                            mFollowingTeams.addAll(fromJson.getTeams());
+                        }
+                        mAttentionAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
+
     }
 
     private void initView() {
         mTvIconSearch.setTypeface(App.mTypeface);
-
+        mMatches = new ArrayList<>();
+        mTeams = new ArrayList<>();
     }
 
     @Override
@@ -219,12 +343,14 @@ public class RecordFragment extends Fragment {
 
     @OnClick({R.id.iv_pic, R.id.ll_same_area_more, R.id.ll_attention_more})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.iv_pic:
                 ToastUtil.toastShort("圖片");
                 break;
             case R.id.ll_same_area_more:
-                ToastUtil.toastShort("同區更多");
+                intent.setClass(mContext, SameAreaTeamActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_attention_more:
                 ToastUtil.toastShort("關注更多");

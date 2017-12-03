@@ -11,7 +11,7 @@ import com.football.freekick.http.Url;
 public class MyUtil {
 
     public static String getImageUrl(String url) {
-        if (url.contains("http")) {
+        if (url!=null&&url.contains("http")) {
             return url;
         } else {
             return Url.BaseImageUrl + url;

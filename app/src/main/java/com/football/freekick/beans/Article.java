@@ -1,5 +1,8 @@
 package com.football.freekick.beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,7 +10,7 @@ import java.util.List;
  * Created by ly on 2017/11/26.
  */
 
-public class Article implements Serializable {
+public class Article {
 
     private List<ArticleBean> article;
 
@@ -19,7 +22,7 @@ public class Article implements Serializable {
         this.article = article;
     }
 
-    public static class ArticleBean implements Serializable{
+    public static class ArticleBean implements Parcelable {
         /**
          * content : <p>hello article</p>
 
@@ -39,7 +42,7 @@ public class Article implements Serializable {
         private String updated_at;
         private String tag;
         private String subject;
-        private Object deleted_at;
+        private String deleted_at;
         private String created_at;
         private String image;
 
@@ -91,11 +94,11 @@ public class Article implements Serializable {
             this.subject = subject;
         }
 
-        public Object getDeleted_at() {
+        public String getDeleted_at() {
             return deleted_at;
         }
 
-        public void setDeleted_at(Object deleted_at) {
+        public void setDeleted_at(String deleted_at) {
             this.deleted_at = deleted_at;
         }
 
@@ -114,5 +117,50 @@ public class Article implements Serializable {
         public void setImage(String image) {
             this.image = image;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.content);
+            dest.writeInt(this.id);
+            dest.writeString(this.category);
+            dest.writeString(this.updated_at);
+            dest.writeString(this.tag);
+            dest.writeString(this.subject);
+            dest.writeString(this.deleted_at);
+            dest.writeString(this.created_at);
+            dest.writeString(this.image);
+        }
+
+        public ArticleBean() {
+        }
+
+        protected ArticleBean(Parcel in) {
+            this.content = in.readString();
+            this.id = in.readInt();
+            this.category = in.readString();
+            this.updated_at = in.readString();
+            this.tag = in.readString();
+            this.subject = in.readString();
+            this.deleted_at = in.readString();
+            this.created_at = in.readString();
+            this.image = in.readString();
+        }
+
+        public static final Parcelable.Creator<ArticleBean> CREATOR = new Parcelable.Creator<ArticleBean>() {
+            @Override
+            public ArticleBean createFromParcel(Parcel source) {
+                return new ArticleBean(source);
+            }
+
+            @Override
+            public ArticleBean[] newArray(int size) {
+                return new ArticleBean[size];
+            }
+        };
     }
 }
