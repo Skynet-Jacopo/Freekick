@@ -9,7 +9,14 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.football.freekick.activity.registerlogin.LoginPage1Activity">
-
+    <com.facebook.login.widget.LoginButton
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible"
+        android:id="@+id/facebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

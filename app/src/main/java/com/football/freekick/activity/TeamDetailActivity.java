@@ -162,8 +162,10 @@ public class TeamDetailActivity extends BaseActivity {
                         for (int i = 0; i < attentionTeams.size(); i++) {
                             if (attentionTeams.get(i).getId() == Integer.parseInt(team_id)) {
                                 mIsFollowed = true;
+                                mTvFollow.setText(getString(R.string.unfollow));
                             } else {
                                 mIsFollowed = false;
+                                mTvFollow.setText(getString(R.string.follow));
                             }
                         }
                     }
@@ -317,6 +319,7 @@ public class TeamDetailActivity extends BaseActivity {
                         if (follow.getSuccess() != null) {
                             ToastUtil.toastShort(follow.getSuccess());
                             mTvFollow.setText(getString(R.string.follow));
+                            mIsFollowed = false;
                         } else if (follow.getErrors() != null) {
                             ToastUtil.toastShort(follow.getErrors());
                         }
@@ -350,6 +353,7 @@ public class TeamDetailActivity extends BaseActivity {
                         if (follow.getSuccess() != null) {
                             ToastUtil.toastShort(follow.getSuccess());
                             mTvFollow.setText(getString(R.string.unfollow));
+                            mIsFollowed = true;
                         } else if (follow.getErrors() != null) {
                             ToastUtil.toastShort(follow.getErrors());
                         }

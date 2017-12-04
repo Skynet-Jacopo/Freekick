@@ -1,0 +1,5 @@
+facebookµÇÂ½
+
+Keytool -exportcert -alias freekick -keystore C:\Personal\Freekick\app\freekick.jks | openssl sha1 -binary | openssl base64
+
+KzwmZ6IPEpy+dohWT3B4Xvws+ic=

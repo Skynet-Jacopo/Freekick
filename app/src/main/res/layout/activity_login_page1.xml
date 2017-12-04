@@ -41,7 +41,13 @@
             android:text="in Hong Kong daily"
             android:textColor="@color/white"
             android:textSize="@dimen/text_24"/>
-
+        <com.facebook.login.widget.LoginButton
+            android:visibility="invisible"
+            android:id="@+id/facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            />
         <FrameLayout
             android:id="@+id/fl_login_by_facebook"
             android:layout_width="match_parent"

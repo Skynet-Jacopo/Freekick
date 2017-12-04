@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
 
+import com.facebook.FacebookSdk;
 import com.football.freekick.beans.Advertisements;
 import com.football.freekick.beans.Pitches;
 import com.football.freekick.http.Url;
@@ -54,6 +55,7 @@ public class App extends Application {
         mTypeface = Typeface.createFromAsset(getAssets(), "fonts/iconfont.ttf");
         initOkGo();
         initImageLoaderOption();
+        FacebookSdk.sdkInitialize(getApplicationContext());
         Logger
                 .init(FREEKICK)                 // 自定义TAG名称
                 .methodCount(3)                 // 方法栈打印的个数,默认为2

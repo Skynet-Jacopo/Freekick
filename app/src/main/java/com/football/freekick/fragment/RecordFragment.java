@@ -333,6 +333,7 @@ public class RecordFragment extends BaseFragment {
         mTvIconSearch.setTypeface(App.mTypeface);
         mMatches = new ArrayList<>();
         mTeams = new ArrayList<>();
+        mFollowingTeams = new ArrayList<>();
     }
 
     @Override

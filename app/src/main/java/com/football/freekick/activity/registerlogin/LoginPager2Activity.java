@@ -8,6 +8,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
@@ -34,8 +40,6 @@ import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.Response;
 
-import static android.R.attr.id;
-
 public class LoginPager2Activity extends BaseActivity {
 
     @Bind(R.id.fl_login_by_facebook)
@@ -50,8 +54,10 @@ public class LoginPager2Activity extends BaseActivity {
     TextView mTvForgetPassWord;
     @Bind(R.id.tv_back)
     TextView mTvBack;
+    @Bind(R.id.facebook)
+    LoginButton mFacebook;
     private Context mContext;
-
+    private CallbackManager mCallbackManager;
     private boolean isSecondRun;//記錄是否已登錄,以獲取廣告,場地等信息
 
     @Override
@@ -61,21 +67,53 @@ public class LoginPager2Activity extends BaseActivity {
         mContext = LoginPager2Activity.this;
         ButterKnife.bind(this);
 //        mEdtEmail.setText("huo@yopmail.com");
-//        mEdtEmail.setText("yue@yopmail.com");
+        mEdtEmail.setText("yue@yopmail.com");
 //        mEdtEmail.setText("lei@yopmail.com");
-//        mEdtPassWord.setText("123456");
+        mEdtPassWord.setText("123456");
         initView();
     }
 
     private void initView() {
         mTvBack.setTypeface(App.mTypeface);
         isSecondRun = PrefUtils.getBoolean(App.APP_CONTEXT, "isSecondRun", false);
+        mCallbackManager = CallbackManager.Factory.create();
+
+        mFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Gson gson = new Gson();
+                Logger.json(gson.toJson(loginResult));
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
     }
 
     @OnClick({R.id.fl_login_by_facebook, R.id.tv_login, R.id.tv_forget_pass_word, R.id.tv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fl_login_by_facebook:
+                mFacebook.performClick();
                 break;
             case R.id.tv_login:
                 login();
@@ -125,7 +163,8 @@ public class LoginPager2Activity extends BaseActivity {
                                 String client = headers.get("client");
                                 String uid = headers.get("uid");
                                 String expiry = headers.get("expiry");
-                                Logger.d("access-token="+access_token + "   client=" + client + "   uid=" + uid + "   expiry=" + expiry);
+                                Logger.d("access-token=" + access_token + "   client=" + client + "   uid=" + uid + "" +
+                                        "   expiry=" + expiry);
                                 HttpHeaders header = new HttpHeaders();
                                 header.put("access-token", access_token);
                                 header.put("client", client);
@@ -159,9 +198,11 @@ public class LoginPager2Activity extends BaseActivity {
                                     PrefUtils.putString(App.APP_CONTEXT, "logourl", teamsBean.getImage().getUrl() + "");
                                     PrefUtils.putString(App.APP_CONTEXT, "team_name", teamsBean.getTeam_name() + "");
                                     PrefUtils.putString(App.APP_CONTEXT, "size", teamsBean.getSize() + "");
-                                    if (teamsBean.getDistrict()!=null){
-                                        PrefUtils.putString(App.APP_CONTEXT, "district", teamsBean.getDistrict().getDistrict() + "");
-                                        PrefUtils.putString(App.APP_CONTEXT, "district_id", teamsBean.getDistrict().getId() + "");
+                                    if (teamsBean.getDistrict() != null) {
+                                        PrefUtils.putString(App.APP_CONTEXT, "district", teamsBean.getDistrict()
+                                                .getDistrict() + "");
+                                        PrefUtils.putString(App.APP_CONTEXT, "district_id", teamsBean.getDistrict()
+                                                .getId() + "");
                                     }
 
                                     startActivity(new Intent(mContext, OneTimePagerActivity.class));
@@ -228,5 +269,12 @@ public class LoginPager2Activity extends BaseActivity {
                         Logger.json(e.getMessage());
                     }
                 });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode,
+                resultCode, data);
     }
 }
