@@ -45,6 +45,17 @@ dependencies {
     //    compile "com.google.android.gms:play-services-gcm:9.0.0"
 
     //    compile 'com.google.firebase:firebase-messaging:11.0.4'
+    compile files('libs/ShareSDK-ShortMessage-3.1.1.jar')
+    compile files('libs/MobTools-2017.1024.1907.jar')
+    compile files('libs/ShareSDK-WhatsApp-3.1.1.jar')
+    compile files('libs/ShareSDK-Wechat-3.1.1.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-3.1.1.jar')
+    compile files('libs/ShareSDK-Wechat-Core-3.1.1.jar')
+    compile files('libs/ShareSDK-Core-3.1.1.jar')
+    compile files('libs/MobCommons-2017.1024.1907.jar')
+    compile files('libs/ShareSDK-Facebook-3.1.1.jar')
+    compile files('libs/ShareSDK-GooglePlus-3.1.1.jar')
+    compile files('libs/ShareSDK-Youtube-3.1.1.jar')
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
@@ -60,16 +71,5 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     testCompile 'junit:junit:4.12'
-    compile files('libs/ShareSDK-ShortMessage-3.1.1.jar')
-    compile files('libs/MobTools-2017.1024.1907.jar')
-    compile files('libs/ShareSDK-WhatsApp-3.1.1.jar')
-    compile files('libs/ShareSDK-Wechat-3.1.1.jar')
-    compile files('libs/ShareSDK-Wechat-Moments-3.1.1.jar')
-    compile files('libs/ShareSDK-Wechat-Core-3.1.1.jar')
-    compile files('libs/ShareSDK-Core-3.1.1.jar')
-    compile files('libs/MobCommons-2017.1024.1907.jar')
-    compile files('libs/ShareSDK-Facebook-3.1.1.jar')
-    compile files('libs/ShareSDK-GooglePlus-3.1.1.jar')
-    compile files('libs/ShareSDK-Youtube-3.1.1.jar')
 }
 apply plugin: 'com.google.gms.google-services'

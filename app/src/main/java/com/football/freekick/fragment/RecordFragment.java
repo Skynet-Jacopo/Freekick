@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
+import com.football.freekick.activity.FollowedTeamsActivity;
 import com.football.freekick.activity.SameAreaTeamActivity;
 import com.football.freekick.activity.TeamDetailActivity;
 import com.football.freekick.app.BaseFragment;
@@ -31,7 +31,6 @@ import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
-import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.gson.Gson;
@@ -55,6 +54,7 @@ import okhttp3.Response;
 public class RecordFragment extends BaseFragment {
 
 
+    public static final int REQUEST_CODE_TO_REFRESH = 1;
     @Bind(R.id.tv_icon_search)
     TextView mTvIconSearch;
     @Bind(R.id.edt_search_team)
@@ -80,6 +80,7 @@ public class RecordFragment extends BaseFragment {
     private CommonAdapter mSameAreaAdapter;
     private List<Followings.TeamsBean> mFollowingTeams;
     private CommonAdapter mAttentionAdapter;
+    private String team_id;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -133,7 +134,7 @@ public class RecordFragment extends BaseFragment {
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 Intent intent = new Intent(mContext, TeamDetailActivity.class);
                 intent.putExtra("id",mFollowingTeams.get(position).getId()+"");
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE_TO_REFRESH);
             }
 
             @Override
@@ -173,7 +174,7 @@ public class RecordFragment extends BaseFragment {
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 Intent intent = new Intent(mContext, TeamDetailActivity.class);
                 intent.putExtra("id",mTeams.get(position).getId()+"");
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE_TO_REFRESH);
             }
 
             @Override
@@ -239,12 +240,9 @@ public class RecordFragment extends BaseFragment {
         if (mTeams != null) {
             mTeams.clear();
         }
-        if (mFollowingTeams != null) {
-            mFollowingTeams.clear();
-        }
         loadingShow();
-        String team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
-        String url = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) +"teams/"+team_id+"/matches_history";
+        team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
+        String url     = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) +"teams/"+ team_id +"/matches_history";
         Logger.d(url);
         OkGo.get(url)
                 .execute(new StringCallback() {
@@ -285,7 +283,7 @@ public class RecordFragment extends BaseFragment {
                         loadingDismiss();
                     }
                 });
-        String urlSameArea = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) +"teams/"+team_id+"/get_same_district_teams";
+        String urlSameArea = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) +"teams/"+ team_id +"/get_same_district_teams";
         Logger.d(urlSameArea);
         OkGo.get(urlSameArea)
                 .execute(new StringCallback() {
@@ -305,7 +303,7 @@ public class RecordFragment extends BaseFragment {
                     }
                 });
 
-        String urlAttention = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) +"users/"+team_id+"/followings";
+        String urlAttention = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) +"users/"+ team_id +"/followings";
         Logger.d(urlAttention);
         OkGo.get(urlAttention)
                 .execute(new StringCallback() {
@@ -326,7 +324,6 @@ public class RecordFragment extends BaseFragment {
                         Logger.d(e.getMessage());
                     }
                 });
-
     }
 
     private void initView() {
@@ -351,11 +348,53 @@ public class RecordFragment extends BaseFragment {
                 break;
             case R.id.ll_same_area_more:
                 intent.setClass(mContext, SameAreaTeamActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_TO_REFRESH);
                 break;
             case R.id.ll_attention_more:
-                ToastUtil.toastShort("關注更多");
+                intent.setClass(mContext, FollowedTeamsActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_TO_REFRESH);
                 break;
+        }
+    }
+
+    /**
+     * 獲取已關注球隊
+     */
+    private void getFollowedTeams() {
+        if (mFollowingTeams != null) {
+            mFollowingTeams.clear();
+        }
+        loadingShow();
+        String urlAttention = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) +"users/"+team_id+"/followings";
+        Logger.d(urlAttention);
+        OkGo.get(urlAttention)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Followings fromJson = gson.fromJson(s, Followings.class);
+                        if (fromJson.getTeams().size()>0){
+                            mFollowingTeams.addAll(fromJson.getTeams());
+                        }
+                        mAttentionAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                    }
+                });
+
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_TO_REFRESH){
+            getFollowedTeams();
         }
     }
 }

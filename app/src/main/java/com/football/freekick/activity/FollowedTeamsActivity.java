@@ -1,15 +1,11 @@
 package com.football.freekick.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,22 +15,19 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.MainActivity;
 import com.football.freekick.R;
-import com.football.freekick.adapter.MyFragmentAdapter;
 import com.football.freekick.app.BaseActivity;
-import com.football.freekick.beans.Attention;
+import com.football.freekick.baseadapter.ViewHolder;
+import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
+import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
 import com.football.freekick.beans.Follow;
+import com.football.freekick.beans.Followings;
 import com.football.freekick.beans.Invite;
 import com.football.freekick.beans.MatchesComing;
-import com.football.freekick.beans.TeamDetail;
-import com.football.freekick.commons.CustomViewpager;
-import com.football.freekick.fragment.TeamDetailFragment1;
-import com.football.freekick.fragment.TeamDetailFragment2;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
@@ -46,107 +39,55 @@ import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
+import com.zhy.autolayout.utils.AutoUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Response;
 
-public class TeamDetailActivity extends BaseActivity {
+/**
+ * 已關注球隊更多界面
+ */
+public class FollowedTeamsActivity extends BaseActivity {
 
     @Bind(R.id.tv_back)
-    TextView mTvBack;
-    @Bind(R.id.tv_friend)
-    TextView mTvFriend;
-    @Bind(R.id.tv_notice)
-    TextView mTvNotice;
-    @Bind(R.id.tv_team_name)
-    TextView mTvTeamName;
-    @Bind(R.id.tab_layout)
-    TabLayout mTabLayout;
-    @Bind(R.id.viewpager)
-    CustomViewpager mViewpager;
-    @Bind(R.id.iv_pic)
-    ImageView mIvPic;
-    @Bind(R.id.tv_one_word)
-    TextView mTvOneWord;
-    @Bind(R.id.tl_top)
-    RelativeLayout mTlTop;
-    @Bind(R.id.tv_fight)
-    TextView mTvFight;
-    @Bind(R.id.tv_follow)
-    TextView mTvFollow;
-    @Bind(R.id.rl_parent)
-    RelativeLayout mRlParent;
+    TextView     mTvBack;
+    @Bind(R.id.recycler_followed)
+    RecyclerView mRecyclerFollowed;
+    @Bind(R.id.ll_parent)
+    LinearLayout mLlParent;
+    private List<Followings.TeamsBean> mFollowingTeams;
     private ArrayList<MatchesComing.MatchesBean> mListWait = new ArrayList<>();
-    private MyFragmentAdapter fragmentPagerAdapter;
-    private List<Fragment> listFragments;//定义要装fragment的列表
-    private List<String> listTitles; //tab名称列表
-
-    private TeamDetailFragment1 mFragment1;//正常
-    private TeamDetailFragment2 mFragment2;//正常
-
-    Context mContext;
-    private String team_id;
-    private TeamDetail.TeamBean mTeam;
-    private boolean mIsFollowed;
+    private Context       mContext;
+    private CommonAdapter mAdapter;
+    private String        team_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_team_detail);
-        mContext = TeamDetailActivity.this;
+        setContentView(R.layout.activity_followed_teams);
+        mContext = FollowedTeamsActivity.this;
         ButterKnife.bind(this);
-        team_id = getIntent().getStringExtra("id");
         initView();
-        initData(team_id);
+        initData();
     }
 
-    private void initView() {
-        mTvBack.setTypeface(App.mTypeface);
-        mTvFriend.setTypeface(App.mTypeface);
-        mTvNotice.setTypeface(App.mTypeface);
-    }
-
-    private void initData(String team_id) {
-        loadingShow();
-        String url = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id;
-        Logger.d(url);
-        OkGo.get(url)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(String s, Call call, Response response) {
-                        loadingDismiss();
-                        Logger.json(s);
-                        Gson gson = new Gson();
-                        TeamDetail json = gson.fromJson(s, TeamDetail.class);
-                        mTeam = json.getTeam();
-                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mTeam.getImage().getUrl()), mIvPic, R
-                                .drawable.icon_default);
-                        mTvTeamName.setText(mTeam.getTeam_name());
-                        mTvOneWord.setText(mTeam.getDistrict().getRegion().substring(0, 1));
-                        initTabAndViewPager();
-                        getFollowedTeams();
-                    }
-
-                    @Override
-                    public void onError(Call call, Response response, Exception e) {
-                        super.onError(call, response, e);
-                        Logger.d(e.getMessage());
-                        loadingDismiss();
-                    }
-                });
+    private void initData() {
+        team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
+        getFollowedTeams();
     }
 
     /**
-     * 獲取已關注球隊與同區球隊做比較,得出關注與否
+     * 獲取已關注球隊
      */
     private void getFollowedTeams() {
+        if (mFollowingTeams != null) {
+            mFollowingTeams.clear();
+        }
         loadingShow();
         String urlAttention = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "users/" + team_id + "/followings";
         Logger.d(urlAttention);
@@ -156,18 +97,12 @@ public class TeamDetailActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson gson = new Gson();
-                        Attention attention = gson.fromJson(s, Attention.class);
-                        List<Attention.TeamsBean> attentionTeams = attention.getTeams();
-                        for (int i = 0; i < attentionTeams.size(); i++) {
-                            if (attentionTeams.get(i).getId() == Integer.parseInt(team_id)) {
-                                mIsFollowed = true;
-                                mTvFollow.setText(getString(R.string.unfollow));
-                            } else {
-//                                mIsFollowed = false;
-//                                mTvFollow.setText(getString(R.string.follow));
-                            }
+                        Gson       gson     = new Gson();
+                        Followings fromJson = gson.fromJson(s, Followings.class);
+                        if (fromJson.getTeams().size() > 0) {
+                            mFollowingTeams.addAll(fromJson.getTeams());
                         }
+                        mAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -180,180 +115,83 @@ public class TeamDetailActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.tv_fight, R.id.tv_follow})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.tv_back:
-                finish();
-                break;
-            case R.id.tv_friend:
-                break;
-            case R.id.tv_notice:
-                break;
-            case R.id.tv_fight:
-                invitePopup();
-                break;
-            case R.id.tv_follow:
-                if (mIsFollowed) {
-                    //取消關注
-                    unfollow();
-                } else {
-                    //關注
-                    follow();
-                }
-                break;
+    private void initView() {
+        mTvBack.setTypeface(App.mTypeface);
+        mFollowingTeams = new ArrayList<>();
+        if (mRecyclerFollowed != null) {
+            mRecyclerFollowed.setHasFixedSize(true);
         }
-    }
-
-
-    private void initTabAndViewPager() {
-        listFragments = new ArrayList<>();
-        Fragment fragment;
-        Bundle bundle;
-        fragment = new TeamDetailFragment1();
-        bundle = new Bundle();
-        bundle.putSerializable("mTeam", mTeam);
-        fragment.setArguments(bundle);
-        listFragments.add(fragment);
-        fragment = new TeamDetailFragment2();
-        bundle = new Bundle();
-        bundle.putString("team_id", team_id);
-        fragment.setArguments(bundle);
-        listFragments.add(fragment);
-
-        //将名称加载tab名字列表，正常情况下，我们应该在values/arrays.xml中进行定义然后调用
-        listTitles = new ArrayList<>();
-        listTitles.add(getString(R.string.basic_information));
-        listTitles.add(getString(R.string.finished_match));
-
-        //为TabLayout添加tab名称
-        for (String title : listTitles) {
-            mTabLayout.addTab(mTabLayout.newTab().setText(title));
-        }
-
-        fragmentPagerAdapter = new MyFragmentAdapter(getSupportFragmentManager(), listFragments, listTitles);
-        //viewpager加载adapter
-        mViewpager.setAdapter(fragmentPagerAdapter);
-        //TabLayout加载viewpager
-        mTabLayout.setupWithViewPager(mViewpager);
-        mTabLayout.setTabsFromPagerAdapter(fragmentPagerAdapter);
-        setIndicator(mContext, mTabLayout, 40, 40);
-        mViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mRecyclerFollowed.setLayoutManager(new LinearLayoutManager(mContext));
+        mAdapter = new CommonAdapter<Followings.TeamsBean>(mContext, R.layout
+                .item_same_area_more, mFollowingTeams) {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            public void onBindViewHolder(ViewHolder holder, int position) {
+                super.onBindViewHolder(holder, position);
+                AutoUtils.auto(holder.getConvertView());
             }
 
             @Override
-            public void onPageSelected(int position) {
+            public void convert(ViewHolder holder, Followings.TeamsBean teamsBean) {
+                final int itemPosition = holder.getItemPosition();
+                ImageView ivPic        = holder.getView(R.id.iv_pic);
+                holder.setText(R.id.tv_attention, getString(R.string.unfollow));
+                ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivPic, R.drawable
+                        .icon_default);
+                holder.setText(R.id.tv_team_name, teamsBean.getTeam_name());
+                holder.setOnClickListener(R.id.tv_attention, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        unfollow(itemPosition);
+                    }
+                });
+                holder.setOnClickListener(R.id.tv_fight, new View.OnClickListener() {
+                    //約戰
+                    @Override
+                    public void onClick(View view) {
+                        invitePopup(itemPosition);
+                    }
+                });
+            }
 
+        };
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                Intent intent = new Intent(mContext, TeamDetailActivity.class);
+                intent.putExtra("id", mFollowingTeams.get(position).getId() + "");
+                startActivity(intent);
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
+                return false;
             }
         });
+        mRecyclerFollowed.setAdapter(mAdapter);
     }
-
-    public static void setIndicator(Context context, TabLayout tabs, int leftDip, int rightDip) {
-        Class<?> tabLayout = tabs.getClass();
-        Field tabStrip = null;
-        try {
-            tabStrip = tabLayout.getDeclaredField("mTabStrip");
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-
-        tabStrip.setAccessible(true);
-        LinearLayout ll_tab = null;
-        try {
-            ll_tab = (LinearLayout) tabStrip.get(tabs);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        int left = (int) (getDisplayMetrics(context).density * leftDip);
-        int right = (int) (getDisplayMetrics(context).density * rightDip);
-
-        for (int i = 0; i < ll_tab.getChildCount(); i++) {
-            View child = ll_tab.getChildAt(i);
-            child.setPadding(0, 0, 0, 0);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams
-                    .MATCH_PARENT, 1);
-            params.leftMargin = left;
-            params.rightMargin = right;
-            child.setLayoutParams(params);
-            child.invalidate();
-        }
-    }
-
-    public static DisplayMetrics getDisplayMetrics(Context context) {
-        DisplayMetrics metric = new DisplayMetrics();
-        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(metric);
-        return metric;
-    }
-
-    public static float getPXfromDP(float value, Context context) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value,
-                context.getResources().getDisplayMetrics());
-    }
-
 
     /**
      * 取消關注
+     *
+     * @param position
      */
-    private void unfollow() {
+    private void unfollow(final int position) {
         loadingShow();
-        Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id +
+        Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mFollowingTeams.get(position).getId() +
                 "/unfollow");
-        OkGo.delete(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id +
+        OkGo.delete(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mFollowingTeams.get(position).getId() +
                 "/unfollow")
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson gson = new Gson();
+                        Gson   gson   = new Gson();
                         Follow follow = gson.fromJson(s, Follow.class);
                         if (follow.getSuccess() != null) {
                             ToastUtil.toastShort(follow.getSuccess());
-                            mTvFollow.setText(getString(R.string.follow));
-                            mIsFollowed = false;
-                        } else if (follow.getErrors() != null) {
-                            ToastUtil.toastShort(follow.getErrors());
-                        }
-                    }
-
-                    @Override
-                    public void onError(Call call, Response response, Exception e) {
-                        super.onError(call, response, e);
-                        Logger.d(e.getMessage());
-                        loadingDismiss();
-                    }
-                });
-    }
-
-    /**
-     * 關注
-     */
-    private void follow() {
-        loadingShow();
-        Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id +
-                "/follow");
-        OkGo.post(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id +
-                "/follow")
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(String s, Call call, Response response) {
-                        loadingDismiss();
-                        Logger.json(s);
-                        Gson gson = new Gson();
-                        Follow follow = gson.fromJson(s, Follow.class);
-                        if (follow.getSuccess() != null) {
-                            ToastUtil.toastShort(follow.getSuccess());
-                            mTvFollow.setText(getString(R.string.unfollow));
-                            mIsFollowed = true;
+                            mFollowingTeams.remove(position);
+                            mAdapter.notifyDataSetChanged();
                         } else if (follow.getErrors() != null) {
                             ToastUtil.toastShort(follow.getErrors());
                         }
@@ -370,8 +208,10 @@ public class TeamDetailActivity extends BaseActivity {
 
     /**
      * 邀請球隊參與Pop
+     *
+     * @param itemPosition
      */
-    private void invitePopup() {
+    private void invitePopup(final int itemPosition) {
         View contentView = LayoutInflater.from(mContext).inflate(
                 R.layout.view_invite_to_not_matched, null);
 
@@ -379,7 +219,7 @@ public class TeamDetailActivity extends BaseActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         TextView tviconclose = (TextView) contentView.findViewById(R.id.tv_icon_close);
         tviconclose.setTypeface(App.mTypeface);
-        TextView tvnewmatch = (TextView) contentView.findViewById(R.id.tv_new_match);
+        TextView tvnewmatch         = (TextView) contentView.findViewById(R.id.tv_new_match);
         TextView tvpartakethismatch = (TextView) contentView.findViewById(R.id.tv_partake_this_match);
         tviconclose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -401,7 +241,7 @@ public class TeamDetailActivity extends BaseActivity {
         tvpartakethismatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getMyFirstMatch();//取我的未落實球賽的第一場
+                getMyFirstMatch(itemPosition);//取我的未落實球賽的第一場
                 popupWindow.dismiss();
             }
         });
@@ -424,14 +264,16 @@ public class TeamDetailActivity extends BaseActivity {
         // 我觉得这里是API的一个bug
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         // 设置好参数之后再show
-        popupWindow.showAtLocation(mRlParent, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(mLlParent, Gravity.CENTER, 0, 0);
         backgroundAlpha(0.5f);
     }
 
     /**
      * 取我的未落實球賽的第一場
+     *
+     * @param itemPosition
      */
-    private void getMyFirstMatch() {
+    private void getMyFirstMatch(final int itemPosition) {
         final String team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
         loadingShow();
         OkGo.get(Url.MATCHES_COMING)
@@ -440,8 +282,8 @@ public class TeamDetailActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
                         loadingDismiss();
-                        Gson gson = new Gson();
-                        MatchesComing json = gson.fromJson(s, MatchesComing.class);
+                        Gson                            gson    = new Gson();
+                        MatchesComing                   json    = gson.fromJson(s, MatchesComing.class);
                         List<MatchesComing.MatchesBean> matches = json.getMatches();
                         if (matches != null && matches.size() > 0)
                             for (int i = 0; i < matches.size(); i++) {
@@ -461,7 +303,7 @@ public class TeamDetailActivity extends BaseActivity {
                         if (mListWait.size() <= 0) {
                             ToastUtil.toastShort(getString(R.string.there_is_not_available_matches));
                         } else {
-                            showPopupInvite();
+                            showPopupInvite(itemPosition);
                         }
                     }
 
@@ -476,21 +318,22 @@ public class TeamDetailActivity extends BaseActivity {
 
     /**
      * 取第一條未落實球賽的pop
-
+     *
+     * @param itemPosition
      */
-    private void showPopupInvite() {
+    private void showPopupInvite(final int itemPosition) {
         View contentView = LayoutInflater.from(mContext).inflate(
                 R.layout.view_invite_to_match, null);
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
-        TextView tvnewmatch = (TextView) contentView.findViewById(R.id.tv_new_match);
-        TextView tvstate = (TextView) contentView.findViewById(R.id.tv_state);
-        TextView tvLocation = (TextView) contentView.findViewById(R.id.tv_location);
-        TextView tvTime = (TextView) contentView.findViewById(R.id.tv_time);
-        TextView tvHomeName = (TextView) contentView.findViewById(R.id.tv_home_name);
-        ImageView ivHomeLogo = (ImageView) contentView.findViewById(R.id.iv_home_logo);
-        TextView tvDate = (TextView) contentView.findViewById(R.id.tv_date);
+        TextView                  tvnewmatch  = (TextView) contentView.findViewById(R.id.tv_new_match);
+        TextView                  tvstate     = (TextView) contentView.findViewById(R.id.tv_state);
+        TextView                  tvLocation  = (TextView) contentView.findViewById(R.id.tv_location);
+        TextView                  tvTime      = (TextView) contentView.findViewById(R.id.tv_time);
+        TextView                  tvHomeName  = (TextView) contentView.findViewById(R.id.tv_home_name);
+        ImageView                 ivHomeLogo  = (ImageView) contentView.findViewById(R.id.iv_home_logo);
+        TextView                  tvDate      = (TextView) contentView.findViewById(R.id.tv_date);
         MatchesComing.MatchesBean matchesBean = mListWait.get(0);
         tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
         ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
@@ -499,14 +342,14 @@ public class TeamDetailActivity extends BaseActivity {
         String date = JodaTimeUtil.getDate2(matchesBean.getPlay_start());
         tvDate.setText(date);
         String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
-        String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
+        String end   = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
         tvTime.setText(start + " - " + end);
         tvLocation.setText(matchesBean.getLocation());
         tvstate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
-                invite();
+                invite(itemPosition);
             }
         });
         tvnewmatch.setOnClickListener(new View.OnClickListener() {
@@ -539,19 +382,21 @@ public class TeamDetailActivity extends BaseActivity {
         // 我觉得这里是API的一个bug
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         // 设置好参数之后再show
-        popupWindow.showAtLocation(mRlParent, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(mLlParent, Gravity.CENTER, 0, 0);
         backgroundAlpha(0.5f);
     }
 
     /**
      * 邀請
+     *
+     * @param position
      */
-    private void invite() {
+    private void invite(int position) {
         //http://api.freekick.hk/api/en/matches/invite
         loadingShow();
-        String inviteUrl = Url.MATCHES_INVITE;
-        JsonObject object = new JsonObject();
-        object.addProperty("invite_team_id", team_id + "");
+        String     inviteUrl = Url.MATCHES_INVITE;
+        JsonObject object    = new JsonObject();
+        object.addProperty("invite_team_id", mFollowingTeams.get(position).getId() + "");
         Logger.d(inviteUrl);
         Logger.d(object.toString());
         OkGo.post(inviteUrl)
@@ -561,7 +406,7 @@ public class TeamDetailActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson gson = new Gson();
+                        Gson   gson   = new Gson();
                         Invite invite = gson.fromJson(s, Invite.class);
                         if (invite.getSuccess() != null) {
                             ToastUtil.toastShort(invite.getSuccess());
@@ -579,6 +424,7 @@ public class TeamDetailActivity extends BaseActivity {
                     }
                 });
     }
+
 
     /**
      * 设置添加屏幕的背景透明度

@@ -29,7 +29,6 @@ import com.football.freekick.beans.Follow;
 import com.football.freekick.beans.Invite;
 import com.football.freekick.beans.MatchesComing;
 import com.football.freekick.beans.SameArea;
-import com.football.freekick.beans.TeamDetail;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
@@ -130,7 +129,7 @@ public class SameAreaTeamActivity extends BaseActivity {
                                 if (attentionTeams.get(i).getId() == mTeams.get(j).getId()) {
                                     mTeams.get(j).setAttention(true);
                                 } else {
-                                    mTeams.get(j).setAttention(false);
+//                                    mTeams.get(j).setAttention(false);
                                 }
                             }
                         }

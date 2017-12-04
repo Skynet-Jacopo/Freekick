@@ -331,6 +331,7 @@
     <string name="withdraw_failed">取消失敗</string>
     <string name="comfirm_success">確認成功</string>
     <string name="confirm_failed">確認失敗</string>
+    <string name="followed_teams">已關注球隊</string>
 
 
 </resources>
