@@ -3,6 +3,7 @@ package com.football.freekick.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
+import com.football.freekick.activity.FriendActivity;
+import com.football.freekick.activity.NoticeActivity;
 import com.football.freekick.adapter.MyFragmentAdapter;
 import com.football.freekick.adapter.MyMatchAdapter0;
 import com.football.freekick.app.BaseFragment;
@@ -136,10 +139,15 @@ public class MineFragment extends BaseFragment {
 
     @OnClick({R.id.tv_friend, R.id.tv_notice})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.tv_friend:
+                intent.setClass(mContext,FriendActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_notice:
+                intent.setClass(mContext,NoticeActivity.class);
+                startActivity(intent);
                 break;
         }
     }

@@ -1,5 +1,7 @@
 package com.football.freekick.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,7 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 球賽內容頁(打分)
+ * 球賽內容頁(打分),只有在接收到推送消息后進入,打完分后再不可見
  */
 public class MatchRateActivity extends BaseActivity {
 
@@ -93,11 +95,12 @@ public class MatchRateActivity extends BaseActivity {
     TextView     mTvVisitorNum;
     @Bind(R.id.tv_confirm)
     TextView     mTvConfirm;
-
+    private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_rate);
+        mContext = MatchRateActivity.this;
         ButterKnife.bind(this);
         initView();
     }
@@ -111,13 +114,18 @@ public class MatchRateActivity extends BaseActivity {
 
     @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location, R.id.iv_1_1, R.id.iv_1_2, R.id.iv_1_3, R.id.iv_1_4, R.id.iv_1_5, R.id.iv_2_1, R.id.iv_2_2, R.id.iv_2_3, R.id.iv_2_4, R.id.iv_2_5, R.id.iv_3_1, R.id.iv_3_2, R.id.iv_3_3, R.id.iv_3_4, R.id.iv_3_5, R.id.iv_4_1, R.id.iv_4_2, R.id.iv_4_3, R.id.iv_4_4, R.id.iv_4_5, R.id.iv_5_1, R.id.iv_5_2, R.id.iv_5_3, R.id.iv_5_4, R.id.iv_5_5, R.id.tv_confirm})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.tv_back:
                 finish();
                 break;
             case R.id.tv_friend:
+                intent.setClass(mContext,FriendActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_notice:
+                intent.setClass(mContext,NoticeActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_location:
                 break;

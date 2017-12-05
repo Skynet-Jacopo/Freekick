@@ -1,5 +1,7 @@
 package com.football.freekick.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -95,11 +97,12 @@ public class JoinMatchActivity extends BaseActivity {
     ImageView    mIvBottom2;
     private AvailableMatches.MatchesBean mMatchesBean;
     private int                          visitorNum;
-
+    private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_match);
+        mContext = JoinMatchActivity.this;
         ButterKnife.bind(this);
         mMatchesBean = (AvailableMatches.MatchesBean) getIntent().getSerializableExtra("matchesBean");
         initView();
@@ -138,13 +141,18 @@ public class JoinMatchActivity extends BaseActivity {
     @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.tv_icon_location, R.id.ll_location, R.id.tv_reduce,
             R.id.tv_add, R.id.tv_confirm, R.id.iv_top_1, R.id.iv_top_2, R.id.iv_left_1, R.id.iv_left_2, R.id.iv_left_3, R.id.iv_right_1, R.id.iv_right_2, R.id.iv_right_3, R.id.iv_bottom_1, R.id.iv_bottom_2})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.tv_back:
                 finish();
                 break;
             case R.id.tv_friend:
+                intent.setClass(mContext,FriendActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_notice:
+                intent.setClass(mContext,NoticeActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_location:
                 ToastUtil.toastShort("定位");

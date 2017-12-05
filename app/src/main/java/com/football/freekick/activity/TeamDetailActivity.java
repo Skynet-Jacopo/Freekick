@@ -182,13 +182,18 @@ public class TeamDetailActivity extends BaseActivity {
 
     @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.tv_fight, R.id.tv_follow})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.tv_back:
                 finish();
                 break;
             case R.id.tv_friend:
+                intent.setClass(mContext,FriendActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_notice:
+                intent.setClass(mContext,NoticeActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_fight:
                 invitePopup();

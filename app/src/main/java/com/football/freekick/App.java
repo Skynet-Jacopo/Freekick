@@ -107,7 +107,7 @@ public class App extends Application {
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
-                        Logger.json(e.getMessage());
+                        Logger.d(e.getMessage());
                     }
                 });
     }

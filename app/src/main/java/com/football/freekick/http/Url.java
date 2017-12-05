@@ -44,6 +44,8 @@ public class Url {
     public static final String SETTINGS = BaseUrl + (App.isChinese ? ZH_HK : EN) + "settings";
     //邀請球隊
     public static final String MATCHES_INVITE = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/invite";
-
+    //http://api.freekick.hk/api/en/matches/<matchID>
+    //Get match detail
+    public static final String MATCH_DETAIL = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/";//+matchID
 
 }

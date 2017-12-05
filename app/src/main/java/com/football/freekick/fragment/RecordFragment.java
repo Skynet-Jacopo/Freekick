@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.activity.FollowedTeamsActivity;
+import com.football.freekick.activity.MatchDetailActivity;
 import com.football.freekick.activity.SameAreaTeamActivity;
 import com.football.freekick.activity.TeamDetailActivity;
 import com.football.freekick.app.BaseFragment;
@@ -34,6 +35,7 @@ import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
@@ -222,7 +224,9 @@ public class RecordFragment extends BaseFragment {
         mRecorAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                ToastUtil.toastShort("詳情");
+                Intent intent = new Intent(mContext, MatchDetailActivity.class);
+                intent.putExtra("id",mMatches.get(position).getId()+"");
+                startActivity(intent);
             }
 
             @Override

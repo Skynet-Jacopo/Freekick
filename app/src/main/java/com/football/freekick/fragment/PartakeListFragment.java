@@ -22,7 +22,9 @@ import com.football.freekick.App;
 import com.football.freekick.CalenderActivity;
 import com.football.freekick.R;
 import com.football.freekick.activity.FiltrateActivity;
+import com.football.freekick.activity.FriendActivity;
 import com.football.freekick.activity.JoinMatchActivity;
+import com.football.freekick.activity.NoticeActivity;
 import com.football.freekick.activity.ShowMatchActivity;
 import com.football.freekick.adapter.PartakeAdapter;
 import com.football.freekick.app.BaseFragment;
@@ -415,10 +417,12 @@ public class PartakeListFragment extends BaseFragment {
                 startActivityForResult(intent, FILTRATE_REQUEST_CODE);
                 break;
             case R.id.tv_friend:
-                ToastUtil.toastShort("朋友");
+                intent.setClass(mContext,FriendActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_notice:
-                ToastUtil.toastShort("通知");
+                intent.setClass(mContext,NoticeActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_icon_left:
 //                ToastUtil.toastShort("左");

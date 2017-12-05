@@ -1,5 +1,6 @@
 package com.football.freekick.activity.registerlogin;
 
+import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,8 @@ import com.football.freekick.app.BaseActivity;
 import com.google.android.gms.common.ConnectionResult;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,6 +23,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * 登录注册页面
@@ -49,6 +54,11 @@ public class FirstPageActivity extends BaseActivity {
     static final String TAG = "GCMDemo";
     AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;
+
+    @Override
+    public LoaderManager getLoaderManager() {
+        return super.getLoaderManager();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

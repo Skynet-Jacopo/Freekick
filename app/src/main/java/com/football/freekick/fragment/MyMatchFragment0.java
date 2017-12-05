@@ -44,12 +44,15 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Response;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * 未落實球賽
  */
 public class MyMatchFragment0 extends LazyLoadFragment {
 
 
+    public static final int REQUEST_CODE_REFRESH = 1;
     @Bind(R.id.recycler_my_match)
     RecyclerView mRecyclerMyMatch;
     @Bind(R.id.tv_icon_lines)
@@ -218,12 +221,16 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                     case 3:
                         intent.setClass(mContext, MatchContentActivity.class);
                         intent.putExtra("type",1);
+                        intent.putExtra("secondPos",secondPos);
                         intent.putExtra("matchesBean",matchesBean);
+                        startActivityForResult(intent, REQUEST_CODE_REFRESH);
                         break;
                     case 4:
                         intent.setClass(mContext, MatchContentActivity.class);
                         intent.putExtra("type",2);
+                        intent.putExtra("secondPos",secondPos);
                         intent.putExtra("matchesBean",matchesBean);
+                        startActivityForResult(intent, REQUEST_CODE_REFRESH);
                         break;
                 }
             }
@@ -378,5 +385,13 @@ public class MyMatchFragment0 extends LazyLoadFragment {
 
     protected void setRefresh() {
         getMatchList();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_REFRESH&&resultCode==RESULT_OK){
+            setRefresh();//客隊或者主隊退出比賽后,回來界面要刷新
+        }
     }
 }

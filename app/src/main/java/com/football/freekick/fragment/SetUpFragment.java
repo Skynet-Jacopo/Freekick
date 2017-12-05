@@ -17,7 +17,9 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.activity.ChangeTeamInfoActivity0;
+import com.football.freekick.activity.NoticeActivity;
 import com.football.freekick.activity.SettingDetailActivity;
+import com.football.freekick.app.BaseFragment;
 import com.football.freekick.beans.Logout;
 import com.football.freekick.beans.Settings;
 import com.football.freekick.http.Url;
@@ -45,7 +47,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * 設定頁.
  */
-public class SetUpFragment extends Fragment {
+public class SetUpFragment extends BaseFragment {
 
 
     public static final int CHANGE_LANGUAGE = 1;
@@ -184,7 +186,8 @@ public class SetUpFragment extends Fragment {
                 startActivity(intent);
                 break;
             case R.id.tv_notice:
-                ToastUtil.toastShort("消息");
+                intent.setClass(mContext, NoticeActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_change_language:
                 startActivityForResult(new Intent(getActivity(), SelectLanguageActivity.class), CHANGE_LANGUAGE);
@@ -215,15 +218,18 @@ public class SetUpFragment extends Fragment {
 
     //登出
     private void logout() {
+        loadingShow();
         OkGo.delete(Url.SIGN_OUT)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
                         Logger.json(s);
                         Gson gson = new Gson();
                         Logout logout = gson.fromJson(s, Logout.class);
                         if (logout.isSuccess()) {
                             getActivity().finish();
+//                            ToastUtil.toastShort(logout.getMessage());
                         } else {
                             ToastUtil.toastShort(logout.getMessage());
                         }
@@ -232,6 +238,7 @@ public class SetUpFragment extends Fragment {
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
+                        loadingDismiss();
                         Logger.d(e.getMessage());
                     }
                 });
