@@ -436,7 +436,7 @@
             android:layout_height="80px"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="148px"
+            android:layout_marginBottom="80px"
             android:layout_marginTop="64px"
             android:background="@drawable/selector_corner_green_gray_bg"
             android:gravity="center"

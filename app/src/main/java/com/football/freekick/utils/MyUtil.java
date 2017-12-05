@@ -26,6 +26,9 @@ public class MyUtil {
         }
     }
     public static int getColorInt(String str) {
+        if (str == null){
+            return Color.parseColor("#000000");
+        }
         if (str.contains("#")) {
             return Color.parseColor(str);
         } else {

@@ -25,11 +25,8 @@ import com.football.freekick.app.BaseActivity;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
 import com.football.freekick.beans.Invite;
-import com.football.freekick.beans.MatchesComing;
 import com.football.freekick.beans.Recommended;
 import com.football.freekick.http.Url;
-import com.football.freekick.utils.JodaTimeUtil;
-import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
@@ -88,6 +85,7 @@ public class MatchInviteActivity extends BaseActivity {
     private Context mContext;
     private List<Recommended.TeamsBean> mList = new ArrayList<>();
     private CommonAdapter mAdapter;
+    private String match_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +101,7 @@ public class MatchInviteActivity extends BaseActivity {
         if (mList != null) {
             mList.clear();
         }
-        String match_id = getIntent().getStringExtra("match_id");
+        match_id = getIntent().getStringExtra("match_id");
         Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id +
                 "/get_recommended_joiner");
         OkGo.get(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id + "/get_recommended_joiner")
@@ -291,7 +289,7 @@ public class MatchInviteActivity extends BaseActivity {
     private void invite(int position) {
         //http://api.freekick.hk/api/en/matches/invite
         loadingShow();
-        String inviteUrl =Url.MATCHES_INVITE;
+        String inviteUrl =Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id + "/invite";
         JsonObject object = new JsonObject();
         object.addProperty("invite_team_id",mList.get(position).getId()+"");
         Logger.d(inviteUrl);

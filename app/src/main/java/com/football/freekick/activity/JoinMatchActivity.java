@@ -219,7 +219,7 @@ public class JoinMatchActivity extends BaseActivity {
         loadingShow();
         JsonObject object  = new JsonObject();
         JsonObject object1 = new JsonObject();
-        object1.addProperty("match_id", "92");
+        object1.addProperty("match_id", "103");
         object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
         object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));
         object1.addProperty("size", "7");

@@ -157,10 +157,10 @@ public class MatchContentActivity extends BaseActivity {
         mTvIconShareLeft.setTypeface(App.mTypeface);
         mTvIconShareRight.setTypeface(App.mTypeface);
 
-        mTvDate.setText(JodaTimeUtil.getDate(mMatchesBean.getPlay_start()));
+        mTvDate.setText(JodaTimeUtil.getDate2(mMatchesBean.getPlay_start()));
         mTvLocation.setText(mMatchesBean.getLocation());
-        mTvTime.setText(JodaTimeUtil.getTimeHourMinutes(mMatchesBean.getPlay_start()) + "-" + JodaTimeUtil
-                .getTimeHourMinutes(mMatchesBean.getPlay_end()));
+        mTvTime.setText(JodaTimeUtil.getTime2(mMatchesBean.getPlay_start()) + "-" + JodaTimeUtil
+                .getTime2(mMatchesBean.getPlay_end()));
         mTvHomeName.setText(mMatchesBean.getHome_team().getTeam_name());
         mIvHomeDress.setBackgroundColor(MyUtil.getColorInt(mMatchesBean.getHome_team_color()));
         mTvHomeNum.setText(mMatchesBean.getHome_team().getSize() + "");
@@ -273,6 +273,7 @@ public class MatchContentActivity extends BaseActivity {
                         cancelMatch();
                         break;
                 }
+                popupWindow.dismiss();
             }
         });
         popupWindow.setTouchable(true);

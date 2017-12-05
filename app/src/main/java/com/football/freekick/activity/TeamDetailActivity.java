@@ -456,7 +456,8 @@ public class TeamDetailActivity extends BaseActivity {
                                         matches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
                                     }
                                 }
-                                if (matches.get(i).getStatus().equals("w")) {
+                                if (matches.get(i).getStatus().equals("w")&& !gson.toJson(matches.get(i)
+                                        .getJoin_matches()).contains("confirmation_pending")) {
                                     if (matches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {
                                         mListWait.add(matches.get(i));
                                         //是否要把主動參與的隊伍去除之後取第一條未落實球賽
@@ -554,7 +555,8 @@ public class TeamDetailActivity extends BaseActivity {
     private void invite() {
         //http://api.freekick.hk/api/en/matches/invite
         loadingShow();
-        String inviteUrl = Url.MATCHES_INVITE;
+        String inviteUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + mListWait.get(0)
+                .getId() + "/invite";
         JsonObject object = new JsonObject();
         object.addProperty("invite_team_id", team_id + "");
         Logger.d(inviteUrl);

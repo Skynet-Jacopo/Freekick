@@ -59,50 +59,50 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  */
 public class PartakeListFragment extends BaseFragment {
-    public static final int CHOOSE_DATE = 2;
+    public static final int CHOOSE_DATE           = 2;
     public static final int FILTRATE_REQUEST_CODE = 1;
 
     public static PartakeListFragment mPartakeListFragment;
     @Bind(R.id.text)
-    TextView mText;
+    TextView     mText;
     @Bind(R.id.tv_icon_filtrate)
-    TextView mTvIconFiltrate;
+    TextView     mTvIconFiltrate;
     @Bind(R.id.tv_friend)
-    TextView mTvFriend;
+    TextView     mTvFriend;
     @Bind(R.id.tv_notice)
-    TextView mTvNotice;
+    TextView     mTvNotice;
     @Bind(R.id.tv_icon_left)
-    TextView mTvIconLeft;
+    TextView     mTvIconLeft;
     @Bind(R.id.tv_icon_date)
-    TextView mTvIconDate;
+    TextView     mTvIconDate;
     @Bind(R.id.tv_icon_right)
-    TextView mTvIconRight;
+    TextView     mTvIconRight;
     @Bind(R.id.tv_pitch_size)
-    TextView mTvPitchSize;
+    TextView     mTvPitchSize;
     @Bind(R.id.tv_icon_down)
-    TextView mTvIconDown;
+    TextView     mTvIconDown;
     @Bind(R.id.tv_date)
-    TextView mTvDate;
+    TextView     mTvDate;
     @Bind(R.id.recycler_partake)
     RecyclerView mRecyclerPartake;
     @Bind(R.id.ll_content)
     LinearLayout mLlContent;
     private PartakeFragment mPartakeFragment;
-    private Context mContext;
+    private Context         mContext;
 
 
-    private DateTime mDateTime;
-    private String pitch_size;
-    private String district_id;
+    private DateTime      mDateTime;
+    private String        pitch_size;
+    private String        district_id;
     private MypopupWindow mPopupWindow;
-    private String mStartTime = "00:00";
-    private String mEndTime = "00:00";
-    private String size = "2";//默認球隊人數
-    private String average_height = "2";//默認平均高度
-    private String age_range = "2";//默認球隊年齡
-    private String style = "1";//默認風格
+    private String mStartTime     = "00:00";
+    private String mEndTime       = "00:00";
+    private String size           = "";//默認球隊人數
+    private String average_height = "";//默認平均高度
+    private String age_range      = "";//默認球隊年齡
+    private String style          = "";//默認風格
     private PartakeAdapter mAdapter;
-    private List<AvailableMatches.MatchesBean> mMatchList =new ArrayList<>();
+    private List<AvailableMatches.MatchesBean> mMatchList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -155,18 +155,23 @@ public class PartakeListFragment extends BaseFragment {
         Logger.d("image--->" + PrefUtils.getString(App.APP_CONTEXT, "logourl", null));
 
         String play_start = StringUtils.getEditText(mTvDate) + " " + mStartTime + ":00";
-        String play_end = StringUtils.getEditText(mTvDate) + " " + mEndTime + ":00";
+        String play_end   = StringUtils.getEditText(mTvDate) + " " + mEndTime + ":00";
 
-        JsonObject object = new JsonObject();
+        JsonObject object  = new JsonObject();
         JsonObject object1 = new JsonObject();
         object1.addProperty("play_start", play_start);
         object1.addProperty("play_end", play_end);
         object1.addProperty("pitch_size", pitch_size);
         object1.addProperty("district_id", district_id);
-        object1.addProperty("size", size);
-        object1.addProperty("average_height", average_height);
-        object1.addProperty("age_range", age_range);
-        object1.addProperty("style", style);
+        if (!size.equals("")) {
+            object1.addProperty("size", size);
+        }
+        if (!average_height.equals(""))
+            object1.addProperty("average_height", average_height);
+        if (!age_range.equals(""))
+            object1.addProperty("age_range", age_range);
+        if (!style.equals(""))
+            object1.addProperty("style", style);
         object.add("get_available_match_input", object1);
         Logger.json(object.toString());
         Logger.d(Url.AVAILABLE_MATCHES + PrefUtils.getString(App.APP_CONTEXT, "team_id", null) + "/available_matches");
@@ -286,7 +291,7 @@ public class PartakeListFragment extends BaseFragment {
                                 "    ]\n" +
                                 "}";
                         Logger.json(str);
-                        Gson gson = new Gson();
+                        Gson             gson    = new Gson();
                         AvailableMatches matches = gson.fromJson(str, AvailableMatches.class);
                         if (matches.getMatches().size() <= 0) {
                             ToastUtil.toastShort("No records found.");
@@ -294,11 +299,11 @@ public class PartakeListFragment extends BaseFragment {
                             mMatchList.addAll(matches.getMatches());
                             AvailableMatches.MatchesBean matchesBean = new AvailableMatches.MatchesBean();
                             matchesBean.setDefault_image(MyUtil.getImageUrl(App.mAdvertisementsBean.get(0).getImage()));
-                            if (mMatchList.size()>=2){
-                                mMatchList.add(2,matchesBean);
-                            }else if (mMatchList.size() == 1){
+                            if (mMatchList.size() >= 2) {
+                                mMatchList.add(2, matchesBean);
+                            } else if (mMatchList.size() == 1) {
                                 mMatchList.add(matchesBean);
-                            }else if (mMatchList.size() == 0){
+                            } else if (mMatchList.size() == 0) {
 
                             }
 
@@ -312,7 +317,7 @@ public class PartakeListFragment extends BaseFragment {
                                 @Override
                                 public void Clike(int state, View view, int position) {
                                     //1.點擊item,2.點擊參與約賽;3.點擊成功約賽
-                                    Intent intent = new Intent();
+                                    Intent                       intent      = new Intent();
                                     AvailableMatches.MatchesBean matchesBean = mMatchList.get(position);
                                     switch (state) {
                                         case 1:
@@ -368,7 +373,7 @@ public class PartakeListFragment extends BaseFragment {
      * @param position
      */
     private void joinMatch(int position) {
-        JsonObject object = new JsonObject();
+        JsonObject object  = new JsonObject();
         JsonObject object1 = new JsonObject();
         object1.addProperty("match_id", mMatchList.get(position).getId() + "");
         object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
@@ -382,7 +387,7 @@ public class PartakeListFragment extends BaseFragment {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
-                        Gson gson = new Gson();
+                        Gson      gson      = new Gson();
                         JoinMatch joinMatch = gson.fromJson(s, JoinMatch.class);
                         if (joinMatch.getJoin_match() != null) {
                             ToastUtil.toastShort(R.string.match_success);
@@ -409,7 +414,7 @@ public class PartakeListFragment extends BaseFragment {
     @OnClick({R.id.tv_date, R.id.tv_icon_filtrate, R.id.tv_friend, R.id.tv_notice, R.id.tv_icon_left, R.id
             .tv_icon_date, R.id.tv_icon_right, R.id.tv_pitch_size, R.id.tv_icon_down, R.id.text})
     public void onViewClicked(View view) {
-        Intent intent = new Intent();
+        Intent   intent   = new Intent();
         DateTime dateTime = null;
         switch (view.getId()) {
             case R.id.tv_icon_filtrate:
@@ -417,11 +422,11 @@ public class PartakeListFragment extends BaseFragment {
                 startActivityForResult(intent, FILTRATE_REQUEST_CODE);
                 break;
             case R.id.tv_friend:
-                intent.setClass(mContext,FriendActivity.class);
+                intent.setClass(mContext, FriendActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_notice:
-                intent.setClass(mContext,NoticeActivity.class);
+                intent.setClass(mContext, NoticeActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_icon_left:
@@ -570,9 +575,9 @@ public class PartakeListFragment extends BaseFragment {
                 style = data.getStringExtra("style");
 
         } else if (requestCode == CHOOSE_DATE && resultCode == RESULT_OK) {
-            String day = data.getStringExtra("day");
+            String day   = data.getStringExtra("day");
             String month = data.getStringExtra("month");
-            String year = data.getStringExtra("year");
+            String year  = data.getStringExtra("year");
             mDateTime = (DateTime) data.getSerializableExtra("dateTime");
 //            ToastUtil.toastShort(year + "年" + month + "月" + day + "日");
             mTvDate.setText(year + "-" + month + "-" + day);
