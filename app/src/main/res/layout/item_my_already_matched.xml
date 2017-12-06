@@ -130,11 +130,11 @@
         </LinearLayout>
 
         <TextView
+            android:layout_alignParentBottom="true"
             android:id="@+id/tv_state"
             android:textSize="20px"
             android:background="@drawable/selector_corner_green_gray_bg"
             android:textColor="@color/white"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:text="已邀請"
             android:gravity="center"

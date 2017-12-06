@@ -3,3 +3,8 @@ facebook登陆
 Keytool -exportcert -alias freekick -keystore C:\Personal\Freekick\app\freekick.jks | openssl sha1 -binary | openssl base64
 
 KzwmZ6IPEpy+dohWT3B4Xvws+ic=
+
+
+1.已參與,待確認狀態下,可請求C7退出比賽嗎
+2.已參與,且已確認,客隊請求C7,返回 服務器數據異常!
+3.

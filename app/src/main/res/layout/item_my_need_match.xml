@@ -148,9 +148,9 @@
         <TextView
             android:id="@+id/tv_state"
             android:textSize="20px"
+            android:layout_alignParentBottom="true"
             android:background="@drawable/selector_corner_green_gray_bg"
             android:textColor="@color/white"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:text="邀請"
             android:gravity="center"

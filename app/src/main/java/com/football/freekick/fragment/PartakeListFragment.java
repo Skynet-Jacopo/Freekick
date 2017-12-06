@@ -24,12 +24,15 @@ import com.football.freekick.R;
 import com.football.freekick.activity.FiltrateActivity;
 import com.football.freekick.activity.FriendActivity;
 import com.football.freekick.activity.JoinMatchActivity;
+import com.football.freekick.activity.MatchContentActivity1;
 import com.football.freekick.activity.NoticeActivity;
 import com.football.freekick.activity.ShowMatchActivity;
 import com.football.freekick.adapter.PartakeAdapter;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.beans.AvailableMatches;
 import com.football.freekick.beans.JoinMatch;
+import com.football.freekick.beans.MatchesComing;
+import com.football.freekick.beans.NoMatches;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
@@ -290,72 +293,105 @@ public class PartakeListFragment extends BaseFragment {
                                 "        }\n" +
                                 "    ]\n" +
                                 "}";
-                        Logger.json(str);
+//                        Logger.json(str);
                         Gson             gson    = new Gson();
-                        AvailableMatches matches = gson.fromJson(str, AvailableMatches.class);
-                        if (matches.getMatches().size() <= 0) {
-                            ToastUtil.toastShort("No records found.");
-                        } else {
-                            mMatchList.addAll(matches.getMatches());
-                            AvailableMatches.MatchesBean matchesBean = new AvailableMatches.MatchesBean();
-                            matchesBean.setDefault_image(MyUtil.getImageUrl(App.mAdvertisementsBean.get(0).getImage()));
-                            if (mMatchList.size() >= 2) {
-                                mMatchList.add(2, matchesBean);
-                            } else if (mMatchList.size() == 1) {
-                                mMatchList.add(matchesBean);
-                            } else if (mMatchList.size() == 0) {
+                        if (!s.contains("[")&&!s.contains("]")){
+                            NoMatches noMatches = gson.fromJson(s, NoMatches.class);
+                            ToastUtil.toastShort(noMatches.getMatches());
+                        }else {
+                            AvailableMatches matches = gson.fromJson(s, AvailableMatches.class);
+                            if (matches.getMatches().size() <= 0) {
+                                mMatchList.clear();
+                                mAdapter.notifyDataSetChanged();
+                                ToastUtil.toastShort("No records found.");
+                            } else {
+                                mMatchList.addAll(matches.getMatches());
+                                AvailableMatches.MatchesBean matchesBean = new AvailableMatches.MatchesBean();
+                                matchesBean.setDefault_image(MyUtil.getImageUrl(App.mAdvertisementsBean.get(0).getImage()));
+                                if (mMatchList.size() >= 2) {
+                                    mMatchList.add(2, matchesBean);
+                                } else if (mMatchList.size() == 1) {
+                                    mMatchList.add(matchesBean);
+                                } else if (mMatchList.size() == 0) {
 
-                            }
-
-                            mAdapter = new PartakeAdapter(mMatchList, mContext);
-                            mRecyclerPartake.setLayoutManager(new LinearLayoutManager(mContext));
-                            if (mTvIconRight != null) {
-                                mRecyclerPartake.setHasFixedSize(true);
-                            }
-                            mRecyclerPartake.setAdapter(mAdapter);
-                            mAdapter.setClick(new PartakeAdapter.Click() {
-                                @Override
-                                public void Clike(int state, View view, int position) {
-                                    //1.點擊item,2.點擊參與約賽;3.點擊成功約賽
-                                    Intent                       intent      = new Intent();
-                                    AvailableMatches.MatchesBean matchesBean = mMatchList.get(position);
-                                    switch (state) {
-                                        case 1:
-                                            String status = matchesBean.getStatus();
-                                            switch (status) {
-                                                case "i"://已邀請
-                                                case "w"://不展示右側以及Button
-                                                    intent.setClass(mContext, JoinMatchActivity.class);
-                                                    intent.putExtra("matchesBean", matchesBean);
-                                                    break;
-                                                case "m"://展示或者(如果參與對是自己的話,是不是應該有退出比賽)
-                                                    intent.setClass(mContext, ShowMatchActivity.class);
-                                                    intent.putExtra("matchesBean", matchesBean);
-                                                    break;
-                                            }
-                                            startActivity(intent);
-                                            break;
-                                        case 2:
-                                            intent.setClass(mContext, JoinMatchActivity.class);
-                                            intent.putExtra("matchesBean", matchesBean);
-                                            startActivity(intent);
-//                                            joinMatch(position);//參與球賽
-                                            break;
-                                        case 3://成功約賽的,應該是沒啥用了
-
-                                            break;
-                                        case 4://分享
-                                            // TODO: 2017/11/30 分享
-                                            ToastUtil.toastShort("分享");
-                                            break;
-                                        case 5://廣告
-                                            // TODO: 2017/11/30 分享
-                                            ToastUtil.toastShort("廣告,暫時沒有Url");
-                                            break;
-                                    }
                                 }
-                            });
+
+                                mAdapter = new PartakeAdapter(mMatchList, mContext);
+                                mRecyclerPartake.setLayoutManager(new LinearLayoutManager(mContext));
+                                if (mTvIconRight != null) {
+                                    mRecyclerPartake.setHasFixedSize(true);
+                                }
+                                mRecyclerPartake.setAdapter(mAdapter);
+                                mAdapter.setClick(new PartakeAdapter.Click() {
+                                    @Override
+                                    public void Clike(int state, View view, int position) {
+                                        /**
+                                         * 1.參與約賽(詳情頁)
+                                         * 2.點擊參與約賽;
+                                         * 3.點擊成功約賽
+                                         * 4.分享
+                                         * 5.廣告
+                                         * 6.已參與,待確認
+                                         * 7.已參與,且已確認
+                                         */
+                                        Intent                       intent      = new Intent();
+                                        AvailableMatches.MatchesBean matchesBean = mMatchList.get(position);
+                                        switch (state) {
+                                            case 1:
+                                                String status = matchesBean.getStatus();
+                                                switch (status) {
+                                                    case "i"://已邀請
+                                                    case "w"://不展示右側以及Button
+                                                        intent.setClass(mContext, JoinMatchActivity.class);
+                                                        intent.putExtra("matchesBean", matchesBean);
+                                                        break;
+                                                    case "m"://展示或者(如果參與對是自己的話,是不是應該有退出比賽)
+                                                        intent.setClass(mContext, ShowMatchActivity.class);
+                                                        intent.putExtra("matchesBean", matchesBean);
+                                                        break;
+                                                }
+                                                startActivity(intent);
+                                                break;
+                                            case 2:
+                                                intent.setClass(mContext, JoinMatchActivity.class);
+                                                intent.putExtra("matchesBean", matchesBean);
+                                                startActivity(intent);
+//                                            joinMatch(position);//參與球賽
+                                                break;
+                                            case 3://成功約賽的,應該是沒啥用了
+
+                                                break;
+                                            case 4://分享
+                                                // TODO: 2017/11/30 分享
+                                                ToastUtil.toastShort("分享");
+                                                break;
+                                            case 5://廣告
+                                                // TODO: 2017/11/30 分享
+                                                ToastUtil.toastShort("廣告,暫時沒有Url");
+                                                break;
+                                            case 6://已參與,待確認
+                                                intent.setClass(mContext, MatchContentActivity1.class);
+                                                intent.putExtra("id",mMatchList.get(position).getId()+"");
+                                                intent.putExtra("type",3);
+                                                intent.putExtra("where","partake");
+                                                intent.putExtra("model",mMatchList.get(position));
+                                                startActivity(intent);
+                                                break;
+                                            case 7://已參與,且已確認
+                                                intent.setClass(mContext, MatchContentActivity1.class);
+                                                intent.putExtra("id",mMatchList.get(position).getId()+"");
+                                                intent.putExtra("type",2);
+//                                                setDataToDetail(intent,position);
+                                                intent.putExtra("where","partake");
+                                                intent.putExtra("model",mMatchList.get(position));
+                                                startActivity(intent);
+                                                break;
+                                        }
+                                    }
+                                });
+                            }
                         }
+
                     }
 
                     @Override
@@ -365,6 +401,16 @@ public class PartakeListFragment extends BaseFragment {
                         loadingDismiss();
                     }
                 });
+    }
+
+    /**
+     * 將數據以統一的格式發向球賽內容頁
+     * @param intent
+     * @param position
+     */
+    private void setDataToDetail(Intent intent, int position) {
+        MatchesComing.MatchesBean matchesBean = new MatchesComing.MatchesBean();
+        AvailableMatches.MatchesBean bean = mMatchList.get(position);
     }
 
     /**

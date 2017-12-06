@@ -198,6 +198,8 @@
             android:name=".activity.MapsActivity"
             android:label="@string/title_activity_maps">
         </activity>
+        <activity android:name=".activity.MatchContentActivity1">
+        </activity>
     </application>
 
 </manifest>

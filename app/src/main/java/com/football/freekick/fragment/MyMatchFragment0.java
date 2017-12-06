@@ -320,9 +320,6 @@ public class MyMatchFragment0 extends LazyLoadFragment {
 
     private void initData() {
         mHasLoadedOnce = true;
-        if (mListMatch != null) {
-            mListMatch.clear();
-        }
         if (point_of_view != null) {
             point_of_view.clear();
         }
@@ -339,6 +336,12 @@ public class MyMatchFragment0 extends LazyLoadFragment {
      * 獲取球賽列表
      */
     private void getMatchList() {
+        if (mMatches != null) {
+            mMatches.clear();
+        }
+        if (mListMatch != null) {
+            mListMatch.clear();
+        }
         loadingShow();
         OkGo.get(Url.MATCHES_COMING)
                 .execute(new StringCallback() {

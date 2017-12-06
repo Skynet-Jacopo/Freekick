@@ -336,6 +336,7 @@
     <string name="withdraw_the_match">退出比賽</string>
     <string name="message">消息</string>
     <string name="title_activity_maps">Map</string>
+    <string name="join_success_please_wait_to_confirm">參與成功,等待確認</string>
 
 
 </resources>

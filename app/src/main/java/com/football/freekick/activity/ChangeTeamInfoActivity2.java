@@ -200,7 +200,7 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
                             PrefUtils.putString(App.APP_CONTEXT,"district",team.getDistrict().getDistrict()+"");
                             PrefUtils.putString(App.APP_CONTEXT,"district_id",team.getDistrict().getId()+"");
                             ToastUtil.toastShort(getString(R.string.change_success));
-                            startActivity(new Intent(mContext, MainActivity.class));
+                            startActivity(new Intent(mContext, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         } else if (createTeam.getTeam() == null && createTeam.getErrors() != null) {
                             ToastUtil.toastShort(createTeam.getErrors().get(0));
                         }

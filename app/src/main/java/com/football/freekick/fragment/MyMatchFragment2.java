@@ -223,7 +223,7 @@ public class MyMatchFragment2 extends LazyLoadFragment {
      * 接受邀請
      * @param position
      */
-    private void confirmInvite(int position) {
+    private void confirmInvite(final int position) {
 //        http://api.freekick.hk/api/en/teams/<team ID>/confirm_invite
         String confirmInviteUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id + "/confirm_invite";
         JsonObject object = new JsonObject();
@@ -243,6 +243,8 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                             ToastUtil.toastShort(getString(R.string.comfirm_success));
                             ((MineFragment)getParentFragment()).mViewpager.setCurrentItem(0,true);
                             ((MineFragment)getParentFragment()).setRefreshFragment1();
+                            mListInvite.remove(position);
+                            mMatchAdapter.notifyDataSetChanged();
                         }else if (fromJson.getError()!=null){
                             ToastUtil.toastShort(fromJson.getError());
                         }else {
@@ -264,9 +266,6 @@ public class MyMatchFragment2 extends LazyLoadFragment {
         mHasLoadedOnce = true;
 //        mMatches = getArguments().getParcelableArrayList("mMatches");
 
-        if (mListInvite != null) {
-            mListInvite.clear();
-        }
         if (point_of_view != null) {
             point_of_view.clear();
         }
@@ -288,6 +287,12 @@ public class MyMatchFragment2 extends LazyLoadFragment {
      * 獲取球賽列表
      */
     private void getMatchList() {
+        if (mMatches != null) {
+            mMatches.clear();
+        }
+        if (mListInvite != null) {
+            mListInvite.clear();
+        }
         loadingShow();
         OkGo.get(Url.MATCHES_COMING)
                 .execute(new StringCallback() {

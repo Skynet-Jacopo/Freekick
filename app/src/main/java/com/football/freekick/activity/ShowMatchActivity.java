@@ -115,10 +115,10 @@ public class ShowMatchActivity extends BaseActivity {
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
         mTvIconLocation.setTypeface(App.mTypeface);
-        mTvDate.setText(JodaTimeUtil.getDate(mMatchesBean.getPlay_start()));
+        mTvDate.setText(JodaTimeUtil.getDate2(mMatchesBean.getPlay_start()));
         mTvLocation.setText(mMatchesBean.getLocation());
-        mTvTime.setText(JodaTimeUtil.getTimeHourMinutes(mMatchesBean.getPlay_start()) + "-" + JodaTimeUtil
-                .getTimeHourMinutes(mMatchesBean.getPlay_end()));
+        mTvTime.setText(JodaTimeUtil.getTime2(mMatchesBean.getPlay_start()) + "-" + JodaTimeUtil
+                .getTime2(mMatchesBean.getPlay_end()));
 
         mTvHomeNum.setText(mMatchesBean.getSize() + "");
         mIvHomeDress.setBackgroundColor(MyUtil.getColorInt(mMatchesBean.getHome_team_color()));

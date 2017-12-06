@@ -113,11 +113,11 @@ public class JoinMatchActivity extends BaseActivity {
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
         mTvIconLocation.setTypeface(App.mTypeface);
-        mTvDate.setText(JodaTimeUtil.getDate(mMatchesBean.getPlay_start()));
+        mTvDate.setText(JodaTimeUtil.getDate2(mMatchesBean.getPlay_start()));
         mTvLocation.setText(mMatchesBean.getLocation());
-        mTvTime.setText(JodaTimeUtil.getTimeHourMinutes(mMatchesBean.getPlay_start()) + "-" + JodaTimeUtil
-                .getTimeHourMinutes(mMatchesBean.getPlay_end()));
-
+        mTvTime.setText(JodaTimeUtil.getTime2(mMatchesBean.getPlay_start()) + "-" + JodaTimeUtil
+                .getTime2(mMatchesBean.getPlay_end()));
+        mTvHomeName.setText(mMatchesBean.getHome_team().getTeam_name());
         mTvHomeNum.setText(mMatchesBean.getSize() + "");
         mIvHomeDress.setBackgroundColor(MyUtil.getColorInt(mMatchesBean.getHome_team_color()));
         mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(PrefUtils.getString(App.APP_CONTEXT, "color2", null)));
@@ -219,16 +219,16 @@ public class JoinMatchActivity extends BaseActivity {
         loadingShow();
         JsonObject object  = new JsonObject();
         JsonObject object1 = new JsonObject();
-        object1.addProperty("match_id", "103");
-        object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
-        object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));
-        object1.addProperty("size", "7");
-        object.add("join_match", object1);
-//        object1.addProperty("match_id", mMatchesBean.getId() + "");
+//        object1.addProperty("match_id", "103");
 //        object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
 //        object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));
-//        object1.addProperty("size", PrefUtils.getString(App.APP_CONTEXT, "size", null));
+//        object1.addProperty("size", "7");
 //        object.add("join_match", object1);
+        object1.addProperty("match_id", mMatchesBean.getId() + "");
+        object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
+        object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));
+        object1.addProperty("size", PrefUtils.getString(App.APP_CONTEXT, "size", null));
+        object.add("join_match", object1);
 
         Logger.json(object.toString());
         OkGo.post(Url.JOIN_MATCHES)
@@ -241,7 +241,7 @@ public class JoinMatchActivity extends BaseActivity {
                         Gson      gson      = new Gson();
                         JoinMatch joinMatch = gson.fromJson(s, JoinMatch.class);
                         if (joinMatch.getJoin_match() != null) {
-                            ToastUtil.toastShort(R.string.match_success);
+                            ToastUtil.toastShort(getString(R.string.join_success_please_wait_to_confirm));
                             finish();
                         } else {
 

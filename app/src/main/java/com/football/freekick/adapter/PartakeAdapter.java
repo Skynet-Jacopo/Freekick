@@ -15,7 +15,9 @@ import com.football.freekick.R;
 import com.football.freekick.beans.AvailableMatches;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
+import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
+import com.google.gson.Gson;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.List;
@@ -27,6 +29,8 @@ import java.util.List;
 public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<AvailableMatches.MatchesBean> mMatchList;
     private Context mContext;
+    private Gson gson;
+    private String team_id;
     private static final int TYPE_1 = 1111;//搵場列表
     private static final int TYPE_2 = 2222;//廣告
 
@@ -36,6 +40,8 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public PartakeAdapter(List<AvailableMatches.MatchesBean> mMatchList, Context mContext) {
         this.mMatchList = mMatchList;
         this.mContext = mContext;
+        gson = new Gson();
+        team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
         for (int i = 0; i < App.mPitchesBeanList.size(); i++) {
             for (int j = 0; j < mMatchList.size(); j++) {
                 if (App.mPitchesBeanList.get(i).getId() == mMatchList.get(j).getPitch_id()) {
@@ -72,47 +78,80 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             myHolder1.tvIconShare.setTypeface(App.mTypeface);
             myHolder1.tvPitchName.setText(matchesBean.getPitch_name());
             myHolder1.tvLocation.setText(matchesBean.getLocation());
-            String start = JodaTimeUtil.getTimeHourMinutes(matchesBean.getPlay_start());
-            String end = JodaTimeUtil.getTimeHourMinutes(matchesBean.getPlay_end());
+            String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
+            String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
 
             myHolder1.tvTime.setText(start + "-" + end);
             myHolder1.ivDressHome.setBackgroundColor(Color.parseColor("#" + matchesBean.getHome_team_color()));
             myHolder1.tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
             // TODO: 2017/11/30 球場圖 還未有
-            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),myHolder1.ivPic);
+            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
+                    myHolder1.ivPic);
 
             String status = matchesBean.getStatus();
-            switch (status){
+            List<AvailableMatches.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
+            switch (status) {
                 case "i"://已邀請
                 case "w":
                     myHolder1.ivDressVisitor.setImageResource(R.drawable.ic_dress_unknow);
                     myHolder1.ivDressVisitor.setBackgroundResource(R.color.black);
                     myHolder1.tvVisitorName.setText("");
-                    myHolder1.tvState.setText(R.string.join_match);
-                    myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_green_gray_bg);
-                    myHolder1.tvState.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            click.Clike(2, myHolder1.tvState, position);
+                    boolean haveMe = false;
+                    for (int i = 0; i < join_matches.size(); i++) {
+                        if (join_matches.get(i).getJoin_team_id() == Integer.parseInt(team_id) && join_matches.get(i)
+                                .getStatus().equals("confirmation_pending")) {
+                            haveMe = true;
                         }
-                    });
+                    }
+                    if (gson.toJson(join_matches).contains("confirmation_pending") && haveMe) {
+                        myHolder1.tvState.setText(R.string.confirmation_pending);
+                        myHolder1.tvState.setBackgroundResource(R.drawable.shape_round_gray_bg);
+                        myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                click.Clike(6, myHolder1.lLContent, position);
+                            }
+                        });
+                    } else {
+                        myHolder1.tvState.setText(R.string.join_match);
+                        myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_green_gray_bg);
+                        myHolder1.tvState.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                click.Clike(2, myHolder1.tvState, position);
+                            }
+                        });
+                        myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                click.Clike(1, myHolder1.lLContent, position);
+                            }
+                        });
+                    }
+
                     break;
                 case "m":
-                    List<AvailableMatches.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
                     for (int i = 0; i < join_matches.size(); i++) {
-                        if (join_matches.get(i).getStatus().equals("confirmed")){
-                            myHolder1.ivDressVisitor.setBackgroundColor(Color.parseColor("#" + join_matches.get(i).getJoin_team_color()));
+                        if (join_matches.get(i).getStatus().equals("confirmed")) {
+                            myHolder1.ivDressVisitor.setBackgroundColor(MyUtil.getColorInt(join_matches.get(i)
+                                    .getJoin_team_color()));
                             myHolder1.tvVisitorName.setText(join_matches.get(i).getTeam().getTeam_name());
 
                         }
                     }
                     myHolder1.tvState.setText(R.string.match_success);
 //                    myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_red_gray_bg);
-                    myHolder1.tvState.setBackgroundResource(R.drawable.shape_corner_light_red);
+                    myHolder1.tvState.setBackgroundResource(R.drawable.shape_round_light_red);
                     myHolder1.tvState.setOnClickListener(new View.OnClickListener() {//應該是沒用了
                         @Override
                         public void onClick(View view) {
                             click.Clike(3, myHolder1.tvState, position);
+                        }
+                    });
+                    myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            click.Clike(7, myHolder1.lLContent, position);
                         }
                     });
                     break;
@@ -124,12 +163,7 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     break;
 
             }
-            myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    click.Clike(1, myHolder1.lLContent, position);
-                }
-            });
+
             myHolder1.lLShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -144,11 +178,12 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         } else if (holder instanceof MyHolder2) {
             final MyHolder2 myHolder2 = (MyHolder2) holder;
-            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getDefault_image()), myHolder2.ivAdvertisement);
+            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getDefault_image()),
+                    myHolder2.ivAdvertisement);
             myHolder2.lLContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    click.Clike(5,myHolder2.lLContent,position);
+                    click.Clike(5, myHolder2.lLContent, position);
                 }
             });
         }
@@ -161,30 +196,30 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        if (mMatchList.size()>=3){
-            if (position ==2){
+        if (mMatchList.size() >= 3) {
+            if (position == 2) {
                 return TYPE_2;
-            }else {
+            } else {
                 return TYPE_1;
             }
-        }else if (mMatchList.size() == 2){
-            if (position ==1){
+        } else if (mMatchList.size() == 2) {
+            if (position == 1) {
                 return TYPE_2;
-            }else {
+            } else {
                 return TYPE_1;
             }
-        }else {
+        } else {
             return TYPE_1;
         }
     }
 
     public static class MyHolder1 extends RecyclerView.ViewHolder {
-        private TextView tvPitchName, tvHomeName, tvVisitorName,tvIconShare;
+        private TextView tvPitchName, tvHomeName, tvVisitorName, tvIconShare;
         private TextView tvLocation;
         private TextView tvIconLocation;
         private TextView tvTime;
         private TextView tvState;
-        private LinearLayout lLContent,lLShare;
+        private LinearLayout lLContent, lLShare;
         private ImageView ivPic;
         private ImageView ivDressHome;
         private ImageView ivDressVisitor;

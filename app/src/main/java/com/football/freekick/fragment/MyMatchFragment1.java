@@ -234,7 +234,6 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                         break;
                     case 5:
                         showCancelInvitePop(position, secondPos);
-
                         break;
                     case 6:
                         break;
@@ -368,11 +367,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
 
     private void initData() {
         mHasLoadedOnce = true;
-//        mMatches = getArguments().getParcelableArrayList("mMatches");
 
-        if (mListWait != null) {
-            mListWait.clear();
-        }
         if (point_of_view != null) {
             point_of_view.clear();
         }
@@ -394,6 +389,12 @@ public class MyMatchFragment1 extends LazyLoadFragment {
      * 獲取球賽列表
      */
     private void getMatchList() {
+        if (mMatches != null) {
+            mMatches.clear();
+        }
+        if (mListWait != null) {
+            mListWait.clear();
+        }
         loadingShow();
         OkGo.get(Url.MATCHES_COMING)
                 .execute(new StringCallback() {
