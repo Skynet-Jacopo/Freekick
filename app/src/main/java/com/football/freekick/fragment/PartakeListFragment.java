@@ -31,7 +31,6 @@ import com.football.freekick.adapter.PartakeAdapter;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.beans.AvailableMatches;
 import com.football.freekick.beans.JoinMatch;
-import com.football.freekick.beans.MatchesComing;
 import com.football.freekick.beans.NoMatches;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.MyUtil;
@@ -64,6 +63,7 @@ import static android.app.Activity.RESULT_OK;
 public class PartakeListFragment extends BaseFragment {
     public static final int CHOOSE_DATE           = 2;
     public static final int FILTRATE_REQUEST_CODE = 1;
+    public static final int REQUEST_CODE_DETAIL = 3;
 
     public static PartakeListFragment mPartakeListFragment;
     @Bind(R.id.text)
@@ -373,13 +373,13 @@ public class PartakeListFragment extends BaseFragment {
                                                 intent.setClass(mContext, MatchContentActivity1.class);
                                                 intent.putExtra("id",mMatchList.get(position).getId()+"");
                                                 intent.putExtra("type",3);
-                                                startActivity(intent);
+                                                startActivityForResult(intent,REQUEST_CODE_DETAIL);
                                                 break;
                                             case 7://已參與,且已確認
                                                 intent.setClass(mContext, MatchContentActivity1.class);
                                                 intent.putExtra("id",mMatchList.get(position).getId()+"");
                                                 intent.putExtra("type",2);
-                                                startActivity(intent);
+                                                startActivityForResult(intent, REQUEST_CODE_DETAIL);
                                                 break;
                                         }
                                     }
@@ -612,6 +612,8 @@ public class PartakeListFragment extends BaseFragment {
             mDateTime = (DateTime) data.getSerializableExtra("dateTime");
 //            ToastUtil.toastShort(year + "年" + month + "月" + day + "日");
             mTvDate.setText(year + "-" + month + "-" + day);
+        }else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK){//回來刷新
+            getAvailableAatches();
         }
     }
 }

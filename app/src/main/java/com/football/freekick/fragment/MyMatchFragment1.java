@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.activity.ArticleActivity;
+import com.football.freekick.activity.ConfirmationPendingActivity;
 import com.football.freekick.activity.MatchContentActivity1;
 import com.football.freekick.activity.MatchInviteActivity;
 import com.football.freekick.adapter.MyMatchAdapter1;
@@ -60,14 +61,16 @@ public class MyMatchFragment1 extends LazyLoadFragment {
 
 
     public static final int REQUEST_CODE_INVITE = 1;
+    public static final int REQUEST_CODE_TO_1   = 2;
+    public static final int REQUEST_CODE_DETAIL   = 3;
     @Bind(R.id.recycler_my_match)
     RecyclerView mRecyclerMyMatch;
     @Bind(R.id.tv_icon_lines)
-    TextView mTvIconLines;
+    TextView     mTvIconLines;
     @Bind(R.id.recycler_lines)
     RecyclerView mRecyclerLines;
     @Bind(R.id.tv_icon_focus)
-    TextView mTvIconFocus;
+    TextView     mTvIconFocus;
     @Bind(R.id.recycler_focus)
     RecyclerView mRecyclerFocus;
     @Bind(R.id.ll_parent)
@@ -76,21 +79,21 @@ public class MyMatchFragment1 extends LazyLoadFragment {
     /**
      * 标志位，标志已经初始化完成
      */
-    private boolean isPrepared;
+    private boolean      isPrepared;
     /**
      * 是否已被加载过一次，第二次就不再去请求数据了
      */
-    private boolean mHasLoadedOnce;
+    private boolean      mHasLoadedOnce;
     private LinearLayout mFragmentView;
 
     private Context mContext;
     private String picUrl = "http://www.cnr.cn/china/xwwgf/201111/W020111128658021231674.jpg";
     private CommonAdapter mLineAdapter;
     private CommonAdapter mFocusAdapter;
-    private ArrayList<MatchesComing.MatchesBean> mMatches = new ArrayList<>();
+    private ArrayList<MatchesComing.MatchesBean> mMatches  = new ArrayList<>();
     private ArrayList<MatchesComing.MatchesBean> mListWait = new ArrayList<>();
     private MyMatchAdapter1 mMatchAdapter;
-    private List<Article.ArticleBean> news = new ArrayList<>();
+    private List<Article.ArticleBean> news          = new ArrayList<>();
     private List<Article.ArticleBean> point_of_view = new ArrayList<>();
 
     public MyMatchFragment1() {
@@ -226,7 +229,10 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                         break;
                     case 2://有×號代替吧
                         break;
-                    case 3://應該是不可點擊吧
+                    case 3:
+                        intent.setClass(mContext, ConfirmationPendingActivity.class);
+                        intent.putExtra("id", mListWait.get(position).getId() + "");
+                        startActivityForResult(intent, REQUEST_CODE_TO_1);
                         break;
                     case 4:
                         intent.setClass(mContext, MatchInviteActivity.class);
@@ -238,9 +244,21 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                         break;
                     case 6://球賽詳情頁(有主動參與的隊伍)
                         intent.setClass(mContext, MatchContentActivity1.class);
-                        intent.putExtra("id",mListWait.get(position).getId()+"");
-                        intent.putExtra("type",4);
-                        startActivity(intent);
+                        intent.putExtra("id", mListWait.get(position).getId() + "");
+                        intent.putExtra("type", 4);
+                        startActivityForResult(intent, REQUEST_CODE_TO_1);
+                        break;
+                    case 7://球賽詳情頁(我主動參與別人的球賽)
+                        intent.setClass(mContext, MatchContentActivity1.class);
+                        intent.putExtra("id", mListWait.get(position).getId() + "");
+                        intent.putExtra("type", 3);
+                        startActivityForResult(intent, REQUEST_CODE_DETAIL);
+                        break;
+                    case 8://球賽詳情頁(我主動邀請過了別的隊伍)
+                        intent.setClass(mContext, MatchContentActivity1.class);
+                        intent.putExtra("id", mListWait.get(position).getId() + "");
+                        intent.putExtra("type", 6);
+                        startActivityForResult(intent, REQUEST_CODE_DETAIL);
                         break;
                 }
             }
@@ -253,7 +271,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
 
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        TextView tvno = (TextView) contentView.findViewById(R.id.tv_no);
+        TextView tvno  = (TextView) contentView.findViewById(R.id.tv_no);
         TextView tvyes = (TextView) contentView.findViewById(R.id.tv_yes);
         tvno.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -309,7 +327,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson gson = new Gson();
+                        Gson     gson     = new Gson();
                         WithDraw fromJson = gson.fromJson(s, WithDraw.class);
                         if (fromJson.getJoin_match() != null) {
                             ToastUtil.toastShort(getString(R.string.withdraw_success));
@@ -349,7 +367,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
-                        Gson gson = new Gson();
+                        Gson   gson   = new Gson();
                         Invite invite = gson.fromJson(s, Invite.class);
                         if (invite.getSuccess() != null) {
                             ToastUtil.toastShort(invite.getSuccess());
@@ -407,7 +425,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
                         loadingDismiss();
-                        Gson gson = new Gson();
+                        Gson          gson = new Gson();
                         MatchesComing json = gson.fromJson(s, MatchesComing.class);
                         mMatches.addAll(json.getMatches());
                         String team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
@@ -478,6 +496,11 @@ public class MyMatchFragment1 extends LazyLoadFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_INVITE && resultCode == RESULT_OK) {
+            setRefresh();
+        } else if (requestCode == REQUEST_CODE_TO_1 && resultCode == RESULT_OK) {
+            ((MineFragment)getParentFragment()).mViewpager.setCurrentItem(0,true);
+            ((MineFragment)getParentFragment()).setRefreshFragment1();
+        } else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
             setRefresh();
         }
     }

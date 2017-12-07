@@ -14,10 +14,12 @@ import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
+import com.football.freekick.beans.ConfirmMatch;
 import com.football.freekick.beans.MatchDetail;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
+import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
@@ -39,38 +41,39 @@ import okhttp3.Response;
 public class ConfirmationPendingActivity extends BaseActivity {
 
     @Bind(R.id.tv_back)
-    TextView mTvBack;
+    TextView     mTvBack;
     @Bind(R.id.tv_friend)
-    TextView mTvFriend;
+    TextView     mTvFriend;
     @Bind(R.id.tv_notice)
-    TextView mTvNotice;
+    TextView     mTvNotice;
     @Bind(R.id.iv_pic)
-    ImageView mIvPic;
+    ImageView    mIvPic;
     @Bind(R.id.tv_pitch_name)
-    TextView mTvPitchName;
+    TextView     mTvPitchName;
     @Bind(R.id.tv_icon_location)
-    TextView mTvIconLocation;
+    TextView     mTvIconLocation;
     @Bind(R.id.tv_location)
-    TextView mTvLocation;
+    TextView     mTvLocation;
     @Bind(R.id.ll_location)
     LinearLayout mLlLocation;
     @Bind(R.id.tv_time)
-    TextView mTvTime;
+    TextView     mTvTime;
     @Bind(R.id.iv_dress_home)
-    ImageView mIvDressHome;
+    ImageView    mIvDressHome;
     @Bind(R.id.tv_home_name)
-    TextView mTvHomeName;
+    TextView     mTvHomeName;
     @Bind(R.id.iv_dress_visitor)
-    ImageView mIvDressVisitor;
+    ImageView    mIvDressVisitor;
     @Bind(R.id.tv_visitor_name)
-    TextView mTvVisitorName;
+    TextView     mTvVisitorName;
     @Bind(R.id.recycler_confirmation_pending)
     RecyclerView mRecyclerConfirmationPending;
     @Bind(R.id.ll_parent)
     LinearLayout mLlParent;
-    private String id;
-    private MatchDetail.MatchBean mMatch;
-    private Context mContext;
+    private String                                      id;
+    private MatchDetail.MatchBean                       mMatch;
+    private Context                                     mContext;
+    private List<MatchDetail.MatchBean.JoinMatchesBean> join_matches;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +95,7 @@ public class ConfirmationPendingActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson gson = new Gson();
+                        Gson        gson     = new Gson();
                         MatchDetail fromJson = gson.fromJson(s, MatchDetail.class);
                         if (fromJson.getMatch() != null) {
                             mMatch = fromJson.getMatch();
@@ -122,7 +125,9 @@ public class ConfirmationPendingActivity extends BaseActivity {
                 .getTime2(mMatch.getPlay_end()));
         mIvDressHome.setBackgroundColor(MyUtil.getColorInt(mMatch.getHome_team_color()));
         mTvHomeName.setText(mMatch.getHome_team().getTeam_name() == null ? "" : mMatch.getHome_team().getTeam_name());
-        List<MatchDetail.MatchBean.JoinMatchesBean> join_matches = mMatch.getJoin_matches();
+
+
+        join_matches = mMatch.getJoin_matches();
         if (mRecyclerConfirmationPending != null) {
             mRecyclerConfirmationPending.setHasFixedSize(true);
         }
@@ -139,7 +144,8 @@ public class ConfirmationPendingActivity extends BaseActivity {
 
             @Override
             public void convert(ViewHolder holder, MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean) {
-                ImageView ivPic = holder.getView(R.id.iv_pic);
+                final int itemPosition = holder.getItemPosition();
+                ImageView ivPic        = holder.getView(R.id.iv_pic);
                 ImageLoaderUtils.displayImage(MyUtil.getImageUrl(joinMatchesBean.getTeam().getImage().getUrl()),
                         ivPic, R.drawable.icon_default);
                 holder.setText(R.id.tv_team_name, joinMatchesBean.getTeam().getTeam_name());
@@ -147,11 +153,52 @@ public class ConfirmationPendingActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
                         //從參與的隊伍中取一隊決定作賽
+//                        http:// api.freekick.hk/api/en/join_matches/<joinmatchID>/confirm
+                        confirm(itemPosition);
                     }
                 });
             }
         };
         mRecyclerConfirmationPending.setAdapter(adapter);
+    }
+
+    /**
+     * 主隊挑選參與隊確定作賽
+     *
+     * @param itemPosition
+     */
+    private void confirm(int itemPosition) {
+        loadingShow();
+        String url = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "join_matches/" + join_matches.get
+                (itemPosition).getId() + "/confirm";
+        Logger.d(url);
+        OkGo.put(url)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson         gson     = new Gson();
+                        ConfirmMatch fromJson = gson.fromJson(s, ConfirmMatch.class);
+                        if (fromJson.getJoin_match() != null) {
+                            ToastUtil.toastShort(getString(R.string.match_success));
+                            setResult(RESULT_OK);
+                            finish();
+                        } else if (fromJson.getError() != null) {
+                            ToastUtil.toastShort(fromJson.getError());
+                        } else {
+                            ToastUtil.toastShort(getString(R.string.confirm_failed));
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                        ToastUtil.toastShort(getString(R.string.confirm_failed));
+                    }
+                });
     }
 
     private void initView() {

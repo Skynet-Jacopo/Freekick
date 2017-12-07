@@ -17,8 +17,7 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.activity.ArticleActivity;
-import com.football.freekick.adapter.MyMatchAdapter0;
-import com.football.freekick.adapter.MyMatchAdapter1;
+import com.football.freekick.activity.MatchContentActivity1;
 import com.football.freekick.adapter.MyMatchAdapter2;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
@@ -26,7 +25,6 @@ import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
 import com.football.freekick.beans.Article;
 import com.football.freekick.beans.ConfirmInvite;
 import com.football.freekick.beans.MatchesComing;
-import com.football.freekick.beans.WithDraw;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
@@ -46,12 +44,15 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Response;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * 未落實球賽
  */
 public class MyMatchFragment2 extends LazyLoadFragment {
 
 
+    public static final int REQUEST_CODE_TO_1 = 1;
     @Bind(R.id.recycler_my_match)
     RecyclerView mRecyclerMyMatch;
     @Bind(R.id.tv_icon_lines)
@@ -84,6 +85,7 @@ public class MyMatchFragment2 extends LazyLoadFragment {
     private ArrayList<MatchesComing.MatchesBean> mListInvite = new ArrayList<>();
     private MyMatchAdapter2 mMatchAdapter;
     private String team_id;
+    private int pos;
 
     public MyMatchFragment2() {
         // Required empty public constructor
@@ -207,12 +209,17 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                  * 1.接受邀請
                  * 2.球賽內容頁
                  */
-
+                Intent intent = new Intent();
+                pos = position;
                 switch (state) {
                     case 1:
                         confirmInvite(position);
                         break;
                     case 2:
+                        intent.setClass(mContext, MatchContentActivity1.class);
+                        intent.putExtra("id", mListInvite.get(position).getId() + "");
+                        intent.putExtra("type", 5);
+                        startActivityForResult(intent, REQUEST_CODE_TO_1);
                         break;
                 }
             }
@@ -346,5 +353,16 @@ public class MyMatchFragment2 extends LazyLoadFragment {
 
     private void setRefresh() {
         getMatchList();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_TO_1&&resultCode == RESULT_OK){
+            ((MineFragment)getParentFragment()).mViewpager.setCurrentItem(0,true);
+            ((MineFragment)getParentFragment()).setRefreshFragment1();
+            mListInvite.remove(pos);
+            mMatchAdapter.notifyDataSetChanged();
+        }
     }
 }

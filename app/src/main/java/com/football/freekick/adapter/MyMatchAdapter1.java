@@ -17,6 +17,7 @@ import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -29,11 +30,11 @@ import java.util.List;
 public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //    private List<String> datas;
     private ArrayList<MatchesComing.MatchesBean> mMatches;
-    private Context mContext;
+    private Context                              mContext;
     private static final int TYPE_1 = 1111;//邀請
     private static final int TYPE_2 = 2222;//已邀請
     private final String team_id;
-    private final Gson gson;
+    private final Gson   gson;
 
     public MyMatchAdapter1(ArrayList<MatchesComing.MatchesBean> datas, Context mContext) {
         this.mMatches = datas;
@@ -45,12 +46,12 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_1) {
-            View view1 = LayoutInflater.from(mContext).inflate(R.layout.item_my_need_match, parent, false);
+            View      view1     = LayoutInflater.from(mContext).inflate(R.layout.item_my_need_match, parent, false);
             MyHolder1 myHolder1 = new MyHolder1(view1);
             AutoUtils.auto(view1);
             return myHolder1;
         } else if (viewType == TYPE_2) {
-            View view2 = LayoutInflater.from(mContext).inflate(R.layout.item_my_already_matched, parent, false);
+            View      view2     = LayoutInflater.from(mContext).inflate(R.layout.item_my_already_matched, parent, false);
             MyHolder2 myHolder2 = new MyHolder2(view2);
             AutoUtils.auto(view2);
             return myHolder2;
@@ -71,7 +72,7 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String date = JodaTimeUtil.getDate2(matchesBean.getPlay_start());
             myHolder1.tvDate.setText(date);
             String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
-            String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
+            String end   = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
             myHolder1.tvTime.setText(start + " - " + end);
             List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
             myHolder1.tvLocation.setText(matchesBean.getLocation());
@@ -83,7 +84,7 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 myHolder1.tvIconDelete.setVisibility(View.VISIBLE);
                 int secondPos = 0;
                 for (int i = 0; i < join_matches.size(); i++) {
-                    if (join_matches.get(i).getJoin_team_id() == Integer.parseInt(team_id)){
+                    if (join_matches.get(i).getJoin_team_id() == Integer.parseInt(team_id)) {
                         secondPos = i;
                     }
                 }
@@ -93,6 +94,12 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View view) {
                         //參與進來而待確認,可取消
                         click.Click(1, myHolder1.tvIconDelete, position, finalSecondPos);
+                    }
+                });
+                myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        click.Click(7, myHolder1.lLContent, position, 0);//球賽詳情頁(我主動參與別人的球賽)
                     }
                 });
             } else {
@@ -116,27 +123,35 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 myHolder1.tvIconDelete.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        click.Click(5, myHolder1.tvIconDelete,position,finalI);//取消邀請
+                                        click.Click(5, myHolder1.tvIconDelete, position, finalI);//取消邀請
+                                    }
+                                });
+                                myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        click.Click(8, myHolder1.lLContent, position, 0);//球賽詳情頁(有邀請了的隊伍)
                                     }
                                 });
                             }
                         }
                     } else if (!toJson.contains("invited") && toJson.contains("confirmation_pending")) {//無邀請的隊伍
                         // (有主動參與的隊伍)
+                        Logger.d("走了嗎  這裡");
                         myHolder1.tvIconDelete.setVisibility(View.GONE);
                         myHolder1.tvState.setText(R.string.confirmation_pending);
-                        myHolder1.tvState.setBackgroundResource(R.drawable.shape_corner_gray_bg);
-                        for (int i = 0; i < join_matches.size(); i++) {
-                            if (join_matches.get(i).getStatus().equals("confirmation_pending")) {
-                                final int finalI = i;
-                                myHolder1.tvState.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        click.Click(3, myHolder1.tvState, position, finalI);//待確認,i是join_match的位置
-                                    }
-                                });
+                        myHolder1.tvState.setBackgroundResource(R.drawable.selector_corner_green_gray_bg);
+//                        for (int i = 0; i < join_matches.size(); i++) {
+//                            if (join_matches.get(i).getStatus().equals("confirmation_pending")) {
+//                                final int finalI = i;
+                        final int finalI = 0;
+                        myHolder1.tvState.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                click.Click(3, myHolder1.tvState, position, finalI);//待確認,i是join_match的位置
                             }
-                        }
+                        });
+//                            }
+//                        }
                         myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -189,7 +204,7 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static class MyHolder1 extends RecyclerView.ViewHolder {
         private TextView tvDate, tvHomeName, tvLocation, tvTime, tvState, tvIconDelete;
         private LinearLayout lLContent;
-        private ImageView ivHomeLogo;
+        private ImageView    ivHomeLogo;
 
         public MyHolder1(View itemView) {
             super(itemView);
@@ -207,7 +222,7 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static class MyHolder2 extends RecyclerView.ViewHolder {
         private TextView tvDate, tvHomeName, tvLocation, tvTime, tvIconDelete, tvVisitorName, tvState;
         private LinearLayout lLContent;
-        private ImageView ivHomeLogo, ivVisitorLogo;
+        private ImageView    ivHomeLogo, ivVisitorLogo;
 
         public MyHolder2(View itemView) {
             super(itemView);

@@ -339,6 +339,7 @@
     <string name="join_success_please_wait_to_confirm">參與成功,等待確認</string>
     <string name="match_content">球賽內容頁</string>
     <string name="cancel_match">取消比賽</string>
+    <string name="cancel_invite">取消邀請</string>
 
 
 </resources>
