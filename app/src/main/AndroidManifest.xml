@@ -200,6 +200,8 @@
         </activity>
         <activity android:name=".activity.MatchContentActivity1">
         </activity>
+        <activity android:name=".activity.ConfirmationPendingActivity">
+        </activity>
     </application>
 
 </manifest>

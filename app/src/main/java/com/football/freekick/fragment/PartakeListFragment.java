@@ -373,17 +373,12 @@ public class PartakeListFragment extends BaseFragment {
                                                 intent.setClass(mContext, MatchContentActivity1.class);
                                                 intent.putExtra("id",mMatchList.get(position).getId()+"");
                                                 intent.putExtra("type",3);
-                                                intent.putExtra("where","partake");
-                                                intent.putExtra("model",mMatchList.get(position));
                                                 startActivity(intent);
                                                 break;
                                             case 7://已參與,且已確認
                                                 intent.setClass(mContext, MatchContentActivity1.class);
                                                 intent.putExtra("id",mMatchList.get(position).getId()+"");
                                                 intent.putExtra("type",2);
-//                                                setDataToDetail(intent,position);
-                                                intent.putExtra("where","partake");
-                                                intent.putExtra("model",mMatchList.get(position));
                                                 startActivity(intent);
                                                 break;
                                         }
@@ -401,16 +396,6 @@ public class PartakeListFragment extends BaseFragment {
                         loadingDismiss();
                     }
                 });
-    }
-
-    /**
-     * 將數據以統一的格式發向球賽內容頁
-     * @param intent
-     * @param position
-     */
-    private void setDataToDetail(Intent intent, int position) {
-        MatchesComing.MatchesBean matchesBean = new MatchesComing.MatchesBean();
-        AvailableMatches.MatchesBean bean = mMatchList.get(position);
     }
 
     /**

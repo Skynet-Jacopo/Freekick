@@ -137,6 +137,12 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 });
                             }
                         }
+                        myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                click.Click(6, myHolder1.lLContent, position, 0);//球賽詳情頁(有主動參與的隊伍)
+                            }
+                        });
                     } else {//無邀請,無主動參與隊伍
                         myHolder1.tvState.setText(R.string.invite);
                         myHolder1.tvIconDelete.setVisibility(View.GONE);
@@ -157,12 +163,6 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         }
                     });
                 }
-                myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        click.Click(6, myHolder1.lLContent, position, 0);//球賽詳情頁
-                    }
-                });
             }
 
         } else if (holder instanceof MyHolder2) {

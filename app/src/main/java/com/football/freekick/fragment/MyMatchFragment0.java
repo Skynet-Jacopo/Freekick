@@ -286,7 +286,7 @@ public class MyMatchFragment0 extends LazyLoadFragment {
     private void withdrawJoin(final int position, int secondPos) {
 //        http://api.freekick.hk/api/en/join_matches/<joinmatchID>/withdraw
         String withdrawUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "join_matches/" + mListMatch.get
-                (position).getJoin_matches().get(secondPos).getJoin_team_id() + "/withdraw";
+                (position).getJoin_matches().get(secondPos).getId() + "/withdraw";
         Logger.d(withdrawUrl);
         loadingShow();
         OkGo.put(withdrawUrl)

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.activity.ArticleActivity;
+import com.football.freekick.activity.MatchContentActivity1;
 import com.football.freekick.activity.MatchInviteActivity;
 import com.football.freekick.adapter.MyMatchAdapter1;
 import com.football.freekick.baseadapter.ViewHolder;
@@ -235,7 +236,11 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                     case 5:
                         showCancelInvitePop(position, secondPos);
                         break;
-                    case 6:
+                    case 6://球賽詳情頁(有主動參與的隊伍)
+                        intent.setClass(mContext, MatchContentActivity1.class);
+                        intent.putExtra("id",mListWait.get(position).getId()+"");
+                        intent.putExtra("type",4);
+                        startActivity(intent);
                         break;
                 }
             }

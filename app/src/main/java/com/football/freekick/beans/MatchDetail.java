@@ -9,11 +9,11 @@ import java.util.List;
 public class MatchDetail {
 
     /**
-     * match : {"id":7,"play_start":"2017-11-20T12:00:00.000Z","play_end":"2017-11-22T01:00:00.000Z","pitch_id":1,
-     * "home_team_color":"ffffff","status":"w","home_team":{"id":33,
-     * "image":{"url":"/uploads/team/image/33/upload-image-9724761-1510149726."}},"join_matches":[{"join_team_id":48,
-     * "status":"confirmation_pending","join_team_color":"ffc300","team":{"team_name":"Lions9dd875","size":5,
-     * "image":{"url":null},"district":{"id":72,"district":"Yuen Long","region":"New Territories"}}}]}
+     * match : {"id":107,"play_end":"2017-12-10T15:00:00.000+08:00","status":"m","home_team_color":"FF0D00",
+     * "home_team":{"id":55,"image":{"url":"/uploads/team/image/55/image.jpeg"},"team_name":"雷队"},
+     * "join_matches":[{"id":38,"team":{"district":{"region":"Hong Kong","district":"Central and Western","id":19},
+     * "image":{"url":"/uploads/team/image/52/image.jpeg"},"size":7,"team_name":"岳队"},"join_team_color":null,
+     * "status":"confirmed","join_team_id":52}],"play_start":"2017-12-10T12:00:00.000+08:00","pitch_id":1,"size":7}
      */
 
     private MatchBean match;
@@ -28,35 +28,30 @@ public class MatchDetail {
 
     public static class MatchBean {
         /**
-         * id : 7
-         * play_start : 2017-11-20T12:00:00.000Z
-         * play_end : 2017-11-22T01:00:00.000Z
+         * id : 107
+         * play_end : 2017-12-10T15:00:00.000+08:00
+         * status : m
+         * home_team_color : FF0D00
+         * home_team : {"id":55,"image":{"url":"/uploads/team/image/55/image.jpeg"},"team_name":"雷队"}
+         * join_matches : [{"id":38,"team":{"district":{"region":"Hong Kong","district":"Central and Western",
+         * "id":19},"image":{"url":"/uploads/team/image/52/image.jpeg"},"size":7,"team_name":"岳队"},
+         * "join_team_color":null,"status":"confirmed","join_team_id":52}]
+         * play_start : 2017-12-10T12:00:00.000+08:00
          * pitch_id : 1
-         * home_team_color : ffffff
-         * status : w
-         * home_team : {"id":33,"image":{"url":"/uploads/team/image/33/upload-image-9724761-1510149726."}}
-         * join_matches : [{"join_team_id":48,"status":"confirmation_pending","join_team_color":"ffc300",
-         * "team":{"team_name":"Lions9dd875","size":5,"image":{"url":null},"district":{"id":72,"district":"Yuen
-         * Long","region":"New Territories"}}}]
+         * size : 7
          */
 
         private int id;
-        private String play_start;
         private String play_end;
-        private int pitch_id;
-        private String home_team_color;
         private String status;
-        private String pitch_name;
-        private String location;
+        private String home_team_color;
         private HomeTeamBean home_team;
+        private String play_start;
+        private int pitch_id;
+        private int size;
+        private String location;
+        private String pitch_name;
         private List<JoinMatchesBean> join_matches;
-        public String getPitch_name() {
-            return pitch_name;
-        }
-
-        public void setPitch_name(String pitch_name) {
-            this.pitch_name = pitch_name;
-        }
 
         public String getLocation() {
             return location;
@@ -64,6 +59,14 @@ public class MatchDetail {
 
         public void setLocation(String location) {
             this.location = location;
+        }
+
+        public String getPitch_name() {
+            return pitch_name;
+        }
+
+        public void setPitch_name(String pitch_name) {
+            this.pitch_name = pitch_name;
         }
 
         public int getId() {
@@ -74,36 +77,12 @@ public class MatchDetail {
             this.id = id;
         }
 
-        public String getPlay_start() {
-            return play_start;
-        }
-
-        public void setPlay_start(String play_start) {
-            this.play_start = play_start;
-        }
-
         public String getPlay_end() {
             return play_end;
         }
 
         public void setPlay_end(String play_end) {
             this.play_end = play_end;
-        }
-
-        public int getPitch_id() {
-            return pitch_id;
-        }
-
-        public void setPitch_id(int pitch_id) {
-            this.pitch_id = pitch_id;
-        }
-
-        public String getHome_team_color() {
-            return home_team_color;
-        }
-
-        public void setHome_team_color(String home_team_color) {
-            this.home_team_color = home_team_color;
         }
 
         public String getStatus() {
@@ -114,12 +93,44 @@ public class MatchDetail {
             this.status = status;
         }
 
+        public String getHome_team_color() {
+            return home_team_color;
+        }
+
+        public void setHome_team_color(String home_team_color) {
+            this.home_team_color = home_team_color;
+        }
+
         public HomeTeamBean getHome_team() {
             return home_team;
         }
 
         public void setHome_team(HomeTeamBean home_team) {
             this.home_team = home_team;
+        }
+
+        public String getPlay_start() {
+            return play_start;
+        }
+
+        public void setPlay_start(String play_start) {
+            this.play_start = play_start;
+        }
+
+        public int getPitch_id() {
+            return pitch_id;
+        }
+
+        public void setPitch_id(int pitch_id) {
+            this.pitch_id = pitch_id;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
         }
 
         public List<JoinMatchesBean> getJoin_matches() {
@@ -132,21 +143,14 @@ public class MatchDetail {
 
         public static class HomeTeamBean {
             /**
-             * id : 33
-             * image : {"url":"/uploads/team/image/33/upload-image-9724761-1510149726."}
+             * id : 55
+             * image : {"url":"/uploads/team/image/55/image.jpeg"}
+             * team_name : 雷队
              */
 
             private int id;
-            private String size;
-            private String team_name;
             private ImageBean image;
-            public String getSize() {
-                return size;
-            }
-
-            public void setSize(String size) {
-                this.size = size;
-            }
+            private String team_name;
 
             public int getId() {
                 return id;
@@ -174,7 +178,7 @@ public class MatchDetail {
 
             public static class ImageBean {
                 /**
-                 * url : /uploads/team/image/33/upload-image-9724761-1510149726.
+                 * url : /uploads/team/image/55/image.jpeg
                  */
 
                 private String url;
@@ -191,40 +195,26 @@ public class MatchDetail {
 
         public static class JoinMatchesBean {
             /**
-             * join_team_id : 48
-             * status : confirmation_pending
-             * join_team_color : ffc300
-             * team : {"team_name":"Lions9dd875","size":5,"image":{"url":null},"district":{"id":72,"district":"Yuen
-             * Long","region":"New Territories"}}
+             * id : 38
+             * team : {"district":{"region":"Hong Kong","district":"Central and Western","id":19},
+             * "image":{"url":"/uploads/team/image/52/image.jpeg"},"size":7,"team_name":"岳队"}
+             * join_team_color : null
+             * status : confirmed
+             * join_team_id : 52
              */
 
-            private int join_team_id;
-            private String status;
-            private String join_team_color;
+            private int id;
             private TeamBean team;
+            private String join_team_color;
+            private String status;
+            private int join_team_id;
 
-            public int getJoin_team_id() {
-                return join_team_id;
+            public int getId() {
+                return id;
             }
 
-            public void setJoin_team_id(int join_team_id) {
-                this.join_team_id = join_team_id;
-            }
-
-            public String getStatus() {
-                return status;
-            }
-
-            public void setStatus(String status) {
-                this.status = status;
-            }
-
-            public String getJoin_team_color() {
-                return join_team_color;
-            }
-
-            public void setJoin_team_color(String join_team_color) {
-                this.join_team_color = join_team_color;
+            public void setId(int id) {
+                this.id = id;
             }
 
             public TeamBean getTeam() {
@@ -235,33 +225,49 @@ public class MatchDetail {
                 this.team = team;
             }
 
+            public String getJoin_team_color() {
+                return join_team_color;
+            }
+
+            public void setJoin_team_color(String join_team_color) {
+                this.join_team_color = join_team_color;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+
+            public int getJoin_team_id() {
+                return join_team_id;
+            }
+
+            public void setJoin_team_id(int join_team_id) {
+                this.join_team_id = join_team_id;
+            }
+
             public static class TeamBean {
                 /**
-                 * team_name : Lions9dd875
-                 * size : 5
-                 * image : {"url":null}
-                 * district : {"id":72,"district":"Yuen Long","region":"New Territories"}
+                 * district : {"region":"Hong Kong","district":"Central and Western","id":19}
+                 * image : {"url":"/uploads/team/image/52/image.jpeg"}
+                 * size : 7
+                 * team_name : 岳队
                  */
 
-                private String team_name;
-                private int size;
-                private ImageBeanX image;
                 private DistrictBean district;
+                private ImageBeanX image;
+                private int size;
+                private String team_name;
 
-                public String getTeam_name() {
-                    return team_name;
+                public DistrictBean getDistrict() {
+                    return district;
                 }
 
-                public void setTeam_name(String team_name) {
-                    this.team_name = team_name;
-                }
-
-                public int getSize() {
-                    return size;
-                }
-
-                public void setSize(int size) {
-                    this.size = size;
+                public void setDistrict(DistrictBean district) {
+                    this.district = district;
                 }
 
                 public ImageBeanX getImage() {
@@ -272,47 +278,39 @@ public class MatchDetail {
                     this.image = image;
                 }
 
-                public DistrictBean getDistrict() {
-                    return district;
+                public int getSize() {
+                    return size;
                 }
 
-                public void setDistrict(DistrictBean district) {
-                    this.district = district;
+                public void setSize(int size) {
+                    this.size = size;
                 }
 
-                public static class ImageBeanX {
-                    /**
-                     * url : null
-                     */
+                public String getTeam_name() {
+                    return team_name;
+                }
 
-                    private Object url;
-
-                    public Object getUrl() {
-                        return url;
-                    }
-
-                    public void setUrl(Object url) {
-                        this.url = url;
-                    }
+                public void setTeam_name(String team_name) {
+                    this.team_name = team_name;
                 }
 
                 public static class DistrictBean {
                     /**
-                     * id : 72
-                     * district : Yuen Long
-                     * region : New Territories
+                     * region : Hong Kong
+                     * district : Central and Western
+                     * id : 19
                      */
 
-                    private int id;
-                    private String district;
                     private String region;
+                    private String district;
+                    private int id;
 
-                    public int getId() {
-                        return id;
+                    public String getRegion() {
+                        return region;
                     }
 
-                    public void setId(int id) {
-                        this.id = id;
+                    public void setRegion(String region) {
+                        this.region = region;
                     }
 
                     public String getDistrict() {
@@ -323,12 +321,28 @@ public class MatchDetail {
                         this.district = district;
                     }
 
-                    public String getRegion() {
-                        return region;
+                    public int getId() {
+                        return id;
                     }
 
-                    public void setRegion(String region) {
-                        this.region = region;
+                    public void setId(int id) {
+                        this.id = id;
+                    }
+                }
+
+                public static class ImageBeanX {
+                    /**
+                     * url : /uploads/team/image/52/image.jpeg
+                     */
+
+                    private String url;
+
+                    public String getUrl() {
+                        return url;
+                    }
+
+                    public void setUrl(String url) {
+                        this.url = url;
                     }
                 }
             }

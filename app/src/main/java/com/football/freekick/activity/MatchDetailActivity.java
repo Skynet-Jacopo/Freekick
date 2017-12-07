@@ -119,30 +119,9 @@ public class MatchDetailActivity extends BaseActivity {
                         Logger.json(s);
                         Gson gson = new Gson();
                         MatchDetail fromJson = gson.fromJson(s, MatchDetail.class);
-                        MatchDetail.MatchBean match = fromJson.getMatch();
-
-                        for (int i = 0; i < App.mPitchesBeanList.size(); i++) {
-                            if (match.getPitch_id() == App.mPitchesBeanList.get(i).getId()) {
-                                match.setLocation(App.mPitchesBeanList.get(i).getLocation());
-                                match.setPitch_name(App.mPitchesBeanList.get(i).getName());
-                            }
-                        }
-                        mTvDate.setText(JodaTimeUtil.getDate(match.getPlay_start()));
-                        mTvLocation.setText(match.getLocation());
-                        mTvTime.setText(JodaTimeUtil.getTimeHourMinutes(match.getPlay_start()) + "-" + JodaTimeUtil
-                                .getTimeHourMinutes(match.getPlay_end()));
-                        mTvHomeName.setText(match.getHome_team().getTeam_name()==null?"":match.getHome_team().getTeam_name());
-                        mIvHomeDress.setBackgroundColor(MyUtil.getColorInt(match.getHome_team_color()));
-                        mTvHomeNum.setText(match.getHome_team().getSize() + "");
-                        List<MatchDetail.MatchBean.JoinMatchesBean> join_matches = match.getJoin_matches();
-                        for (int i = 0; i < join_matches.size(); i++) {
-                            if (join_matches.get(i).getStatus().equals("confirmed")) {
-                                MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
-                                mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
-                                mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
-                                        .getJoin_team_color()));
-                                mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
-                            }
+                        if (fromJson.getMatch()!=null){
+                            MatchDetail.MatchBean match = fromJson.getMatch();
+                            setDatas(match);
                         }
                     }
 
@@ -155,10 +134,41 @@ public class MatchDetailActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * 將獲取下來的數據添加到界面
+     * @param match
+     */
+    private void setDatas(MatchDetail.MatchBean match) {
+        for (int i = 0; i < App.mPitchesBeanList.size(); i++) {
+            if (match.getPitch_id() == App.mPitchesBeanList.get(i).getId()) {
+                match.setLocation(App.mPitchesBeanList.get(i).getLocation());
+                match.setPitch_name(App.mPitchesBeanList.get(i).getName());
+            }
+        }
+        mTvDate.setText(JodaTimeUtil.getDate(match.getPlay_start()));
+        mTvLocation.setText(match.getLocation());
+        mTvTime.setText(JodaTimeUtil.getTimeHourMinutes(match.getPlay_start()) + "-" + JodaTimeUtil
+                .getTimeHourMinutes(match.getPlay_end()));
+        mTvHomeName.setText(match.getHome_team().getTeam_name()==null?"":match.getHome_team().getTeam_name());
+        mIvHomeDress.setBackgroundColor(MyUtil.getColorInt(match.getHome_team_color()));
+        mTvHomeNum.setText(match.getSize() + "");
+        List<MatchDetail.MatchBean.JoinMatchesBean> join_matches = match.getJoin_matches();
+        for (int i = 0; i < join_matches.size(); i++) {
+            if (join_matches.get(i).getStatus().equals("confirmed")) {
+                MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
+                mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
+                mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
+                        .getJoin_team_color()));
+                mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
+            }
+        }
+    }
+
     private void initView() {
         mTvBack.setTypeface(App.mTypeface);
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
+        mTvIconLocation.setTypeface(App.mTypeface);
 
         String image = App.mAdvertisementsBean.get(0).getImage();
         ImageLoaderUtils.displayImage(image, mIvTop1);

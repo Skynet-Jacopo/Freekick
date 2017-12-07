@@ -271,8 +271,17 @@ public class MatchesComing {
 
             private int join_team_id;
             private String status;
+            private String id;
             private String join_team_color;
             private TeamBean team;
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
 
             public int getJoin_team_id() {
                 return join_team_id;
@@ -501,6 +510,9 @@ public class MatchesComing {
                 };
             }
 
+            public JoinMatchesBean() {
+            }
+
             @Override
             public int describeContents() {
                 return 0;
@@ -510,21 +522,20 @@ public class MatchesComing {
             public void writeToParcel(Parcel dest, int flags) {
                 dest.writeInt(this.join_team_id);
                 dest.writeString(this.status);
+                dest.writeString(this.id);
                 dest.writeString(this.join_team_color);
                 dest.writeParcelable(this.team, flags);
-            }
-
-            public JoinMatchesBean() {
             }
 
             protected JoinMatchesBean(Parcel in) {
                 this.join_team_id = in.readInt();
                 this.status = in.readString();
+                this.id = in.readString();
                 this.join_team_color = in.readString();
                 this.team = in.readParcelable(TeamBean.class.getClassLoader());
             }
 
-            public static final Parcelable.Creator<JoinMatchesBean> CREATOR = new Parcelable.Creator<JoinMatchesBean>() {
+            public static final Creator<JoinMatchesBean> CREATOR = new Creator<JoinMatchesBean>() {
                 @Override
                 public JoinMatchesBean createFromParcel(Parcel source) {
                     return new JoinMatchesBean(source);

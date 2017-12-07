@@ -13,12 +13,28 @@ import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.AvailableMatches;
+import com.football.freekick.beans.CancelMatch;
+import com.football.freekick.beans.MatchDetail;
 import com.football.freekick.beans.MatchesComing;
+import com.football.freekick.beans.WithDraw;
+import com.football.freekick.http.Url;
+import com.football.freekick.utils.JodaTimeUtil;
+import com.football.freekick.utils.MyUtil;
+import com.football.freekick.utils.PrefUtils;
+import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.orhanobut.logger.Logger;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * 球賽內容頁,最終版,除打分頁以及參與球賽頁,都統一使用此界面
@@ -32,6 +48,7 @@ import butterknife.OnClick;
  */
 public class MatchContentActivity1 extends BaseActivity {
 
+    public static final int REQUEST_CODE_REFRESH = 1;
     @Bind(R.id.tv_back)
     TextView mTvBack;
     @Bind(R.id.tv_friend)
@@ -107,6 +124,9 @@ public class MatchContentActivity1 extends BaseActivity {
     private String where;
     private int type;
     private Context mContext;
+    private MatchDetail.MatchBean mMatch;
+    private String team_id;
+    private String join_match_id = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,36 +135,169 @@ public class MatchContentActivity1 extends BaseActivity {
         mContext = MatchContentActivity1.this;
         ButterKnife.bind(this);
         id = getIntent().getStringExtra("id") == null ? "" : getIntent().getStringExtra("id");
-        where = getIntent().getStringExtra("where") == null ? "" : getIntent().getStringExtra("where");
+//        where = getIntent().getStringExtra("where") == null ? "" : getIntent().getStringExtra("where");
         type = getIntent().getIntExtra("type", 0);
-        MatchesComing.MatchesBean matchesBean = (MatchesComing.MatchesBean) getIntent().getSerializableExtra("model");
+        team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
         initView();//初始化廣告等
         initData();
     }
 
     private void initData() {
-        switch (where) {
-            case "partake":
-                AvailableMatches.MatchesBean model = (AvailableMatches.MatchesBean) getIntent().getSerializableExtra
-                        ("model");
-                initDetail(model);
-                break;
-        }
+        loadingShow();
+        Logger.d(Url.MATCH_DETAIL + id);
+        OkGo.get(Url.MATCH_DETAIL + id)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        MatchDetail fromJson = gson.fromJson(s, MatchDetail.class);
+                        if (fromJson.getMatch() != null) {
+                            mMatch = fromJson.getMatch();
+                            setData();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        loadingDismiss();
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
     }
 
     /**
-     * 從PartakeListFragment跳轉過來的
-     *
-     * @param model
+     * 將獲取下來的數據添加到界面
      */
-    private void initDetail(AvailableMatches.MatchesBean model) {
+    private void setData() {
 
+        for (int i = 0; i < App.mPitchesBeanList.size(); i++) {
+            if (mMatch.getPitch_id() == App.mPitchesBeanList.get(i).getId()) {
+                mMatch.setLocation(App.mPitchesBeanList.get(i).getLocation());
+                mMatch.setPitch_name(App.mPitchesBeanList.get(i).getName());
+            }
+        }
+        mTvDate.setText(JodaTimeUtil.getDate2(mMatch.getPlay_start()));
+        mTvLocation.setText(mMatch.getLocation());
+        mTvTime.setText(JodaTimeUtil.getTime2(mMatch.getPlay_start()) + "-" + JodaTimeUtil
+                .getTime2(mMatch.getPlay_end()));
+        mTvHomeName.setText(mMatch.getHome_team().getTeam_name() == null ? "" : mMatch.getHome_team().getTeam_name());
+        mIvHomeDress.setBackgroundColor(MyUtil.getColorInt(mMatch.getHome_team_color()));
+        mTvHomeNum.setText(mMatch.getSize() + "");
+
+        /**
+         * 1.已落實,我是主隊(不區分客隊是邀請落實的,還是參與進來的)(match status = m,join match status = confirmed)
+         * 2.已落實,我是客隊(不區分是邀請落實的,還是參與進來的)(match status = m,join match status = confirmed)
+         * 3.我已參與,主隊未確認(match status = w,join match status = confirmation_pending)
+         * 4.我是主隊,有隊伍參與,我還未確認(match status = w,join match status = confirmation_pending)
+         * 5.我被邀請,還未接受邀請(match status = i,join match status = invited)
+         * 6.我已邀請別人,別人還未確認(match status = i,join match status = invited)
+         * 7.我不是主隊,也不是客隊,只是來瀏覽的(match status = m,join match status = confirmed?(還不確定))
+         */
+        List<MatchDetail.MatchBean.JoinMatchesBean> join_matches = mMatch.getJoin_matches();
+        switch (type) {
+            case 1://已落實,我是主隊
+                mTvBtn.setText(R.string.cancel_match);
+                for (int i = 0; i < join_matches.size(); i++) {
+                    if (join_matches.get(i).getStatus().equals("confirmed")) {
+                        MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
+                        mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
+                        mIvVisitorDress.setImageResource(R.drawable.ic_dress_visitor);
+                        mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
+                                .getJoin_team_color()));
+                        mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
+                    }
+                }
+                mTvBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        cancelMatch();//主隊取消球賽
+                    }
+                });
+                break;
+            case 2://已落實,我是客隊
+                mTvBtn.setText(R.string.withdraw_the_match);
+                for (int i = 0; i < join_matches.size(); i++) {
+                    if (join_matches.get(i).getStatus().equals("confirmed") && join_matches.get(i).getJoin_team_id()
+                            == Integer.parseInt(team_id)) {
+                        join_match_id = join_matches.get(i).getId() + "";
+                        MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
+                        mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
+                        mIvVisitorDress.setImageResource(R.drawable.ic_dress_visitor);
+                        mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
+                                .getJoin_team_color()));
+                        mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
+                    }
+                }
+                mTvBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!join_match_id.equals(""))
+                            withdrawJoin(join_match_id);//客隊取消參與
+                    }
+                });
+                break;
+            case 3://我已參與,主隊未確認
+                mTvBtn.setText(R.string.withdraw_the_match);
+                for (int i = 0; i < join_matches.size(); i++) {
+                    if (join_matches.get(i).getStatus().equals("confirmation_pending") && join_matches.get(i)
+                            .getJoin_team_id()
+                            == Integer.parseInt(team_id)) {
+                        join_match_id = join_matches.get(i).getId() + "";
+                        MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
+                        mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
+                        mIvVisitorDress.setImageResource(R.drawable.ic_dress_unknow);
+                        mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
+                                .getJoin_team_color()));
+                        mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
+                    }
+                }
+                mTvBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!join_match_id.equals(""))
+                            withdrawJoin(join_match_id);//客隊取消參與
+                    }
+                });
+                break;
+            case 4://我是主隊,有隊伍參與,我還未確認(match status = w,join match status = confirmation_pending)
+                mTvBtn.setText(R.string.decide_to_play);
+                for (int i = 0; i < join_matches.size(); i++) {
+                    if (mMatch.getHome_team().getId() == Integer.parseInt(team_id) && join_matches.get(i).getStatus()
+                            .equals("confirmation_pending")) {
+                        MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
+                        mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
+                        mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
+                                .getJoin_team_color()));
+                        mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
+                    }
+                }
+                mTvBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(mContext,ConfirmationPendingActivity.class);
+                        intent.putExtra("id",id);
+                        startActivityForResult(intent, REQUEST_CODE_REFRESH);
+                    }
+                });
+                break;
+            case 5://我被邀請,還未接受邀請(match status = i,join match status = invited)
+                break;
+            case 6://我已邀請別人,別人還未確認(match status = i,join match status = invited)
+                break;
+            case 7://我不是主隊,也不是客隊,只是來瀏覽的(match status = m,join match status = confirmed?(還不確定))
+                break;
+
+        }
     }
 
     private void initView() {
         mTvBack.setTypeface(App.mTypeface);
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
+        mTvIconLocation.setTypeface(App.mTypeface);
 
         String image = App.mAdvertisementsBean.get(0).getImage();
         ImageLoaderUtils.displayImage(image, mIvTop1);
@@ -207,6 +360,91 @@ public class MatchContentActivity1 extends BaseActivity {
                 break;
             case R.id.tv_btn:
                 break;
+        }
+    }
+
+    /**
+     * 主隊取消比賽(是不是只可以在已落實球賽進到這個界面)
+     */
+    private void cancelMatch() {
+//        http://api.freekick.hk/api/en/matches/<matchID>/cancel
+        String cancelMatchUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + mMatch.getId() +
+                "/cancel";
+        Logger.d(cancelMatchUrl);
+        loadingShow();
+        OkGo.put(cancelMatchUrl)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        CancelMatch fromJson = gson.fromJson(s, CancelMatch.class);
+                        if (fromJson.getMatch() != null) {
+                            ToastUtil.toastShort(getString(R.string.withdraw_success));
+                            setResult(RESULT_OK);
+                            finish();
+                        } else if (fromJson.getErrors() != null) {
+                            ToastUtil.toastShort(fromJson.getErrors());
+                        } else {
+                            ToastUtil.toastShort(getString(R.string.withdraw_failed));
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                        ToastUtil.toastShort(getString(R.string.withdraw_failed));
+                    }
+                });
+    }
+
+    /**
+     * 參與隊取消參與
+     */
+    private void withdrawJoin(String join_match_id) {
+//        http://api.freekick.hk/api/en/join_matches/<joinmatchID>/withdraw
+        String withdrawUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "join_matches/" + join_match_id +
+                "/withdraw";
+        Logger.d(withdrawUrl);
+        loadingShow();
+        OkGo.put(withdrawUrl)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        WithDraw fromJson = gson.fromJson(s, WithDraw.class);
+                        if (fromJson.getJoin_match() != null) {
+                            ToastUtil.toastShort(getString(R.string.withdraw_success));
+                            setResult(RESULT_OK);
+                            finish();
+                        } else if (fromJson.getError() != null) {
+                            ToastUtil.toastShort(fromJson.getError());
+                        } else {
+                            ToastUtil.toastShort(getString(R.string.withdraw_failed));
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        ToastUtil.toastShort(getString(R.string.withdraw_failed));
+                        loadingDismiss();
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_REFRESH&&resultCode == RESULT_OK){
+            type =1;
+            initData();
         }
     }
 }
