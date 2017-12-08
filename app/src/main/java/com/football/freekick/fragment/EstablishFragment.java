@@ -42,6 +42,8 @@ import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 import com.zhy.autolayout.AutoLinearLayout;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,8 +104,8 @@ public class EstablishFragment extends BaseFragment {
     @Bind(R.id.iv_advertisement4)
     ImageView mIvAdvertisement4;
     private Context mContext;
-    private String mStartTime;
-    private String mEndTime;
+    private String mStartTime = "00:00";
+    private String mEndTime = "00:00";
     private List<String> mRegions;//大區
     private List<Area.RegionsBean> mAreaRegions;//解析出的大區
     private List<Area.RegionsBean.DistrictsBean> mDistricts;//解析出的小區
@@ -119,6 +121,7 @@ public class EstablishFragment extends BaseFragment {
     private String home_team_color;
     private List<Advertisements.AdvertisementsBean> mAdvertisementsList;//广告列表
     private String district_id = "";
+    private DateTime mDateTime;
 
     public EstablishFragment() {
         // Required empty public constructor
@@ -147,6 +150,7 @@ public class EstablishFragment extends BaseFragment {
      * 初始化View
      */
     private void initView() {
+        mDateTime = new DateTime();
         initAdvertisements();
     }
 
@@ -256,12 +260,18 @@ public class EstablishFragment extends BaseFragment {
             .tv_reduce, R.id.tv_add, R.id.tv_establish, R.id.iv_advertisement1, R.id.iv_advertisement2, R.id
             .iv_advertisement3, R.id.iv_advertisement4})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.ll_match_date:
-                startActivityForResult(new Intent(mContext, CalenderActivity.class), CHOOSE_DATE);
+                intent.setClass(mContext, CalenderActivity.class);
+                intent.putExtra("dateTime",mDateTime);
+                startActivityForResult(intent, CHOOSE_DATE);
                 break;
             case R.id.ll_match_time:
-                startActivityForResult(new Intent(mContext, ChooseTimeActivity.class), CHOOSE_TIME);
+                intent.setClass(mContext, ChooseTimeActivity.class);
+                intent.putExtra("start_time", mStartTime);
+                intent.putExtra("end_time", mEndTime);
+                startActivityForResult(intent, CHOOSE_TIME);
                 break;
             case R.id.ll_pitch_size:
                 choosePitchSize();
@@ -341,7 +351,7 @@ public class EstablishFragment extends BaseFragment {
         if (StringUtils.isEmpty(mTvPitchName)) {
             // TODO: 2017/11/29 這裡other_pitch應該怎麼傳
             object1.addProperty("other_pitch", "other_pitch");//if pitch_id is NULL, other_pitch is required to fill
-        }else {
+        } else {
             object1.addProperty("pitch_id", pitch_id);
         }
         object.add("match", object1);
@@ -360,7 +370,7 @@ public class EstablishFragment extends BaseFragment {
                             String status = match.getStatus();
                             switch (status) {
                                 case "w":
-                                    ToastUtil.toastShort("未成功匹配到");
+//                                    ToastUtil.toastShort("未成功匹配到");
                                     break;
                                 case "m":
                                     ToastUtil.toastShort("成功匹配");
@@ -405,10 +415,10 @@ public class EstablishFragment extends BaseFragment {
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
         List<String> pitches = new ArrayList<>();
         for (int i = 0; i < App.mPitchesBeanList.size(); i++) {
-            if (App.mPitchesBeanList.get(i).getSize() == pitch_size){
-                if (district_id.equals("")){
+            if (App.mPitchesBeanList.get(i).getSize() == pitch_size) {
+                if (district_id.equals("")) {
                     pitches.add(App.mPitchesBeanList.get(i).getName());
-                }else if ((App.mPitchesBeanList.get(i).getDistrict().getId()+"").equals(district_id)){
+                } else if ((App.mPitchesBeanList.get(i).getDistrict().getId() + "").equals(district_id)) {
                     pitches.add(App.mPitchesBeanList.get(i).getName());
                 }
             }
@@ -420,10 +430,10 @@ public class EstablishFragment extends BaseFragment {
                 mPitchPos = index;
             }
         });
-        if (pitches.size()<=0){
+        if (pitches.size() <= 0) {
             ToastUtil.toastShort(getString(R.string.no_qualified_pitches));
             return;
-        }else {
+        } else {
             loopView.setItems(pitches);
         }
         tvConfirm.setOnClickListener(new View.OnClickListener() {
@@ -514,7 +524,8 @@ public class EstablishFragment extends BaseFragment {
             public void onClick(View view) {
                 popupWindow.dismiss();
                 district_id = mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict_id();
-                mTvArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace("$", " "));
+                mTvArea.setText(mAreaRegions.get(regionPos).getDistricts().get(districtPos).getDistrict().replace
+                        ("$", " "));
                 mTvPitchName.setText("");
 //                ToastUtil.toastShort(district_id);
             }
@@ -555,6 +566,13 @@ public class EstablishFragment extends BaseFragment {
         final RadioButton radio11 = (RadioButton) contentView.findViewById(R.id.radio_11);
         final RadioButton radio7 = (RadioButton) contentView.findViewById(R.id.radio_7);
         final RadioButton radio5 = (RadioButton) contentView.findViewById(R.id.radio_5);
+        if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_5))) {
+            radio5.setChecked(true);
+        } else if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_7))) {
+            radio7.setChecked(true);
+        } else if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_11))) {
+            radio11.setChecked(true);
+        }
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -602,6 +620,7 @@ public class EstablishFragment extends BaseFragment {
             String day = data.getStringExtra("day");
             String month = data.getStringExtra("month");
             String year = data.getStringExtra("year");
+            mDateTime = (DateTime) data.getSerializableExtra("dateTime");
 //            ToastUtil.toastShort(year + "年" + month + "月" + day + "日");
             mTvDate.setText(year + "-" + month + "-" + day);
         } else if (requestCode == CHOOSE_TIME && resultCode == RESULT_OK) {

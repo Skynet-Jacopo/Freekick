@@ -107,6 +107,9 @@ public class ChangeTeamInfoActivity0 extends BaseActivity {
                         Gson gson = new Gson();
                         RegisterResponse json = gson.fromJson(s, RegisterResponse.class);
                         if (json.getStatus().equals("success")) {
+                            RegisterResponse.DataBean data = json.getData();
+                            PrefUtils.putString(App.APP_CONTEXT, "mobile_no", data.getMobile_no() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "username", data.getUsername() + "");
                             Intent intent = new Intent(mContext, ChangeTeamInfoActivity1.class);
                             startActivity(intent);
                         }

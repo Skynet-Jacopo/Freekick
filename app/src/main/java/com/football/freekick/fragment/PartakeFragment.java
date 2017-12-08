@@ -246,12 +246,17 @@ public class PartakeFragment extends Fragment {
     @OnClick({R.id.ll_match_date, R.id.ll_match_time, R.id.ll_pitch_size, R.id.ll_area, R.id.iv_advertisement1, R.id
             .iv_advertisement2, R.id.iv_advertisement3, R.id.iv_advertisement4, R.id.tv_partake})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.ll_match_date:
-                startActivityForResult(new Intent(mContext, CalenderActivity.class), CHOOSE_DATE);
+                intent.setClass(mContext, CalenderActivity.class);
+                startActivityForResult(intent, CHOOSE_DATE);
                 break;
             case R.id.ll_match_time:
-                startActivityForResult(new Intent(mContext, ChooseTimeActivity.class), CHOOSE_TIME);
+                intent.setClass(mContext,ChooseTimeActivity.class);
+                intent.putExtra("start_time",mStartTime);
+                intent.putExtra("end_time",mEndTime);
+                startActivityForResult(intent, CHOOSE_TIME);
                 break;
             case R.id.ll_pitch_size:
                 choosePitchSize();
@@ -406,6 +411,13 @@ public class PartakeFragment extends Fragment {
         final RadioButton radio11 = (RadioButton) contentView.findViewById(R.id.radio_11);
         final RadioButton radio7 = (RadioButton) contentView.findViewById(R.id.radio_7);
         final RadioButton radio5 = (RadioButton) contentView.findViewById(R.id.radio_5);
+        if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_5))) {
+            radio5.setChecked(true);
+        } else if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_7))) {
+            radio7.setChecked(true);
+        } else if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_11))) {
+            radio11.setChecked(true);
+        }
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

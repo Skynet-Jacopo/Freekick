@@ -18,6 +18,7 @@ import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.activity.ArticleActivity;
 import com.football.freekick.activity.MatchContentActivity;
+import com.football.freekick.activity.MatchContentActivity1;
 import com.football.freekick.adapter.MyMatchAdapter0;
 import com.football.freekick.adapter.MyMatchAdapter1;
 import com.football.freekick.baseadapter.ViewHolder;
@@ -219,17 +220,15 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                         cancelMatch(position);
                         break;
                     case 3:
-                        intent.setClass(mContext, MatchContentActivity.class);
-                        intent.putExtra("type",1);
-                        intent.putExtra("secondPos",secondPos);
-                        intent.putExtra("matchesBean",matchesBean);
+                        intent.setClass(mContext, MatchContentActivity1.class);
+                        intent.putExtra("id",mListMatch.get(position).getId()+"");
+                        intent.putExtra("type",2);
                         startActivityForResult(intent, REQUEST_CODE_REFRESH);
                         break;
                     case 4:
-                        intent.setClass(mContext, MatchContentActivity.class);
-                        intent.putExtra("type",2);
-                        intent.putExtra("secondPos",secondPos);
-                        intent.putExtra("matchesBean",matchesBean);
+                        intent.setClass(mContext, MatchContentActivity1.class);
+                        intent.putExtra("id",mListMatch.get(position).getId()+"");
+                        intent.putExtra("type",1);
                         startActivityForResult(intent, REQUEST_CODE_REFRESH);
                         break;
                 }

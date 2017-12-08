@@ -25,8 +25,11 @@ import com.football.freekick.app.BaseActivity;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
 import com.football.freekick.beans.Invite;
+import com.football.freekick.beans.MatchDetail;
 import com.football.freekick.beans.Recommended;
 import com.football.freekick.http.Url;
+import com.football.freekick.utils.JodaTimeUtil;
+import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
@@ -86,6 +89,7 @@ public class MatchInviteActivity extends BaseActivity {
     private List<Recommended.TeamsBean> mList = new ArrayList<>();
     private CommonAdapter mAdapter;
     private String match_id;
+    private MatchDetail.MatchBean mMatch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +106,30 @@ public class MatchInviteActivity extends BaseActivity {
             mList.clear();
         }
         match_id = getIntent().getStringExtra("match_id");
+        loadingShow();
+        Logger.d(Url.MATCH_DETAIL + match_id);
+        OkGo.get(Url.MATCH_DETAIL + match_id)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        MatchDetail fromJson = gson.fromJson(s, MatchDetail.class);
+                        if (fromJson.getMatch() != null) {
+                            mMatch = fromJson.getMatch();
+                            setData();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        loadingDismiss();
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
+
         Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id +
                 "/get_recommended_joiner");
         OkGo.get(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id + "/get_recommended_joiner")
@@ -129,13 +157,33 @@ public class MatchInviteActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * 獲取球賽的詳細信息展示
+     */
+    private void setData() {
+        for (int i = 0; i < App.mPitchesBeanList.size(); i++) {
+            if (mMatch.getPitch_id() == App.mPitchesBeanList.get(i).getId()) {
+                mMatch.setLocation(App.mPitchesBeanList.get(i).getLocation());
+                mMatch.setPitch_name(App.mPitchesBeanList.get(i).getName());
+            }
+        }
+        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mMatch.getHome_team().getImage().getUrl()), mIvPic, R
+                .drawable.icon_default);
+        mTvPitchName.setText(mMatch.getPitch_name());
+        mTvLocation.setText(mMatch.getLocation());
+        mTvTime.setText(JodaTimeUtil.getTime2(mMatch.getPlay_start()) + "-" + JodaTimeUtil
+                .getTime2(mMatch.getPlay_end()));
+        mTvHomeName.setText(mMatch.getHome_team().getTeam_name() == null ? "" : mMatch.getHome_team().getTeam_name());
+        mIvDressHome.setBackgroundColor(MyUtil.getColorInt(mMatch.getHome_team_color()));
+    }
+
     private void initView() {
         mTvBack.setTypeface(App.mTypeface);
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
         mTvIconLocation.setTypeface(App.mTypeface);
-        mTvHomeName.setText(PrefUtils.getString(App.APP_CONTEXT,"team_name",null));
-        mIvDressHome.setBackgroundColor(Color.parseColor("#"+PrefUtils.getString(App.APP_CONTEXT,"color1",null)));
+        mTvHomeName.setText(PrefUtils.getString(App.APP_CONTEXT, "team_name", null));
+        mIvDressHome.setBackgroundColor(Color.parseColor("#" + PrefUtils.getString(App.APP_CONTEXT, "color1", null)));
         mIvDressVisitor.setImageDrawable(getResources().getDrawable(R.drawable.ic_dress_unknow));
 
         if (mRecyclerRecommended != null) {
@@ -208,17 +256,18 @@ public class MatchInviteActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_friend:
-                intent.setClass(mContext,FriendActivity.class);
+                intent.setClass(mContext, FriendActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_notice:
-                intent.setClass(mContext,NoticeActivity.class);
+                intent.setClass(mContext, NoticeActivity.class);
                 startActivity(intent);
                 break;
             case R.id.ll_location:
                 break;
         }
     }
+
     /**
      * 邀請球隊參與Pop
      *
@@ -289,9 +338,9 @@ public class MatchInviteActivity extends BaseActivity {
     private void invite(int position) {
         //http://api.freekick.hk/api/en/matches/invite
         loadingShow();
-        String inviteUrl =Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id + "/invite";
+        String inviteUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id + "/invite";
         JsonObject object = new JsonObject();
-        object.addProperty("invite_team_id",mList.get(position).getId()+"");
+        object.addProperty("invite_team_id", mList.get(position).getId() + "");
         Logger.d(inviteUrl);
         Logger.d(object.toString());
         OkGo.post(inviteUrl)

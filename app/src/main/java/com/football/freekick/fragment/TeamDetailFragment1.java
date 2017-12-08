@@ -257,6 +257,9 @@ public class TeamDetailFragment1 extends Fragment {
                 mTvTeamAverageHeight.setText(getString(R.string.above_180cm));
                 break;
         }
+        int age_range_max = mTeam.getAge_range_max();
+        int age_range_min = mTeam.getAge_range_min();
+        mTvTeamAverageAge.setText(age_range_min + " - " + age_range_max);
         String style = mTeam.getStyle().get(0);
         switch (style) {
             case "short_pass":

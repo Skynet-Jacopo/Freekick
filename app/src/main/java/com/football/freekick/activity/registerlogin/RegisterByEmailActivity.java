@@ -75,10 +75,10 @@ public class RegisterByEmailActivity extends BaseActivity {
      * 注册
      */
     private void register() {
-        if (StringUtils.isEmpty(mEdtName)) {
-            ToastUtil.toastShort(getString(R.string.please_enter_your_name));
-            return;
-        }
+//        if (StringUtils.isEmpty(mEdtName)) {
+//            ToastUtil.toastShort(getString(R.string.please_enter_your_name));
+//            return;
+//        }
         if (StringUtils.isEmpty(mEdtEmail)) {
             ToastUtil.toastShort(getString(R.string.please_enter_your_email));
             return;

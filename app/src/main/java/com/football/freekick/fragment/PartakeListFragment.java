@@ -26,7 +26,6 @@ import com.football.freekick.activity.FriendActivity;
 import com.football.freekick.activity.JoinMatchActivity;
 import com.football.freekick.activity.MatchContentActivity1;
 import com.football.freekick.activity.NoticeActivity;
-import com.football.freekick.activity.ShowMatchActivity;
 import com.football.freekick.adapter.PartakeAdapter;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.beans.AvailableMatches;
@@ -345,10 +344,10 @@ public class PartakeListFragment extends BaseFragment {
                                                         intent.setClass(mContext, JoinMatchActivity.class);
                                                         intent.putExtra("matchesBean", matchesBean);
                                                         break;
-                                                    case "m"://展示或者(如果參與對是自己的話,是不是應該有退出比賽)
-                                                        intent.setClass(mContext, ShowMatchActivity.class);
-                                                        intent.putExtra("matchesBean", matchesBean);
-                                                        break;
+//                                                    case "m"://展示或者(如果參與對是自己的話,是不是應該有退出比賽)
+//                                                        intent.setClass(mContext, ShowMatchActivity.class);
+//                                                        intent.putExtra("matchesBean", matchesBean);
+//                                                        break;
                                                 }
                                                 startActivity(intent);
                                                 break;

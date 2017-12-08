@@ -94,14 +94,11 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
         color1 = intent.getStringExtra("color1");
         color2 = intent.getStringExtra("color2");
         Logger.d("color1--->"+color1+"     color2--->"+color2);
+        Logger.d("color1--->"+Color.parseColor("#"+color1)+"     color2--->"+Color.parseColor("#"+color2));
+        mColorPickerHome.selectGiven(color1);
+        mColorPickerVisitor.selectGiven(color2);
         mIvClothesHome.setBackgroundColor(MyUtil.getColorInt(color1));
         mIvClothesVisitor.setBackgroundColor(MyUtil.getColorInt(color2));
-    }
-
-    private void initView() {
-        color1 = mColorPickerHome.getColorHtml();
-        color2 = mColorPickerVisitor.getColorHtml();
-        mTvBack.setTypeface(App.mTypeface);
         mColorPickerHome.setColorListener(new ColorListener() {
             @Override
             public void onColorSelected(int color) {
@@ -120,6 +117,13 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
                 color2 = mColorPickerVisitor.getColorHtml();
             }
         });
+    }
+
+    private void initView() {
+        color1 = mColorPickerHome.getColorHtml();
+        color2 = mColorPickerVisitor.getColorHtml();
+        mTvBack.setTypeface(App.mTypeface);
+
     }
 
     @OnClick({R.id.tv_back, R.id.tv_complete})

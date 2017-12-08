@@ -368,7 +368,7 @@ public class MatchContentActivity1 extends BaseActivity {
         ImageLoaderUtils.displayImage(image, mIvRight3);
     }
 
-    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.iv_top_1, R.id.iv_top_2, R.id.iv_left_1, R.id
+    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice,R.id.ll_location, R.id.iv_top_1, R.id.iv_top_2, R.id.iv_left_1, R.id
             .iv_left_2, R.id.iv_left_3, R.id.iv_right_1, R.id.iv_right_2, R.id.iv_right_3, R.id.iv_bottom_1, R.id
             .iv_bottom_2, R.id.tv_icon_share_left, R.id.tv_icon_notice_left, R.id.tv_icon_share_right, R.id
             .tv_icon_notice_right, R.id.tv_btn})
@@ -384,6 +384,10 @@ public class MatchContentActivity1 extends BaseActivity {
                 break;
             case R.id.tv_notice:
                 intent.setClass(mContext, NoticeActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_location:
+                intent.setClass(mContext,MapsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.iv_top_1:

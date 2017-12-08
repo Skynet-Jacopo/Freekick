@@ -37,6 +37,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.football.freekick.R;
+import com.orhanobut.logger.Logger;
 
 public class ColorPickerView extends FrameLayout {
 
@@ -92,7 +93,8 @@ public class ColorPickerView extends FrameLayout {
     }
 
     private void onFirstLayout() {
-        selectCenter();
+//        selectCenter();
+//        fireColorListener(-15360);
         loadListeners();
     }
 
@@ -148,6 +150,7 @@ public class ColorPickerView extends FrameLayout {
     }
 
     private boolean onTouchReceived(MotionEvent event) {
+        Logger.d("onTouchReceived走了么,");
         Point snapPoint = new Point((int)event.getX(), (int)event.getY());
         selectedColor = getColorFromBitmap(snapPoint.x, snapPoint.y);
 
@@ -187,6 +190,7 @@ public class ColorPickerView extends FrameLayout {
     }
 
     private void fireColorListener(int color) {
+        Logger.d("你從哪裡來--->"+color);
         if (mColorListener != null) {
             mColorListener.onColorSelected(color);
         }
@@ -245,5 +249,18 @@ public class ColorPickerView extends FrameLayout {
 
     public void selectCenter() {
         setSelectorPoint(getMeasuredWidth()/2 - selector.getWidth()/2, getMeasuredHeight()/2- selector.getHeight()/2);
+    }
+    public void selectGiven(String color) {
+        Logger.d("selectGiven這裡走了吧");
+        fireColorListener(Color.parseColor("#"+color));
+//        for (int i = 0; i < getMeasuredWidth(); i++) {
+//            for (int j = 0; j < getMeasuredHeight(); j++) {
+//                Logger.d("selectGiven這裡走了吧");
+//                if (getColorFromBitmap((float) i, (float) j) == Color.parseColor("#"+color)){
+//                    Logger.d("selectGiven這裡呢");
+//                    setSelectorPoint(i, j);
+//                }
+//            }
+//        }
     }
 }

@@ -16,7 +16,12 @@ import android.widget.TextView;
 import com.football.freekick.R;
 import com.football.freekick.adapter.MyFragmentAdapter;
 import com.football.freekick.fragment.ChooseTimeFragment;
+import com.football.freekick.utils.JodaTimeUtil;
+import com.football.freekick.utils.StringUtils;
+import com.football.freekick.utils.ToastUtil;
 import com.zhy.autolayout.AutoLayoutActivity;
+
+import org.joda.time.DateTime;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -46,6 +51,8 @@ public class ChooseTimeActivity extends AutoLayoutActivity {
     private List<String>      listTitles; //tab名称列表
 
     private Context mContext;
+    private String start_time;
+    private String end_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +60,26 @@ public class ChooseTimeActivity extends AutoLayoutActivity {
         setContentView(R.layout.activity_choose_time);
         mContext = ChooseTimeActivity.this;
         ButterKnife.bind(this);
+        start_time = getIntent().getStringExtra("start_time");
+        end_time = getIntent().getStringExtra("end_time");
+        mTvStartTime.setText(start_time);
+        mTvEndTime.setText(end_time);
         initTabAndViewPager();
     }
 
     @OnClick(R.id.tv_confirm)
     public void onViewClicked() {
-        Intent intent = getIntent();
-        intent.putExtra("start_time", mTvStartTime.getText().toString().trim());
-        intent.putExtra("end_time", mTvEndTime.getText().toString().trim());
-        setResult(RESULT_OK, intent);
-        finish();
+        start_time = StringUtils.getEditText(mTvStartTime);
+        end_time = StringUtils.getEditText(mTvEndTime);
+        if (JodaTimeUtil.compare(start_time,end_time)){
+            Intent intent = getIntent();
+            intent.putExtra("start_time", mTvStartTime.getText().toString().trim());
+            intent.putExtra("end_time", mTvEndTime.getText().toString().trim());
+            setResult(RESULT_OK, intent);
+            finish();
+        }else {
+            ToastUtil.toastShort(getString(R.string.time_error));
+        }
     }
 
     private void initTabAndViewPager() {
@@ -72,11 +89,13 @@ public class ChooseTimeActivity extends AutoLayoutActivity {
         fragment = new ChooseTimeFragment();
         bundle = new Bundle();
         bundle.putString("state", "1");
+        bundle.putString("start_time", start_time);
         fragment.setArguments(bundle);
         listFragments.add(fragment);
         fragment = new ChooseTimeFragment();
         bundle = new Bundle();
         bundle.putString("state", "2");
+        bundle.putString("end_time", end_time);
         fragment.setArguments(bundle);
         listFragments.add(fragment);
 

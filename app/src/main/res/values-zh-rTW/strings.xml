@@ -109,97 +109,7 @@
     <string name="please_choose_the_district">請選擇區域</string>
     <string name="pitch_name">球場名稱</string>
     <string name="expected_number_of_matches">預計作賽人數</string>
-    <string name="text_area">{
-    "regions": [
-        {
-            "region": "港島區",
-            "districts": [
-                {
-                    "district": "中西區",
-                    "district_id": "19"
-                },
-                {
-                    "district": "東區",
-                    "district_id": "20"
-                },
-                {
-                    "district": "南區",
-                    "district_id": "21"
-                },
-                {
-                    "district": "灣仔區",
-                    "district_id": "22"
-                }
-            ]
-        },
-        {
-            "region": "九龍區",
-            "districts": [
-                {
-                    "district": "九龍城區",
-                    "district_id": "23"
-                },
-                {
-                    "district": "觀塘區",
-                    "district_id": "24"
-                },
-                {
-                    "district": "深水埗區",
-                    "district_id": "25"
-                },
-                {
-                    "district": "黃大仙區",
-                    "district_id": "26"
-                },
-                {
-                    "district": "油尖旺區",
-                    "district_id": "27"
-                }
-            ]
-        },
-        {
-            "region": "新界區",
-            "districts": [
-                {
-                    "district": "離島區",
-                    "district_id": "28"
-                },
-                {
-                    "district": "葵青區",
-                    "district_id": "29"
-                },
-                {
-                    "district": "北區",
-                    "district_id": "30"
-                },
-                {
-                    "district": "西貢區",
-                    "district_id": "31"
-                },
-                {
-                    "district": "沙田區",
-                    "district_id": "32"
-                },
-                {
-                    "district": "大埔區",
-                    "district_id": "33"
-                },
-                {
-                    "district": "荃灣區",
-                    "district_id": "34"
-                },
-                {
-                    "district": "屯門區",
-                    "district_id": "35"
-                },
-                {
-                    "district": "元朗區",
-                    "district_id": "36"
-                }
-            ]
-        }
-    ]
-}</string>
+    <string name="text_area">{"regions":[{"region":"港島區","districts":[{"district":"中西區","district_id":"19"},{"district":"東區","district_id":"20"},{"district":"南區","district_id":"21"},{"district":"灣仔區","district_id":"22"}]},{"region":"九龍區","districts":[{"district":"九龍城區","district_id":"23"},{"district":"觀塘區","district_id":"24"},{"district":"深水埗區","district_id":"25"},{"district":"黃大仙區","district_id":"26"},{"district":"油尖旺區","district_id":"27"}]},{"region":"新界區","districts":[{"district":"離島區","district_id":"28"},{"district":"葵青區","district_id":"29"},{"district":"北區","district_id":"30"},{"district":"西貢區","district_id":"31"},{"district":"沙田區","district_id":"32"},{"district":"大埔區","district_id":"33"},{"district":"荃灣區","district_id":"34"},{"district":"屯門區","district_id":"35"},{"district":"元朗區","district_id":"36"}]}]}</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_qualified_pitches">您選擇的條件內沒有符合條件的球場!</string>
     <string name="people_under_5">5人以下</string>
@@ -244,4 +154,5 @@
     <string name="confirmation_pending">待確認</string>
     <string name="invited_already">已邀請</string>
     <string name="accept_the_invitation">接受</string>
+    <string name="time_error">結束時間必須大於開始時間,請重新選擇!</string>
 </resources>

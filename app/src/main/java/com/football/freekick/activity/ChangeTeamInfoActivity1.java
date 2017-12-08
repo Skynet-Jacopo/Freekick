@@ -167,9 +167,9 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
         mTvChange.setTypeface(App.mTypeface);
         age_range_min = PrefUtils.getString(App.APP_CONTEXT, "age_range_min", null);
         age_range_max = PrefUtils.getString(App.APP_CONTEXT, "age_range_max", null);
-        mSeekBar.setValue(12, 85);
-        mSeekBar.setLeftProgressDescription(age_range_min);
-        mSeekBar.setRightProgressDescription(age_range_max);
+        mSeekBar.setValue(Float.parseFloat(age_range_min), Float.parseFloat(age_range_max));
+//        mSeekBar.setLeftProgressDescription(age_range_min);
+//        mSeekBar.setRightProgressDescription(age_range_max);
 
 //        mSeekBar.setRange(Float.parseFloat(age_range_min),Float.parseFloat(age_range_max));
         mSeekBar.setOnRangeChangedListener(new RangeSeekBar.OnRangeChangedListener() {

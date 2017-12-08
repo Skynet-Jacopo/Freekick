@@ -155,7 +155,8 @@ public class JoinMatchActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.ll_location:
-                ToastUtil.toastShort("定位");
+                intent.setClass(mContext,MapsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_reduce:
                 if (visitorNum <= 1) {

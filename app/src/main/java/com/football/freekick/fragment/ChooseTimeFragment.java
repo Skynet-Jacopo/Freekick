@@ -56,6 +56,8 @@ public class ChooseTimeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mState = getArguments().getString("state");
+        String start_time = getArguments().getString("start_time");
+        String end_time = getArguments().getString("end_time");
         for (int i = 0; i < 24; i++) {
             if (i < 10) {
                 hours.add("0" + i);
@@ -63,15 +65,37 @@ public class ChooseTimeFragment extends Fragment {
                 hours.add(i + "");
             }
         }
-        for (int i = 0; i < 60; i++) {
-            if (i < 10) {
-                minutes.add("0" + i);
-            } else {
-                minutes.add(i + "");
-            }
-        }
+//        for (int i = 0; i < 60; i++) {
+//            if (i < 10) {
+//                minutes.add("0" + i);
+//            } else {
+//                minutes.add(i + "");
+//            }
+//        }
+        minutes.add("00");
+        minutes.add("30");
         mLoopView1.setItems(hours);
         mLoopView2.setItems(minutes);
+        switch (mState){
+            case "1":
+                assert start_time != null;
+                String minute = start_time.substring(3);
+                String hour = start_time.substring(0,2);
+                mPosition1 = hours.indexOf(hour);
+                mPosition2 = minutes.indexOf(minute);
+                mLoopView1.setCurrentPosition(mPosition1);
+                mLoopView2.setCurrentPosition(mPosition2);
+                break;
+            case "2":
+                assert end_time != null;
+                String minute1 = end_time.substring(3);
+                String hour1 = end_time.substring(0,2);
+                mPosition1 = hours.indexOf(hour1);
+                mPosition2 = minutes.indexOf(minute1);
+                mLoopView1.setCurrentPosition(mPosition1);
+                mLoopView2.setCurrentPosition(mPosition2);
+                break;
+        }
         mLoopView1.setDividerColor(Color.TRANSPARENT);
         mLoopView2.setDividerColor(Color.TRANSPARENT);
         mLoopView1.setListener(new OnItemSelectedListener() {

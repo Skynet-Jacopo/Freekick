@@ -27,12 +27,13 @@
         <LinearLayout
             android:layout_marginTop="120px"
             android:layout_width="match_parent"
-            android:layout_height="275px"
+            android:layout_height="185px"
             android:layout_marginLeft="64px"
             android:layout_marginRight="64px"
             android:background="@drawable/shape_corner_white"
             android:orientation="vertical">
             <EditText
+                android:visibility="gone"
                 android:inputType="text"
                 android:singleLine="true"
                 android:id="@+id/edt_name"

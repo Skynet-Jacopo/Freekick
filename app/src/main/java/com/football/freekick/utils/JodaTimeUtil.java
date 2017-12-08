@@ -19,6 +19,17 @@ public class JodaTimeUtil {
 //        String str = dateTime2.toString("HH:mm");
 //        return str;
 //    }
+    public static boolean compare(String start,String end) {
+        if (start == null||end == null)
+            return false;
+        DateTime startTime = new DateTime(2017,1,1,Integer.parseInt(start.substring(0,2)),Integer.parseInt(start.substring(3)));
+        DateTime endTime = new DateTime(2017,1,1,Integer.parseInt(end.substring(0,2)),Integer.parseInt(end.substring(3)));
+        if (endTime.getSecondOfDay() >startTime.getSecondOfDay()){
+            return true;
+        }else {
+            return false;
+        }
+    }
     public static String getTimeHourMinutes(String time) {
         if (time == null)
             return "";

@@ -198,6 +198,10 @@ public class LoginPager2Activity extends BaseActivity {
                                     PrefUtils.putString(App.APP_CONTEXT, "logourl", teamsBean.getImage().getUrl() + "");
                                     PrefUtils.putString(App.APP_CONTEXT, "team_name", teamsBean.getTeam_name() + "");
                                     PrefUtils.putString(App.APP_CONTEXT, "size", teamsBean.getSize() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "age_range_max", teamsBean.getAge_range_max() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "age_range_min", teamsBean.getAge_range_min() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "establish_year", teamsBean.getEstablish_year() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "average_height", teamsBean.getAverage_height() + "");
                                     if (teamsBean.getDistrict() != null) {
                                         PrefUtils.putString(App.APP_CONTEXT, "district", teamsBean.getDistrict()
                                                 .getDistrict() + "");
