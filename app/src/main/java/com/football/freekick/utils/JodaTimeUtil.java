@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by ly on 2017/11/26.
@@ -48,8 +49,8 @@ public class JodaTimeUtil {
     }
 
     public static String getDate(String time) {
-        time = time.replace("Z", " UTC");//注意是空格+UTC
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");//注意格式化的表达式
+        time = time.substring(0,time.length()-6);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");//注意格式化的表达式
 
         Date d = null;
         try {
@@ -103,7 +104,7 @@ public class JodaTimeUtil {
         }
         long     time1    = d.getTime();
         DateTime dateTime = new DateTime(time1);
-        return dateTime.toString("d MMM yyyy");
+        return dateTime.toString("dd MMM yyyy", Locale.ENGLISH);
     }
     public static String getTime2(String time) {
         time = time.substring(0,time.length()-6);

@@ -27,6 +27,7 @@ import com.football.freekick.app.BaseFragment;
 import com.football.freekick.beans.Advertisements;
 import com.football.freekick.beans.Area;
 import com.football.freekick.beans.Matches;
+import com.football.freekick.beans.Pitches;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.DateUtil;
 import com.football.freekick.utils.PrefUtils;
@@ -37,6 +38,7 @@ import com.football.freekick.views.loopview.LoopView;
 import com.football.freekick.views.loopview.OnItemSelectedListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.internal.Streams;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
@@ -122,6 +124,7 @@ public class EstablishFragment extends BaseFragment {
     private List<Advertisements.AdvertisementsBean> mAdvertisementsList;//广告列表
     private String district_id = "";
     private DateTime mDateTime;
+    private List<Pitches.PitchesBean> mPitchesList;
 
     public EstablishFragment() {
         // Required empty public constructor
@@ -186,7 +189,9 @@ public class EstablishFragment extends BaseFragment {
      * (如果App中未能获取到)获取广告列表
      */
     private void getAdvertisements() {
-        OkGo.get(Url.ADVERTISEMENTS)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "advertisements";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
@@ -356,7 +361,9 @@ public class EstablishFragment extends BaseFragment {
         }
         object.add("match", object1);
         Logger.json(object.toString());
-        OkGo.post(Url.MATCHES)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches";
+        Logger.d(url);
+        OkGo.post(url)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
@@ -414,12 +421,15 @@ public class EstablishFragment extends BaseFragment {
         LoopView loopView = (LoopView) contentView.findViewById(R.id.loop_view);
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
         List<String> pitches = new ArrayList<>();
+        mPitchesList = new ArrayList<>();
         for (int i = 0; i < App.mPitchesBeanList.size(); i++) {
             if (App.mPitchesBeanList.get(i).getSize() == pitch_size) {
                 if (district_id.equals("")) {
                     pitches.add(App.mPitchesBeanList.get(i).getName());
+                    mPitchesList.add(App.mPitchesBeanList.get(i));
                 } else if ((App.mPitchesBeanList.get(i).getDistrict().getId() + "").equals(district_id)) {
                     pitches.add(App.mPitchesBeanList.get(i).getName());
+                    mPitchesList.add(App.mPitchesBeanList.get(i));
                 }
             }
         }
@@ -435,13 +445,14 @@ public class EstablishFragment extends BaseFragment {
             return;
         } else {
             loopView.setItems(pitches);
+            loopView.setCurrentPosition(mPitchPos);
         }
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
-                mTvPitchName.setText(App.mPitchesBeanList.get(mPitchPos).getName());
-                pitch_id = App.mPitchesBeanList.get(mPitchPos).getId();
+                mTvPitchName.setText(mPitchesList.get(mPitchPos).getName());
+                pitch_id = mPitchesList.get(mPitchPos).getId();
                 Logger.d("pitch_id--->" + pitch_id);
             }
         });
@@ -481,10 +492,13 @@ public class EstablishFragment extends BaseFragment {
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
 
         loopView1.setItems(mRegions);
+        loopView1.setCurrentPosition(regionPos);
         loopView1.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
                 regionPos = index;
+                mPitchPos = 0;
+                districtPos = 0;
                 districtList = new ArrayList<String>();
                 mDistricts = mAreaRegions.get(index).getDistricts();
                 for (int i = 0; i < mDistricts.size(); i++) {
@@ -498,10 +512,11 @@ public class EstablishFragment extends BaseFragment {
                     }
                 }
                 loopView2.setItems(districtList);
+                loopView2.setCurrentPosition(districtPos);
             }
         });
         districtList = new ArrayList<>();
-        mDistricts = mAreaRegions.get(0).getDistricts();
+        mDistricts = mAreaRegions.get(regionPos).getDistricts();
         for (int i = 0; i < mDistricts.size(); i++) {
             String district = mDistricts.get(i).getDistrict();
             String s = null;
@@ -513,9 +528,11 @@ public class EstablishFragment extends BaseFragment {
             }
         }
         loopView2.setItems(districtList);
+        loopView2.setCurrentPosition(districtPos);
         loopView2.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
+                mPitchPos = 0;
                 districtPos = index;
             }
         });
@@ -576,6 +593,7 @@ public class EstablishFragment extends BaseFragment {
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mPitchPos = 0;
                 popupWindow.dismiss();
                 if (radio5.isChecked()) {
                     mTvPitchSize.setText(radio5.getText());
@@ -622,7 +640,8 @@ public class EstablishFragment extends BaseFragment {
             String year = data.getStringExtra("year");
             mDateTime = (DateTime) data.getSerializableExtra("dateTime");
 //            ToastUtil.toastShort(year + "年" + month + "月" + day + "日");
-            mTvDate.setText(year + "-" + month + "-" + day);
+//            mTvDate.setText(year + "-" + month + "-" + day);
+            mTvDate.setText(mDateTime.toString("yyyy-MM-dd"));
         } else if (requestCode == CHOOSE_TIME && resultCode == RESULT_OK) {
             mStartTime = data.getStringExtra("start_time");
             mEndTime = data.getStringExtra("end_time");

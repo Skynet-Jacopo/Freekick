@@ -11,6 +11,7 @@ import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.RegisterResponse;
+import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.google.gson.Gson;
@@ -83,8 +84,16 @@ public class RegisterByEmailActivity extends BaseActivity {
             ToastUtil.toastShort(getString(R.string.please_enter_your_email));
             return;
         }
+        if (!MyUtil.checkEmail(StringUtils.getEditText(mEdtEmail))){
+            ToastUtil.toastShort(getString(R.string.email_error));
+            return;
+        }
         if (StringUtils.isEmpty(mEdtPassWord)) {
             ToastUtil.toastShort(getString(R.string.please_enter_your_password));
+            return;
+        }
+        if (StringUtils.getEditText(mEdtPassWord).length()<6) {
+            ToastUtil.toastShort(getString(R.string.password_error));
             return;
         }
         String url;
@@ -121,6 +130,18 @@ public class RegisterByEmailActivity extends BaseActivity {
                             intent.putExtra("email", StringUtils.getEditText(mEdtEmail));
                             intent.putExtra("password", StringUtils.getEditText(mEdtPassWord));
                             startActivity(intent);
+                        }else if (registerResponse.getStatus().equals("error")){
+                            RegisterResponse.ErrorsBean errors = registerResponse.getErrors();
+                            if (errors.getFull_messages()!=null&&errors.getFull_messages().size()!=0){
+                                ToastUtil.toastShort(errors.getFull_messages().get(0));
+                            }else if (errors.getMobile_no()!=null&&errors.getMobile_no().size()!=0){
+                                ToastUtil.toastShort(errors.getMobile_no().get(0));
+                            }else if (errors.getPassword()!=null&&errors.getPassword().size()!=0){
+                                ToastUtil.toastShort(errors.getPassword().get(0));
+                            }else if (errors.getRegister_type()!=null&&errors.getRegister_type().size()!=0){
+                                ToastUtil.toastShort(errors.getRegister_type().get(0));
+                            }
+
                         }
                     }
 

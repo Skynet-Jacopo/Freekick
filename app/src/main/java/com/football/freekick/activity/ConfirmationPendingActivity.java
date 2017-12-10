@@ -88,8 +88,9 @@ public class ConfirmationPendingActivity extends BaseActivity {
 
     private void initData() {
         loadingShow();
-        Logger.d(Url.MATCH_DETAIL + id);
-        OkGo.get(Url.MATCH_DETAIL + id)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/";//+matchID
+        Logger.d(url + id);
+        OkGo.get(url + id)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {

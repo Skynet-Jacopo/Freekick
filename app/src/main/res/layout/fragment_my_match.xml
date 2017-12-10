@@ -73,7 +73,7 @@
                     android:id="@+id/tv_icon_focus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_lines"
+                    android:text="@string/icon_focus"
                     android:textColor="@color/text_black"
                     android:textSize="30px"/>
 

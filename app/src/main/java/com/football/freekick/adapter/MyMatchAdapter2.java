@@ -75,7 +75,7 @@ public class MyMatchAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
             myHolder1.tvTime.setText(start + " - " + end);
             List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
-            myHolder1.tvLocation.setText(matchesBean.getLocation());
+            myHolder1.tvLocation.setText(matchesBean.getPitch_name());
             myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_green_gray_bg);
             myHolder1.tvState.setText(R.string.accept_the_invitation);
             myHolder1.tvState.setOnClickListener(new View.OnClickListener() {

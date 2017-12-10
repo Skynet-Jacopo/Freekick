@@ -14,6 +14,7 @@ import com.beiing.monthcalendar.listener.GetViewHelper;
 import com.beiing.monthcalendar.listener.OnDateSelectListener;
 import com.beiing.monthcalendar.listener.OnMonthChangeListener;
 import com.beiing.monthcalendar.utils.CalendarUtil;
+import com.football.freekick.utils.ToastUtil;
 import com.orhanobut.logger.Logger;
 import com.zhy.autolayout.AutoLayoutActivity;
 
@@ -44,23 +45,25 @@ public class CalenderActivity extends AutoLayoutActivity {
     TextView mTvConfirm;
     private DateTime mSelectDate;
     private boolean isClicked = false;
-    private DateTime mDateTime;
+    private DateTime now;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calender);
         ButterKnife.bind(this);
+        now = new DateTime();
         mTvLeft.setTypeface(App.mTypeface);
         mTvRight.setTypeface(App.mTypeface);
-        mDateTime = (DateTime) getIntent().getSerializableExtra("dateTime");
-        Logger.d(mDateTime.toString());
+        mSelectDate = (DateTime) getIntent().getSerializableExtra("dateTime") == null ? new DateTime() : (DateTime)
+                getIntent().getSerializableExtra("dateTime");
+        Logger.d(mSelectDate.toString());
         initMonthCalendar();
     }
 
     private void initMonthCalendar() {
-        int monthOfYear = mDateTime.getMonthOfYear();
-        int year = mDateTime.getYear();
+        int monthOfYear = mSelectDate.getMonthOfYear();
+        int year = mSelectDate.getYear();
         mTvMonth.setText(getMonth(monthOfYear));
         mTvYear.setText(" " + year);
         monthCalendar.setGetViewHelper(new GetViewHelper() {
@@ -128,7 +131,7 @@ public class CalenderActivity extends AutoLayoutActivity {
                 return convertView;
             }
         });
-        monthCalendar.setSelectDateTime(mDateTime);
+        monthCalendar.setSelectDateTime(mSelectDate);
         monthCalendar.setOnMonthChangeListener(new OnMonthChangeListener() {
             @Override
             public void onMonthChanged(int currentYear, int currentMonth) {
@@ -199,26 +202,22 @@ public class CalenderActivity extends AutoLayoutActivity {
                 break;
             case R.id.tv_confirm:
                 Intent intent = getIntent();
-                if (!isClicked) {
-                    DateTime dateTime = mDateTime;
-                    int monthOfYear = dateTime.getMonthOfYear();
-                    int year = dateTime.getYear();
-                    int day = dateTime.getDayOfMonth();
-                    intent.putExtra("day", day + "");
-                    intent.putExtra("month", monthOfYear + "");
-                    intent.putExtra("year", year + "");
-                    intent.putExtra("dateTime", mDateTime);
-                } else {
-                    int dayOfMonth = mSelectDate.getDayOfMonth();
-                    int monthOfYear = mSelectDate.getMonthOfYear();
-                    int year = mSelectDate.getYear();
-                    Logger.d(year + "年" + monthOfYear + "月" + dayOfMonth + "日");
 
-                    intent.putExtra("day", dayOfMonth + "");
-                    intent.putExtra("month", monthOfYear + "");
-                    intent.putExtra("year", year + "");
-                    intent.putExtra("dateTime", mSelectDate);
+                if (now.minusMinutes(10).getMillis() > mSelectDate.getMillis()) {
+                    ToastUtil.toastShort(getString(R.string.date_error));
+                    return;
                 }
+
+                int dayOfMonth = mSelectDate.getDayOfMonth();
+                int monthOfYear = mSelectDate.getMonthOfYear();
+                int year = mSelectDate.getYear();
+                Logger.d(year + "年" + monthOfYear + "月" + dayOfMonth + "日");
+
+                intent.putExtra("day", dayOfMonth + "");
+                intent.putExtra("month", monthOfYear + "");
+                intent.putExtra("year", year + "");
+                intent.putExtra("dateTime", mSelectDate);
+
                 setResult(RESULT_OK, intent);
                 finish();
                 break;

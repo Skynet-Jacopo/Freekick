@@ -114,7 +114,9 @@ public class SetUpFragment extends BaseFragment {
     }
 
     private void initData() {
-        OkGo.get(Url.SETTINGS)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "settings";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
@@ -152,7 +154,7 @@ public class SetUpFragment extends BaseFragment {
         mTvRight2.setTypeface(App.mTypeface);
         mTvRight3.setTypeface(App.mTypeface);
         mTvRight4.setTypeface(App.mTypeface);
-        mTvLanguage.setText(App.isChinese ? "繁體中文(香港)" : "English");
+        mTvLanguage.setText(App.isChinese ? "繁體中文" : "English");
         mToggleButton.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
             @Override
             public void onToggle(boolean on) {
@@ -219,7 +221,9 @@ public class SetUpFragment extends BaseFragment {
     //登出
     private void logout() {
         loadingShow();
-        OkGo.delete(Url.SIGN_OUT)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "auth/sign_out";
+        Logger.d(url);
+        OkGo.delete(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {

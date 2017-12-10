@@ -156,12 +156,36 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
         district = PrefUtils.getString(App.APP_CONTEXT, "district_id", null);
         mTvTeamArea.setText(PrefUtils.getString(App.APP_CONTEXT, "district", null) == null ? "" : PrefUtils.getString
                 (App.APP_CONTEXT, "district", null));
-        mTvTeamStyle.setText(PrefUtils.getString(App.APP_CONTEXT, "style", null) == null ? "" : PrefUtils.getString
-                (App.APP_CONTEXT, "style", null));
-        num = Integer.parseInt(PrefUtils.getString(App.APP_CONTEXT, "size", null));
-        mTvTeamLike.setText(PrefUtils.getString(App.APP_CONTEXT, "battle_preference", null) == null ? "" : PrefUtils
-                .getString(App.APP_CONTEXT, "battle_preference", null));
-        mEdtTeamName.setText(PrefUtils.getString(App.APP_CONTEXT,"team_name",null)==null?"":PrefUtils.getString(App.APP_CONTEXT,"team_name",null));
+        String style = PrefUtils.getString(App.APP_CONTEXT, "style", "");
+        switch (style) {
+            case "short_pass":
+                mTvTeamStyle.setText(getString(R.string.short_pass));
+                break;
+            case "long_pass":
+                mTvTeamStyle.setText(getString(R.string.long_pass));
+                break;
+            case "attack":
+                mTvTeamStyle.setText(getString(R.string.attack));
+                break;
+            default:
+                mTvTeamStyle.setText(getString(R.string.short_pass));
+                break;
+        }
+        num = Integer.parseInt(PrefUtils.getString(App.APP_CONTEXT, "size", "7"));
+        String battle_preference = PrefUtils.getString(App.APP_CONTEXT, "battle_preference", "");
+        switch (battle_preference) {
+            case "for_fun":
+                mTvTeamLike.setText(getString(R.string.for_fun));
+                break;
+            case "become_strong":
+                mTvTeamLike.setText(getString(R.string.become_strong));
+                break;
+            default:
+                mTvTeamLike.setText(getString(R.string.for_fun));
+                break;
+        }
+        mEdtTeamName.setText(PrefUtils.getString(App.APP_CONTEXT, "team_name", null) == null ? "" : PrefUtils
+                .getString(App.APP_CONTEXT, "team_name", null));
         mTvUploadPic.setTypeface(App.mTypeface);
         mTvBack.setTypeface(App.mTypeface);
         mTvChange.setTypeface(App.mTypeface);
@@ -175,7 +199,7 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
         mSeekBar.setOnRangeChangedListener(new RangeSeekBar.OnRangeChangedListener() {
             @Override
             public void onRangeChanged(RangeSeekBar view, float min, float max, boolean isFromUser) {
-                ToastUtil.toastShort("小值" + (int) min + ",大值" + (int) max);
+//                ToastUtil.toastShort("小值" + (int) min + ",大值" + (int) max);
                 age_range_min = (int) min + "";
                 age_range_max = (int) max + "";
             }
@@ -241,11 +265,12 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
             ImageLoaderUtils.displayImage(MyUtil.getImageUrl(PrefUtils.getString(App.APP_CONTEXT, "logourl", null)),
                     mIvLogo);
         }
-        String establish_year = PrefUtils.getString(App.APP_CONTEXT, "establish_year", null)==null?"":PrefUtils.getString(App.APP_CONTEXT, "establish_year", null);
+        String establish_year = PrefUtils.getString(App.APP_CONTEXT, "establish_year", null) == null ? "" : PrefUtils
+                .getString(App.APP_CONTEXT, "establish_year", null);
         DateTime time = new DateTime();
         if (establish_year.equals(time.getYear())) {
             mTvYear.setText("今年");
-        }else {
+        } else {
             mTvYear.setText(establish_year);
         }
         mTvPeopleNum.setText(num + "");
@@ -449,10 +474,12 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
 
         loopView1.setItems(mRegions);
+        loopView1.setCurrentPosition(regionPos);
         loopView1.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
                 regionPos = index;
+                districtPos = 0;
                 districtList = new ArrayList<String>();
                 mDistricts = mAreaRegions.get(index).getDistricts();
                 for (int i = 0; i < mDistricts.size(); i++) {
@@ -466,10 +493,11 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
                     }
                 }
                 loopView2.setItems(districtList);
+                loopView2.setCurrentPosition(0);
             }
         });
         districtList = new ArrayList<>();
-        mDistricts = mAreaRegions.get(0).getDistricts();
+        mDistricts = mAreaRegions.get(regionPos).getDistricts();
         for (int i = 0; i < mDistricts.size(); i++) {
             String district = mDistricts.get(i).getDistrict();
             String s = null;
@@ -481,6 +509,7 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
             }
         }
         loopView2.setItems(districtList);
+        loopView2.setCurrentPosition(districtPos);
         loopView2.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {

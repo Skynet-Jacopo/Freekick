@@ -60,12 +60,19 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"/>
-        <activity android:name=".MainActivity">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".TestActivity">
+        <activity
+            android:name=".TestActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".RegisterLoginActivity">
+        <activity
+            android:name=".RegisterLoginActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".language.SelectLanguageActivity"
@@ -73,13 +80,20 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"/>
         <activity
             android:name=".CalenderActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/MyCalendar">
         </activity>
-        <activity android:name=".activity.registerlogin.RegisterPager1Activity">
+        <activity
+            android:name=".activity.registerlogin.RegisterPager1Activity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.registerlogin.RegisterPager2Activity">
+        <activity
+            android:name=".activity.registerlogin.RegisterPager2Activity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.registerlogin.FirstPageActivity">
+        <activity
+            android:name=".activity.registerlogin.FirstPageActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -106,33 +120,55 @@
                 android:resource="@xml/file_paths"/>
         </provider>
 
-        <activity android:name=".activity.registerlogin.RegisterPager3Activity">
+        <activity
+            android:name=".activity.registerlogin.RegisterPager3Activity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.registerlogin.OneTimePagerActivity">
+        <activity
+            android:name=".activity.registerlogin.OneTimePagerActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.registerlogin.LoginPage1Activity">
+        <activity
+            android:name=".activity.registerlogin.LoginPage1Activity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.registerlogin.LoginPager2Activity">
+        <activity
+            android:name=".activity.registerlogin.LoginPager2Activity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.registerlogin.RegisterByEmailActivity">
+        <activity
+            android:name=".activity.registerlogin.RegisterByEmailActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.ChooseTimeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/MyCalendar">
         </activity>
-        <activity android:name=".activity.MatchInviteActivity">
+        <activity
+            android:name=".activity.MatchInviteActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.FiltrateActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleLeft">
         </activity>
-        <activity android:name=".activity.ArticleActivity">
+        <activity
+            android:name=".activity.ArticleActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.MatchRateActivity">
+        <activity
+            android:name=".activity.MatchRateActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.MatchContentActivity">
+        <activity
+            android:name=".activity.MatchContentActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.TeamDetailActivity">
+        <activity
+            android:name=".activity.TeamDetailActivity"
+            android:screenOrientation="portrait">
         </activity>
 
         <service android:name=".service.MyInstanceIDListenerService">
@@ -160,27 +196,49 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent"/>
 
-        <activity android:name=".activity.JoinMatchActivity">
+        <activity
+            android:name=".activity.JoinMatchActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.ShowMatchActivity">
+        <activity
+            android:name=".activity.ShowMatchActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.ChangeTeamInfoActivity1">
+        <activity
+            android:name=".activity.ChangeTeamInfoActivity1"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.ChangeTeamInfoActivity2">
+        <activity
+            android:name=".activity.ChangeTeamInfoActivity2"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.SettingDetailActivity">
+        <activity
+            android:name=".activity.SettingDetailActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.SameAreaTeamActivity">
+        <activity
+            android:name=".activity.SameAreaTeamActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.ChangeTeamInfoActivity0">
+        <activity
+            android:name=".activity.ChangeTeamInfoActivity0"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.FollowedTeamsActivity">
+        <activity
+            android:name=".activity.FollowedTeamsActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.MatchDetailActivity">
+        <activity
+            android:name=".activity.MatchDetailActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.NoticeActivity">
+        <activity
+            android:name=".activity.NoticeActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.FriendActivity">
+        <activity
+            android:name=".activity.FriendActivity"
+            android:screenOrientation="portrait">
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -198,9 +256,13 @@
             android:name=".activity.MapsActivity"
             android:label="@string/title_activity_maps">
         </activity>
-        <activity android:name=".activity.MatchContentActivity1">
+        <activity
+            android:name=".activity.MatchContentActivity1"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.ConfirmationPendingActivity">
+        <activity
+            android:name=".activity.ConfirmationPendingActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -89,6 +89,8 @@ public class MineFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        initData();
+        mTvFriend.setTypeface(App.mTypeface);
+        mTvNotice.setTypeface(App.mTypeface);
         initDatas();//初始化動態和焦點
     }
 
@@ -103,7 +105,9 @@ public class MineFragment extends BaseFragment {
             news.clear();
         }
         loadingShow();
-        OkGo.get(Url.ARTICLES)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "articles";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
@@ -194,7 +198,7 @@ public class MineFragment extends BaseFragment {
         //TabLayout加载viewpager
         mTabLayout.setupWithViewPager(mViewpager);
         mTabLayout.setTabsFromPagerAdapter(fragmentPagerAdapter);
-        setIndicator(mContext, mTabLayout, 20, 20);
+        setIndicator(mContext, mTabLayout, 10, 10);
         mViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

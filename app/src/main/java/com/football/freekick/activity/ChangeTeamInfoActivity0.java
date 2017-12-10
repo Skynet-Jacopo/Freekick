@@ -2,18 +2,15 @@ package com.football.freekick.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
-import com.football.freekick.activity.registerlogin.RegisterPager1Activity;
-import com.football.freekick.activity.registerlogin.RegisterPager2Activity;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.RegisterResponse;
-import com.football.freekick.http.Url;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
@@ -44,6 +41,8 @@ public class ChangeTeamInfoActivity0 extends BaseActivity {
     EditText mEdtUserName;
     @Bind(R.id.edt_phone_num)
     EditText mEdtPhoneNum;
+    @Bind(R.id.tv_back)
+    TextView mTvBack;
 
     private Context mContext;
 
@@ -61,7 +60,7 @@ public class ChangeTeamInfoActivity0 extends BaseActivity {
     private void initView() {
         mTvUserIcon.setTypeface(App.mTypeface);
         mTvPhoneIcon.setTypeface(App.mTypeface);
-
+        mTvBack.setTypeface(App.mTypeface);
     }
 
     private void initData() {
@@ -71,11 +70,16 @@ public class ChangeTeamInfoActivity0 extends BaseActivity {
         mEdtUserName.setText(username);
     }
 
-    @OnClick(R.id.tv_next)
-    public void onViewClicked() {
-//        next();
-        putNameAndPhone();
-//        startActivity(new Intent(mContext, RegisterPager2Activity.class));
+    @OnClick({R.id.tv_next, R.id.tv_back})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_next:
+                putNameAndPhone();
+                break;
+            case R.id.tv_back:
+                finish();
+                break;
+        }
     }
 
     /**
@@ -97,7 +101,9 @@ public class ChangeTeamInfoActivity0 extends BaseActivity {
         object1.addProperty("mobile_no", StringUtils.getEditText(mEdtPhoneNum));
         object.add("user", object1);
         Logger.json(object.toString());
-        OkGo.put(Url.REGISTER)
+        String url = App.isChinese ? "http://api.freekick.hk/api/zh_HK/auth" : "http://api" +
+                ".freekick.hk/api/en/auth";
+        OkGo.put(url)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override

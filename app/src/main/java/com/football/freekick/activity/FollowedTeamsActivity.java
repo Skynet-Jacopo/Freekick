@@ -46,6 +46,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -55,16 +56,16 @@ import okhttp3.Response;
 public class FollowedTeamsActivity extends BaseActivity {
 
     @Bind(R.id.tv_back)
-    TextView     mTvBack;
+    TextView mTvBack;
     @Bind(R.id.recycler_followed)
     RecyclerView mRecyclerFollowed;
     @Bind(R.id.ll_parent)
     LinearLayout mLlParent;
     private List<Followings.TeamsBean> mFollowingTeams;
     private ArrayList<MatchesComing.MatchesBean> mListWait = new ArrayList<>();
-    private Context       mContext;
+    private Context mContext;
     private CommonAdapter mAdapter;
-    private String        team_id;
+    private String team_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +98,7 @@ public class FollowedTeamsActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson       gson     = new Gson();
+                        Gson gson = new Gson();
                         Followings fromJson = gson.fromJson(s, Followings.class);
                         if (fromJson.getTeams().size() > 0) {
                             mFollowingTeams.addAll(fromJson.getTeams());
@@ -133,7 +134,7 @@ public class FollowedTeamsActivity extends BaseActivity {
             @Override
             public void convert(ViewHolder holder, Followings.TeamsBean teamsBean) {
                 final int itemPosition = holder.getItemPosition();
-                ImageView ivPic        = holder.getView(R.id.iv_pic);
+                ImageView ivPic = holder.getView(R.id.iv_pic);
                 holder.setText(R.id.tv_attention, getString(R.string.unfollow));
                 ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivPic, R.drawable
                         .icon_default);
@@ -179,14 +180,15 @@ public class FollowedTeamsActivity extends BaseActivity {
         loadingShow();
         Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mFollowingTeams.get(position).getId() +
                 "/unfollow");
-        OkGo.delete(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mFollowingTeams.get(position).getId() +
+        OkGo.delete(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mFollowingTeams.get(position)
+                .getId() +
                 "/unfollow")
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson   gson   = new Gson();
+                        Gson gson = new Gson();
                         Follow follow = gson.fromJson(s, Follow.class);
                         if (follow.getSuccess() != null) {
                             ToastUtil.toastShort(follow.getSuccess());
@@ -219,7 +221,7 @@ public class FollowedTeamsActivity extends BaseActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         TextView tviconclose = (TextView) contentView.findViewById(R.id.tv_icon_close);
         tviconclose.setTypeface(App.mTypeface);
-        TextView tvnewmatch         = (TextView) contentView.findViewById(R.id.tv_new_match);
+        TextView tvnewmatch = (TextView) contentView.findViewById(R.id.tv_new_match);
         TextView tvpartakethismatch = (TextView) contentView.findViewById(R.id.tv_partake_this_match);
         tviconclose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,14 +278,16 @@ public class FollowedTeamsActivity extends BaseActivity {
     private void getMyFirstMatch(final int itemPosition) {
         final String team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
         loadingShow();
-        OkGo.get(Url.MATCHES_COMING)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/coming";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
                         loadingDismiss();
-                        Gson                            gson    = new Gson();
-                        MatchesComing                   json    = gson.fromJson(s, MatchesComing.class);
+                        Gson gson = new Gson();
+                        MatchesComing json = gson.fromJson(s, MatchesComing.class);
                         List<MatchesComing.MatchesBean> matches = json.getMatches();
                         if (matches != null && matches.size() > 0)
                             for (int i = 0; i < matches.size(); i++) {
@@ -293,7 +297,7 @@ public class FollowedTeamsActivity extends BaseActivity {
                                         matches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
                                     }
                                 }
-                                if (matches.get(i).getStatus().equals("w")&& !gson.toJson(matches.get(i)
+                                if (matches.get(i).getStatus().equals("w") && !gson.toJson(matches.get(i)
                                         .getJoin_matches()).contains("confirmation_pending")) {
                                     if (matches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {
                                         mListWait.add(matches.get(i));
@@ -328,13 +332,13 @@ public class FollowedTeamsActivity extends BaseActivity {
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
-        TextView                  tvnewmatch  = (TextView) contentView.findViewById(R.id.tv_new_match);
-        TextView                  tvstate     = (TextView) contentView.findViewById(R.id.tv_state);
-        TextView                  tvLocation  = (TextView) contentView.findViewById(R.id.tv_location);
-        TextView                  tvTime      = (TextView) contentView.findViewById(R.id.tv_time);
-        TextView                  tvHomeName  = (TextView) contentView.findViewById(R.id.tv_home_name);
-        ImageView                 ivHomeLogo  = (ImageView) contentView.findViewById(R.id.iv_home_logo);
-        TextView                  tvDate      = (TextView) contentView.findViewById(R.id.tv_date);
+        TextView tvnewmatch = (TextView) contentView.findViewById(R.id.tv_new_match);
+        TextView tvstate = (TextView) contentView.findViewById(R.id.tv_state);
+        TextView tvLocation = (TextView) contentView.findViewById(R.id.tv_location);
+        TextView tvTime = (TextView) contentView.findViewById(R.id.tv_time);
+        TextView tvHomeName = (TextView) contentView.findViewById(R.id.tv_home_name);
+        ImageView ivHomeLogo = (ImageView) contentView.findViewById(R.id.iv_home_logo);
+        TextView tvDate = (TextView) contentView.findViewById(R.id.tv_date);
         MatchesComing.MatchesBean matchesBean = mListWait.get(0);
         tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
         ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
@@ -343,7 +347,7 @@ public class FollowedTeamsActivity extends BaseActivity {
         String date = JodaTimeUtil.getDate2(matchesBean.getPlay_start());
         tvDate.setText(date);
         String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
-        String end   = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
+        String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
         tvTime.setText(start + " - " + end);
         tvLocation.setText(matchesBean.getLocation());
         tvstate.setOnClickListener(new View.OnClickListener() {
@@ -395,9 +399,9 @@ public class FollowedTeamsActivity extends BaseActivity {
     private void invite(int position) {
         //http://api.freekick.hk/api/en/matches/invite
         loadingShow();
-        String     inviteUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + mListWait.get(0)
+        String inviteUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + mListWait.get(0)
                 .getId() + "/invite";
-        JsonObject object    = new JsonObject();
+        JsonObject object = new JsonObject();
         object.addProperty("invite_team_id", mFollowingTeams.get(position).getId() + "");
         Logger.d(inviteUrl);
         Logger.d(object.toString());
@@ -408,7 +412,7 @@ public class FollowedTeamsActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson   gson   = new Gson();
+                        Gson gson = new Gson();
                         Invite invite = gson.fromJson(s, Invite.class);
                         if (invite.getSuccess() != null) {
                             ToastUtil.toastShort(invite.getSuccess());
@@ -437,5 +441,10 @@ public class FollowedTeamsActivity extends BaseActivity {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
         getWindow().setAttributes(lp);
+    }
+
+    @OnClick(R.id.tv_back)
+    public void onViewClicked() {
+        finish();
     }
 }

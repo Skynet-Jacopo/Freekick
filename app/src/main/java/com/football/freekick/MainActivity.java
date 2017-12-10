@@ -122,6 +122,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             case 4:
                 mainRadiogroup.check(R.id.main_mine);
                 break;
+            case 5:
+                mainRadiogroup.check(R.id.main_set_up);
+                break;
         }
 
         //因切圖尺寸不一,故而設置drawable邊界

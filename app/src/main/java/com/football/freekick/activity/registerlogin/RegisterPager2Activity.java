@@ -159,7 +159,7 @@ public class RegisterPager2Activity extends BaseActivity {
         mSeekBar.setOnRangeChangedListener(new RangeSeekBar.OnRangeChangedListener() {
             @Override
             public void onRangeChanged(RangeSeekBar view, float min, float max, boolean isFromUser) {
-                ToastUtil.toastShort("小值" + (int) min + ",大值" + (int) max);
+//                ToastUtil.toastShort("小值" + (int) min + ",大值" + (int) max);
                 age_range_min = (int) min + "";
                 age_range_max = (int) max + "";
             }

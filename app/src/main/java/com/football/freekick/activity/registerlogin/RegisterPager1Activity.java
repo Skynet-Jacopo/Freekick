@@ -89,7 +89,10 @@ public class RegisterPager1Activity extends BaseActivity {
         object1.addProperty("password", mPassword);
         object.add("user", object1);
         Logger.json(object.toString());
-        OkGo.post(Url.LOGINURL)
+        String url = App.isChinese ? "http://api.freekick.hk/api/zh_HK/auth/sign_in" :
+                "http://api.freekick.hk/api/en/auth/sign_in";
+        Logger.d(url);
+        OkGo.post(url)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
@@ -163,7 +166,9 @@ public class RegisterPager1Activity extends BaseActivity {
         object1.addProperty("mobile_no", StringUtils.getEditText(mEdtPhoneNum));
         object.add("user", object1);
         Logger.json(object.toString());
-        OkGo.put(Url.REGISTER)
+        String url = App.isChinese ? "http://api.freekick.hk/api/zh_HK/auth" : "http://api" +
+                ".freekick.hk/api/en/auth";
+        OkGo.put(url)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
@@ -175,6 +180,19 @@ public class RegisterPager1Activity extends BaseActivity {
                         if (json.getStatus().equals("success")) {
                             Intent intent = new Intent(mContext, RegisterPager2Activity.class);
                             startActivity(intent);
+                        } else if (json.getStatus().equals("error")) {
+                            RegisterResponse.ErrorsBean errors = json.getErrors();
+                            if (errors.getFull_messages() != null && errors.getFull_messages().size() != 0) {
+                                ToastUtil.toastShort(errors.getFull_messages().get(0));
+                            } else if (errors.getMobile_no() != null && errors.getMobile_no().size() != 0) {
+                                ToastUtil.toastShort(errors.getMobile_no().get(0));
+                            } else if (errors.getPassword() != null && errors.getPassword().size() != 0) {
+                                ToastUtil.toastShort(errors.getPassword().get(0));
+                            } else if (errors.getRegister_type() != null && errors.getRegister_type().size() != 0) {
+                                ToastUtil.toastShort(errors.getRegister_type().get(0));
+                            }
+                        } else {
+                            ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
                         }
                     }
 

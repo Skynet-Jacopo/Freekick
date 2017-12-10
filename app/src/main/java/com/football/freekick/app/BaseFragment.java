@@ -12,7 +12,9 @@ import com.football.freekick.utils.LoadingDialogUtil;
 public class BaseFragment extends Fragment {
 
     private Dialog mLoadingDialog;
-
+    public static final String BaseUrl = "http://api.freekick.hk/api/";
+    public static final String ZH_HK = "zh_HK/";
+    public static final String EN = "en/";
     /**
      * Progress   Dialog
      */

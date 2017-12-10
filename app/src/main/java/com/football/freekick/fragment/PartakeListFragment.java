@@ -60,49 +60,49 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  */
 public class PartakeListFragment extends BaseFragment {
-    public static final int CHOOSE_DATE           = 2;
+    public static final int CHOOSE_DATE = 2;
     public static final int FILTRATE_REQUEST_CODE = 1;
     public static final int REQUEST_CODE_DETAIL = 3;
 
     public static PartakeListFragment mPartakeListFragment;
     @Bind(R.id.text)
-    TextView     mText;
+    TextView mText;
     @Bind(R.id.tv_icon_filtrate)
-    TextView     mTvIconFiltrate;
+    TextView mTvIconFiltrate;
     @Bind(R.id.tv_friend)
-    TextView     mTvFriend;
+    TextView mTvFriend;
     @Bind(R.id.tv_notice)
-    TextView     mTvNotice;
+    TextView mTvNotice;
     @Bind(R.id.tv_icon_left)
-    TextView     mTvIconLeft;
+    TextView mTvIconLeft;
     @Bind(R.id.tv_icon_date)
-    TextView     mTvIconDate;
+    TextView mTvIconDate;
     @Bind(R.id.tv_icon_right)
-    TextView     mTvIconRight;
+    TextView mTvIconRight;
     @Bind(R.id.tv_pitch_size)
-    TextView     mTvPitchSize;
+    TextView mTvPitchSize;
     @Bind(R.id.tv_icon_down)
-    TextView     mTvIconDown;
+    TextView mTvIconDown;
     @Bind(R.id.tv_date)
-    TextView     mTvDate;
+    TextView mTvDate;
     @Bind(R.id.recycler_partake)
     RecyclerView mRecyclerPartake;
     @Bind(R.id.ll_content)
     LinearLayout mLlContent;
     private PartakeFragment mPartakeFragment;
-    private Context         mContext;
+    private Context mContext;
 
 
-    private DateTime      mDateTime;
-    private String        pitch_size;
-    private String        district_id;
+    private DateTime mDateTime;
+    private String pitch_size;
+    private String district_id;
     private MypopupWindow mPopupWindow;
-    private String mStartTime     = "00:00";
-    private String mEndTime       = "00:00";
-    private String size           = "";//默認球隊人數
+    private String mStartTime = "00:00";
+    private String mEndTime = "00:00";
+    private String size = "";//默認球隊人數
     private String average_height = "";//默認平均高度
-    private String age_range      = "";//默認球隊年齡
-    private String style          = "";//默認風格
+    private String age_range = "";//默認球隊年齡
+    private String style = "";//默認風格
     private PartakeAdapter mAdapter;
     private List<AvailableMatches.MatchesBean> mMatchList = new ArrayList<>();
 
@@ -157,9 +157,9 @@ public class PartakeListFragment extends BaseFragment {
         Logger.d("image--->" + PrefUtils.getString(App.APP_CONTEXT, "logourl", null));
 
         String play_start = StringUtils.getEditText(mTvDate) + " " + mStartTime + ":00";
-        String play_end   = StringUtils.getEditText(mTvDate) + " " + mEndTime + ":00";
+        String play_end = StringUtils.getEditText(mTvDate) + " " + mEndTime + ":00";
 
-        JsonObject object  = new JsonObject();
+        JsonObject object = new JsonObject();
         JsonObject object1 = new JsonObject();
         object1.addProperty("play_start", play_start);
         object1.addProperty("play_end", play_end);
@@ -176,9 +176,10 @@ public class PartakeListFragment extends BaseFragment {
             object1.addProperty("style", style);
         object.add("get_available_match_input", object1);
         Logger.json(object.toString());
-        Logger.d(Url.AVAILABLE_MATCHES + PrefUtils.getString(App.APP_CONTEXT, "team_id", null) + "/available_matches");
         loadingShow();
-        OkGo.post(Url.AVAILABLE_MATCHES + PrefUtils.getString(App.APP_CONTEXT, "team_id", null) + "/available_matches")
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "teams/";
+        Logger.d(url + PrefUtils.getString(App.APP_CONTEXT, "team_id", null) + "/available_matches");
+        OkGo.post(url + PrefUtils.getString(App.APP_CONTEXT, "team_id", null) + "/available_matches")
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
@@ -293,11 +294,11 @@ public class PartakeListFragment extends BaseFragment {
                                 "    ]\n" +
                                 "}";
 //                        Logger.json(str);
-                        Gson             gson    = new Gson();
-                        if (!s.contains("[")&&!s.contains("]")){
+                        Gson gson = new Gson();
+                        if (!s.contains("[") && !s.contains("]")) {
                             NoMatches noMatches = gson.fromJson(s, NoMatches.class);
                             ToastUtil.toastShort(noMatches.getMatches());
-                        }else {
+                        } else {
                             AvailableMatches matches = gson.fromJson(s, AvailableMatches.class);
                             if (matches.getMatches().size() <= 0) {
                                 mMatchList.clear();
@@ -306,7 +307,8 @@ public class PartakeListFragment extends BaseFragment {
                             } else {
                                 mMatchList.addAll(matches.getMatches());
                                 AvailableMatches.MatchesBean matchesBean = new AvailableMatches.MatchesBean();
-                                matchesBean.setDefault_image(MyUtil.getImageUrl(App.mAdvertisementsBean.get(0).getImage()));
+                                matchesBean.setDefault_image(MyUtil.getImageUrl(App.mAdvertisementsBean.get(0)
+                                        .getImage()));
                                 if (mMatchList.size() >= 2) {
                                     mMatchList.add(2, matchesBean);
                                 } else if (mMatchList.size() == 1) {
@@ -333,7 +335,7 @@ public class PartakeListFragment extends BaseFragment {
                                          * 6.已參與,待確認
                                          * 7.已參與,且已確認
                                          */
-                                        Intent                       intent      = new Intent();
+                                        Intent intent = new Intent();
                                         AvailableMatches.MatchesBean matchesBean = mMatchList.get(position);
                                         switch (state) {
                                             case 1:
@@ -370,14 +372,14 @@ public class PartakeListFragment extends BaseFragment {
                                                 break;
                                             case 6://已參與,待確認
                                                 intent.setClass(mContext, MatchContentActivity1.class);
-                                                intent.putExtra("id",mMatchList.get(position).getId()+"");
-                                                intent.putExtra("type",3);
-                                                startActivityForResult(intent,REQUEST_CODE_DETAIL);
+                                                intent.putExtra("id", mMatchList.get(position).getId() + "");
+                                                intent.putExtra("type", 3);
+                                                startActivityForResult(intent, REQUEST_CODE_DETAIL);
                                                 break;
                                             case 7://已參與,且已確認
                                                 intent.setClass(mContext, MatchContentActivity1.class);
-                                                intent.putExtra("id",mMatchList.get(position).getId()+"");
-                                                intent.putExtra("type",2);
+                                                intent.putExtra("id", mMatchList.get(position).getId() + "");
+                                                intent.putExtra("type", 2);
                                                 startActivityForResult(intent, REQUEST_CODE_DETAIL);
                                                 break;
                                         }
@@ -403,7 +405,7 @@ public class PartakeListFragment extends BaseFragment {
      * @param position
      */
     private void joinMatch(int position) {
-        JsonObject object  = new JsonObject();
+        JsonObject object = new JsonObject();
         JsonObject object1 = new JsonObject();
         object1.addProperty("match_id", mMatchList.get(position).getId() + "");
         object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
@@ -411,13 +413,15 @@ public class PartakeListFragment extends BaseFragment {
         object1.addProperty("size", PrefUtils.getString(App.APP_CONTEXT, "size", null));
         object.add("join_match", object1);
         Logger.json(object.toString());
-        OkGo.post(Url.JOIN_MATCHES)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "join_matches";
+        Logger.d(url);
+        OkGo.post(url)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
-                        Gson      gson      = new Gson();
+                        Gson gson = new Gson();
                         JoinMatch joinMatch = gson.fromJson(s, JoinMatch.class);
                         if (joinMatch.getJoin_match() != null) {
                             ToastUtil.toastShort(R.string.match_success);
@@ -444,7 +448,7 @@ public class PartakeListFragment extends BaseFragment {
     @OnClick({R.id.tv_date, R.id.tv_icon_filtrate, R.id.tv_friend, R.id.tv_notice, R.id.tv_icon_left, R.id
             .tv_icon_date, R.id.tv_icon_right, R.id.tv_pitch_size, R.id.tv_icon_down, R.id.text})
     public void onViewClicked(View view) {
-        Intent   intent   = new Intent();
+        Intent intent = new Intent();
         DateTime dateTime = null;
         switch (view.getId()) {
             case R.id.tv_icon_filtrate:
@@ -469,7 +473,9 @@ public class PartakeListFragment extends BaseFragment {
             case R.id.tv_date:
             case R.id.tv_icon_date:
 //                ToastUtil.toastShort("日期");
-                startActivityForResult(new Intent(mContext, CalenderActivity.class), CHOOSE_DATE);
+                intent.setClass(mContext, CalenderActivity.class);
+                intent.putExtra("dateTime", mDateTime);
+                startActivityForResult(intent, CHOOSE_DATE);
                 break;
             case R.id.tv_icon_right:
 //                ToastUtil.toastShort("右");
@@ -502,6 +508,17 @@ public class PartakeListFragment extends BaseFragment {
         mStartTime = mPartakeFragment.mStartTime;
         mEndTime = mPartakeFragment.mEndTime;
         pitch_size = mPartakeFragment.pitch_size;
+        switch (mPartakeFragment.pitch_size) {
+            case "5":
+                mTvPitchSize.setText(getString(R.string.pitch_size_5));
+                break;
+            case "7":
+                mTvPitchSize.setText(getString(R.string.pitch_size_7));
+                break;
+            case "11":
+                mTvPitchSize.setText(getString(R.string.pitch_size_11));
+                break;
+        }
         mTvDate.setText(mDateTime.toString("yyyy-MM-dd"));
         district_id = mPartakeFragment.district_id;
 
@@ -605,13 +622,14 @@ public class PartakeListFragment extends BaseFragment {
                 style = data.getStringExtra("style");
 
         } else if (requestCode == CHOOSE_DATE && resultCode == RESULT_OK) {
-            String day   = data.getStringExtra("day");
+            String day = data.getStringExtra("day");
             String month = data.getStringExtra("month");
-            String year  = data.getStringExtra("year");
+            String year = data.getStringExtra("year");
             mDateTime = (DateTime) data.getSerializableExtra("dateTime");
 //            ToastUtil.toastShort(year + "年" + month + "月" + day + "日");
-            mTvDate.setText(year + "-" + month + "-" + day);
-        }else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK){//回來刷新
+//            mTvDate.setText(year + "-" + month + "-" + day);
+            mTvDate.setText(mDateTime.toString("yyyy-MM-dd"));
+        } else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {//回來刷新
             getAvailableAatches();
         }
     }

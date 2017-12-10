@@ -62,8 +62,8 @@
                 android:id="@+id/iv_pic"
                 android:layout_width="match_parent"
                 android:layout_height="320px"
-                android:scaleType="fitXY"
-                android:src="@color/black_blue"/>
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_team_bg"/>
 
             <TextView
                 android:layout_width="match_parent"

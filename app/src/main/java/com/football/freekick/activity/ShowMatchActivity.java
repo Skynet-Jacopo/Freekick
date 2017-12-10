@@ -214,7 +214,9 @@ public class ShowMatchActivity extends BaseActivity {
         object1.addProperty("size", PrefUtils.getString(App.APP_CONTEXT, "size", null));
         object.add("join_match", object1);
         Logger.json(object.toString());
-        OkGo.post(Url.JOIN_MATCHES)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "join_matches";
+        Logger.d(url);
+        OkGo.post(url)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override

@@ -276,7 +276,8 @@
                     app:hintBGWith="20dp"
                     app:lineColorEdge="#88beff"
                     app:lineColorSelected="@color/white"
-                    app:markTextArray="@array/markArray"
+
+                    app:progressHintMode="alwaysShow"
                     app:max="85"
                     app:min="12"
                     app:seekBarHeight="4px"

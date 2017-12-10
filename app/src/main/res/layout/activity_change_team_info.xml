@@ -273,6 +273,7 @@
                     android:layout_marginTop="26px"
                     app:cellMode="other"
                     app:hintBGHeight="20dp"
+                    app:progressHintMode="alwaysShow"
                     app:hintBGWith="20dp"
                     app:lineColorEdge="#88beff"
                     app:lineColorSelected="@color/white"

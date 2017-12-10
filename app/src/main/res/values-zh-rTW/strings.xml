@@ -150,9 +150,11 @@
     <string name="team_detail">球隊詳情</string>
     <string name="team_average_age">球隊平均年齡</string>
     <string name="match_fail">約賽失敗</string>
-    <string name="please_verify_your_account_first">請在郵箱驗證登錄</string>
+    <string name="please_verify_your_account_first">請先到您的電子郵箱確認並啟動用戶</string>
     <string name="confirmation_pending">待確認</string>
     <string name="invited_already">已邀請</string>
     <string name="accept_the_invitation">接受</string>
     <string name="time_error">結束時間必須大於開始時間,請重新選擇!</string>
+    <string name="email_error">請輸入正確的郵箱格式!</string>
+    <string name="password_error">密碼長度要求最小為6位!</string>
 </resources>

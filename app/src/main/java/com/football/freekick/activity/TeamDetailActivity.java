@@ -439,7 +439,9 @@ public class TeamDetailActivity extends BaseActivity {
     private void getMyFirstMatch() {
         final String team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
         loadingShow();
-        OkGo.get(Url.MATCHES_COMING)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/coming";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {

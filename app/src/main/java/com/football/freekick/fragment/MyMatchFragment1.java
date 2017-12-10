@@ -419,7 +419,9 @@ public class MyMatchFragment1 extends LazyLoadFragment {
             mListWait.clear();
         }
         loadingShow();
-        OkGo.get(Url.MATCHES_COMING)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/coming";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {

@@ -86,15 +86,15 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
         battle_preference = intent.getStringExtra("battle_preference");
         size = intent.getStringExtra("size");
         status = intent.getStringExtra("status");
-        if (intent.getStringExtra("image").equals("")){
+        if (intent.getStringExtra("image").equals("")) {
             image = "";
-        }else {
-            image = "data:image/jpeg;base64,"+intent.getStringExtra("image");
+        } else {
+            image = "data:image/jpeg;base64," + intent.getStringExtra("image");
         }
         color1 = intent.getStringExtra("color1");
         color2 = intent.getStringExtra("color2");
-        Logger.d("color1--->"+color1+"     color2--->"+color2);
-        Logger.d("color1--->"+Color.parseColor("#"+color1)+"     color2--->"+Color.parseColor("#"+color2));
+        Logger.d("color1--->" + color1 + "     color2--->" + color2);
+        Logger.d("color1--->" + Color.parseColor("#" + color1) + "     color2--->" + Color.parseColor("#" + color2));
         mColorPickerHome.selectGiven(color1);
         mColorPickerVisitor.selectGiven(color2);
         mIvClothesHome.setBackgroundColor(MyUtil.getColorInt(color1));
@@ -160,17 +160,18 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
         object1.addProperty("color1", color1);
         object1.addProperty("color2", color2);
         object1.addProperty("status", status);
-        if (image.equals("")){
+        if (image.equals("")) {
 
-        }else {
+        } else {
             object1.addProperty("image", image);
         }
         object1.addProperty("prefer_district_id", district);
         object.add("team", object1);
         Logger.json(object.toString());
         Logger.d(App.headers.toString());
-        Logger.d(Url.CREATE_TEAM+"/"+PrefUtils.getString(App.APP_CONTEXT,"team_id",null));
-        OkGo.put(Url.CREATE_TEAM+"/"+PrefUtils.getString(App.APP_CONTEXT,"team_id",null))
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "teams";
+        Logger.d(url + "/" + PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
+        OkGo.put(url + "/" + PrefUtils.getString(App.APP_CONTEXT, "team_id", null))
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
@@ -188,23 +189,28 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
                             String team_name = team.getTeam_name();
                             int size = team.getSize();
                             // TODO: 2017/11/19 這裡是放在數據庫還是Sp中,欠考慮
-                            PrefUtils.putString(App.APP_CONTEXT,"team_id",id+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"color1",color1+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"color2",color2+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"logourl",logourl+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"team_name",team_name+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"size",size+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"establish_year",team.getEstablish_year()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"average_height",team.getAverage_height()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"age_range_min",team.getAge_range_min()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"age_range_max",team.getAge_range_max()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"establish_year",team.getEstablish_year()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"style",team.getStyle()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"battle_preference",team.getBattle_preference()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"district",team.getDistrict().getDistrict()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"district_id",team.getDistrict().getId()+"");
+                            PrefUtils.putString(App.APP_CONTEXT, "team_id", id + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "color1", color1 + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "color2", color2 + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "logourl", logourl + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "team_name", team_name + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "size", size + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "establish_year", team.getEstablish_year() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "average_height", team.getAverage_height() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "age_range_min", team.getAge_range_min() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "age_range_max", team.getAge_range_max() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "establish_year", team.getEstablish_year() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "style", team.getStyle() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "battle_preference", team.getBattle_preference() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "district", team.getDistrict().getDistrict() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "district_id", team.getDistrict().getId() + "");
                             ToastUtil.toastShort(getString(R.string.change_success));
-                            startActivity(new Intent(mContext, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+//                            startActivity(new Intent(mContext, MainActivity.class).setFlags(Intent
+// .FLAG_ACTIVITY_NEW_TASK));
+                            Intent intent = new Intent(mContext, MainActivity.class);
+                            intent.putExtra("which", 5);
+                            startActivity(intent);
+                            finish();
                         } else if (createTeam.getTeam() == null && createTeam.getErrors() != null) {
                             ToastUtil.toastShort(createTeam.getErrors().get(0));
                         }

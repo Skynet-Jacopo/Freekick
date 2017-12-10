@@ -65,14 +65,16 @@ public class App extends Application {
 //                .logAdapter(new AndroidLogAdapter()); //自顶一个打印适配器
         mConfig = LanguageConfig.newInstance(APP_CONTEXT);
         getAdvertisements();//獲取廣告
-        getPitches();//獲取場地
+//        getPitches();//獲取場地
     }
 
     /**
      * 獲取場地
      */
     private void getPitches() {
-        OkGo.get(Url.PITCHES)
+        String url = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "pitches";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
@@ -94,7 +96,9 @@ public class App extends Application {
      * 獲取廣告
      */
     private void getAdvertisements() {
-        OkGo.get(Url.ADVERTISEMENTS)
+        String url = Url.BaseUrl + (isChinese ? Url.ZH_HK : Url.EN) + "advertisements";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {

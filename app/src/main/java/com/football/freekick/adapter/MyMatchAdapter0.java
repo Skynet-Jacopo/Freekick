@@ -75,7 +75,7 @@ public class MyMatchAdapter0 extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
             myHolder2.tvTime.setText(start + " - " + end);
             List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
-            myHolder2.tvLocation.setText(matchesBean.getLocation());
+            myHolder2.tvLocation.setText(matchesBean.getPitch_name());
             if (matchesBean.getHome_team().getId() != Integer.parseInt(team_id)) {
                 //主隊位置不是自己,那自己應該在另一邊,屬於主動參與進來的
                 myHolder2.tvState.setText("已落實");

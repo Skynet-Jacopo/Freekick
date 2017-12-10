@@ -86,7 +86,7 @@ public class RegisterPager3Activity extends BaseActivity {
         battle_preference = intent.getStringExtra("battle_preference");
         size = intent.getStringExtra("size");
         status = intent.getStringExtra("status");
-        if (!intent.getStringExtra("image").equals("")){
+        if (!intent.getStringExtra("image").equals("")) {
             uploadImageToBase64(intent.getStringExtra("image"));
         }
     }
@@ -156,7 +156,9 @@ public class RegisterPager3Activity extends BaseActivity {
         object.add("team", object1);
         Logger.json(object.toString());
         Logger.d(App.headers.toString());
-        OkGo.post(Url.CREATE_TEAM)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "teams";
+        Logger.d(url);
+        OkGo.post(url)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
@@ -174,21 +176,22 @@ public class RegisterPager3Activity extends BaseActivity {
                             String team_name = team.getTeam_name();
                             int size = team.getSize();
                             // TODO: 2017/11/19 這裡是放在數據庫還是Sp中,欠考慮
-                            PrefUtils.putString(App.APP_CONTEXT,"team_id",id+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"color1",color1+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"color2",color2+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"logourl",logourl+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"team_name",team_name+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"size",size+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"establish_year",team.getEstablish_year()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"average_height",team.getAverage_height()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"age_range_min",team.getAge_range_min()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"age_range_max",team.getAge_range_max()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"establish_year",team.getEstablish_year()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"style",team.getStyle().get(0)+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"battle_preference",team.getBattle_preference().get(0)+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"district",team.getDistrict().getDistrict()+"");
-                            PrefUtils.putString(App.APP_CONTEXT,"district_id",team.getDistrict().getId()+"");
+                            PrefUtils.putString(App.APP_CONTEXT, "team_id", id + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "color1", color1 + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "color2", color2 + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "logourl", logourl + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "team_name", team_name + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "size", size + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "establish_year", team.getEstablish_year() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "average_height", team.getAverage_height() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "age_range_min", team.getAge_range_min() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "age_range_max", team.getAge_range_max() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "establish_year", team.getEstablish_year() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "style", team.getStyle().get(0) + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "battle_preference", team.getBattle_preference().get
+                                    (0) + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "district", team.getDistrict().getDistrict() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "district_id", team.getDistrict().getId() + "");
                             ToastUtil.toastShort(getString(R.string.create_team_success));
                             startActivity(new Intent(mContext, OneTimePagerActivity.class));
                         } else if (createTeam.getTeam() == null && createTeam.getErrors() != null) {
@@ -212,6 +215,6 @@ public class RegisterPager3Activity extends BaseActivity {
      */
     private void uploadImageToBase64(String picLoaclUrl) {
         Bitmap bitmap = ImageUtil.getimage(picLoaclUrl);
-        image = "data:image/jpeg;base64,"+ImageUtil.bitmapToBase64(bitmap);
+        image = "data:image/jpeg;base64," + ImageUtil.bitmapToBase64(bitmap);
     }
 }

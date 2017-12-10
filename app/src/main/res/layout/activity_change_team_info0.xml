@@ -9,13 +9,23 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.football.freekick.activity.registerlogin.RegisterPager1Activity">
-
+    <TextView
+        android:id="@+id/tv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="50px"
+        android:paddingLeft="24px"
+        android:paddingRight="80px"
+        android:paddingTop="26px"
+        android:text="@string/back"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_36"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="76px"
         android:layout_marginRight="76px"
-        android:layout_marginTop="168px"
+        android:layout_marginTop="56px"
         android:background="#0F175D"
         android:orientation="vertical"
         android:paddingBottom="34px"

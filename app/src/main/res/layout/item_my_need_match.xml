@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
               android:id="@+id/ll_content"
-              android:clickable="true"
-              android:background="@drawable/selector_rectangle_white_gray_bg"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:background="@drawable/selector_rectangle_white_gray_bg"
+              android:clickable="true"
               android:orientation="vertical">
 
     <View
@@ -40,7 +40,7 @@
         android:layout_height="1px"
         android:background="#ececec"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="32px"
@@ -48,12 +48,12 @@
         android:paddingRight="24px">
 
         <LinearLayout
-            android:paddingTop="32px"
             android:id="@+id/ll_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="32px">
 
             <ImageView
                 android:id="@+id/iv_home_logo"
@@ -71,16 +71,18 @@
                 android:textSize="20px"
                 tools:text="這是名字"/>
         </LinearLayout>
-        <LinearLayout
 
+        <LinearLayout
+            android:layout_weight="1"
             android:id="@+id/ll_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="96px"
+            android:layout_marginLeft="50px"
             android:layout_toRightOf="@+id/ll_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
@@ -91,6 +93,8 @@
                 android:textSize="30px"/>
 
             <TextView
+                android:gravity="center"
+                tools:text="Tsz Wan Shan Estate Service Reservoir Playground (No.1)"
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -98,64 +102,78 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10px"
                 android:textColor="@color/text_black"
-                android:textSize="22px"
-                tools:text="這是地點"/>
+                android:textSize="22px"/>
         </LinearLayout>
 
 
         <LinearLayout
-            android:paddingTop="32px"
-            android:layout_marginLeft="104px"
-            android:layout_toRightOf="@+id/ll_2"
+            android:id="@+id/ll_visitor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50px"
+            android:layout_toLeftOf="@id/tv_state"
+            android:layout_toRightOf="@+id/ll_2"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="32px">
 
             <ImageView
                 android:id="@+id/iv_visitor_logo"
                 android:layout_width="72px"
                 android:layout_height="82px"
                 android:scaleType="fitXY"/>
+
             <TextView
-                android:background="@color/text_black"
                 android:id="@+id/tv_visitor_name"
                 android:layout_width="56px"
                 android:layout_height="2px"
                 android:layout_marginTop="16px"
+                android:background="@color/text_black"
                 android:textColor="@color/text_black"
                 android:textSize="20px"
                 tools:text="這是名字"/>
             <!--<TextView-->
-                <!--android:id="@+id/tv_visitor_name"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="16px"-->
-                <!--android:textColor="@color/text_black"-->
-                <!--android:textSize="20px"-->
-                <!--tools:text="這是名字"/>-->
+            <!--android:id="@+id/tv_visitor_name"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="16px"-->
+            <!--android:textColor="@color/text_black"-->
+            <!--android:textSize="20px"-->
+            <!--tools:text="這是名字"/>-->
         </LinearLayout>
-        <TextView
-            android:id="@+id/tv_icon_delete"
-            android:paddingLeft="34px"
-            android:paddingTop="12px"
-            android:paddingRight="34px"
-            android:text="@string/icon_error"
-            android:layout_alignParentRight="true"
-            android:textSize="30px"
+        <LinearLayout
+            android:layout_marginLeft="50px"
+            android:gravity="right"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/tv_state"
-            android:textSize="20px"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/selector_corner_green_gray_bg"
-            android:textColor="@color/white"
-            android:layout_alignParentRight="true"
-            android:text="邀請"
-            android:gravity="center"
-            android:layout_width="100px"
-            android:layout_height="44px"/>
-
-    </RelativeLayout>
+            android:layout_height="match_parent">
+            <TextView
+                android:gravity="right"
+                android:layout_weight="1"
+                android:id="@+id/tv_icon_delete"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:text="@string/icon_error"
+                android:textSize="30px"/>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp">
+                <TextView
+                    android:paddingBottom="10px"
+                    android:paddingTop="10px"
+                    android:paddingRight="20px"
+                    android:paddingLeft="20px"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/tv_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_corner_green_gray_bg"
+                    android:gravity="center"
+                    android:text="邀請"
+                    android:textColor="@color/white"
+                    android:textSize="20px"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

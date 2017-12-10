@@ -8,7 +8,13 @@
     android:background="@drawable/register_login_bg"
     android:fitsSystemWindows="true"
     tools:context="com.football.freekick.RegisterLoginActivity">
-
+    <EditText
+        android:layout_centerVertical="true"
+        android:id="@+id/tv_token"
+        android:textSize="20sp"
+        android:text="token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

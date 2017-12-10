@@ -76,6 +76,7 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (holder instanceof MyHolder1) {
             final MyHolder1 myHolder1 = (MyHolder1) holder;
             myHolder1.tvIconShare.setTypeface(App.mTypeface);
+            myHolder1.tvIconLocation.setTypeface(App.mTypeface);
             myHolder1.tvPitchName.setText(matchesBean.getPitch_name());
             myHolder1.tvLocation.setText(matchesBean.getLocation());
             String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());

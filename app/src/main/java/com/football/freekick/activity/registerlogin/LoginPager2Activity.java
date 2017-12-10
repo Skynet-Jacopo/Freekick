@@ -67,10 +67,11 @@ public class LoginPager2Activity extends BaseActivity {
         mContext = LoginPager2Activity.this;
         ButterKnife.bind(this);
 //        mEdtEmail.setText("huo@yopmail.com");
-        mEdtEmail.setText("yue@yopmail.com");
-//        mEdtEmail.setText("lei@yopmail.com");
+//        mEdtEmail.setText("yue@yopmail.com");
+        mEdtEmail.setText("lei@yopmail.com");
         mEdtPassWord.setText("123456");
         initView();
+
     }
 
     private void initView() {
@@ -145,7 +146,10 @@ public class LoginPager2Activity extends BaseActivity {
         object1.addProperty("password", StringUtils.getEditText(mEdtPassWord));
         object.add("user", object1);
         Logger.json(object.toString());
-        OkGo.post(Url.LOGINURL)
+        String url = App.isChinese ? "http://api.freekick.hk/api/zh_HK/auth/sign_in" :
+                "http://api.freekick.hk/api/en/auth/sign_in";
+        Logger.d(url);
+        OkGo.post(url)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override
@@ -198,10 +202,14 @@ public class LoginPager2Activity extends BaseActivity {
                                     PrefUtils.putString(App.APP_CONTEXT, "logourl", teamsBean.getImage().getUrl() + "");
                                     PrefUtils.putString(App.APP_CONTEXT, "team_name", teamsBean.getTeam_name() + "");
                                     PrefUtils.putString(App.APP_CONTEXT, "size", teamsBean.getSize() + "");
-                                    PrefUtils.putString(App.APP_CONTEXT, "age_range_max", teamsBean.getAge_range_max() + "");
-                                    PrefUtils.putString(App.APP_CONTEXT, "age_range_min", teamsBean.getAge_range_min() + "");
-                                    PrefUtils.putString(App.APP_CONTEXT, "establish_year", teamsBean.getEstablish_year() + "");
-                                    PrefUtils.putString(App.APP_CONTEXT, "average_height", teamsBean.getAverage_height() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "age_range_max", teamsBean.getAge_range_max
+                                            () + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "age_range_min", teamsBean.getAge_range_min
+                                            () + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "establish_year", teamsBean
+                                            .getEstablish_year() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "average_height", teamsBean
+                                            .getAverage_height() + "");
                                     if (teamsBean.getDistrict() != null) {
                                         PrefUtils.putString(App.APP_CONTEXT, "district", teamsBean.getDistrict()
                                                 .getDistrict() + "");
@@ -235,7 +243,9 @@ public class LoginPager2Activity extends BaseActivity {
      * 獲取場地
      */
     private void getPitches() {
-        OkGo.get(Url.PITCHES)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "pitches";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
@@ -257,7 +267,9 @@ public class LoginPager2Activity extends BaseActivity {
      * 獲取廣告
      */
     private void getAdvertisements() {
-        OkGo.get(Url.ADVERTISEMENTS)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "advertisements";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {

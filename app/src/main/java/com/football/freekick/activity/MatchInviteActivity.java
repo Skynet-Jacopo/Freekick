@@ -107,8 +107,9 @@ public class MatchInviteActivity extends BaseActivity {
         }
         match_id = getIntent().getStringExtra("match_id");
         loadingShow();
-        Logger.d(Url.MATCH_DETAIL + match_id);
-        OkGo.get(Url.MATCH_DETAIL + match_id)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/";//+matchID
+        Logger.d(url + match_id);
+        OkGo.get(url + match_id)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {

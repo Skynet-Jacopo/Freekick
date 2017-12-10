@@ -42,9 +42,4 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     private void sendNotification(String title, String message, String action) {
 
     }
-
-    @Override
-    public void zzm(Intent intent) {
-        super.zzm(intent);
-    }
 }

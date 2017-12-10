@@ -113,7 +113,7 @@ public class JoinMatchActivity extends BaseActivity {
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
         mTvIconLocation.setTypeface(App.mTypeface);
-        mTvDate.setText(JodaTimeUtil.getDate2(mMatchesBean.getPlay_start()));
+        mTvDate.setText(JodaTimeUtil.getDate(mMatchesBean.getPlay_start()));
         mTvLocation.setText(mMatchesBean.getLocation());
         mTvTime.setText(JodaTimeUtil.getTime2(mMatchesBean.getPlay_start()) + "-" + JodaTimeUtil
                 .getTime2(mMatchesBean.getPlay_end()));
@@ -232,7 +232,8 @@ public class JoinMatchActivity extends BaseActivity {
         object.add("join_match", object1);
 
         Logger.json(object.toString());
-        OkGo.post(Url.JOIN_MATCHES)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "join_matches";
+        OkGo.post(url)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override

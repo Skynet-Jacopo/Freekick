@@ -54,11 +54,12 @@
             android:layout_marginRight="50px">
 
             <TextView
+                android:gravity="center"
                 android:id="@+id/tv_pitch_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="巴富街運動場"
+                android:text="Tsz Wan Shan Estate Service Reservoir Playground (No.1)"
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/text_30"
                 android:textStyle="bold"/>
@@ -86,7 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="東菀市城區"
+                    android:text="九龍觀塘三家村茶果嶺道四山街交界"
                     android:textColor="#6c6c6c"
                     android:textSize="@dimen/text_18"/>
             </LinearLayout>

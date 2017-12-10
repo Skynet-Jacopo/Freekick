@@ -153,8 +153,9 @@ public class MatchContentActivity1 extends BaseActivity {
 
     private void initData() {
         loadingShow();
-        Logger.d(Url.MATCH_DETAIL + id);
-        OkGo.get(Url.MATCH_DETAIL + id)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/";//+matchID
+        Logger.d(url + id);
+        OkGo.get(url + id)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
@@ -188,7 +189,7 @@ public class MatchContentActivity1 extends BaseActivity {
                 mMatch.setPitch_name(App.mPitchesBeanList.get(i).getName());
             }
         }
-        mTvDate.setText(JodaTimeUtil.getDate2(mMatch.getPlay_start()));
+        mTvDate.setText(JodaTimeUtil.getDate(mMatch.getPlay_start()));
         mTvLocation.setText(mMatch.getLocation());
         mTvTime.setText(JodaTimeUtil.getTime2(mMatch.getPlay_start()) + "-" + JodaTimeUtil
                 .getTime2(mMatch.getPlay_end()));

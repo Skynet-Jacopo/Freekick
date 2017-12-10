@@ -24,6 +24,7 @@ import com.football.freekick.App;
 import com.football.freekick.CalenderActivity;
 import com.football.freekick.R;
 import com.football.freekick.activity.ChooseTimeActivity;
+import com.football.freekick.app.BaseFragment;
 import com.football.freekick.beans.Advertisements;
 import com.football.freekick.beans.Area;
 import com.football.freekick.event.MainEvent;
@@ -58,7 +59,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * 參與球賽頁.
  */
-public class PartakeFragment extends Fragment {
+public class PartakeFragment extends BaseFragment {
 
     public static final int CHOOSE_DATE = 1;
     public static final int CHOOSE_TIME = 2;
@@ -139,6 +140,7 @@ public class PartakeFragment extends Fragment {
      */
     private void initView() {
         mTvIconDate.setTypeface(App.mTypeface);
+        dateTime = new DateTime();
         initAdvertisements();
     }
 
@@ -174,7 +176,9 @@ public class PartakeFragment extends Fragment {
      * (如果App中未能获取到)获取广告列表
      */
     private void getAdvertisements() {
-        OkGo.get(Url.ADVERTISEMENTS)
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "advertisements";
+        Logger.d(url);
+        OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
@@ -250,6 +254,7 @@ public class PartakeFragment extends Fragment {
         switch (view.getId()) {
             case R.id.ll_match_date:
                 intent.setClass(mContext, CalenderActivity.class);
+                intent.putExtra("dateTime",dateTime);
                 startActivityForResult(intent, CHOOSE_DATE);
                 break;
             case R.id.ll_match_time:
@@ -325,10 +330,12 @@ public class PartakeFragment extends Fragment {
         TextView tvConfirm = (TextView) contentView.findViewById(R.id.tv_confirm);
 
         loopView1.setItems(mRegions);
+        loopView1.setCurrentPosition(regionPos);
         loopView1.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
                 regionPos = index;
+                districtPos = 0;
                 districtList = new ArrayList<String>();
                 mDistricts = mAreaRegions.get(index).getDistricts();
                 for (int i = 0; i < mDistricts.size(); i++) {
@@ -342,10 +349,11 @@ public class PartakeFragment extends Fragment {
                     }
                 }
                 loopView2.setItems(districtList);
+                loopView2.setCurrentPosition(districtPos);
             }
         });
         districtList = new ArrayList<>();
-        mDistricts = mAreaRegions.get(0).getDistricts();
+        mDistricts = mAreaRegions.get(regionPos).getDistricts();
         for (int i = 0; i < mDistricts.size(); i++) {
             String district = mDistricts.get(i).getDistrict();
             String s = null;
@@ -357,6 +365,7 @@ public class PartakeFragment extends Fragment {
             }
         }
         loopView2.setItems(districtList);
+        loopView2.setCurrentPosition(districtPos);
         loopView2.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
@@ -463,7 +472,8 @@ public class PartakeFragment extends Fragment {
             String year = data.getStringExtra("year");
             dateTime = (DateTime) data.getSerializableExtra("dateTime");
 //            ToastUtil.toastShort(year + "年" + month + "月" + day + "日");
-            mTvDate.setText(year + "-" + month + "-" + day);
+//            mTvDate.setText(year + "-" + month + "-" + day);
+            mTvDate.setText(dateTime.toString("yyyy-MM-dd"));
         } else if (requestCode == CHOOSE_TIME && resultCode == RESULT_OK) {
             mStartTime = data.getStringExtra("start_time");
             mEndTime = data.getStringExtra("end_time");

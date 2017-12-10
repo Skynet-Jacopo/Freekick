@@ -449,7 +449,7 @@ public class RangeSeekBar extends View {
 
             if (bmp != null) {
                 canvas.drawBitmap(bmp, left, lineTop - bmp.getHeight() / 2, null);
-                if (isShowingHint) {
+//                if (isShowingHint) {
 
                     Rect rect = new Rect();
                     rect.left = left - (hintW / 2 - bmp.getWidth() / 2);
@@ -464,7 +464,7 @@ public class RangeSeekBar extends View {
                     int x = (int) (left + (bmp.getWidth() / 2) - mCursorPaint.measureText(text2Draw) / 2);
                     int y = bottom - hintH - bmp.getHeight() + hintH / 2;
                     canvas.drawText(text2Draw, x, y, mCursorPaint);
-                }
+//                }
             } else {
                 canvas.translate(left, 0);
                 if (isShowingHint) {

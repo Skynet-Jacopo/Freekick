@@ -22,6 +22,9 @@ import java.util.Observer;
 
 public class BaseActivity extends AutoLayoutActivity implements Observer {
     private Dialog mLoadingDialog;
+    public static final String BaseUrl = "http://api.freekick.hk/api/";
+    public static final String ZH_HK = "zh_HK/";
+    public static final String EN = "en/";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
