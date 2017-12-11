@@ -1,10 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.football.freekick.activity.FriendActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="88px"
+        android:background="#070D44"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="24px"
+            android:paddingRight="30px"
+            android:text="@string/icon_left_big"
+            android:textColor="@color/white"
+            android:textSize="36px"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/match_content"
+            android:textColor="@color/white"
+            android:textSize="36px"/>
+
+        <TextView
+            android:id="@+id/tv_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:paddingLeft="20px"
+            android:paddingRight="24px"
+            android:text="@string/icon_notice"
+            android:textColor="@color/white"
+            android:textSize="36px"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10px"
+        android:paddingLeft="24px"
+        android:paddingTop="44px"
+        android:text="@string/invite_friend"
+        android:textColor="@color/text_black"
+        android:textSize="30px"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="16px"
+        android:background="#344a64"/>
+
+    <LinearLayout
+        android:id="@+id/ll_facebook"
+        android:clickable="true"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16px"
+        android:paddingLeft="24px"
+        android:paddingTop="16px">
+
+        <ImageView
+            android:layout_width="56px"
+            android:layout_height="56px"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_facebook_blue"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="32px"
+            android:text="Facebook"
+            android:textColor="@color/text_black"
+            android:textSize="36px"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_whatsapp"
+        android:clickable="true"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16px"
+        android:paddingLeft="24px"
+        android:paddingTop="16px">
+
+        <ImageView
+            android:layout_width="56px"
+            android:layout_height="56px"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_whatsapp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="32px"
+            android:text="Whatsapp"
+            android:textColor="@color/text_black"
+            android:textSize="36px"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_wechat"
+        android:clickable="true"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16px"
+        android:paddingLeft="24px"
+        android:paddingTop="16px">
+
+        <ImageView
+            android:layout_width="56px"
+            android:layout_height="56px"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_wechat"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="32px"
+            android:text="Wechat"
+            android:textColor="@color/text_black"
+            android:textSize="36px"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_short_msg"
+        android:clickable="true"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16px"
+        android:paddingLeft="24px"
+        android:paddingTop="16px">
+
+        <ImageView
+            android:layout_width="56px"
+            android:layout_height="56px"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_short_msg"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="32px"
+            android:text="@string/short_message"
+            android:textColor="@color/text_black"
+            android:textSize="36px"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10px"
+        android:paddingLeft="24px"
+        android:paddingTop="40px"
+        android:text="@string/share"
+        android:textColor="@color/text_black"
+        android:textSize="30px"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="16px"
+        android:background="#344a64"/>
+    <LinearLayout
+        android:id="@+id/ll_facebook_wall"
+        android:clickable="true"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16px"
+        android:paddingLeft="24px"
+        android:paddingTop="16px">
+
+        <ImageView
+            android:layout_width="56px"
+            android:layout_height="56px"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_facebook_blue"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="32px"
+            android:text="Facebook Wall"
+            android:textColor="@color/text_black"
+            android:textSize="36px"
+            android:textStyle="bold"/>
+    </LinearLayout>
+</LinearLayout>

@@ -136,7 +136,7 @@ public class MatchContentActivity1 extends BaseActivity {
     private MatchDetail.MatchBean mMatch;
     private String                team_id;
     private String join_match_id = "";
-    private String join_team_id = "";
+    private String join_team_id  = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,6 +210,10 @@ public class MatchContentActivity1 extends BaseActivity {
         List<MatchDetail.MatchBean.JoinMatchesBean> join_matches = mMatch.getJoin_matches();
         switch (type) {
             case 1://已落實,我是主隊
+                mTvIconNoticeLeft.setVisibility(View.GONE);
+                mTvIconShareLeft.setVisibility(View.GONE);
+                mTvIconShareRight.setVisibility(View.VISIBLE);
+                mTvIconNoticeRight.setVisibility(View.VISIBLE);
                 mTvBtn.setText(R.string.cancel_match);
                 for (int i = 0; i < join_matches.size(); i++) {
                     if (join_matches.get(i).getStatus().equals("confirmed")) {
@@ -229,6 +233,10 @@ public class MatchContentActivity1 extends BaseActivity {
                 });
                 break;
             case 2://已落實,我是客隊
+                mTvIconNoticeLeft.setVisibility(View.VISIBLE);
+                mTvIconShareLeft.setVisibility(View.VISIBLE);
+                mTvIconShareRight.setVisibility(View.GONE);
+                mTvIconNoticeRight.setVisibility(View.GONE);
                 mTvBtn.setText(R.string.withdraw_the_match);
                 for (int i = 0; i < join_matches.size(); i++) {
                     if (join_matches.get(i).getStatus().equals("confirmed") && join_matches.get(i).getJoin_team_id()
@@ -251,6 +259,10 @@ public class MatchContentActivity1 extends BaseActivity {
                 });
                 break;
             case 3://我已參與,主隊未確認
+                mTvIconNoticeLeft.setVisibility(View.GONE);
+                mTvIconShareLeft.setVisibility(View.GONE);
+                mTvIconShareRight.setVisibility(View.GONE);
+                mTvIconNoticeRight.setVisibility(View.GONE);
                 mTvBtn.setText(R.string.withdraw_the_match);
                 for (int i = 0; i < join_matches.size(); i++) {
                     if (join_matches.get(i).getStatus().equals("confirmation_pending") && join_matches.get(i)
@@ -274,6 +286,10 @@ public class MatchContentActivity1 extends BaseActivity {
                 });
                 break;
             case 4://我是主隊,有隊伍參與,我還未確認(match status = w,join match status = confirmation_pending)
+                mTvIconNoticeLeft.setVisibility(View.GONE);
+                mTvIconShareLeft.setVisibility(View.GONE);
+                mTvIconShareRight.setVisibility(View.GONE);
+                mTvIconNoticeRight.setVisibility(View.GONE);
                 mTvBtn.setText(R.string.decide_to_play);
                 for (int i = 0; i < join_matches.size(); i++) {
                     if (mMatch.getHome_team().getId() == Integer.parseInt(team_id) && join_matches.get(i).getStatus()
@@ -295,6 +311,11 @@ public class MatchContentActivity1 extends BaseActivity {
                 });
                 break;
             case 5://我被邀請,還未接受邀請(match status = i,join match status = invited)
+
+                mTvIconNoticeLeft.setVisibility(View.GONE);
+                mTvIconShareLeft.setVisibility(View.GONE);
+                mTvIconShareRight.setVisibility(View.GONE);
+                mTvIconNoticeRight.setVisibility(View.GONE);
                 mTvBtn.setText(R.string.accept_the_invitation);
                 for (int i = 0; i < join_matches.size(); i++) {
                     if (mMatch.getStatus().equals("i") && mMatch.getJoin_matches().get(i).getJoin_team_id() == Integer
@@ -314,6 +335,10 @@ public class MatchContentActivity1 extends BaseActivity {
                 });
                 break;
             case 6://我已邀請別人,別人還未確認(match status = i,join match status = invited)
+                mTvIconNoticeLeft.setVisibility(View.GONE);
+                mTvIconShareLeft.setVisibility(View.GONE);
+                mTvIconShareRight.setVisibility(View.GONE);
+                mTvIconNoticeRight.setVisibility(View.GONE);
                 mTvBtn.setText(R.string.cancel_invite);
                 for (int i = 0; i < join_matches.size(); i++) {
                     if (mMatch.getHome_team().getId() == Integer.parseInt(team_id) && join_matches.get(i).getStatus()
@@ -334,6 +359,10 @@ public class MatchContentActivity1 extends BaseActivity {
                 });
                 break;
             case 7://我不是主隊,也不是客隊,只是來瀏覽的(match status = m,join match status = confirmed?(還不確定))
+                mTvIconNoticeLeft.setVisibility(View.GONE);
+                mTvIconShareLeft.setVisibility(View.GONE);
+                mTvIconShareRight.setVisibility(View.GONE);
+                mTvIconNoticeRight.setVisibility(View.GONE);
                 mTvBtn.setVisibility(View.GONE);
                 for (int i = 0; i < join_matches.size(); i++) {
                     if (mMatch.getStatus().equals("f") && join_matches.get(i).getStatus()
@@ -374,7 +403,7 @@ public class MatchContentActivity1 extends BaseActivity {
         ImageLoaderUtils.displayImage(image, mIvRight3);
     }
 
-    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice,R.id.ll_location, R.id.iv_top_1, R.id.iv_top_2, R.id.iv_left_1, R.id
+    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location, R.id.iv_top_1, R.id.iv_top_2, R.id.iv_left_1, R.id
             .iv_left_2, R.id.iv_left_3, R.id.iv_right_1, R.id.iv_right_2, R.id.iv_right_3, R.id.iv_bottom_1, R.id
             .iv_bottom_2, R.id.tv_icon_share_left, R.id.tv_icon_notice_left, R.id.tv_icon_share_right, R.id
             .tv_icon_notice_right, R.id.tv_btn})
@@ -393,7 +422,7 @@ public class MatchContentActivity1 extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.ll_location:
-                intent.setClass(mContext,MapsActivity.class);
+                intent.setClass(mContext, MapsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.iv_top_1:
@@ -593,13 +622,13 @@ public class MatchContentActivity1 extends BaseActivity {
         popupWindow.showAtLocation(mFlParent, Gravity.CENTER, 0, 0);
         backgroundAlpha(0.5f);
     }
+
     /**
      * 取消邀請
-     *
      */
     private void cancelInvite() {
         JsonObject object = new JsonObject();
-        object.addProperty("invite_team_id", join_team_id+ "");
+        object.addProperty("invite_team_id", join_team_id + "");
         String cancelInviteUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + id +
                 "/withdraw_invite";
         Logger.d(cancelInviteUrl);
@@ -654,6 +683,7 @@ public class MatchContentActivity1 extends BaseActivity {
 // 启动分享GUI
         oks.show(this);
     }
+
     /**
      * 设置添加屏幕的背景透明度
      *
@@ -664,6 +694,7 @@ public class MatchContentActivity1 extends BaseActivity {
         lp.alpha = bgAlpha; //0.0-1.0
         getWindow().setAttributes(lp);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -261,6 +261,10 @@
         It should describe the category of notifications that will be sent through this channel
      -->
     <string name="default_notification_channel_name" translatable="true">News</string>
+    <string name="invite_friend">邀請好友</string>
+    <string name="short_message">短訊</string>
+    <string name="share">分享</string>
+    <string name="yesterday">昨天</string>
 
 
 </resources>

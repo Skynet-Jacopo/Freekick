@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:clickable="true"
+              android:background="@drawable/selector_rectangle_white_gray_bg"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1px"
+        android:paddingBottom="32px"
+        android:paddingLeft="24px"
+        android:paddingRight="24px"
+        android:paddingTop="32px">
+
+        <LinearLayout
+            android:layout_width="64px"
+            android:layout_height="64px"
+            android:layout_marginRight="32px"
+            android:background="@drawable/icon_blue_oval">
+
+            <com.football.freekick.views.RoundImageView
+                android:id="@+id/iv_head"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我是名字"
+                android:textColor="@color/text_black"
+                android:textSize="24px"/>
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12px"
+                android:singleLine="true"
+                android:text="我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容"
+                android:textColor="#b7b7b7"
+                android:textSize="18px"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_msg_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="32px"
+            android:background="@drawable/shape_red_oval"
+            android:padding="5px"
+            android:text="99"
+            android:textColor="@color/white"
+            android:textSize="20px"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="32px"
+            android:text="時間"
+            android:textColor="#bcbcbc"
+            android:textSize="18px"/>
+    </LinearLayout>
+</LinearLayout>
