@@ -32,6 +32,7 @@ import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
 import com.football.freekick.beans.Article;
 import com.football.freekick.beans.Invite;
 import com.football.freekick.beans.MatchesComing;
+import com.football.freekick.beans.NoMatches;
 import com.football.freekick.beans.WithDraw;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.PrefUtils;
@@ -428,35 +429,40 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                         Logger.json(s);
                         loadingDismiss();
                         Gson          gson = new Gson();
-                        MatchesComing json = gson.fromJson(s, MatchesComing.class);
-                        mMatches.addAll(json.getMatches());
-                        String team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
-                        for (int i = 0; i < mMatches.size(); i++) {
-                            for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
-                                if (mMatches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()) {
-                                    mMatches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
-                                    mMatches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
+                        if (!s.contains("[") && !s.contains("]")) {
+                            NoMatches noMatches = gson.fromJson(s, NoMatches.class);
+                            ToastUtil.toastShort(noMatches.getMatches());
+                        } else {
+                            MatchesComing json = gson.fromJson(s, MatchesComing.class);
+                            mMatches.addAll(json.getMatches());
+                            String team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
+                            for (int i = 0; i < mMatches.size(); i++) {
+                                for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
+                                    if (mMatches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()) {
+                                        mMatches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
+                                        mMatches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
+                                    }
                                 }
-                            }
-                            if (mMatches.get(i).getStatus().equals("w")) {
-                                mListWait.add(mMatches.get(i));
-                            }
-                            if (mMatches.get(i).getStatus().equals("i")) {
-                                List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = mMatches.get(i)
-                                        .getJoin_matches();
-                                for (int j = 0; j < join_matches.size(); j++) {
-                                    if (join_matches.get(j).getStatus().equals("invited")) {
-                                        if (join_matches.get(j).getJoin_team_id() != Integer.parseInt(team_id)) {
-                                            //客隊不是自己,添加
-                                            mListWait.add(mMatches.get(i));
-                                        } else {
-                                            //客隊是自己,不能添加
+                                if (mMatches.get(i).getStatus().equals("w")) {
+                                    mListWait.add(mMatches.get(i));
+                                }
+                                if (mMatches.get(i).getStatus().equals("i")) {
+                                    List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = mMatches.get(i)
+                                            .getJoin_matches();
+                                    for (int j = 0; j < join_matches.size(); j++) {
+                                        if (join_matches.get(j).getStatus().equals("invited")) {
+                                            if (join_matches.get(j).getJoin_team_id() != Integer.parseInt(team_id)) {
+                                                //客隊不是自己,添加
+                                                mListWait.add(mMatches.get(i));
+                                            } else {
+                                                //客隊是自己,不能添加
+                                            }
                                         }
                                     }
                                 }
                             }
+                            mMatchAdapter.notifyDataSetChanged();
                         }
-                        mMatchAdapter.notifyDataSetChanged();
                     }
 
                     @Override

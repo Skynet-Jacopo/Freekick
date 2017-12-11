@@ -738,7 +738,7 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
         });
         loopView.setItems(mTeamStyle);
         loopView.setCurrentPosition(mTeamStyle.size() - 1);
-
+        mTeamStylePos = mTeamStyle.size() - 1;
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -788,7 +788,7 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
         });
         loopView.setItems(mTeamLike);
         loopView.setCurrentPosition(mTeamLike.size() - 1);
-
+        mLikePos = mTeamLike.size() - 1;
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -837,7 +837,8 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
                 && resultCode == Activity.RESULT_OK) {
             Logger.d(mPicLoaclUrl);
             ImageLoaderUtils.displayImage("file:/" + mPicLoaclUrl, mIvLogo);
-            uploadImageToBase64(mPicLoaclUrl);
+//            uploadImageToBase64(mPicLoaclUrl);
+            image = mPicLoaclUrl;
 
         } else if (requestCode == RESULT_LOAD_IMAGE
                 && resultCode == Activity.RESULT_OK && null != data) {
@@ -873,7 +874,8 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
             }
             if (picturePath != null && !picturePath.equals("")) {
                 ImageLoaderUtils.displayImage("file:/" + picturePath, mIvLogo);
-                uploadImageToBase64(picturePath);
+//                uploadImageToBase64(picturePath);
+                image = picturePath;
             } else {
                 ToastUtil.toastShort("获取图片失败");
             }

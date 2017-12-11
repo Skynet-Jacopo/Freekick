@@ -25,6 +25,7 @@ import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
 import com.football.freekick.beans.Article;
 import com.football.freekick.beans.ConfirmInvite;
 import com.football.freekick.beans.MatchesComing;
+import com.football.freekick.beans.NoMatches;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
@@ -228,13 +229,15 @@ public class MyMatchFragment2 extends LazyLoadFragment {
 
     /**
      * 接受邀請
+     *
      * @param position
      */
     private void confirmInvite(final int position) {
 //        http://api.freekick.hk/api/en/teams/<team ID>/confirm_invite
-        String confirmInviteUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id + "/confirm_invite";
+        String confirmInviteUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id +
+                "/confirm_invite";
         JsonObject object = new JsonObject();
-        object.addProperty("match_id",mListInvite.get(position).getId()+"");
+        object.addProperty("match_id", mListInvite.get(position).getId() + "");
         Logger.d(confirmInviteUrl);
         loadingShow();
         OkGo.put(confirmInviteUrl)
@@ -246,15 +249,15 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                         Logger.json(s);
                         Gson gson = new Gson();
                         ConfirmInvite fromJson = gson.fromJson(s, ConfirmInvite.class);
-                        if (fromJson.getJoin_match()!=null){
+                        if (fromJson.getJoin_match() != null) {
                             ToastUtil.toastShort(getString(R.string.comfirm_success));
-                            ((MineFragment)getParentFragment()).mViewpager.setCurrentItem(0,true);
-                            ((MineFragment)getParentFragment()).setRefreshFragment1();
+                            ((MineFragment) getParentFragment()).mViewpager.setCurrentItem(0, true);
+                            ((MineFragment) getParentFragment()).setRefreshFragment1();
                             mListInvite.remove(position);
                             mMatchAdapter.notifyDataSetChanged();
-                        }else if (fromJson.getError()!=null){
+                        } else if (fromJson.getError() != null) {
                             ToastUtil.toastShort(fromJson.getError());
-                        }else {
+                        } else {
                             ToastUtil.toastShort(getString(R.string.confirm_failed));
                         }
                     }
@@ -310,27 +313,32 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                         loadingDismiss();
                         Logger.json(s);
                         Gson gson = new Gson();
-                        MatchesComing json = gson.fromJson(s, MatchesComing.class);
-                        mMatches.addAll(json.getMatches());
-                        team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
-                        for (int i = 0; i < mMatches.size(); i++) {
-                            for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
-                                if (mMatches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()) {
-                                    mMatches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
-                                    mMatches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
+                        if (!s.contains("[") && !s.contains("]")) {
+                            NoMatches noMatches = gson.fromJson(s, NoMatches.class);
+                            ToastUtil.toastShort(noMatches.getMatches());
+                        } else {
+                            MatchesComing json = gson.fromJson(s, MatchesComing.class);
+                            mMatches.addAll(json.getMatches());
+                            team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
+                            for (int i = 0; i < mMatches.size(); i++) {
+                                for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
+                                    if (mMatches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()) {
+                                        mMatches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
+                                        mMatches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
+                                    }
                                 }
-                            }
-                            if (mMatches.get(i).getStatus().equals("i")) {
-                                List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = mMatches.get(i)
-                                        .getJoin_matches();
-                                for (int j = 0; j < join_matches.size(); j++) {
-                                    if (join_matches.get(j).getJoin_team_id() == Integer.parseInt(team_id)) {
-                                        mListInvite.add(mMatches.get(i));
+                                if (mMatches.get(i).getStatus().equals("i")) {
+                                    List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = mMatches.get(i)
+                                            .getJoin_matches();
+                                    for (int j = 0; j < join_matches.size(); j++) {
+                                        if (join_matches.get(j).getJoin_team_id() == Integer.parseInt(team_id)) {
+                                            mListInvite.add(mMatches.get(i));
+                                        }
                                     }
                                 }
                             }
+                            mMatchAdapter.notifyDataSetChanged();
                         }
-                        mMatchAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -360,9 +368,9 @@ public class MyMatchFragment2 extends LazyLoadFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_TO_1&&resultCode == RESULT_OK){
-            ((MineFragment)getParentFragment()).mViewpager.setCurrentItem(0,true);
-            ((MineFragment)getParentFragment()).setRefreshFragment1();
+        if (requestCode == REQUEST_CODE_TO_1 && resultCode == RESULT_OK) {
+            ((MineFragment) getParentFragment()).mViewpager.setCurrentItem(0, true);
+            ((MineFragment) getParentFragment()).setRefreshFragment1();
             mListInvite.remove(pos);
             mMatchAdapter.notifyDataSetChanged();
         }

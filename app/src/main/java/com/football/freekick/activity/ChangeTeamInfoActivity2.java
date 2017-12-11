@@ -2,6 +2,7 @@ package com.football.freekick.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.football.freekick.beans.CreateTeam;
 import com.football.freekick.commons.colorpicker.ColorListener;
 import com.football.freekick.commons.colorpicker.ColorPickerView;
 import com.football.freekick.http.Url;
+import com.football.freekick.utils.ImageUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
@@ -24,6 +26,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.orhanobut.logger.Logger;
 
 import butterknife.Bind;
@@ -86,11 +89,12 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
         battle_preference = intent.getStringExtra("battle_preference");
         size = intent.getStringExtra("size");
         status = intent.getStringExtra("status");
-        if (intent.getStringExtra("image").equals("")) {
+        if (!intent.getStringExtra("image").equals("")) {
+            uploadImageToBase64(intent.getStringExtra("image"));
+        }else {
             image = "";
-        } else {
-            image = "data:image/jpeg;base64," + intent.getStringExtra("image");
         }
+
         color1 = intent.getStringExtra("color1");
         color2 = intent.getStringExtra("color2");
         Logger.d("color1--->" + color1 + "     color2--->" + color2);
@@ -137,7 +141,15 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
                 break;
         }
     }
-
+    /**
+     * 操作圖片toBase64
+     *
+     * @param picLoaclUrl
+     */
+    private void uploadImageToBase64(String picLoaclUrl) {
+        Bitmap bitmap = ImageUtil.getimage(picLoaclUrl);
+        image = "data:image/jpeg;base64," + ImageUtil.bitmapToBase64(bitmap);
+    }
     /**
      * 修改球隊
      */
@@ -207,6 +219,9 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
                             ToastUtil.toastShort(getString(R.string.change_success));
 //                            startActivity(new Intent(mContext, MainActivity.class).setFlags(Intent
 // .FLAG_ACTIVITY_NEW_TASK));
+                            //清除一下緩存,要不然圖片還是加載之前的,因為ImageLoader的緩存機制是同名文件不會走網絡加載
+                            ImageLoader.getInstance().clearDiskCache();
+                            ImageLoader.getInstance().clearMemoryCache();
                             Intent intent = new Intent(mContext, MainActivity.class);
                             intent.putExtra("which", 5);
                             startActivity(intent);
@@ -224,4 +239,5 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
                     }
                 });
     }
+
 }

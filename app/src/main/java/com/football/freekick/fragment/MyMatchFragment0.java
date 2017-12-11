@@ -27,6 +27,7 @@ import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
 import com.football.freekick.beans.Article;
 import com.football.freekick.beans.CancelMatch;
 import com.football.freekick.beans.MatchesComing;
+import com.football.freekick.beans.NoMatches;
 import com.football.freekick.beans.WithDraw;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.ToastUtil;
@@ -221,14 +222,14 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                         break;
                     case 3:
                         intent.setClass(mContext, MatchContentActivity1.class);
-                        intent.putExtra("id",mListMatch.get(position).getId()+"");
-                        intent.putExtra("type",2);
+                        intent.putExtra("id", mListMatch.get(position).getId() + "");
+                        intent.putExtra("type", 2);
                         startActivityForResult(intent, REQUEST_CODE_REFRESH);
                         break;
                     case 4:
                         intent.setClass(mContext, MatchContentActivity1.class);
-                        intent.putExtra("id",mListMatch.get(position).getId()+"");
-                        intent.putExtra("type",1);
+                        intent.putExtra("id", mListMatch.get(position).getId() + "");
+                        intent.putExtra("type", 1);
                         startActivityForResult(intent, REQUEST_CODE_REFRESH);
                         break;
                 }
@@ -351,20 +352,25 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                         loadingDismiss();
                         Logger.json(s);
                         Gson gson = new Gson();
-                        MatchesComing json = gson.fromJson(s, MatchesComing.class);
-                        mMatches.addAll(json.getMatches());
-                        for (int i = 0; i < mMatches.size(); i++) {
-                            for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
-                                if (mMatches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()) {
-                                    mMatches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
-                                    mMatches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
+                        if (!s.contains("[") && !s.contains("]")) {
+                            NoMatches noMatches = gson.fromJson(s, NoMatches.class);
+                            ToastUtil.toastShort(noMatches.getMatches());
+                        } else {
+                            MatchesComing json = gson.fromJson(s, MatchesComing.class);
+                            mMatches.addAll(json.getMatches());
+                            for (int i = 0; i < mMatches.size(); i++) {
+                                for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
+                                    if (mMatches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()) {
+                                        mMatches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
+                                        mMatches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
+                                    }
+                                }
+                                if (mMatches.get(i).getStatus().equals("m")) {
+                                    mListMatch.add(mMatches.get(i));
                                 }
                             }
-                            if (mMatches.get(i).getStatus().equals("m")) {
-                                mListMatch.add(mMatches.get(i));
-                            }
+                            mMatchAdapter.notifyDataSetChanged();
                         }
-                        mMatchAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -394,7 +400,7 @@ public class MyMatchFragment0 extends LazyLoadFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_REFRESH&&resultCode==RESULT_OK){
+        if (requestCode == REQUEST_CODE_REFRESH && resultCode == RESULT_OK) {
             setRefresh();//客隊或者主隊退出比賽后,回來界面要刷新
         }
     }

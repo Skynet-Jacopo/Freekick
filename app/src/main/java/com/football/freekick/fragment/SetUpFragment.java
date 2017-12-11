@@ -161,9 +161,9 @@ public class SetUpFragment extends BaseFragment {
                 ToastUtil.toastShort(on + "");
             }
         });
-
+        Logger.d("圖片--->"+MyUtil.getImageUrl(PrefUtils.getString(App.APP_CONTEXT, "logourl", null)));
         ImageLoaderUtils.displayImage(MyUtil.getImageUrl(PrefUtils.getString(App.APP_CONTEXT, "logourl", null)),
-                mIvLogo);
+                mIvLogo,R.drawable.icon_default);
         mTvTeamName.setText(PrefUtils.getString(App.APP_CONTEXT, "team_name", null));
         mTvTeamArea.setText(PrefUtils.getString(App.APP_CONTEXT, "district", null));
 

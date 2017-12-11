@@ -255,7 +255,12 @@
     <string name="cancel_invite">取消邀請</string>
     <string name="date_error">所選日期不可早於當前日期,請重新選擇!</string>
     <string name="email_confirm">確認郵件已發到您的電子郵箱,請先確認之後繼續</string>
-
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <!--
+        This is the name that users will see when interacting with this channel.
+        It should describe the category of notifications that will be sent through this channel
+     -->
+    <string name="default_notification_channel_name" translatable="true">News</string>
 
 
 </resources>

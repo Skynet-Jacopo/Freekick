@@ -623,7 +623,7 @@ public class RegisterPager2Activity extends BaseActivity {
         });
         loopView.setItems(mTeamStyle);
         loopView.setCurrentPosition(mTeamStyle.size() - 1);
-
+        mTeamStylePos = mTeamStyle.size() - 1;
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -673,7 +673,7 @@ public class RegisterPager2Activity extends BaseActivity {
         });
         loopView.setItems(mTeamLike);
         loopView.setCurrentPosition(mTeamLike.size() - 1);
-
+        mLikePos = mTeamLike.size() - 1;
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

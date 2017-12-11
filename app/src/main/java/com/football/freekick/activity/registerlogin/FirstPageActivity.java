@@ -21,6 +21,8 @@ import com.football.freekick.language.LanguageConfig;
 import com.football.freekick.language.LanguageCountry;
 import com.football.freekick.language.LanguageObservable;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
@@ -91,7 +93,7 @@ public class FirstPageActivity extends BaseActivity {
 //            LanguageObservable.getInstance().notifyObservers();
         }
 
-//        Logger.d("google可用么" + GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext()));
+        Logger.d("google可用么" + GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext()));
 //        Logger.d("getToken---->"+ FirebaseInstanceId.getInstance().getToken());
 //        int success = ConnectionResult.SUCCESS;
         String token =FirebaseInstanceId.getInstance().getToken();
@@ -137,16 +139,16 @@ public class FirstPageActivity extends BaseActivity {
                 });
     }
 //
-//    private boolean checkPlayServices() {
-//        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-////        int resultCode = apiAvailability.isGooglePlayServicesAvailable(app);
-//        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
-//        if (resultCode != ConnectionResult.SUCCESS) {
-//            //TODO track user's device not support play service. should use pull to get msg.
-//            return false;
-//        }
-//        return true;
-//    }
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+//        int resultCode = apiAvailability.isGooglePlayServicesAvailable(app);
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+        if (resultCode != ConnectionResult.SUCCESS) {
+            //TODO track user's device not support play service. should use pull to get msg.
+            return false;
+        }
+        return true;
+    }
 // 更新app当前语言
 public static void setLanguage(String language,String country, Context context) {
     if (null == language ||null == country || null == context) {

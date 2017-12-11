@@ -125,7 +125,7 @@ public class RegisterByEmailActivity extends BaseActivity {
                         Gson gson = new Gson();
                         RegisterResponse registerResponse = gson.fromJson(s, RegisterResponse.class);
                         if (registerResponse.getStatus().equals("success")) {
-                            ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
+//                            ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
                             Intent intent = new Intent(mContext, RegisterPager1Activity.class);
                             intent.putExtra("email", StringUtils.getEditText(mEdtEmail));
                             intent.putExtra("password", StringUtils.getEditText(mEdtPassWord));
