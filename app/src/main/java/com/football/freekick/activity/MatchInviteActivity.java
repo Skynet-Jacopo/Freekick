@@ -166,9 +166,12 @@ public class MatchInviteActivity extends BaseActivity {
             if (mMatch.getPitch_id() == App.mPitchesBeanList.get(i).getId()) {
                 mMatch.setLocation(App.mPitchesBeanList.get(i).getLocation());
                 mMatch.setPitch_name(App.mPitchesBeanList.get(i).getName());
+                mMatch.setLongitude(App.mPitchesBeanList.get(i).getLongitude());
+                mMatch.setLatitude(App.mPitchesBeanList.get(i).getLatitude());
+                mMatch.setPitch_image(App.mPitchesBeanList.get(i).getImage().getUrl());
             }
         }
-        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mMatch.getHome_team().getImage().getUrl()), mIvPic, R
+        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mMatch.getPitch_image()), mIvPic, R
                 .drawable.icon_default);
         mTvPitchName.setText(mMatch.getPitch_name());
         mTvLocation.setText(mMatch.getLocation());

@@ -3,6 +3,7 @@ package com.football.freekick.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,13 +17,22 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.orhanobut.logger.Logger;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private double longitude;
+    private double latitude;
+    private String location;
+    private String pitch_name;
+    private Bitmap bitmap;
+    private Bitmap bitmap1;
 
     private static class LongPressLocationSource implements LocationSource, GoogleMap.OnMapLongClickListener {
 
@@ -72,6 +82,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        longitude = getIntent().getDoubleExtra("longitude", 22.286725);
+        latitude = getIntent().getDoubleExtra("latitude", 114.145835);
+        location = getIntent().getStringExtra("location");
+        pitch_name = getIntent().getStringExtra("pitch_name");
+        Logger.d("longitude-->"+longitude+"  latitude-->"+latitude+"  location-->"+location+"  pitch_name-->"+pitch_name);
         mLocationSource = new LongPressLocationSource();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -119,8 +134,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         mMap.setMyLocationEnabled(true);
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(22.286725,114.145835);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Hong Kong"));
+        LatLng sydney = new LatLng(latitude,longitude);
+        mMap.addMarker(new MarkerOptions().position(sydney).title(location).snippet(pitch_name));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }

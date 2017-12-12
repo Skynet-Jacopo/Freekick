@@ -188,6 +188,9 @@ public class MatchContentActivity1 extends BaseActivity {
             if (mMatch.getPitch_id() == App.mPitchesBeanList.get(i).getId()) {
                 mMatch.setLocation(App.mPitchesBeanList.get(i).getLocation());
                 mMatch.setPitch_name(App.mPitchesBeanList.get(i).getName());
+                mMatch.setLongitude(App.mPitchesBeanList.get(i).getLongitude());
+                mMatch.setLatitude(App.mPitchesBeanList.get(i).getLatitude());
+                mMatch.setPitch_image(App.mPitchesBeanList.get(i).getImage().getUrl());
             }
         }
         mTvDate.setText(JodaTimeUtil.getDate(mMatch.getPlay_start()));
@@ -423,6 +426,10 @@ public class MatchContentActivity1 extends BaseActivity {
                 break;
             case R.id.ll_location:
                 intent.setClass(mContext, MapsActivity.class);
+                intent.putExtra("longitude",mMatch.getLongitude());
+                intent.putExtra("latitude",mMatch.getLatitude());
+                intent.putExtra("location",mMatch.getLocation());
+                intent.putExtra("pitch_name",mMatch.getPitch_name());
                 startActivity(intent);
                 break;
             case R.id.iv_top_1:

@@ -156,6 +156,10 @@ public class JoinMatchActivity extends BaseActivity {
                 break;
             case R.id.ll_location:
                 intent.setClass(mContext,MapsActivity.class);
+                intent.putExtra("longitude",mMatchesBean.getLongitude());
+                intent.putExtra("latitude",mMatchesBean.getLatitude());
+                intent.putExtra("location",mMatchesBean.getLocation());
+                intent.putExtra("pitch_name",mMatchesBean.getPitch_name());
                 startActivity(intent);
                 break;
             case R.id.tv_reduce:

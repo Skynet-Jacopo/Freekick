@@ -52,6 +52,33 @@ public class MatchDetail {
         private String location;
         private String pitch_name;
         private List<JoinMatchesBean> join_matches;
+        private double longitude;
+        private double latitude;
+        private String pitch_image;
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(double latitude) {
+            this.latitude = latitude;
+        }
+
+        public String getPitch_image() {
+            return pitch_image;
+        }
+
+        public void setPitch_image(String pitch_image) {
+            this.pitch_image = pitch_image;
+        }
 
         public String getLocation() {
             return location;

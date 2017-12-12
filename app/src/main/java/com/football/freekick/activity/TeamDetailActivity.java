@@ -188,11 +188,11 @@ public class TeamDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_friend:
-                intent.setClass(mContext,FriendActivity.class);
+                intent.setClass(mContext, FriendActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_notice:
-                intent.setClass(mContext,NoticeActivity.class);
+                intent.setClass(mContext, NoticeActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_fight:
@@ -458,8 +458,9 @@ public class TeamDetailActivity extends BaseActivity {
                                         matches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
                                     }
                                 }
-                                if (matches.get(i).getStatus().equals("w")&& !gson.toJson(matches.get(i)
-                                        .getJoin_matches()).contains("confirmation_pending")) {
+                                if (matches.get(i).getStatus().equals("w")
+                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains("confirmation_pending")
+                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains("invited")) {
                                     if (matches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {
                                         mListWait.add(matches.get(i));
                                         //是否要把主動參與的隊伍去除之後取第一條未落實球賽
@@ -484,7 +485,6 @@ public class TeamDetailActivity extends BaseActivity {
 
     /**
      * 取第一條未落實球賽的pop
-
      */
     private void showPopupInvite() {
         View contentView = LayoutInflater.from(mContext).inflate(

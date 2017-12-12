@@ -52,6 +52,35 @@ public class MatchesComing {
         private String status;
         private HomeTeamBean home_team;
         private List<JoinMatchesBean> join_matches;
+        private String pitch_name;
+        private String location;
+        private double longitude;
+        private double latitude;
+        private String pitch_image;
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(double latitude) {
+            this.latitude = latitude;
+        }
+
+        public String getPitch_image() {
+            return pitch_image;
+        }
+
+        public void setPitch_image(String pitch_image) {
+            this.pitch_image = pitch_image;
+        }
 
         public String getPitch_name() {
             return pitch_name;
@@ -68,9 +97,6 @@ public class MatchesComing {
         public void setLocation(String location) {
             this.location = location;
         }
-
-        private String pitch_name;
-        private String location;
         public int getId() {
             return id;
         }
@@ -569,6 +595,9 @@ public class MatchesComing {
             dest.writeTypedList(this.join_matches);
             dest.writeString(this.pitch_name);
             dest.writeString(this.location);
+            dest.writeDouble(this.longitude);
+            dest.writeDouble(this.latitude);
+            dest.writeString(this.pitch_image);
         }
 
         protected MatchesBean(Parcel in) {
@@ -583,6 +612,9 @@ public class MatchesComing {
             this.join_matches = in.createTypedArrayList(JoinMatchesBean.CREATOR);
             this.pitch_name = in.readString();
             this.location = in.readString();
+            this.longitude = in.readDouble();
+            this.latitude = in.readDouble();
+            this.pitch_image = in.readString();
         }
 
         public static final Creator<MatchesBean> CREATOR = new Creator<MatchesBean>() {

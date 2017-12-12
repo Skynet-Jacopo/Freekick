@@ -67,9 +67,9 @@ public class LoginPager2Activity extends BaseActivity {
         mContext = LoginPager2Activity.this;
         ButterKnife.bind(this);
 //        mEdtEmail.setText("huo@yopmail.com");
-        mEdtEmail.setText("yue@yopmail.com");
+//        mEdtEmail.setText("yue@yopmail.com");
 //        mEdtEmail.setText("lei@yopmail.com");
-//        mEdtEmail.setText("wei@yopmail.com");
+        mEdtEmail.setText("wei@yopmail.com");
         mEdtPassWord.setText("123456");
         initView();
 

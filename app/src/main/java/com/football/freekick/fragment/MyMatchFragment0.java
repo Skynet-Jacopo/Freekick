@@ -363,6 +363,9 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                                     if (mMatches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()) {
                                         mMatches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
                                         mMatches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
+                                        mMatches.get(i).setLongitude(App.mPitchesBeanList.get(j).getLongitude());
+                                        mMatches.get(i).setLatitude(App.mPitchesBeanList.get(j).getLatitude());
+                                        mMatches.get(i).setPitch_image(App.mPitchesBeanList.get(j).getImage().getUrl());
                                     }
                                 }
                                 if (mMatches.get(i).getStatus().equals("m")) {

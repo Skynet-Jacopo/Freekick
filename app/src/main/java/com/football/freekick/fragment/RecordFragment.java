@@ -79,11 +79,12 @@ public class RecordFragment extends BaseFragment {
     private List<MatchHistory.MatchesBean> mListFinished;
     private List<String> datas = new ArrayList<>();
     private CommonAdapter mRecorAdapter;
-    private List<SameArea.TeamsBean> mTeams;
+    private List<SameArea.TeamBean> mTeams;
     private CommonAdapter mSameAreaAdapter;
     private List<Followings.TeamsBean> mFollowingTeams;
     private CommonAdapter mAttentionAdapter;
     private String team_id;
+    private String district_id;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -103,7 +104,7 @@ public class RecordFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        district_id = PrefUtils.getString(App.APP_CONTEXT, "district_id", null);
         initView();
         initData();
         initRecordList();//初始化作戰記錄列表
@@ -160,7 +161,7 @@ public class RecordFragment extends BaseFragment {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerSameArea.setLayoutManager(manager);
-        mSameAreaAdapter = new CommonAdapter<SameArea.TeamsBean>(mContext, R.layout.item_same_area, mTeams) {
+        mSameAreaAdapter = new CommonAdapter<SameArea.TeamBean>(mContext, R.layout.item_same_area, mTeams) {
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
@@ -168,7 +169,7 @@ public class RecordFragment extends BaseFragment {
             }
 
             @Override
-            public void convert(ViewHolder holder, SameArea.TeamsBean teamsBean) {
+            public void convert(ViewHolder holder, SameArea.TeamBean teamsBean) {
                 holder.setText(R.id.tv_team_name, teamsBean.getTeam_name());
                 ImageView ivLogo = holder.getView(R.id.iv_logo);
                 ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivLogo, R.drawable
@@ -237,7 +238,7 @@ public class RecordFragment extends BaseFragment {
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 Intent intent = new Intent(mContext, MatchContentActivity1.class);
                 intent.putExtra("id", mListFinished.get(position).getId() + "");
-                intent.putExtra("type",7);
+                intent.putExtra("type", 7);
                 startActivity(intent);
             }
 
@@ -303,8 +304,8 @@ public class RecordFragment extends BaseFragment {
                         loadingDismiss();
                     }
                 });
-        String urlSameArea = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id +
-                "/get_same_district_teams";
+        //接口B7 已改做 http://api.freekick.hk/api/en/teams/get_all_teams  查所有球隊, 代替原來柑同區球隊
+        String urlSameArea = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/get_all_teams";
         Logger.d(urlSameArea);
         OkGo.get(urlSameArea)
                 .execute(new StringCallback() {
@@ -313,7 +314,14 @@ public class RecordFragment extends BaseFragment {
                         Logger.json(s);
                         Gson gson = new Gson();
                         SameArea json = gson.fromJson(s, SameArea.class);
-                        mTeams.addAll(json.getTeams());
+                        List<SameArea.TeamBean> team = json.getTeam();
+                        if (team.size() > 0)
+                            for (int i = 0; i < team.size(); i++) {
+                                if (team.get(i).getDistrict() != null && Integer.parseInt(district_id) == team.get(i)
+                                        .getDistrict().getId()) {
+                                    mTeams.add(team.get(i));
+                                }
+                            }
                         mSameAreaAdapter.notifyDataSetChanged();
                     }
 

@@ -297,8 +297,9 @@ public class FollowedTeamsActivity extends BaseActivity {
                                         matches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
                                     }
                                 }
-                                if (matches.get(i).getStatus().equals("w") && !gson.toJson(matches.get(i)
-                                        .getJoin_matches()).contains("confirmation_pending")) {
+                                if (matches.get(i).getStatus().equals("w")
+                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains("confirmation_pending")
+                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains("invited")) {
                                     if (matches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {
                                         mListWait.add(matches.get(i));
                                         //是否要把主動參與的隊伍去除之後取第一條未落實球賽

@@ -61,16 +61,17 @@ import static com.football.freekick.http.Url.ZH_HK;
 public class SameAreaTeamActivity extends BaseActivity {
 
     @Bind(R.id.tv_back)
-    TextView     mTvBack;
+    TextView mTvBack;
     @Bind(R.id.recycler_same_district)
     RecyclerView mRecyclerSameDistrict;
     @Bind(R.id.ll_parent)
     LinearLayout mLlParent;
     private ArrayList<MatchesComing.MatchesBean> mListWait = new ArrayList<>();
-    private List<SameArea.TeamsBean> mTeams;
-    private Context                  mContext;
-    private CommonAdapter            mAdapter;
-    private String                   team_id;
+    private List<SameArea.TeamBean> mTeams;
+    private Context mContext;
+    private CommonAdapter mAdapter;
+    private String team_id;
+    private String district_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,7 @@ public class SameAreaTeamActivity extends BaseActivity {
         setContentView(R.layout.activity_same_area_team);
         mContext = SameAreaTeamActivity.this;
         ButterKnife.bind(this);
+        district_id = PrefUtils.getString(App.APP_CONTEXT, "district_id", null);
         initView();
         initData();
     }
@@ -88,8 +90,7 @@ public class SameAreaTeamActivity extends BaseActivity {
         }
         loadingShow();
         team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
-        String urlSameArea = BaseUrl + (App.isChinese ? ZH_HK : EN) + "teams/" + team_id +
-                "/get_same_district_teams";
+        String urlSameArea = BaseUrl + (App.isChinese ? ZH_HK : EN) + "teams/get_all_teams";
         Logger.d(urlSameArea);
         OkGo.get(urlSameArea)
                 .execute(new StringCallback() {
@@ -97,9 +98,15 @@ public class SameAreaTeamActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson     gson = new Gson();
+                        Gson gson = new Gson();
                         SameArea json = gson.fromJson(s, SameArea.class);
-                        mTeams.addAll(json.getTeams());
+                        List<SameArea.TeamBean> team = json.getTeam();
+                        for (int i = 0; i < team.size(); i++) {
+                            if (team.get(i).getDistrict() != null && Integer.parseInt(district_id) == team.get(i)
+                                    .getDistrict().getId()) {
+                                mTeams.add(team.get(i));
+                            }
+                        }
                         mAdapter.notifyDataSetChanged();
                         getFollowedTeams();
                     }
@@ -125,8 +132,8 @@ public class SameAreaTeamActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
-                        Gson                      gson           = new Gson();
-                        Attention                 attention      = gson.fromJson(s, Attention.class);
+                        Gson gson = new Gson();
+                        Attention attention = gson.fromJson(s, Attention.class);
                         List<Attention.TeamsBean> attentionTeams = attention.getTeams();
                         for (int i = 0; i < attentionTeams.size(); i++) {
                             for (int j = 0; j < mTeams.size(); j++) {
@@ -156,7 +163,7 @@ public class SameAreaTeamActivity extends BaseActivity {
             mRecyclerSameDistrict.setHasFixedSize(true);
         }
         mRecyclerSameDistrict.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new CommonAdapter<SameArea.TeamsBean>(mContext, R.layout
+        mAdapter = new CommonAdapter<SameArea.TeamBean>(mContext, R.layout
                 .item_same_area_more, mTeams) {
             @Override
             public void onBindViewHolder(ViewHolder holder, int position) {
@@ -165,9 +172,9 @@ public class SameAreaTeamActivity extends BaseActivity {
             }
 
             @Override
-            public void convert(ViewHolder holder, SameArea.TeamsBean teamsBean) {
+            public void convert(ViewHolder holder, SameArea.TeamBean teamsBean) {
                 final int itemPosition = holder.getItemPosition();
-                ImageView ivPic        = holder.getView(R.id.iv_pic);
+                ImageView ivPic = holder.getView(R.id.iv_pic);
                 ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivPic, R.drawable
                         .icon_default);
                 if (teamsBean.isAttention()) {
@@ -233,7 +240,7 @@ public class SameAreaTeamActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson   gson   = new Gson();
+                        Gson gson = new Gson();
                         Follow follow = gson.fromJson(s, Follow.class);
                         if (follow.getSuccess() != null) {
                             ToastUtil.toastShort(follow.getSuccess());
@@ -275,7 +282,7 @@ public class SameAreaTeamActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson   gson   = new Gson();
+                        Gson gson = new Gson();
                         Follow follow = gson.fromJson(s, Follow.class);
                         if (follow.getSuccess() != null) {
                             ToastUtil.toastShort(follow.getSuccess());
@@ -308,7 +315,7 @@ public class SameAreaTeamActivity extends BaseActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         TextView tviconclose = (TextView) contentView.findViewById(R.id.tv_icon_close);
         tviconclose.setTypeface(App.mTypeface);
-        TextView tvnewmatch         = (TextView) contentView.findViewById(R.id.tv_new_match);
+        TextView tvnewmatch = (TextView) contentView.findViewById(R.id.tv_new_match);
         TextView tvpartakethismatch = (TextView) contentView.findViewById(R.id.tv_partake_this_match);
         tviconclose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -373,8 +380,8 @@ public class SameAreaTeamActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
                         loadingDismiss();
-                        Gson                            gson    = new Gson();
-                        MatchesComing                   json    = gson.fromJson(s, MatchesComing.class);
+                        Gson gson = new Gson();
+                        MatchesComing json = gson.fromJson(s, MatchesComing.class);
                         List<MatchesComing.MatchesBean> matches = json.getMatches();
                         if (matches != null && matches.size() > 0)
                             for (int i = 0; i < matches.size(); i++) {
@@ -384,8 +391,9 @@ public class SameAreaTeamActivity extends BaseActivity {
                                         matches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
                                     }
                                 }
-                                if (matches.get(i).getStatus().equals("w") && !gson.toJson(matches.get(i)
-                                        .getJoin_matches()).contains("confirmation_pending")) {
+                                if (matches.get(i).getStatus().equals("w")
+                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains("confirmation_pending")
+                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains("invited")) {
                                     if (matches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {
                                         mListWait.add(matches.get(i));
                                         //是否要把主動參與的隊伍去除之後取第一條未落實球賽
@@ -419,13 +427,13 @@ public class SameAreaTeamActivity extends BaseActivity {
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
-        TextView                  tvnewmatch  = (TextView) contentView.findViewById(R.id.tv_new_match);
-        TextView                  tvstate     = (TextView) contentView.findViewById(R.id.tv_state);
-        TextView                  tvLocation  = (TextView) contentView.findViewById(R.id.tv_location);
-        TextView                  tvTime      = (TextView) contentView.findViewById(R.id.tv_time);
-        TextView                  tvHomeName  = (TextView) contentView.findViewById(R.id.tv_home_name);
-        ImageView                 ivHomeLogo  = (ImageView) contentView.findViewById(R.id.iv_home_logo);
-        TextView                  tvDate      = (TextView) contentView.findViewById(R.id.tv_date);
+        TextView tvnewmatch = (TextView) contentView.findViewById(R.id.tv_new_match);
+        TextView tvstate = (TextView) contentView.findViewById(R.id.tv_state);
+        TextView tvLocation = (TextView) contentView.findViewById(R.id.tv_location);
+        TextView tvTime = (TextView) contentView.findViewById(R.id.tv_time);
+        TextView tvHomeName = (TextView) contentView.findViewById(R.id.tv_home_name);
+        ImageView ivHomeLogo = (ImageView) contentView.findViewById(R.id.iv_home_logo);
+        TextView tvDate = (TextView) contentView.findViewById(R.id.tv_date);
         MatchesComing.MatchesBean matchesBean = mListWait.get(0);
         tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
         ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
@@ -434,7 +442,7 @@ public class SameAreaTeamActivity extends BaseActivity {
         String date = JodaTimeUtil.getDate2(matchesBean.getPlay_start());
         tvDate.setText(date);
         String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
-        String end   = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
+        String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
         tvTime.setText(start + " - " + end);
         tvLocation.setText(matchesBean.getLocation());
         tvstate.setOnClickListener(new View.OnClickListener() {
@@ -499,7 +507,7 @@ public class SameAreaTeamActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson   gson   = new Gson();
+                        Gson gson = new Gson();
                         Invite invite = gson.fromJson(s, Invite.class);
                         if (invite.getSuccess() != null) {
                             ToastUtil.toastShort(invite.getSuccess());

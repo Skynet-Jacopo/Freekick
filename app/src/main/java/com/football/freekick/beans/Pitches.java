@@ -32,6 +32,15 @@ public class Pitches {
         private String location;
         private String name;
         private int size;
+        /**
+         * image : {"url":"/uploads/pitch/image/11/HKE1.jpg"}
+         * longitude : 23
+         * latitude : 114
+         */
+
+        private ImageBean image;
+        private double longitude;
+        private double latitude;
 
         public int getId() {
             return id;
@@ -73,6 +82,30 @@ public class Pitches {
             this.size = size;
         }
 
+        public ImageBean getImage() {
+            return image;
+        }
+
+        public void setImage(ImageBean image) {
+            this.image = image;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(double latitude) {
+            this.latitude = latitude;
+        }
+
         public static class DistrictBean {
             /**
              * region : Hong Kong
@@ -106,6 +139,22 @@ public class Pitches {
 
             public void setId(int id) {
                 this.id = id;
+            }
+        }
+
+        public static class ImageBean {
+            /**
+             * url : /uploads/pitch/image/11/HKE1.jpg
+             */
+
+            private String url;
+
+            public String getUrl() {
+                return url;
+            }
+
+            public void setUrl(String url) {
+                this.url = url;
             }
         }
     }

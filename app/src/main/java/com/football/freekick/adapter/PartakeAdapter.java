@@ -47,6 +47,9 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if (App.mPitchesBeanList.get(i).getId() == mMatchList.get(j).getPitch_id()) {
                     mMatchList.get(j).setPitch_name(App.mPitchesBeanList.get(i).getName());
                     mMatchList.get(j).setLocation(App.mPitchesBeanList.get(i).getLocation());
+                    mMatchList.get(j).setLongitude(App.mPitchesBeanList.get(i).getLongitude());
+                    mMatchList.get(j).setLatitude(App.mPitchesBeanList.get(i).getLatitude());
+                    mMatchList.get(j).setPitch_image(App.mPitchesBeanList.get(i).getImage().getUrl());
                 }
             }
         }
@@ -86,7 +89,7 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             myHolder1.ivDressHome.setBackgroundColor(Color.parseColor("#" + matchesBean.getHome_team_color()));
             myHolder1.tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
             // TODO: 2017/11/30 球場圖 還未有
-            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
+            ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getPitch_image()),
                     myHolder1.ivPic);
 
             String status = matchesBean.getStatus();
