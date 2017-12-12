@@ -231,7 +231,7 @@
     <string name="team_average_age">team average age</string>
     <string name="match_fail">match failed</string>
     <string name="please_verify_your_account_first">Please verify your account and activate it in your email first</string>
-    <string name="confirmation_pending">confirmation pending</string>
+    <string name="confirmation_pending">wait to confirm</string>
     <string name="invited_already">invited</string>
     <string name="accept_the_invitation">accept</string>
     <string name="email_error">Please enter the correct email format!</string>

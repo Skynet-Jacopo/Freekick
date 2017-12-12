@@ -1,5 +1,8 @@
 package com.football.freekick.beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -19,7 +22,7 @@ public class SameArea {
         this.team = team;
     }
 
-    public static class TeamBean {
+    public static class TeamBean implements Parcelable {
         /**
          * id : 51
          * team_name : 空中监狱
@@ -44,7 +47,7 @@ public class SameArea {
         private int size;
         private String color1;
         private String color2;
-        private Object remark;
+        private String remark;
         private String status;
         private ImageBean image;
         private int establish_year;
@@ -105,11 +108,11 @@ public class SameArea {
             this.color2 = color2;
         }
 
-        public Object getRemark() {
+        public String getRemark() {
             return remark;
         }
 
-        public void setRemark(Object remark) {
+        public void setRemark(String remark) {
             this.remark = remark;
         }
 
@@ -193,7 +196,7 @@ public class SameArea {
             this.battle_preference = battle_preference;
         }
 
-        public static class ImageBean {
+        public static class ImageBean implements Parcelable {
             /**
              * url : /uploads/team/image/51/image.jpeg
              */
@@ -207,9 +210,38 @@ public class SameArea {
             public void setUrl(String url) {
                 this.url = url;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.url);
+            }
+
+            public ImageBean() {
+            }
+
+            protected ImageBean(Parcel in) {
+                this.url = in.readString();
+            }
+
+            public static final Parcelable.Creator<ImageBean> CREATOR = new Parcelable.Creator<ImageBean>() {
+                @Override
+                public ImageBean createFromParcel(Parcel source) {
+                    return new ImageBean(source);
+                }
+
+                @Override
+                public ImageBean[] newArray(int size) {
+                    return new ImageBean[size];
+                }
+            };
         }
 
-        public static class DistrictBean {
+        public static class DistrictBean implements Parcelable {
             /**
              * id : 19
              * district : Central and Western
@@ -243,9 +275,42 @@ public class SameArea {
             public void setRegion(String region) {
                 this.region = region;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeInt(this.id);
+                dest.writeString(this.district);
+                dest.writeString(this.region);
+            }
+
+            public DistrictBean() {
+            }
+
+            protected DistrictBean(Parcel in) {
+                this.id = in.readInt();
+                this.district = in.readString();
+                this.region = in.readString();
+            }
+
+            public static final Parcelable.Creator<DistrictBean> CREATOR = new Parcelable.Creator<DistrictBean>() {
+                @Override
+                public DistrictBean createFromParcel(Parcel source) {
+                    return new DistrictBean(source);
+                }
+
+                @Override
+                public DistrictBean[] newArray(int size) {
+                    return new DistrictBean[size];
+                }
+            };
         }
 
-        public static class UserBean {
+        public static class UserBean implements Parcelable {
             /**
              * id : 27
              * username : 来来2
@@ -279,6 +344,100 @@ public class SameArea {
             public void setRole(String role) {
                 this.role = role;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeInt(this.id);
+                dest.writeString(this.username);
+                dest.writeString(this.role);
+            }
+
+            public UserBean() {
+            }
+
+            protected UserBean(Parcel in) {
+                this.id = in.readInt();
+                this.username = in.readString();
+                this.role = in.readString();
+            }
+
+            public static final Parcelable.Creator<UserBean> CREATOR = new Parcelable.Creator<UserBean>() {
+                @Override
+                public UserBean createFromParcel(Parcel source) {
+                    return new UserBean(source);
+                }
+
+                @Override
+                public UserBean[] newArray(int size) {
+                    return new UserBean[size];
+                }
+            };
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.id);
+            dest.writeString(this.team_name);
+            dest.writeInt(this.size);
+            dest.writeString(this.color1);
+            dest.writeString(this.color2);
+            dest.writeString(this.remark);
+            dest.writeString(this.status);
+            dest.writeParcelable(this.image, flags);
+            dest.writeInt(this.establish_year);
+            dest.writeInt(this.average_height);
+            dest.writeInt(this.age_range_min);
+            dest.writeInt(this.age_range_max);
+            dest.writeParcelable(this.district, flags);
+            dest.writeParcelable(this.user, flags);
+            dest.writeStringList(this.style);
+            dest.writeStringList(this.battle_preference);
+            dest.writeByte(this.attention ? (byte) 1 : (byte) 0);
+        }
+
+        public TeamBean() {
+        }
+
+        protected TeamBean(Parcel in) {
+            this.id = in.readInt();
+            this.team_name = in.readString();
+            this.size = in.readInt();
+            this.color1 = in.readString();
+            this.color2 = in.readString();
+            this.remark = in.readString();
+            this.status = in.readString();
+            this.image = in.readParcelable(ImageBean.class.getClassLoader());
+            this.establish_year = in.readInt();
+            this.average_height = in.readInt();
+            this.age_range_min = in.readInt();
+            this.age_range_max = in.readInt();
+            this.district = in.readParcelable(DistrictBean.class.getClassLoader());
+            this.user = in.readParcelable(UserBean.class.getClassLoader());
+            this.style = in.createStringArrayList();
+            this.battle_preference = in.createStringArrayList();
+            this.attention = in.readByte() != 0;
+        }
+
+        public static final Parcelable.Creator<TeamBean> CREATOR = new Parcelable.Creator<TeamBean>() {
+            @Override
+            public TeamBean createFromParcel(Parcel source) {
+                return new TeamBean(source);
+            }
+
+            @Override
+            public TeamBean[] newArray(int size) {
+                return new TeamBean[size];
+            }
+        };
     }
 }
