@@ -7,10 +7,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -23,12 +27,15 @@ import com.football.freekick.beans.Pitches;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpHeaders;
 import com.orhanobut.logger.Logger;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -84,6 +91,7 @@ public class LoginPager2Activity extends BaseActivity {
             public void onSuccess(LoginResult loginResult) {
                 Gson gson = new Gson();
                 Logger.json(gson.toJson(loginResult));
+                getLoginInfo(loginResult.getAccessToken());
             }
 
             @Override
@@ -144,6 +152,7 @@ public class LoginPager2Activity extends BaseActivity {
         JsonObject object1 = new JsonObject();
         object1.addProperty("email", StringUtils.getEditText(mEdtEmail));
         object1.addProperty("password", StringUtils.getEditText(mEdtPassWord));
+        object1.addProperty("android_device_token", FirebaseInstanceId.getInstance().getToken());
         object.add("user", object1);
         Logger.json(object.toString());
         String url = App.isChinese ? "http://api.freekick.hk/api/zh_HK/auth/sign_in" :
@@ -292,5 +301,35 @@ public class LoginPager2Activity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode,
                 resultCode, data);
+    }
+
+    public void getLoginInfo(AccessToken accessToken) {
+        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                if (object != null) {
+                    String id = object.optString("id");   //比如:1565455221565
+                    String name = object.optString("name");  //比如：Zhang San
+                    String gender = object.optString("gender");  //性别：比如 male （男）  female （女）
+                    String emali = object.optString("email");  //邮箱：比如：56236545@qq.com
+
+                    //获取用户头像
+                    JSONObject object_pic = object.optJSONObject("picture");
+                    JSONObject object_data = object_pic.optJSONObject("data");
+                    String photo = object_data.optString("url");
+
+                    //获取地域信息
+                    String locale = object.optString("locale");   //zh_CN 代表中文简体
+
+                    Toast.makeText(mContext, "" + object.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link,gender,birthday,email,picture,locale,updated_time,timezone," +
+                "age_range,first_name,last_name");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 }

@@ -1,0 +1,19 @@
+{
+  "accessToken": {
+    "applicationId": "164526007493077",
+    "declinedPermissions": [],
+    "expires": "Feb 11, 2018 10:26:18 AM",
+    "lastRefresh": "Dec 13, 2017 10:48:00 AM",
+    "permissions": [
+      "public_profile",
+      "email"
+    ],
+    "source": "FACEBOOK_APPLICATION_SERVICE",
+    "token": "EAACVorI7odUBAPPt8GuD7svgabdbCmb6qIxt7Uq1lkeOjDgZCpVxLguM9m6vwGZAsmJ6eKJjuplAxjG7NPbSjlyzZCh2EUF4RDsqRCDmyghtBZAdEg5vw8SySiub2ghxBaSNoK1eRiZAtOfdhdyiKZCmkitgJhb9idSHGppp6cztPU81nBg82TuJvUZAZCJJb1ZCZC2q5o1uQnOdg6OOkHyuTfvyvjIAoH6o6mZBCRZArompGwZDZD",
+    "userId": "108927019898583"
+  },
+  "recentlyDeniedPermissions": [],
+  "recentlyGrantedPermissions": [
+    "public_profile"
+  ]
+}

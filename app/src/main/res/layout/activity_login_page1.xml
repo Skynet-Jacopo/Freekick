@@ -9,7 +9,11 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.football.freekick.activity.registerlogin.LoginPage1Activity">
-
+    <EditText
+        android:id="@+id/edt_log"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

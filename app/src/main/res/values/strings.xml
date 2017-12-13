@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Freekick</string>
-    <string name="facebook_app_id">1142428895392515</string>
+    <!--<string name="facebook_app_id">923107371174162</string>-->
+    <string name="facebook_app_id">164526007493077</string>
+    <string name="fb_login_protocol_scheme">fb164526007493077</string>
+
     <string name="test">&#xe643;</string>
     <!--我的(人形圖標)-->
     <string name="user_icon">&#xe62a;</string>

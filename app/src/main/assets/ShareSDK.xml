@@ -126,8 +126,8 @@
     <Facebook
         Id="8"
         SortId="8"
-		ConsumerKey="1412473428822331"
-		ConsumerSecret="a42f4f3f867dc947b9ed6020c2e93558"
+		ConsumerKey="923107371174162"
+		ConsumerSecret="986d178106c4c509e2fbd2677cdbd363"
 		RedirectUrl="https://mob.com"
 		ShareByAppClient="true"
 		Enable="true" />
