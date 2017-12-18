@@ -239,7 +239,7 @@ public class LoginPager2Activity extends BaseActivity {
                                                 .getId() + "");
                                     }
                                     //註冊FirebaseDatabase
-                                    loginFirebaseDatabase(user.getUsername(),teamsBean.getId()+"");
+                                    loginFirebaseDatabase(user.getUsername(),teamsBean);
 //                                    registerFirebaseDatabase(user.getUsername(),teamsBean.getId()+"");
                                     startActivity(new Intent(mContext, OneTimePagerActivity.class));
                                 }
@@ -262,7 +262,7 @@ public class LoginPager2Activity extends BaseActivity {
                 });
     }
 
-    private void loginFirebaseDatabase(final String username, final String team_id) {
+    private void loginFirebaseDatabase(final String username, final Login.UserBean.TeamsBean teamsBean) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(StringUtils.getEditText(mEdtEmail), StringUtils
                 .getEditText(mEdtPassWord))
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -275,9 +275,21 @@ public class LoginPager2Activity extends BaseActivity {
                                 FirebaseDatabase.getInstance()
                                         .getReference().
                                         child("users").
-                                        child(team_id).
+                                        child(teamsBean.getId()+"").
                                         child("connection").
                                         setValue(UsersChatAdapter.ONLINE);
+                                FirebaseDatabase.getInstance()
+                                        .getReference().
+                                        child("users").
+                                        child(teamsBean.getId()+"").
+                                        child("displayName").
+                                        setValue(username+"（"+teamsBean.getTeam_name()+"）");
+                                FirebaseDatabase.getInstance()
+                                        .getReference().
+                                        child("users").
+                                        child(teamsBean.getId()+"").
+                                        child("team_url").
+                                        setValue(teamsBean.getImage().getUrl());
                             }
                         } else {
                             Logger.d(task.getException().getMessage());

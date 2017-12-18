@@ -89,7 +89,7 @@ public class MessageFragment extends BaseFragment {
                 if (user != null) {
                     mCurrentUserUid = PrefUtils.getString(App.APP_CONTEXT,"team_id",null);
                     mChildEventListener = getChildEventListener();
-                    mUserRefDatabase.limitToFirst(50).addChildEventListener(mChildEventListener);
+                    mUserRefDatabase.orderByChild("lastEditTime").limitToFirst(50).addChildEventListener(mChildEventListener);
                 } else {
 
                 }

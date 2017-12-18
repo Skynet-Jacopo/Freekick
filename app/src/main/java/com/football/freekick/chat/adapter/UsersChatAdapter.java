@@ -22,8 +22,10 @@ import com.football.freekick.chat.model.ChatMessage;
 import com.football.freekick.chat.model.User;
 import com.football.freekick.chat.ui.ChatActivity;
 import com.football.freekick.utils.JodaTimeUtil;
+import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.views.RoundImageView;
+import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -69,7 +71,7 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
         // Set avatar
         int userAvatarId = ChatHelper.getDrawableAvatarId(fireChatUser.getAvatarId());
         Drawable avatarDrawable = ContextCompat.getDrawable(mContext, userAvatarId);
-        holder.getUserAvatar().setImageDrawable(avatarDrawable);
+        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(fireChatUser.getTeam_url()),holder.getUserAvatar(),R.drawable.icon_default);
 
         // Set display name
         holder.getUserDisplayName().setText(fireChatUser.getDisplayName());
@@ -164,7 +166,7 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
     /* ViewHolder for RecyclerView */
     public class ViewHolderUsers extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private RoundImageView mUserAvatar;
+        private ImageView mUserAvatar;
         private TextView mUserDisplayName;
         private TextView mTvContent;
         private TextView mTvTime;
@@ -173,7 +175,7 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
 
         public ViewHolderUsers(Context context, View itemView) {
             super(itemView);
-            mUserAvatar = (RoundImageView) itemView.findViewById(R.id.iv_head);
+            mUserAvatar = (ImageView) itemView.findViewById(R.id.iv_head);
             mUserDisplayName = (TextView) itemView.findViewById(R.id.tv_name);
             mTvContent = (TextView) itemView.findViewById(R.id.tv_content);
             mTvMsgNum = (TextView) itemView.findViewById(R.id.tv_msg_num);

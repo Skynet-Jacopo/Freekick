@@ -16,10 +16,27 @@ public class User implements Serializable {
     private String connection;
     private int avatarId;
     private long createdAt;
-
     private long readNum;
+    private long lastEditTime;
+    private String team_url;
 
     private String mRecipientId;
+
+    public long getLastEditTime() {
+        return lastEditTime;
+    }
+
+    public void setLastEditTime(long lastEditTime) {
+        this.lastEditTime = lastEditTime;
+    }
+
+    public String getTeam_url() {
+        return team_url;
+    }
+
+    public void setTeam_url(String team_url) {
+        this.team_url = team_url;
+    }
 
     public User() {
     }

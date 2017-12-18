@@ -342,6 +342,7 @@ public class SetUpFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case R.id.tv_logout:
+                PrefUtils.clearShare(App.APP_CONTEXT);
                 logout();
                 break;
         }

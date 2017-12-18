@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:clickable="true"
               android:background="@drawable/selector_rectangle_white_gray_bg"
+              android:clickable="true"
               android:orientation="vertical">
 
     <LinearLayout
@@ -15,19 +16,15 @@
         android:paddingRight="24px"
         android:paddingTop="32px">
 
-        <LinearLayout
-            android:layout_width="64px"
-            android:layout_height="64px"
-            android:layout_marginRight="32px"
-            android:background="@drawable/icon_blue_oval">
 
-            <com.football.freekick.views.RoundImageView
-                android:id="@+id/iv_head"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="fitXY"/>
-        </LinearLayout>
+        <ImageView
+            android:src="@drawable/clothes_home"
+            android:id="@+id/iv_head"
+            android:layout_width="64px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:layout_marginRight="32px"
+            android:scaleType="fitXY"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -50,9 +47,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12px"
                 android:singleLine="true"
-                android:text="我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容"
                 android:textColor="#b7b7b7"
-                android:textSize="18px"/>
+                android:textSize="18px"
+                tools:text="我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容"/>
         </LinearLayout>
 
         <TextView
@@ -65,7 +62,8 @@
             android:padding="5px"
             android:text="99"
             android:textColor="@color/white"
-            android:textSize="20px"/>
+            android:textSize="20px"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_time"
@@ -73,8 +71,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="32px"
-            android:text="時間"
             android:textColor="#bcbcbc"
-            android:textSize="18px"/>
+            android:textSize="18px"
+            tools:text="時間"/>
     </LinearLayout>
 </LinearLayout>

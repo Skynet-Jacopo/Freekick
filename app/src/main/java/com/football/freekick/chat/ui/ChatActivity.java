@@ -61,9 +61,11 @@ public class ChatActivity extends BaseActivity {
     private String mCurrentUserId;
     private MessageChatAdapter messageChatAdapter;
     private DatabaseReference messageChatDatabase;
+    private DatabaseReference mUserRefDatabase;
 //    private DatabaseReference mUserRefDatabase;
     private ChildEventListener messageChatListener;
     private String chatRef;
+    private String recipient_id;
 
 
     @Override
@@ -80,15 +82,7 @@ public class ChatActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND){
 
-                    String senderMessage = mUserMessageChatText.getText().toString().trim();
-
-                    if (!senderMessage.isEmpty()) {
-
-                        ChatMessage newMessage = new ChatMessage(senderMessage, mCurrentUserId, mRecipientId,new Date().getTime());
-                        messageChatDatabase.push().setValue(newMessage);
-
-                        mUserMessageChatText.setText("");
-                    }
+                    sendMsg();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                     return true;
@@ -101,6 +95,7 @@ public class ChatActivity extends BaseActivity {
     private void initView() {
         String name = getIntent().getStringExtra(ExtraIntent.RECIPIENT_NAME);
         String current_user_id = getIntent().getStringExtra(ExtraIntent.EXTRA_CURRENT_USER_ID);
+        recipient_id = getIntent().getStringExtra(ExtraIntent.EXTRA_RECIPIENT_ID);
 //        mUserRefDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(current_user_id);
         mTvBack.setTypeface(App.mTypeface);
         mTvBack.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +116,7 @@ public class ChatActivity extends BaseActivity {
     private void setDatabaseInstance() {
         chatRef = getIntent().getStringExtra(ExtraIntent.EXTRA_CHAT_REF);
         messageChatDatabase = FirebaseDatabase.getInstance().getReference().child(chatRef);
+        mUserRefDatabase = FirebaseDatabase.getInstance().getReference().child("users");
     }
 
     private void setUsersId() {
@@ -139,7 +135,7 @@ public class ChatActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        messageChatListener = messageChatDatabase.limitToFirst(20).addChildEventListener(new ChildEventListener() {
+        messageChatListener = messageChatDatabase.limitToFirst(50).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildKey) {
 
@@ -194,14 +190,17 @@ public class ChatActivity extends BaseActivity {
 
     @OnClick(R.id.btn_send_message)
     public void btnSendMsgListener(View sendButton) {
+        sendMsg();
+    }
 
+    private void sendMsg() {
         String senderMessage = mUserMessageChatText.getText().toString().trim();
 
         if (!senderMessage.isEmpty()) {
 
             ChatMessage newMessage = new ChatMessage(senderMessage, mCurrentUserId, mRecipientId,new Date().getTime());
             messageChatDatabase.push().setValue(newMessage);
-
+            mUserRefDatabase.child(recipient_id).child("lastEditTime").setValue(-new Date().getTime());
             mUserMessageChatText.setText("");
         }
     }
