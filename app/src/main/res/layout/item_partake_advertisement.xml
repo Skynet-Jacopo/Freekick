@@ -11,7 +11,7 @@
         android:background="@color/white"
         android:paddingTop="32px">
 
-        <ImageView
+        <com.football.freekick.views.ClickableImageView
             android:scaleType="centerCrop"
             android:id="@+id/iv_advertisement"
             android:layout_width="match_parent"

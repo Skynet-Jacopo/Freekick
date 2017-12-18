@@ -74,6 +74,24 @@ public class RegisterResponse {
         private Object     deleted_at;
         private String     created_at;
         private String     updated_at;
+        private String     android_device_token;
+        private boolean     push_notification;
+
+        public String getAndroid_device_token() {
+            return android_device_token;
+        }
+
+        public void setAndroid_device_token(String android_device_token) {
+            this.android_device_token = android_device_token;
+        }
+
+        public boolean getPush_notification() {
+            return push_notification;
+        }
+
+        public void setPush_notification(boolean push_notification) {
+            this.push_notification = push_notification;
+        }
 
         public int getId() {
             return id;

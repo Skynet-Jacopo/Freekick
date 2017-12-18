@@ -12,15 +12,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
 import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
+import com.football.freekick.chat.FireChatHelper.ExtraIntent;
+import com.football.freekick.chat.adapter.UsersChatAdapter;
+import com.football.freekick.chat.model.User;
 import com.football.freekick.utils.JodaTimeUtil;
+import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -41,8 +51,14 @@ public class MessageFragment extends BaseFragment {
     private List<String> datas = new ArrayList<>();
     private CommonAdapter mAdapter;
 
-    FirebaseAuth auth;
-    FirebaseAuth.AuthStateListener authListener;
+    private String mCurrentUserUid;
+    private List<String>  mUsersKeyList;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference mUserRefDatabase;
+
+    private ChildEventListener mChildEventListener;
+    private UsersChatAdapter mUsersChatAdapter;
     private String userUID;
     public MessageFragment() {
         // Required empty public constructor
@@ -62,37 +78,54 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        auth = FirebaseAuth.getInstance();
-        authListener = new FirebaseAuth.AuthStateListener() {
+        mUsersKeyList = new ArrayList<String>();
+        initRecyclerView();
+        mAuth = FirebaseAuth.getInstance();
+        mUserRefDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(
-                    @NonNull FirebaseAuth firebaseAuth) {
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user!=null) {
-                    Log.d("onAuthStateChanged", "登入:"+
-                            user.getUid());
-                    String userUID =  user.getUid();
-//                    addContact();
-//                    updateContact();
-//                    pushFriend("Jack");
-                }else{
-                    Log.d("onAuthStateChanged", "已登出");
+                if (user != null) {
+                    mCurrentUserUid = PrefUtils.getString(App.APP_CONTEXT,"team_id",null);
+                    mChildEventListener = getChildEventListener();
+                    mUserRefDatabase.limitToFirst(50).addChildEventListener(mChildEventListener);
+                } else {
+
                 }
             }
         };
-        initView();
-        initData();
+//        initView();
+//        initData();
     }
+
+    private void initRecyclerView() {
+        mUsersChatAdapter = new UsersChatAdapter(mContext, new ArrayList<User>());
+        mRecyclerMessage.setLayoutManager(new LinearLayoutManager(mContext));
+        mRecyclerMessage.setHasFixedSize(true);
+        mRecyclerMessage.setAdapter(mUsersChatAdapter);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        auth.addAuthStateListener(authListener);
+        mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        auth.removeAuthStateListener(authListener);
+
+        clearCurrentUsers();
+
+        if (mChildEventListener != null) {
+            mUserRefDatabase.removeEventListener(mChildEventListener);
+        }
+
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+
     }
     private void initData() {
         for (int i = 0; i < 20; i++) {
@@ -120,7 +153,7 @@ public class MessageFragment extends BaseFragment {
                 holder.setText(R.id.tv_name, s);
                 holder.setText(R.id.tv_content, "我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容");
                 holder.setText(R.id.tv_msg_num, "99");
-                holder.setText(R.id.tv_time, JodaTimeUtil.progressDate1(mContext, "2017-12-01T10:00:10+08:00"));
+//                holder.setText(R.id.tv_time, JodaTimeUtil.progressDate1(mContext, "2017-12-01T10:00:10+08:00"));
                 if (itemPosition > 9) {
                     holder.setVisible(R.id.tv_msg_num, false);
                     holder.setVisible(R.id.tv_time, true);
@@ -148,5 +181,64 @@ public class MessageFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    private void clearCurrentUsers() {
+        mUsersChatAdapter.clear();
+        mUsersKeyList.clear();
+    }
+    private ChildEventListener getChildEventListener() {
+        return new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                if(dataSnapshot.exists()){
+                    String userUid = dataSnapshot.getKey();
+
+                    if(dataSnapshot.getKey().equals(mCurrentUserUid)){
+                        User currentUser = dataSnapshot.getValue(User.class);
+                        mUsersChatAdapter.setCurrentUserInfo(userUid, currentUser.getEmail(), currentUser.getCreatedAt());
+                    }else {
+                        User recipient = dataSnapshot.getValue(User.class);
+                        recipient.setRecipientId(userUid);
+                        mUsersKeyList.add(userUid);
+                        mUsersChatAdapter.refill(recipient);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                if(dataSnapshot.exists()) {
+                    String userUid = dataSnapshot.getKey();
+                    if(!userUid.equals(mCurrentUserUid)) {
+
+                        User user = dataSnapshot.getValue(User.class);
+
+                        int index = mUsersKeyList.indexOf(userUid);
+                        if(index > -1) {
+                            mUsersChatAdapter.changeUser(index, user);
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
     }
 }

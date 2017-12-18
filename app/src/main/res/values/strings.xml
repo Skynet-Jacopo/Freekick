@@ -269,5 +269,17 @@
     <string name="share">分享</string>
     <string name="yesterday">昨天</string>
 
+    <!--以下是即時通訊-->
+    <!-- LogInActivity-->
+    <string name="login_error_message">Please make sure you enter a username and password!</string>
+    <string name="login_error_title">Checking</string>
+    <string name="title_activity_chat">Chat</string>
 
+    <!-- RegisterActivity-->
+    <string name="error_fields_empty">Please make sure you enter display name, email and password!</string>
+    <string name="error_incorrect_email_pass">Provide correct email and password with more than 6 characters.</string>
+    <string name="notice_open_success">消息通知已開啟</string>
+    <string name="notice_close_success">消息通知已關閉</string>
+    <string name="notice_open_failed">開啟失敗!</string>
+    <string name="notice_close_failed">關閉失敗!</string>
 </resources>

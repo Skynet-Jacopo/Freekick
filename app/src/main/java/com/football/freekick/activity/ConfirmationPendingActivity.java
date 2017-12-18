@@ -1,6 +1,7 @@
 package com.football.freekick.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -118,8 +119,13 @@ public class ConfirmationPendingActivity extends BaseActivity {
             if (mMatch.getPitch_id() == App.mPitchesBeanList.get(i).getId()) {
                 mMatch.setLocation(App.mPitchesBeanList.get(i).getLocation());
                 mMatch.setPitch_name(App.mPitchesBeanList.get(i).getName());
+                mMatch.setLongitude(App.mPitchesBeanList.get(i).getLongitude());
+                mMatch.setLatitude(App.mPitchesBeanList.get(i).getLatitude());
+                mMatch.setPitch_image(App.mPitchesBeanList.get(i).getImage().getUrl());
             }
         }
+        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mMatch.getPitch_image()), mIvPic, R
+                .drawable.icon_default);
         mTvPitchName.setText(mMatch.getPitch_name());
         mTvLocation.setText(mMatch.getLocation());
         mTvTime.setText(JodaTimeUtil.getTime2(mMatch.getPlay_start()) + " - " + JodaTimeUtil
@@ -211,14 +217,26 @@ public class ConfirmationPendingActivity extends BaseActivity {
 
     @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.tv_back:
+                finish();
                 break;
             case R.id.tv_friend:
+                intent.setClass(mContext, FriendActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_notice:
+                intent.setClass(mContext, NoticeActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_location:
+                intent.setClass(mContext, MapsActivity.class);
+                intent.putExtra("longitude", mMatch.getLongitude());
+                intent.putExtra("latitude", mMatch.getLatitude());
+                intent.putExtra("location", mMatch.getLocation());
+                intent.putExtra("pitch_name", mMatch.getPitch_name());
+                startActivity(intent);
                 break;
         }
     }

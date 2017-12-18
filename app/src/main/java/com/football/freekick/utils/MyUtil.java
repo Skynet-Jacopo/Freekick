@@ -20,7 +20,13 @@ public class MyUtil {
             return Url.BaseImageUrl + url;
         }
     }
-
+    public static String getUrl(String url) {
+        if (url!=null&&url.contains("https")) {
+            return url;
+        } else {
+            return "https://" + url;
+        }
+    }
     public static String getColorStr(String str) {
         if (str.contains("#")) {
             return str;

@@ -19,17 +19,26 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
+import com.football.freekick.beans.Advertisements;
 import com.football.freekick.beans.CancelMatch;
 import com.football.freekick.beans.ConfirmInvite;
 import com.football.freekick.beans.Invite;
 import com.football.freekick.beans.MatchDetail;
 import com.football.freekick.beans.WithDraw;
+import com.football.freekick.chat.FireChatHelper.ExtraIntent;
+import com.football.freekick.chat.model.User;
+import com.football.freekick.chat.ui.ChatActivity;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
@@ -59,84 +68,93 @@ public class MatchContentActivity1 extends BaseActivity {
 
     public static final int REQUEST_CODE_REFRESH = 1;
     @Bind(R.id.tv_back)
-    TextView     mTvBack;
+    TextView mTvBack;
     @Bind(R.id.tv_friend)
-    TextView     mTvFriend;
+    TextView mTvFriend;
     @Bind(R.id.tv_notice)
-    TextView     mTvNotice;
+    TextView mTvNotice;
     @Bind(R.id.iv_top_1)
-    ImageView    mIvTop1;
+    ImageView mIvTop1;
     @Bind(R.id.iv_top_2)
-    ImageView    mIvTop2;
+    ImageView mIvTop2;
     @Bind(R.id.ll_top)
     LinearLayout mLlTop;
     @Bind(R.id.iv_left_1)
-    ImageView    mIvLeft1;
+    ImageView mIvLeft1;
     @Bind(R.id.iv_left_2)
-    ImageView    mIvLeft2;
+    ImageView mIvLeft2;
     @Bind(R.id.iv_left_3)
-    ImageView    mIvLeft3;
+    ImageView mIvLeft3;
     @Bind(R.id.iv_right_1)
-    ImageView    mIvRight1;
+    ImageView mIvRight1;
     @Bind(R.id.iv_right_2)
-    ImageView    mIvRight2;
+    ImageView mIvRight2;
     @Bind(R.id.iv_right_3)
-    ImageView    mIvRight3;
+    ImageView mIvRight3;
     @Bind(R.id.iv_bottom_1)
-    ImageView    mIvBottom1;
+    ImageView mIvBottom1;
     @Bind(R.id.iv_bottom_2)
-    ImageView    mIvBottom2;
+    ImageView mIvBottom2;
     @Bind(R.id.ll_bottom)
     LinearLayout mLlBottom;
     @Bind(R.id.tv_date)
-    TextView     mTvDate;
+    TextView mTvDate;
     @Bind(R.id.tv_icon_location)
-    TextView     mTvIconLocation;
+    TextView mTvIconLocation;
     @Bind(R.id.tv_location)
-    TextView     mTvLocation;
+    TextView mTvLocation;
     @Bind(R.id.ll_location)
     LinearLayout mLlLocation;
     @Bind(R.id.tv_time)
-    TextView     mTvTime;
+    TextView mTvTime;
     @Bind(R.id.iv_home_dress)
-    ImageView    mIvHomeDress;
+    ImageView mIvHomeDress;
     @Bind(R.id.tv_home_name)
-    TextView     mTvHomeName;
+    TextView mTvHomeName;
     @Bind(R.id.tv_home_num)
-    TextView     mTvHomeNum;
+    TextView mTvHomeNum;
     @Bind(R.id.iv_visitor_dress)
-    ImageView    mIvVisitorDress;
+    ImageView mIvVisitorDress;
     @Bind(R.id.tv_visitor_name)
-    TextView     mTvVisitorName;
+    TextView mTvVisitorName;
     @Bind(R.id.tv_reduce)
-    TextView     mTvReduce;
+    TextView mTvReduce;
     @Bind(R.id.tv_visitor_num)
-    TextView     mTvVisitorNum;
+    TextView mTvVisitorNum;
     @Bind(R.id.tv_add)
-    TextView     mTvAdd;
+    TextView mTvAdd;
     @Bind(R.id.ll_team)
     LinearLayout mLlTeam;
     @Bind(R.id.tv_icon_share_left)
-    TextView     mTvIconShareLeft;
+    TextView mTvIconShareLeft;
     @Bind(R.id.tv_icon_notice_left)
-    TextView     mTvIconNoticeLeft;
+    TextView mTvIconNoticeLeft;
     @Bind(R.id.tv_icon_share_right)
-    TextView     mTvIconShareRight;
+    TextView mTvIconShareRight;
     @Bind(R.id.tv_icon_notice_right)
-    TextView     mTvIconNoticeRight;
+    TextView mTvIconNoticeRight;
     @Bind(R.id.fl_parent)
-    FrameLayout  mFlParent;
+    FrameLayout mFlParent;
     @Bind(R.id.tv_btn)
-    TextView     mTvBtn;
+    TextView mTvBtn;
 
-    private String                id;
-    private String                where;
-    private int                   type;
-    private Context               mContext;
+    private String id;
+    private String where;
+    private int type;
+    private Context mContext;
     private MatchDetail.MatchBean mMatch;
-    private String                team_id;
+    private String team_id;
     private String join_match_id = "";
-    private String join_team_id  = "";
+    private String join_team_id = "";
+
+    private DatabaseReference mUserRefDatabase;
+    private User mCurrentUser;
+    private User mRecipient;
+    private String recipient_id = "";
+    private String recipient_name = "";
+
+    private ChildEventListener mChildEventListener;
+    private List<Advertisements.AdvertisementsBean> mAdvertisementsList;//广告列表
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +170,13 @@ public class MatchContentActivity1 extends BaseActivity {
         initData();
     }
 
+    //獲取發送者,收件者,還有chat_room的名字進入聊天界面
+    private void initUserDatabase() {
+        mUserRefDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mChildEventListener = getChildEventListener();
+        mUserRefDatabase.limitToFirst(50).addChildEventListener(mChildEventListener);
+    }
+
     private void initData() {
         loadingShow();
         String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/";//+matchID
@@ -162,11 +187,12 @@ public class MatchContentActivity1 extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson        gson     = new Gson();
+                        Gson gson = new Gson();
                         MatchDetail fromJson = gson.fromJson(s, MatchDetail.class);
                         if (fromJson.getMatch() != null) {
                             mMatch = fromJson.getMatch();
                             setData();
+                            initUserDatabase();
                         }
                     }
 
@@ -226,12 +252,36 @@ public class MatchContentActivity1 extends BaseActivity {
                         mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
                                 .getJoin_team_color()));
                         mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
+                        recipient_id = join_matches.get(i).getJoin_team_id() + "";
+                        recipient_name = joinMatchesBean.getTeam().getTeam_name();
                     }
                 }
                 mTvBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         cancelMatch();//主隊取消球賽
+                    }
+                });
+                mTvIconNoticeRight.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String chatRef = "";
+                        if (mCurrentUser.getCreatedAt() > mRecipient.getCreatedAt()) {
+                            chatRef = cleanEmailAddress(mCurrentUser.getEmail()) + "-" + cleanEmailAddress(mRecipient
+                                    .getEmail());
+                        } else {
+
+                            chatRef = cleanEmailAddress(mRecipient.getEmail()) + "-" + cleanEmailAddress(mCurrentUser
+                                    .getEmail());
+                        }
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, ChatActivity.class);
+                        intent.putExtra(ExtraIntent.EXTRA_CURRENT_USER_ID, team_id);
+                        intent.putExtra(ExtraIntent.EXTRA_RECIPIENT_ID, recipient_id);
+                        intent.putExtra(ExtraIntent.EXTRA_CHAT_REF, chatRef);
+                        intent.putExtra(ExtraIntent.RECIPIENT_NAME, recipient_name);
+                        // Start new activity
+                        startActivity(intent);
                     }
                 });
                 break;
@@ -258,6 +308,29 @@ public class MatchContentActivity1 extends BaseActivity {
                     public void onClick(View view) {
                         if (!join_match_id.equals(""))
                             withdrawJoin(join_match_id);//客隊取消參與
+                    }
+                });
+                mTvIconNoticeLeft.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String chatRef = "";
+                        if (mCurrentUser.getCreatedAt() > mRecipient.getCreatedAt()) {
+                            chatRef = cleanEmailAddress(mCurrentUser.getEmail()) + "-" + cleanEmailAddress(mRecipient
+                                    .getEmail());
+                        } else {
+
+                            chatRef = cleanEmailAddress(mRecipient.getEmail()) + "-" + cleanEmailAddress(mCurrentUser
+                                    .getEmail());
+                        }
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, ChatActivity.class);
+                        intent.putExtra(ExtraIntent.EXTRA_CURRENT_USER_ID, PrefUtils.getString(App.APP_CONTEXT,
+                                "team_id", null));
+                        intent.putExtra(ExtraIntent.EXTRA_RECIPIENT_ID, mMatch.getHome_team().getId() + "");
+                        intent.putExtra(ExtraIntent.EXTRA_CHAT_REF, chatRef);
+                        intent.putExtra(ExtraIntent.RECIPIENT_NAME, mMatch.getHome_team().getTeam_name());
+                        // Start new activity
+                        startActivity(intent);
                     }
                 });
                 break;
@@ -383,6 +456,11 @@ public class MatchContentActivity1 extends BaseActivity {
         }
     }
 
+    private String cleanEmailAddress(String email) {
+        //replace dot with comma since firebase does not allow dot
+        return email.replace(".", "-");
+    }
+
     private void initView() {
         mTvBack.setTypeface(App.mTypeface);
         mTvFriend.setTypeface(App.mTypeface);
@@ -393,20 +471,204 @@ public class MatchContentActivity1 extends BaseActivity {
         mTvIconNoticeRight.setTypeface(App.mTypeface);
         mTvIconShareRight.setTypeface(App.mTypeface);
 
-        String image = App.mAdvertisementsBean.get(0).getImage();
-        ImageLoaderUtils.displayImage(image, mIvTop1);
-        ImageLoaderUtils.displayImage(image, mIvTop2);
-        ImageLoaderUtils.displayImage(image, mIvBottom1);
-        ImageLoaderUtils.displayImage(image, mIvBottom2);
-        ImageLoaderUtils.displayImage(image, mIvLeft1);
-        ImageLoaderUtils.displayImage(image, mIvLeft2);
-        ImageLoaderUtils.displayImage(image, mIvLeft3);
-        ImageLoaderUtils.displayImage(image, mIvRight1);
-        ImageLoaderUtils.displayImage(image, mIvRight2);
-        ImageLoaderUtils.displayImage(image, mIvRight3);
+        mAdvertisementsList = App.mAdvertisementsBean;
+        for (int i = 0; i <mAdvertisementsList.size(); i++) {
+            switch (mAdvertisementsList.get(i).getScreen()) {
+                case Url.MATCH_DETAIL_001:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvTop1, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvTop1, R.drawable.icon_default);
+                    final int finalI = i;
+                    mIvTop1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_002:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvTop2, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvTop2, R.drawable.icon_default);
+                    final int finalI1 = i;
+                    mIvTop2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI1).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI1).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                case Url.MATCH_DETAIL_003:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvRight1, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvRight1, R.drawable.icon_default);
+                    final int finalI2 = i;
+                    mIvRight1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI2).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI2).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_004:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvRight2, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvRight2, R.drawable.icon_default);
+                    final int finalI3 = i;
+                    mIvRight2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI3).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI3).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_005:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvRight3, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvRight3, R.drawable.icon_default);
+                    final int finalI4 = i;
+                    mIvRight3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI4).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI4).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_006:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvBottom1, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvBottom1, R.drawable.icon_default);
+                    final int finalI5 = i;
+                    mIvBottom1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI5).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI5).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_007:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvBottom2, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvBottom2, R.drawable.icon_default);
+                    final int finalI6 = i;
+                    mIvBottom2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI6).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI6).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_008:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvLeft1, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvLeft1, R.drawable.icon_default);
+                    final int finalI7 = i;
+                    mIvLeft1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI7).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI7).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_009:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvLeft2, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvLeft2, R.drawable.icon_default);
+                    final int finalI8 = i;
+                    mIvLeft2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI8).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI8).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_010:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvLeft3, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvLeft3, R.drawable.icon_default);
+                    final int finalI9 = i;
+                    mIvLeft3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI9).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI9).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+            }
+        }
     }
 
-    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location, R.id.iv_top_1, R.id.iv_top_2, R.id.iv_left_1, R.id
+    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location, R.id.iv_top_1, R.id.iv_top_2, R.id
+            .iv_left_1, R.id
             .iv_left_2, R.id.iv_left_3, R.id.iv_right_1, R.id.iv_right_2, R.id.iv_right_3, R.id.iv_bottom_1, R.id
             .iv_bottom_2, R.id.tv_icon_share_left, R.id.tv_icon_notice_left, R.id.tv_icon_share_right, R.id
             .tv_icon_notice_right, R.id.tv_btn})
@@ -426,10 +688,10 @@ public class MatchContentActivity1 extends BaseActivity {
                 break;
             case R.id.ll_location:
                 intent.setClass(mContext, MapsActivity.class);
-                intent.putExtra("longitude",mMatch.getLongitude());
-                intent.putExtra("latitude",mMatch.getLatitude());
-                intent.putExtra("location",mMatch.getLocation());
-                intent.putExtra("pitch_name",mMatch.getPitch_name());
+                intent.putExtra("longitude", mMatch.getLongitude());
+                intent.putExtra("latitude", mMatch.getLatitude());
+                intent.putExtra("location", mMatch.getLocation());
+                intent.putExtra("pitch_name", mMatch.getPitch_name());
                 startActivity(intent);
                 break;
             case R.id.iv_top_1:
@@ -456,6 +718,7 @@ public class MatchContentActivity1 extends BaseActivity {
                 showShare();
                 break;
             case R.id.tv_icon_notice_left:
+
                 break;
             case R.id.tv_icon_share_right:
                 showShare();
@@ -482,7 +745,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson        gson     = new Gson();
+                        Gson gson = new Gson();
                         CancelMatch fromJson = gson.fromJson(s, CancelMatch.class);
                         if (fromJson.getMatch() != null) {
                             ToastUtil.toastShort(getString(R.string.withdraw_success));
@@ -520,7 +783,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson     gson     = new Gson();
+                        Gson gson = new Gson();
                         WithDraw fromJson = gson.fromJson(s, WithDraw.class);
                         if (fromJson.getJoin_match() != null) {
                             ToastUtil.toastShort(getString(R.string.withdraw_success));
@@ -548,8 +811,9 @@ public class MatchContentActivity1 extends BaseActivity {
      */
     private void confirmInvite() {
 //        http://api.freekick.hk/api/en/teams/<team ID>/confirm_invite
-        String     confirmInviteUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id + "/confirm_invite";
-        JsonObject object           = new JsonObject();
+        String confirmInviteUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id +
+                "/confirm_invite";
+        JsonObject object = new JsonObject();
         object.addProperty("match_id", mMatch.getId() + "");
         Logger.d(confirmInviteUrl);
         loadingShow();
@@ -560,7 +824,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson          gson     = new Gson();
+                        Gson gson = new Gson();
                         ConfirmInvite fromJson = gson.fromJson(s, ConfirmInvite.class);
                         if (fromJson.getJoin_match() != null) {
                             ToastUtil.toastShort(getString(R.string.comfirm_success));
@@ -592,7 +856,7 @@ public class MatchContentActivity1 extends BaseActivity {
 
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        TextView tvno  = (TextView) contentView.findViewById(R.id.tv_no);
+        TextView tvno = (TextView) contentView.findViewById(R.id.tv_no);
         TextView tvyes = (TextView) contentView.findViewById(R.id.tv_yes);
         tvno.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -646,7 +910,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
-                        Gson   gson   = new Gson();
+                        Gson gson = new Gson();
                         Invite invite = gson.fromJson(s, Invite.class);
                         if (invite.getSuccess() != null) {
                             ToastUtil.toastShort(invite.getSuccess());
@@ -663,6 +927,52 @@ public class MatchContentActivity1 extends BaseActivity {
                         Logger.d(e.getMessage());
                     }
                 });
+    }
+
+    private ChildEventListener getChildEventListener() {
+        return new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.exists()) {
+                    switch (type) {
+                        case 1://已落實,我是主隊
+                            if (dataSnapshot.getKey().equals(team_id)) {
+                                mCurrentUser = dataSnapshot.getValue(User.class);
+                            } else if (dataSnapshot.getKey().equals(recipient_id)) {
+                                mRecipient = dataSnapshot.getValue(User.class);
+                            }
+                            break;
+                        case 2://已落實,我是客隊
+                            if (dataSnapshot.getKey().equals(team_id)) {
+                                mCurrentUser = dataSnapshot.getValue(User.class);
+                            } else if (dataSnapshot.getKey().equals(mMatch.getHome_team().getId() + "")) {
+                                mRecipient = dataSnapshot.getValue(User.class);
+                            }
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
     }
 
     private void showShare() {
@@ -690,6 +1000,14 @@ public class MatchContentActivity1 extends BaseActivity {
 
 // 启动分享GUI
         oks.show(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mChildEventListener != null) {
+            mUserRefDatabase.removeEventListener(mChildEventListener);
+        }
     }
 
     /**

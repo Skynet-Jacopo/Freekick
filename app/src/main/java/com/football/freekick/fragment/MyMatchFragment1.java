@@ -509,6 +509,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
         if (requestCode == REQUEST_CODE_INVITE && resultCode == RESULT_OK) {
             setRefresh();
         } else if (requestCode == REQUEST_CODE_TO_1 && resultCode == RESULT_OK) {
+            setRefresh();
             ((MineFragment)getParentFragment()).mViewpager.setCurrentItem(0,true);
             ((MineFragment)getParentFragment()).setRefreshFragment1();
         } else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {

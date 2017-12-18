@@ -38,6 +38,15 @@ public class Advertisements {
         private String created_at;
         private String image;
         private String default_image;
+        private String url;
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
 
         public int getId() {
             return id;

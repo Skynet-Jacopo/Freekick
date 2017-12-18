@@ -38,6 +38,7 @@ public class SettingDetailActivity extends BaseActivity {
         String terms_and_conditions = intent.getStringExtra("terms_and_conditions");
         String about_us = intent.getStringExtra("about_us");
         String contact_us = intent.getStringExtra("contact_us");
+        String help = intent.getStringExtra("help");
         if (terms_and_conditions !=null){
             mTvTitle.setText(R.string.clause);
             html = terms_and_conditions;
@@ -47,6 +48,9 @@ public class SettingDetailActivity extends BaseActivity {
         }else if (contact_us !=null){
             mTvTitle.setText(R.string.contact_us);
             html = contact_us;
+        }else if (help!=null){
+            mTvTitle.setText(R.string.support);
+            html = help;
         }
         initWebView(html);
     }

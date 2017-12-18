@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginRight="24px"
+        android:layout_marginLeft="24px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:textSize="@dimen/text_24"
+            android:layout_marginBottom="20px"
+            android:layout_marginTop="32px"
+            android:text="時間"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:id="@+id/ll_content"
+            android:clickable="true"
+            android:padding="20px"
+            android:background="@drawable/selector_corner_white_gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_gravity="center_vertical"
+                android:layout_width="64px"
+                android:layout_height="64px"
+                android:layout_marginRight="32px"
+                android:background="@drawable/icon_blue_oval">
+
+                <TextView
+                    android:id="@+id/tv_icon_notice"
+                    android:textSize="30px"
+                    android:textColor="@color/white"
+                    android:text="@string/icon_bell"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_content"
+                android:text="我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/text_black"
+                android:textSize="28px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

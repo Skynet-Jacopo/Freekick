@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.CalenderActivity;
 import com.football.freekick.R;
+import com.football.freekick.activity.AdvertisementDetailActivity;
 import com.football.freekick.activity.FiltrateActivity;
 import com.football.freekick.activity.FriendActivity;
 import com.football.freekick.activity.JoinMatchActivity;
@@ -307,8 +308,12 @@ public class PartakeListFragment extends BaseFragment {
                             } else {
                                 mMatchList.addAll(matches.getMatches());
                                 AvailableMatches.MatchesBean matchesBean = new AvailableMatches.MatchesBean();
-                                matchesBean.setDefault_image(MyUtil.getImageUrl(App.mAdvertisementsBean.get(0)
-                                        .getImage()));
+                                for (int i = 0; i < App.mAdvertisementsBean.size(); i++) {
+                                    if (App.mAdvertisementsBean.get(i).getScreen().equals(Url.SEARCH_RESULT_001)){
+                                        matchesBean.setDefault_image(MyUtil.getImageUrl(App.mAdvertisementsBean.get(i)
+                                                .getImage()));
+                                    }
+                                }
                                 if (mMatchList.size() >= 2) {
                                     mMatchList.add(2, matchesBean);
                                 } else if (mMatchList.size() == 1) {
@@ -368,7 +373,14 @@ public class PartakeListFragment extends BaseFragment {
                                                 break;
                                             case 5://廣告
                                                 // TODO: 2017/11/30 分享
-                                                ToastUtil.toastShort("廣告,暫時沒有Url");
+                                                for (int i = 0; i < App.mAdvertisementsBean.size(); i++) {
+                                                    if (App.mAdvertisementsBean.get(i).getScreen().equals(Url.SEARCH_RESULT_001)){
+                                                        intent.setClass(mContext, AdvertisementDetailActivity.class);
+                                                        intent.putExtra("name", App.mAdvertisementsBean.get(i).getName());
+                                                        intent.putExtra("url", App.mAdvertisementsBean.get(i).getUrl());
+                                                        startActivity(intent);
+                                                    }
+                                                }
                                                 break;
                                             case 6://已參與,待確認
                                                 intent.setClass(mContext, MatchContentActivity1.class);

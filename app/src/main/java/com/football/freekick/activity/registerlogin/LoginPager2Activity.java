@@ -3,6 +3,7 @@ package com.football.freekick.activity.registerlogin;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -24,9 +25,18 @@ import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.Advertisements;
 import com.football.freekick.beans.Login;
 import com.football.freekick.beans.Pitches;
+import com.football.freekick.chat.FireChatHelper.ChatHelper;
+import com.football.freekick.chat.adapter.UsersChatAdapter;
+import com.football.freekick.chat.model.User;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -37,6 +47,7 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -48,6 +59,7 @@ import okhttp3.Response;
 
 public class LoginPager2Activity extends BaseActivity {
 
+    private DatabaseReference mDatabase;
     @Bind(R.id.fl_login_by_facebook)
     FrameLayout mFlLoginByFacebook;
     @Bind(R.id.edt_email)
@@ -72,6 +84,7 @@ public class LoginPager2Activity extends BaseActivity {
         setContentView(R.layout.activity_login_pager2);
         mContext = LoginPager2Activity.this;
         ButterKnife.bind(this);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 //        mEdtEmail.setText("huo@yopmail.com");
         mEdtEmail.setText("yue@yopmail.com");
 //        mEdtEmail.setText("lei@yopmail.com");
@@ -225,7 +238,9 @@ public class LoginPager2Activity extends BaseActivity {
                                         PrefUtils.putString(App.APP_CONTEXT, "district_id", teamsBean.getDistrict()
                                                 .getId() + "");
                                     }
-
+                                    //註冊FirebaseDatabase
+                                    loginFirebaseDatabase(user.getUsername(),teamsBean.getId()+"");
+//                                    registerFirebaseDatabase(user.getUsername(),teamsBean.getId()+"");
                                     startActivity(new Intent(mContext, OneTimePagerActivity.class));
                                 }
                             } else {
@@ -247,6 +262,50 @@ public class LoginPager2Activity extends BaseActivity {
                 });
     }
 
+    private void loginFirebaseDatabase(final String username, final String team_id) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(StringUtils.getEditText(mEdtEmail), StringUtils
+                .getEditText(mEdtPassWord))
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Logger.d("登錄FirebaseDatabase成功了");
+                            if ( FirebaseAuth.getInstance().getCurrentUser()!=null){
+                                Logger.json(new Gson().toJson(task));
+                                FirebaseDatabase.getInstance()
+                                        .getReference().
+                                        child("users").
+                                        child(team_id).
+                                        child("connection").
+                                        setValue(UsersChatAdapter.ONLINE);
+                            }
+                        } else {
+                            Logger.d(task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 註冊FirebaseDatabase
+     */
+    private void registerFirebaseDatabase(final String username, final String team_id) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(StringUtils.getEditText(mEdtEmail), StringUtils
+                .getEditText(mEdtPassWord))
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Logger.d("註冊FirebaseDatabase成功了");
+                            User user = new User(username,StringUtils.getEditText(mEdtEmail), UsersChatAdapter.ONLINE, ChatHelper.generateRandomAvatarForUser(),
+                                    new Date().getTime(),0);
+                            mDatabase.child("users").child(team_id).setValue(user);
+                        } else {
+                            Logger.d(task.getException().getMessage());
+                        }
+                    }
+                });
+    }
 
     /**
      * 獲取場地

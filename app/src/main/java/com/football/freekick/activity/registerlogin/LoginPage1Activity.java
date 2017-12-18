@@ -29,6 +29,9 @@ import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.utils.StringUtils;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 
@@ -88,7 +91,7 @@ public class LoginPage1Activity extends BaseActivity {
                 getLoginInfo(loginResult.getAccessToken());
                 List<String> str = new ArrayList<String>();
                 str.add("public_profile");
-
+                final AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
             }
 
             @Override
@@ -163,7 +166,7 @@ public class LoginPage1Activity extends BaseActivity {
                     Logger.json(object.toString());
                     Toast.makeText(mContext, "" + object.toString(), Toast.LENGTH_SHORT).show();
                     mEdtLog.setText(object.toString());
-                    LoginManager.getInstance().logInWithReadPermissions(LoginPage1Activity.this,Arrays.asList("public_profile"));
+//                    LoginManager.getInstance().logInWithReadPermissions(LoginPage1Activity.this,Arrays.asList("public_profile"));
                 }
             }
         });

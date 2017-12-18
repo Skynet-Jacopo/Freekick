@@ -16,6 +16,7 @@ import com.football.freekick.beans.AvailableMatches;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
+import com.football.freekick.views.ClickableImageView;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.gson.Gson;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -247,12 +248,12 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public static class MyHolder2 extends RecyclerView.ViewHolder {
-        private ImageView ivAdvertisement;
+        private ClickableImageView ivAdvertisement;
         private LinearLayout lLContent;
 
         public MyHolder2(View itemView) {
             super(itemView);
-            ivAdvertisement = (ImageView) itemView.findViewById(R.id.iv_advertisement);
+            ivAdvertisement = (ClickableImageView) itemView.findViewById(R.id.iv_advertisement);
             lLContent = (LinearLayout) itemView.findViewById(R.id.ll_content);
         }
     }

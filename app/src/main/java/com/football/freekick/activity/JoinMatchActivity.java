@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
+import com.football.freekick.beans.Advertisements;
 import com.football.freekick.beans.AvailableMatches;
 import com.football.freekick.beans.JoinMatch;
 import com.football.freekick.http.Url;
@@ -25,6 +26,8 @@ import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -98,6 +101,7 @@ public class JoinMatchActivity extends BaseActivity {
     private AvailableMatches.MatchesBean mMatchesBean;
     private int                          visitorNum;
     private Context mContext;
+    private List<Advertisements.AdvertisementsBean> mAdvertisementsList;//广告列表
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,17 +129,200 @@ public class JoinMatchActivity extends BaseActivity {
         mTvVisitorNum.setText(PrefUtils.getString(App.APP_CONTEXT, "size", null));
 
         visitorNum = Integer.parseInt(StringUtils.getEditText(mTvVisitorNum));
-        String image = App.mAdvertisementsBean.get(0).getImage();
-        ImageLoaderUtils.displayImage(image, mIvTop1);
-        ImageLoaderUtils.displayImage(image, mIvTop2);
-        ImageLoaderUtils.displayImage(image, mIvBottom1);
-        ImageLoaderUtils.displayImage(image, mIvBottom2);
-        ImageLoaderUtils.displayImage(image, mIvLeft1);
-        ImageLoaderUtils.displayImage(image, mIvLeft2);
-        ImageLoaderUtils.displayImage(image, mIvLeft3);
-        ImageLoaderUtils.displayImage(image, mIvRight1);
-        ImageLoaderUtils.displayImage(image, mIvRight2);
-        ImageLoaderUtils.displayImage(image, mIvRight3);
+        mAdvertisementsList = App.mAdvertisementsBean;
+        for (int i = 0; i <mAdvertisementsList.size(); i++) {
+            switch (mAdvertisementsList.get(i).getScreen()) {
+                case Url.MATCH_DETAIL_001:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvTop1, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvTop1, R.drawable.icon_default);
+                    final int finalI = i;
+                    mIvTop1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_002:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvTop2, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvTop2, R.drawable.icon_default);
+                    final int finalI1 = i;
+                    mIvTop2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI1).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI1).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                case Url.MATCH_DETAIL_003:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvRight1, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvRight1, R.drawable.icon_default);
+                    final int finalI2 = i;
+                    mIvRight1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI2).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI2).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_004:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvRight2, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvRight2, R.drawable.icon_default);
+                    final int finalI3 = i;
+                    mIvRight2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI3).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI3).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_005:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvRight3, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvRight3, R.drawable.icon_default);
+                    final int finalI4 = i;
+                    mIvRight3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI4).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI4).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_006:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvBottom1, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvBottom1, R.drawable.icon_default);
+                    final int finalI5 = i;
+                    mIvBottom1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI5).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI5).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_007:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvBottom2, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvBottom2, R.drawable.icon_default);
+                    final int finalI6 = i;
+                    mIvBottom2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI6).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI6).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_008:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvLeft1, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvLeft1, R.drawable.icon_default);
+                    final int finalI7 = i;
+                    mIvLeft1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI7).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI7).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_009:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvLeft2, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvLeft2, R.drawable.icon_default);
+                    final int finalI8 = i;
+                    mIvLeft2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI8).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI8).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+                case Url.MATCH_DETAIL_010:
+                    if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
+                            .equals(""))
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i).getImage()),
+                                mIvLeft3, R.drawable.icon_default);
+                    else
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mAdvertisementsList.get(i)
+                                .getDefault_image()), mIvLeft3, R.drawable.icon_default);
+                    final int finalI9 = i;
+                    mIvLeft3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            intent.putExtra("name", mAdvertisementsList.get(finalI9).getName());
+                            intent.putExtra("url", mAdvertisementsList.get(finalI9).getUrl());
+                            startActivity(intent);
+                        }
+                    });
+                    break;
+            }
+        }
     }
 
     @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.tv_icon_location, R.id.ll_location, R.id.tv_reduce,
@@ -204,31 +391,10 @@ public class JoinMatchActivity extends BaseActivity {
      * 參與約
      */
     private void joinMatch() {
-//        {
-//            "id": 87,
-//                "play_end": "2017-12-05T09:00:00.000+08:00",
-//                "status": "w",
-//                "home_team_color": "1D00FF",
-//                "home_team": {
-//            "id": 49,
-//                    "image": {
-//                "url": "\/uploads\/team\/image\/49\/image.jpeg"
-//            },
-//            "team_name": "天空可了"
-//        },
-//            "join_matches": [],
-//            "play_start": "2017-12-05T06:00:00.000+08:00",
-//                "pitch_id": 1,
-//                "size": 7
-//        },
+
         loadingShow();
         JsonObject object  = new JsonObject();
         JsonObject object1 = new JsonObject();
-//        object1.addProperty("match_id", "103");
-//        object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
-//        object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));
-//        object1.addProperty("size", "7");
-//        object.add("join_match", object1);
         object1.addProperty("match_id", mMatchesBean.getId() + "");
         object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
         object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));

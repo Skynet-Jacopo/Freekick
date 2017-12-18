@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "782614488689",
-    "firebase_url": "https://freekick-a30c2.firebaseio.com",
-    "project_id": "freekick-a30c2",
-    "storage_bucket": "freekick-a30c2.appspot.com"
+    "project_number": "247471445398",
+    "firebase_url": "https://freekickmaster-d522c.firebaseio.com",
+    "project_id": "freekickmaster-d522c",
+    "storage_bucket": "freekickmaster-d522c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:782614488689:android:63d65da6a3ee1b04",
+        "mobilesdk_app_id": "1:247471445398:android:63d65da6a3ee1b04",
         "android_client_info": {
           "package_name": "com.football.freekick"
         }
       },
       "oauth_client": [
         {
-          "client_id": "782614488689-1on9b5dds3qgd95q4atjov8sabo0g0pv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.football.freekick",
-            "certificate_hash": "2b3c2667a20f129cbe7688564f70785efc2cfa27"
-          }
-        },
-        {
-          "client_id": "782614488689-ehsi0hbv66glip4ss8ge9suko6gkgkh7.apps.googleusercontent.com",
+          "client_id": "247471445398-te4hngajp55nd8jhvuhnp2dusalsc4al.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA7K8eVRxJgN8049W-m3-qNZpLHMVo5f1M"
+          "current_key": "AIzaSyAuVB0k71eUzXrk_oFdukOe45D-KhtJPfM"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "782614488689-ehsi0hbv66glip4ss8ge9suko6gkgkh7.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

@@ -174,22 +174,24 @@
                 android:layout_marginBottom="15px"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.football.freekick.views.ClickableImageView
                     android:id="@+id/iv_advertisement1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="15px"
                     android:layout_weight="1"
                     android:scaleType="fitXY"
-                    android:src="@color/bottom_blue_bg"/>
+                    android:padding="1px"
+                    android:background="@color/gray_light"/>
 
-                <ImageView
+                <com.football.freekick.views.ClickableImageView
                     android:id="@+id/iv_advertisement2"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:scaleType="fitXY"
-                    android:src="@color/bottom_blue_bg"/>
+                    android:padding="1px"
+                    android:background="@color/gray_light"/>
             </LinearLayout>
 
             <LinearLayout
@@ -197,22 +199,24 @@
                 android:layout_height="200px"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.football.freekick.views.ClickableImageView
                     android:id="@+id/iv_advertisement3"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="15px"
                     android:layout_weight="1"
                     android:scaleType="fitXY"
-                    android:src="@color/bottom_blue_bg"/>
+                    android:padding="1px"
+                    android:background="@color/gray_light"/>
 
-                <ImageView
+                <com.football.freekick.views.ClickableImageView
                     android:id="@+id/iv_advertisement4"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:scaleType="fitXY"
-                    android:src="@color/bottom_blue_bg"/>
+                    android:padding="1px"
+                    android:background="@color/gray_light"/>
             </LinearLayout>
         </LinearLayout>
 
