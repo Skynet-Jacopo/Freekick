@@ -41,7 +41,16 @@ public class Notification {
         private String created_at;
         private int user_id;
         private String is_read;
+        private String notification_type;
         private int team_id;
+
+        public String getNotification_type() {
+            return notification_type;
+        }
+
+        public void setNotification_type(String notification_type) {
+            this.notification_type = notification_type;
+        }
 
         public int getId() {
             return id;

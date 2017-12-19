@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +20,6 @@ import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
 import com.football.freekick.beans.Notification;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
-import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
@@ -122,6 +119,15 @@ public class NoticeFragment extends BaseFragment {
 //                holder.setText(R.id.tv_content, Html.fromHtml(notificationBean.getBody()).toString());
                 holder.setText(R.id.tv_content, body);
                 holder.setTypeface(App.mTypeface,R.id.tv_icon_notice);
+                String notification_type = notificationBean.getNotification_type();
+                switch (notification_type){
+                    case "N7b"://是在主隊確認客隊之後(球賽狀態是'已確認'), 客隊在球賽確認限期(confirm_end)后退出, 通知由主隊收到.
+                        break;
+                    case "N7c"://是在主隊確認客隊之後(球賽狀態是'已確認'), 客隊在球賽確認限期(confirm_end)前退出, 通知由主隊收到.
+                        break;
+                    case "N10"://在球賽完結后發出
+                        break;
+                }
                 holder.setOnClickListener(R.id.ll_content, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
