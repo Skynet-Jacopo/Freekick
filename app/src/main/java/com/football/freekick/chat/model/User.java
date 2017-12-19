@@ -16,11 +16,20 @@ public class User implements Serializable {
     private String connection;
     private int avatarId;
     private long createdAt;
-    private long readNum;
+    private long unReadNum;
     private long lastEditTime;
     private String team_url;
+    private String team_id;
 
     private String mRecipientId;
+
+    public String getTeam_id() {
+        return team_id;
+    }
+
+    public void setTeam_id(String team_id) {
+        this.team_id = team_id;
+    }
 
     public long getLastEditTime() {
         return lastEditTime;
@@ -47,7 +56,7 @@ public class User implements Serializable {
         this.connection = connection;
         this.avatarId = avatarId;
         this.createdAt = createdAt;
-        this.readNum = readNum;
+        this.unReadNum = readNum;
     }
 
 
@@ -103,11 +112,11 @@ public class User implements Serializable {
         this.mRecipientId = recipientId;
     }
 
-    public long getReadNum() {
-        return readNum;
+    public long getUnReadNum() {
+        return unReadNum;
     }
 
-    public void setReadNum(long readNum) {
-        this.readNum = readNum;
+    public void setUnReadNum(long readNum) {
+        this.unReadNum = readNum;
     }
 }

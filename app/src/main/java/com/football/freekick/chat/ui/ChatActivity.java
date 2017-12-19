@@ -21,6 +21,7 @@ import com.football.freekick.app.BaseActivity;
 import com.football.freekick.chat.FireChatHelper.ExtraIntent;
 import com.football.freekick.chat.adapter.MessageChatAdapter;
 import com.football.freekick.chat.model.ChatMessage;
+import com.football.freekick.chat.model.User;
 import com.football.freekick.utils.PrefUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -62,10 +63,11 @@ public class ChatActivity extends BaseActivity {
     private MessageChatAdapter messageChatAdapter;
     private DatabaseReference messageChatDatabase;
     private DatabaseReference mUserRefDatabase;
-//    private DatabaseReference mUserRefDatabase;
+    //    private DatabaseReference mUserRefDatabase;
     private ChildEventListener messageChatListener;
     private String chatRef;
     private String recipient_id;
+    private long unReadNum;
 
 
     @Override
@@ -80,7 +82,7 @@ public class ChatActivity extends BaseActivity {
         mUserMessageChatText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND){
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
 
                     sendMsg();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -148,7 +150,7 @@ public class ChatActivity extends BaseActivity {
                     }
                     messageChatAdapter.refillAdapter(newMessage);
                     mChatRecyclerView.scrollToPosition(messageChatAdapter.getItemCount() - 1);
-                    PrefUtils.putInt(App.APP_CONTEXT,chatRef,messageChatAdapter.getItemCount());
+//                    PrefUtils.putInt(App.APP_CONTEXT, chatRef, messageChatAdapter.getItemCount());
                 }
 
             }
@@ -173,7 +175,40 @@ public class ChatActivity extends BaseActivity {
 
             }
         });
+        mUserRefDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.exists()) {
+                    String userUid = dataSnapshot.getKey();
+                    if (userUid.equals(mCurrentUserId)){
+                        User mCurrentUser = dataSnapshot.getValue(User.class);
+                        unReadNum = mCurrentUser.getUnReadNum();
+//                        mUserRefDatabase.child(recipient_id).child("unReadNum").setValue(0);
+                        mUserRefDatabase.child(mCurrentUserId).child("from"+recipient_id+"unReadNum").setValue(0);
+                    }
+                }
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
@@ -197,11 +232,13 @@ public class ChatActivity extends BaseActivity {
         String senderMessage = mUserMessageChatText.getText().toString().trim();
 
         if (!senderMessage.isEmpty()) {
-
-            ChatMessage newMessage = new ChatMessage(senderMessage, mCurrentUserId, mRecipientId,new Date().getTime());
+            unReadNum += 1;
+            ChatMessage newMessage = new ChatMessage(senderMessage, mCurrentUserId, mRecipientId, new Date().getTime());
             messageChatDatabase.push().setValue(newMessage);
             mUserRefDatabase.child(recipient_id).child("lastEditTime").setValue(-new Date().getTime());
+            mUserRefDatabase.child(mCurrentUserId).child("lastEditTime").setValue(-new Date().getTime());
             mUserMessageChatText.setText("");
+            mUserRefDatabase.child(recipient_id).child("from"+mCurrentUserId+"unReadNum").setValue(unReadNum);
         }
     }
 }

@@ -179,6 +179,8 @@ public class RegisterPager1Activity extends BaseActivity {
                         RegisterResponse json = gson.fromJson(s, RegisterResponse.class);
                         if (json.getStatus().equals("success")) {
                             Intent intent = new Intent(mContext, RegisterPager2Activity.class);
+                            intent.putExtra("email", mEmail);
+                            intent.putExtra("password", mPassword);
                             startActivity(intent);
                         } else if (json.getStatus().equals("error")) {
                             RegisterResponse.ErrorsBean errors = json.getErrors();

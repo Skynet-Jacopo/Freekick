@@ -185,7 +185,6 @@ public class MatchContentActivity1 extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
-                        loadingDismiss();
                         Logger.json(s);
                         Gson gson = new Gson();
                         MatchDetail fromJson = gson.fromJson(s, MatchDetail.class);
@@ -454,6 +453,7 @@ public class MatchContentActivity1 extends BaseActivity {
                 break;
 
         }
+        loadingDismiss();
     }
 
     private String cleanEmailAddress(String email) {

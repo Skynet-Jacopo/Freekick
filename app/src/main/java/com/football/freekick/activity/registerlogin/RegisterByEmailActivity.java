@@ -3,6 +3,7 @@ package com.football.freekick.activity.registerlogin;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,17 +12,30 @@ import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.RegisterResponse;
+import com.football.freekick.chat.FireChatHelper.ChatHelper;
+import com.football.freekick.chat.adapter.UsersChatAdapter;
+import com.football.freekick.chat.model.User;
+import com.football.freekick.event.AccountEvent;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,7 +56,7 @@ public class RegisterByEmailActivity extends BaseActivity {
     @Bind(R.id.tv_back)
     TextView mTvBack;
     private Context mContext;
-
+    private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +68,7 @@ public class RegisterByEmailActivity extends BaseActivity {
 
     private void initView() {
         mTvBack.setTypeface(App.mTypeface);
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 //        mEdtEmail.setText("liu@yopmail.com");
 //        mEdtName.setText("楊過");
 //        mEdtPassWord.setText("123456789");
@@ -125,6 +139,7 @@ public class RegisterByEmailActivity extends BaseActivity {
                         Gson gson = new Gson();
                         RegisterResponse registerResponse = gson.fromJson(s, RegisterResponse.class);
                         if (registerResponse.getStatus().equals("success")) {
+
 //                            ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
                             Intent intent = new Intent(mContext, RegisterPager1Activity.class);
                             intent.putExtra("email", StringUtils.getEditText(mEdtEmail));
@@ -153,4 +168,26 @@ public class RegisterByEmailActivity extends BaseActivity {
                     }
                 });
     }
+
+    /**
+     * 註冊FirebaseDatabase
+     */
+    private void registerFirebaseDatabase(final String username, final String team_id) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(StringUtils.getEditText(mEdtEmail), StringUtils
+                .getEditText(mEdtPassWord))
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Logger.d("註冊FirebaseDatabase成功了");
+                            User user = new User(username,StringUtils.getEditText(mEdtEmail), UsersChatAdapter.ONLINE, ChatHelper.generateRandomAvatarForUser(),
+                                    new Date().getTime(),0);
+                            mDatabase.child("users").child(team_id).setValue(user);
+                        } else {
+                            Logger.d(task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
 }

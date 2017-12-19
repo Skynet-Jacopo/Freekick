@@ -2,6 +2,7 @@ package com.football.freekick.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
+import com.football.freekick.activity.NoticeDetailActivity;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
@@ -113,16 +115,21 @@ public class NoticeFragment extends BaseFragment {
             }
 
             @Override
-            public void convert(ViewHolder holder, Notification.NotificationBean notificationBean) {
+            public void convert(ViewHolder holder, final Notification.NotificationBean notificationBean) {
                 final int itemPosition = holder.getItemPosition();
                 holder.setText(R.id.tv_time, JodaTimeUtil.getTime(notificationBean.getCreated_at()));
-                Spanned spanned = Html.fromHtml(notificationBean.getBody());
-                holder.setText(R.id.tv_content, Html.fromHtml(notificationBean.getBody()).toString());
+                final String body = notificationBean.getBody();
+//                holder.setText(R.id.tv_content, Html.fromHtml(notificationBean.getBody()).toString());
+                holder.setText(R.id.tv_content, body);
                 holder.setTypeface(App.mTypeface,R.id.tv_icon_notice);
                 holder.setOnClickListener(R.id.ll_content, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         ToastUtil.toastShort(""+itemPosition);
+                        Intent intent = new Intent(mContext, NoticeDetailActivity.class);
+                        intent.putExtra("body",body);
+                        intent.putExtra("match_id",notificationBean.getMatch_id()+"");
+                        startActivity(intent);
                     }
                 });
             }

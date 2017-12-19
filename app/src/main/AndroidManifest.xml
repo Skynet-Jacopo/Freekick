@@ -359,6 +359,8 @@
         </activity>
         <activity android:name=".activity.AdvertisementDetailActivity">
         </activity>
+        <activity android:name=".activity.NoticeDetailActivity">
+        </activity>
     </application>
 
 </manifest>

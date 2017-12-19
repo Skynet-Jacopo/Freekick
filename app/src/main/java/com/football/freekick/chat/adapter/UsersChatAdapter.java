@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,12 +50,14 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
     private Long mCurrentUserCreatedAt;
     private String mCurrentUserId;
     private DatabaseReference messageChatDatabase;
-    private List<ChatMessage> msgs;
+    private DatabaseReference mUserRefDatabase;
+    private String team_id;
 
     public UsersChatAdapter(Context context, List<User> fireChatUsers) {
         mUsers = fireChatUsers;
         mContext = context;
-        msgs = new ArrayList<>();
+        mUserRefDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        team_id = PrefUtils.getString(App.APP_CONTEXT,"team_id",null);
     }
 
     @Override
@@ -71,48 +74,67 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
         // Set avatar
         int userAvatarId = ChatHelper.getDrawableAvatarId(fireChatUser.getAvatarId());
         Drawable avatarDrawable = ContextCompat.getDrawable(mContext, userAvatarId);
-        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(fireChatUser.getTeam_url()),holder.getUserAvatar(),R.drawable.icon_default);
-
-        // Set display name
+        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(fireChatUser.getTeam_url()), holder.getUserAvatar(), R
+                .drawable.icon_default);
         holder.getUserDisplayName().setText(fireChatUser.getDisplayName());
-        // Set presence status
-//        holder.getStatusConnection().setText(fireChatUser.getConnection());
+        long unReadNum = fireChatUser.getUnReadNum();
 
-        // Set presence text color
-//        if(fireChatUser.getConnection().equals(ONLINE)) {
-//            // Green color
-//            holder.getStatusConnection().setTextColor(Color.parseColor("#00FF00"));
-//        }else {
-//            // Red color
-//            holder.getStatusConnection().setTextColor(Color.parseColor("#FF0000"));
-//        }
+        String s = mUserRefDatabase.child(team_id).child("from" + fireChatUser.getTeam_id() + "unReadNum").toString();
+        mUserRefDatabase.child(team_id).child("from" + fireChatUser.getTeam_id() + "unReadNum").addListenerForSingleValueEvent(new ValueEventListener() {
 
-        final String chatRef = fireChatUser.createUniqueChatRef(mCurrentUserCreatedAt, PrefUtils.getString(App.APP_CONTEXT,"uid",null));
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    long num = (long) dataSnapshot.getValue();
+                    if (num <= 0) {
+                        holder.mTvMsgNum.setVisibility(View.GONE);
+                    } else {
+                        holder.mTvMsgNum.setVisibility(View.VISIBLE);
+                        holder.mTvMsgNum.setText(num + "");
+                    }
+                }else {
+                    holder.mTvMsgNum.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        final String chatRef = fireChatUser.createUniqueChatRef(mCurrentUserCreatedAt, PrefUtils.getString(App
+                .APP_CONTEXT, "uid", null));
         messageChatDatabase = FirebaseDatabase.getInstance().getReference().child(chatRef);
 
-        messageChatDatabase.addChildEventListener(new ChildEventListener() {
+        messageChatDatabase.limitToLast(1).addChildEventListener(new ChildEventListener() {
             int count = 0;
+
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.exists()) {
                     ChatMessage newMessage = dataSnapshot.getValue(ChatMessage.class);
-                    msgs.add(newMessage);
+                    holder.mTvContent.setText(newMessage.getMessage());
+                    holder.mTvTime.setVisibility(View.VISIBLE);
+                    holder.mTvTime.setText(JodaTimeUtil.progressDate1(mContext, newMessage.getCreatedAt()));
+                } else {
+                    holder.mTvTime.setVisibility(View.GONE);
                 }
-                if (msgs.size() > 0) {
-                    holder.mTvContent.setText(msgs.get(msgs.size() - 1).getMessage());
-                    count+=1;
-                    int num = count - PrefUtils.getInt(App.APP_CONTEXT, chatRef, 0);
-                    if (num > 0) {
-                        holder.mTvMsgNum.setVisibility(View.VISIBLE);
-                        holder.mTvMsgNum.setText(num + "");
-                        holder.mTvTime.setVisibility(View.GONE);
-                    } else {
-                        holder.mTvMsgNum.setVisibility(View.GONE);
-                        holder.mTvTime.setVisibility(View.VISIBLE);
-                        holder.mTvTime.setText(JodaTimeUtil.progressDate1(mContext, msgs.get(msgs.size() - 1)
-                                .getCreatedAt()));
-                    }
-                }
+//                if (msgs.size() > 0) {
+//                    holder.mTvContent.setText(msgs.get(msgs.size() - 1).getMessage());
+//                    count+=1;
+//                    int num = count - PrefUtils.getInt(App.APP_CONTEXT, chatRef, 0);
+//                    if (num > 0) {
+//                        holder.mTvMsgNum.setVisibility(View.VISIBLE);
+//                        holder.mTvMsgNum.setText(num + "");
+//                        holder.mTvTime.setVisibility(View.GONE);
+//                    } else {
+//                        holder.mTvMsgNum.setVisibility(View.GONE);
+//                        holder.mTvTime.setVisibility(View.VISIBLE);
+//                        holder.mTvTime.setText(JodaTimeUtil.progressDate1(mContext, msgs.get(msgs.size() - 1)
+//                                .getCreatedAt()));
+//                    }
+//                }
             }
 
             @Override

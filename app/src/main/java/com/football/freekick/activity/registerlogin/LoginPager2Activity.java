@@ -290,6 +290,12 @@ public class LoginPager2Activity extends BaseActivity {
                                         child(teamsBean.getId()+"").
                                         child("team_url").
                                         setValue(teamsBean.getImage().getUrl());
+                                FirebaseDatabase.getInstance()
+                                        .getReference().
+                                        child("users").
+                                        child(teamsBean.getId()+"").
+                                        child("team_id").
+                                        setValue(teamsBean.getId()+"");
                             }
                         } else {
                             Logger.d(task.getException().getMessage());

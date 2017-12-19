@@ -18,7 +18,7 @@
 
 
         <ImageView
-            android:src="@drawable/clothes_home"
+            tools:src="@drawable/clothes_home"
             android:id="@+id/iv_head"
             android:layout_width="64px"
             android:layout_height="80px"
@@ -37,7 +37,7 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我是名字"
+                tools:text="我是名字"
                 android:textColor="@color/text_black"
                 android:textSize="24px"/>
 
@@ -53,14 +53,15 @@
         </LinearLayout>
 
         <TextView
+            android:gravity="center"
             android:id="@+id/tv_msg_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30px"
+            android:layout_height="30px"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="32px"
             android:background="@drawable/shape_red_oval"
             android:padding="5px"
-            android:text="99"
+            android:text="9"
             android:textColor="@color/white"
             android:textSize="20px"
             android:visibility="gone"/>

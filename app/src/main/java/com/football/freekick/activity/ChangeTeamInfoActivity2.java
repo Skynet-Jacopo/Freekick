@@ -21,6 +21,8 @@ import com.football.freekick.utils.ImageUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -67,6 +69,7 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
     private String color1;
     private String color2;
 
+    private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +130,7 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
         color1 = mColorPickerHome.getColorHtml();
         color2 = mColorPickerVisitor.getColorHtml();
         mTvBack.setTypeface(App.mTypeface);
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @OnClick({R.id.tv_back, R.id.tv_complete})
@@ -194,6 +197,7 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
                         CreateTeam createTeam = gson.fromJson(s, CreateTeam.class);
                         if (createTeam.getTeam() != null) {
                             CreateTeam.TeamBean team = createTeam.getTeam();
+                            asyDatabase(team);//將更改的數據同步到FireDatabase
                             int id = team.getId();
                             String color1 = team.getColor1();
                             String color2 = team.getColor2();
@@ -238,6 +242,23 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
                         loadingDismiss();
                     }
                 });
+    }
+
+    /**
+     * 將更改的數據同步到FireDatabase
+     * @param team
+     */
+    private void asyDatabase(CreateTeam.TeamBean team) {
+        mDatabase.
+                child("users").
+                child(team.getId() + "").
+                child("displayName").
+                setValue(team.getUser().getUsername() + "（" + team.getTeam_name() + "）");
+        mDatabase.
+                child("users").
+                child(team.getId() + "").
+                child("team_url").
+                setValue(team.getImage().getUrl());
     }
 
 }

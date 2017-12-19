@@ -194,7 +194,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="152px"
-            android:text="2017-11-27"
+            tools:text="2017-11-27"
             android:textColor="@color/black"
             android:textSize="42px"
             android:textStyle="bold"/>
@@ -221,7 +221,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12px"
-                android:text="何文田公關"
+                tools:text="何文田公關"
                 android:textColor="@color/black"
                 android:textSize="32px"
                 android:textStyle="bold"/>
@@ -234,7 +234,7 @@
             android:layout_below="@id/ll_location"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16px"
-            android:text="19:00-21:00"
+            tools:text="19:00-21:00"
             android:textColor="@color/black"
             android:textSize="46px"
             android:textStyle="bold"/>
@@ -271,7 +271,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="14px"
-                    android:text="球隊名稱"
+                    tools:text="球隊名稱"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_24"/>
 
@@ -320,7 +320,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="14px"
-                    android:text="球隊名稱"
+                    tools:text="球隊名稱"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_24"/>
 

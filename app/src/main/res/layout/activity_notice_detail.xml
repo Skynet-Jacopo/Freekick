@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:background="#ececec"
+    android:id="@+id/ll_parent"
+    tools:context="com.football.freekick.activity.NoticeDetailActivity">
+
+    <RelativeLayout
+        android:id="@+id/tl_top"
+        android:layout_width="match_parent"
+        android:layout_height="88px"
+        android:background="#070D44"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="24px"
+            android:paddingRight="30px"
+            android:text="@string/icon_left_big"
+            android:textColor="@color/white"
+            android:textSize="36px"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="36px"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:padding="20px"
+        android:layout_marginTop="30px"
+        android:layout_marginRight="24px"
+        android:layout_marginLeft="24px"
+        android:background="@drawable/shape_corner_white"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:gravity="center"
+            android:id="@+id/tv_content"
+            tools:text="搞掂喇！終於可以踢返場波啦！\n2017-12-18 09:00 - 11:00\n鴨脷洲橋道遊樂場\n岳队 vs ABC"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/text_black"
+            android:textSize="30px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="88px"
+            android:layout_marginTop="30px"
+            android:background="@drawable/selector_corner_dark_blue_gray_bg"
+            android:gravity="center"
+            android:text="人黎，同朕check下其他球隊！"
+            android:textColor="@color/white"
+            android:textSize="30px"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="88px"
+            android:layout_marginTop="30px"
+            android:background="@drawable/selector_corner_dark_blue_gray_bg"
+            android:gravity="center"
+            android:text="唔急既，再等下先啦！"
+            android:textColor="@color/white"
+            android:textSize="30px"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="88px"
+            android:layout_marginTop="30px"
+            android:background="@drawable/selector_corner_dark_blue_gray_bg"
+            android:gravity="center"
+            android:text="好叻咩，唔踢咪唔踢囉！"
+            android:textColor="@color/white"
+            android:textSize="30px"/>
+    </LinearLayout>
+
+</LinearLayout>
+

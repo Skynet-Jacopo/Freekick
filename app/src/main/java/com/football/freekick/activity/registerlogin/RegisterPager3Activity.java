@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,18 +14,37 @@ import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.CreateTeam;
+import com.football.freekick.beans.Login;
+import com.football.freekick.chat.FireChatHelper.ChatHelper;
+import com.football.freekick.chat.adapter.UsersChatAdapter;
+import com.football.freekick.chat.model.User;
 import com.football.freekick.commons.colorpicker.ColorListener;
 import com.football.freekick.commons.colorpicker.ColorPickerView;
+import com.football.freekick.event.AccountEvent;
+import com.football.freekick.event.MainEvent;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.ImageUtil;
 import com.football.freekick.utils.PrefUtils;
+import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -63,6 +84,10 @@ public class RegisterPager3Activity extends BaseActivity {
     private String color1;
     private String color2;
 
+    private DatabaseReference mDatabase;
+    private String mEmail;
+    private String mPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +99,9 @@ public class RegisterPager3Activity extends BaseActivity {
     }
 
     private void initData() {
-
+        mEmail = getIntent().getStringExtra("email");
+        mPassword = getIntent().getStringExtra("password");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         Intent intent = getIntent();
         team_name = intent.getStringExtra("team_name");
         district = intent.getStringExtra("district");
@@ -128,7 +155,6 @@ public class RegisterPager3Activity extends BaseActivity {
                 break;
         }
     }
-
     /**
      * 創建球隊
      */
@@ -169,6 +195,7 @@ public class RegisterPager3Activity extends BaseActivity {
                         CreateTeam createTeam = gson.fromJson(s, CreateTeam.class);
                         if (createTeam.getTeam() != null) {
                             CreateTeam.TeamBean team = createTeam.getTeam();
+                            registerFirebaseDatabase(team);
                             int id = team.getId();
                             String color1 = team.getColor1();
                             String color2 = team.getColor2();
@@ -217,4 +244,63 @@ public class RegisterPager3Activity extends BaseActivity {
         Bitmap bitmap = ImageUtil.getimage(picLoaclUrl);
         image = "data:image/jpeg;base64," + ImageUtil.bitmapToBase64(bitmap);
     }
+
+    /**
+     * 註冊FirebaseDatabase
+     */
+    private void registerFirebaseDatabase(final CreateTeam.TeamBean team) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(mEmail, mPassword)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Logger.d("註冊FirebaseDatabase成功了");
+                            User user = new User("", mEmail, UsersChatAdapter.ONLINE, ChatHelper
+                                    .generateRandomAvatarForUser(),
+                                    new Date().getTime(), 0);
+                            mDatabase.child("users").child(team.getId() + "").setValue(user);
+                            loginFirebaseDatabase(team);
+                        } else {
+                            Logger.d(task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
+    private void loginFirebaseDatabase(final CreateTeam.TeamBean team) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(mEmail, mPassword)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Logger.d("登錄FirebaseDatabase成功了");
+                            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                                Logger.json(new Gson().toJson(task));
+                                mDatabase.child("users").
+                                        child(team.getId() + "").
+                                        child("connection").
+                                        setValue(UsersChatAdapter.ONLINE);
+                                mDatabase.
+                                        child("users").
+                                        child(team.getId() + "").
+                                        child("displayName").
+                                        setValue(team.getUser().getUsername() + "（" + team.getTeam_name() + "）");
+                                mDatabase.
+                                        child("users").
+                                        child(team.getId() + "").
+                                        child("team_url").
+                                        setValue(team.getImage().getUrl());
+                                mDatabase.
+                                        child("users").
+                                        child(team.getId() + "").
+                                        child("team_id").
+                                        setValue(team.getId() + "");
+                            }
+                        } else {
+                            Logger.d(task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
 }

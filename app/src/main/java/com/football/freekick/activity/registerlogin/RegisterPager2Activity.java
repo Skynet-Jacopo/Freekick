@@ -134,6 +134,8 @@ public class RegisterPager2Activity extends BaseActivity {
     private String age_range_max = "";
     private String image = "";
     private String district = "";
+    private String mEmail;
+    private String mPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +151,9 @@ public class RegisterPager2Activity extends BaseActivity {
     }
 
     private void initView() {
+        mEmail = getIntent().getStringExtra("email");
+        mPassword = getIntent().getStringExtra("password");
+
         num = 7;
         mTvUploadPic.setTypeface(App.mTypeface);
         mTvBack.setTypeface(App.mTypeface);
@@ -347,6 +352,9 @@ public class RegisterPager2Activity extends BaseActivity {
         intent.putExtra("size", size);
         intent.putExtra("status", "a");//?這是個什麼東東??
         intent.putExtra("image", image);
+        //郵箱和密碼是註冊FireDatabase使用的
+        intent.putExtra("email", mEmail);
+        intent.putExtra("password", mPassword);
         startActivity(intent);
     }
 
