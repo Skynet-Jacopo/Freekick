@@ -132,7 +132,20 @@ public class JodaTimeUtil {
         DateTime dateTime = new DateTime(time1);
         return dateTime.toString("HH:mm");
     }
+    public static long getMills(String time) {
+        time = time.substring(0, time.length() - 6);
+//        time = time.replace("Z", " UTC");//注意是空格+UTC
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");//注意格式化的表达式
 
+        Date d = null;
+        try {
+            d = format.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long time1 = d.getTime();
+        return time1;
+    }
     /**
      * @param releaseDate format: 2012-04-24T10:00:10+08:00
      * @return 返回天数，大于14天则显示具体发帖时间

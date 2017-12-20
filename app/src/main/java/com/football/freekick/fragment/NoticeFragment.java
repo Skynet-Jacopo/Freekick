@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
+import com.football.freekick.activity.MatchRateActivity;
 import com.football.freekick.activity.NoticeDetailActivity;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.baseadapter.ViewHolder;
@@ -102,7 +103,8 @@ public class NoticeFragment extends BaseFragment {
             mRecyclerNotice.setHasFixedSize(true);
         }
         mRecyclerNotice.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new CommonAdapter<Notification.NotificationBean>(mContext, R.layout.item_notification,mNotification) {
+        mAdapter = new CommonAdapter<Notification.NotificationBean>(mContext, R.layout.item_notification,
+                mNotification) {
 
 
             @Override
@@ -118,26 +120,45 @@ public class NoticeFragment extends BaseFragment {
                 final String body = notificationBean.getBody();
 //                holder.setText(R.id.tv_content, Html.fromHtml(notificationBean.getBody()).toString());
                 holder.setText(R.id.tv_content, body);
-                holder.setTypeface(App.mTypeface,R.id.tv_icon_notice);
+                holder.setTypeface(App.mTypeface, R.id.tv_icon_notice);
                 String notification_type = notificationBean.getNotification_type();
-                switch (notification_type){
+                Intent intent = new Intent();
+                switch (notification_type) {
                     case "N7b"://是在主隊確認客隊之後(球賽狀態是'已確認'), 客隊在球賽確認限期(confirm_end)后退出, 通知由主隊收到.
+                        intent.setClass(mContext, NoticeDetailActivity.class);
+                        intent.putExtra("notification_type", "N7b");
+                        intent.putExtra("match_id", notificationBean.getMatch_id() + "");
+                        startActivity(intent);
                         break;
                     case "N7c"://是在主隊確認客隊之後(球賽狀態是'已確認'), 客隊在球賽確認限期(confirm_end)前退出, 通知由主隊收到.
+                        intent.setClass(mContext, NoticeDetailActivity.class);
+                        intent.putExtra("notification_type", "N7c");
+                        intent.putExtra("match_id", notificationBean.getMatch_id() + "");
+                        startActivity(intent);
                         break;
                     case "N10"://在球賽完結后發出
+                        //先判斷有沒有打過分
+                        intent.setClass(mContext, MatchRateActivity.class);
+                        intent.putExtra("match_id",notificationBean.getMatch_id() + "");
+//                        intent.putExtra("match_id",161 + "");
+                        startActivity(intent);
+                        break;
+                    default:
                         break;
                 }
-                holder.setOnClickListener(R.id.ll_content, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ToastUtil.toastShort(""+itemPosition);
-                        Intent intent = new Intent(mContext, NoticeDetailActivity.class);
-                        intent.putExtra("body",body);
-                        intent.putExtra("match_id",notificationBean.getMatch_id()+"");
-                        startActivity(intent);
-                    }
-                });
+//                holder.setOnClickListener(R.id.ll_content, new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        ToastUtil.toastShort("" + itemPosition);
+////                        Intent intent = new Intent(mContext, NoticeDetailActivity.class);
+//                        Intent intent = new Intent(mContext, MatchRateActivity.class);
+//                        intent.putExtra("notification_type", "N7c");
+//                        intent.putExtra("body", body);
+////                        intent.putExtra("match_id", notificationBean.getMatch_id() + "");
+//                        intent.putExtra("match_id",161 + "");
+//                        startActivity(intent);
+//                    }
+//                });
             }
         };
         mRecyclerNotice.setAdapter(mAdapter);

@@ -24,6 +24,7 @@ import com.football.freekick.beans.CancelMatch;
 import com.football.freekick.beans.ConfirmInvite;
 import com.football.freekick.beans.Invite;
 import com.football.freekick.beans.MatchDetail;
+import com.football.freekick.beans.Ratings;
 import com.football.freekick.beans.WithDraw;
 import com.football.freekick.chat.FireChatHelper.ExtraIntent;
 import com.football.freekick.chat.model.User;
@@ -218,6 +219,7 @@ public class MatchContentActivity1 extends BaseActivity {
                 mMatch.setPitch_image(App.mPitchesBeanList.get(i).getImage().getUrl());
             }
         }
+        loadingDismiss();
         mTvDate.setText(JodaTimeUtil.getDate(mMatch.getPlay_start()));
         mTvLocation.setText(mMatch.getLocation());
         mTvTime.setText(JodaTimeUtil.getTime2(mMatch.getPlay_start()) + "-" + JodaTimeUtil
@@ -234,6 +236,7 @@ public class MatchContentActivity1 extends BaseActivity {
          * 5.我被邀請,還未接受邀請(match status = i,join match status = invited)
          * 6.我已邀請別人,別人還未確認(match status = i,join match status = invited)
          * 7.我不是主隊,也不是客隊,只是來瀏覽的(match status = m,join match status = confirmed?(還不確定))
+         * 8.我是主隊或客隊,球賽完成後在作賽記錄頁進入
          */
         List<MatchDetail.MatchBean.JoinMatchesBean> join_matches = mMatch.getJoin_matches();
         switch (type) {
@@ -451,9 +454,73 @@ public class MatchContentActivity1 extends BaseActivity {
                     }
                 }
                 break;
+            case 8://我是主隊或客隊,球賽完成後在作賽記錄頁進入
+                getMatchRatings();//判斷是否已打分
+                mTvIconNoticeLeft.setVisibility(View.GONE);
+                mTvIconShareLeft.setVisibility(View.GONE);
+                mTvIconShareRight.setVisibility(View.GONE);
+                mTvIconNoticeRight.setVisibility(View.GONE);
+                for (int i = 0; i < join_matches.size(); i++) {
+                    if (mMatch.getStatus().equals("f") && join_matches.get(i).getStatus()
+                            .equals("confirmed")) {
+                        join_match_id = join_matches.get(i).getId() + "";
+                        MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
+                        mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
+                        mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
+                                .getJoin_team_color()));
+                        mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
+                    }
+                }
+                break;
 
         }
-        loadingDismiss();
+
+    }
+
+    private void getMatchRatings() {
+//        http://api.freekick.hk/api/en/matches/<matchID>/match_ratings
+//        http://api.freekick.hk/api/zh_Hk/matches/<matchID>/match_ratings
+        loadingShow();
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/"+id+"/match_ratings";
+        Logger.d(url);
+        OkGo.get(url)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Ratings fromJson = gson.fromJson(s, Ratings.class);
+                        List<Ratings.RatingsBean> ratings = fromJson.getRatings();
+                        if (ratings.size()<=0){
+                            mTvBtn.setText(R.string.rate);//打分
+                            mTvBtn.setVisibility(View.VISIBLE);
+                        }else {
+                            mTvBtn.setText(R.string.rate);//打分
+                            mTvBtn.setVisibility(View.VISIBLE);
+                            for (int i = 0; i < ratings.size(); i++) {
+                                if (ratings.get(i).getTeam_id() == Integer.parseInt(team_id)){
+                                    mTvBtn.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+                        mTvBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(mContext,MatchRateActivity.class);
+                                intent.putExtra("match_id",id);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        loadingDismiss();
+                        Logger.d(e.getMessage());
+                    }
+                });
     }
 
     private String cleanEmailAddress(String email) {

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/fl_parent"
-    tools:context="com.football.freekick.activity.MatchContent1Activity">
+    tools:context="com.football.freekick.activity.MatchContentActivity1">
 
     <RelativeLayout
         android:layout_width="match_parent"

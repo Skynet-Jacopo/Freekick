@@ -239,6 +239,10 @@
     <string name="accept_the_invitation">accept</string>
     <string name="email_error">Please enter the correct email format!</string>
     <string name="password_error">Minimum password length requirement is six!</string>
+    <string name="check_any_other_team_available">check any other team available</string>
+    <string name="still_have_time_to_wait_another_team_to_join">still  have time to wait another team to join</string>
+    <string name="notice_cancel_the_match">cancel the match</string>
+
     <string name="there_is_not_available_matches">無未落實球賽,請創建新球賽</string>
     <string name="cancel_the_invitation">是否取消邀請?</string>
     <string name="yes">是</string>
@@ -282,4 +286,9 @@
     <string name="notice_close_success">消息通知已關閉</string>
     <string name="notice_open_failed">開啟失敗!</string>
     <string name="notice_close_failed">關閉失敗!</string>
+    <string name="cancel_success">取消成功!</string>
+    <string name="rate">打分</string>
+    <string name="rate_success">打分成功!</string>
+    <string name="rate_already">你已經評分該球賽</string>
+
 </resources>

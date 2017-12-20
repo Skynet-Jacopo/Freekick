@@ -157,4 +157,7 @@
     <string name="time_error">結束時間必須大於開始時間,請重新選擇!</string>
     <string name="email_error">請輸入正確的郵箱格式!</string>
     <string name="password_error">密碼長度要求最小為6位!</string>
+    <string name="check_any_other_team_available">人黎，同朕check下其他球隊！</string>
+    <string name="still_have_time_to_wait_another_team_to_join">唔急既，再等下先啦！</string>
+    <string name="notice_cancel_the_match">好叻咩，唔踢咪唔踢囉！</string>
 </resources>

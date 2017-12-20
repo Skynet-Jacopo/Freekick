@@ -238,7 +238,7 @@ public class RecordFragment extends BaseFragment {
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
                 Intent intent = new Intent(mContext, MatchContentActivity1.class);
                 intent.putExtra("id", mListFinished.get(position).getId() + "");
-                intent.putExtra("type", 7);
+                intent.putExtra("type", 8);
                 startActivity(intent);
             }
 

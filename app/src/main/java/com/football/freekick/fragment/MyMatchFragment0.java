@@ -257,7 +257,7 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                         Gson gson = new Gson();
                         CancelMatch fromJson = gson.fromJson(s, CancelMatch.class);
                         if (fromJson.getMatch() != null) {
-                            ToastUtil.toastShort(getString(R.string.withdraw_success));
+                            ToastUtil.toastShort(getString(R.string.cancel_success));
                             mListMatch.remove(position);
                             mMatchAdapter.notifyDataSetChanged();
                         } else if (fromJson.getErrors() != null) {

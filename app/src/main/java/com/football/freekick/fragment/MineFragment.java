@@ -94,6 +94,25 @@ public class MineFragment extends BaseFragment {
         initDatas();//初始化動態和焦點
     }
 
+    private void getDataFromNotice() {
+        String toPage = getActivity().getIntent().getStringExtra("toPage");
+        if (toPage==null){
+            return;
+        }else {
+            switch (toPage){
+                case "0":
+                    mViewpager.setCurrentItem(0);
+                    break;
+                case "1":
+                    mViewpager.setCurrentItem(1);
+                    break;
+                case "2":
+                    mViewpager.setCurrentItem(2);
+                    break;
+            }
+        }
+    }
+
     /**
      * 初始化動態和焦點
      */
@@ -124,6 +143,7 @@ public class MineFragment extends BaseFragment {
                             }
                         }
                         initTabAndViewPager();
+                        getDataFromNotice();
                     }
 
                     @Override

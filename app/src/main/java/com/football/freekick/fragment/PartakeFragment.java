@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
@@ -30,6 +31,7 @@ import com.football.freekick.beans.Advertisements;
 import com.football.freekick.beans.Area;
 import com.football.freekick.event.MainEvent;
 import com.football.freekick.http.Url;
+import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
@@ -50,6 +52,7 @@ import org.joda.time.DateTime;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -136,6 +139,87 @@ public class PartakeFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initView();
         initData();
+        getDataFromNotice();
+    }
+
+    private void getDataFromNotice() {
+        Intent intent = getActivity().getIntent();
+        if (intent.getStringExtra("district")==null){
+            Logger.d("傳值-->");
+        }else {
+            district_id = intent.getStringExtra("district_id");
+            String region = intent.getStringExtra("region");
+            String district = intent.getStringExtra("district");
+            regionPos = mRegions.indexOf(region);
+            List<Area.RegionsBean.DistrictsBean> districts = mAreaRegions.get(regionPos).getDistricts();
+            for (int i = 0; i < districts.size(); i++) {
+                if (districts.get(i).getDistrict().equals(district)){
+                    districtPos = i;
+                }
+            }
+            Logger.d("regionPos-->"+regionPos+"  districtPos-->"+districtPos);
+            mTvArea.setText(district);
+            String start = intent.getStringExtra("start");
+            String end = intent.getStringExtra("end");
+            DateTime startDate = DateTime.parse(start.substring(0,start.length()-6));
+            DateTime endDate = DateTime.parse(end.substring(0,end.length()-6));
+            DateTime minusHours = startDate.minusHours(2);
+            DateTime plusHours = endDate.plusHours(2);
+//            Logger.d("minusHours.getDayOfYear()--->"+minusHours.getDayOfYear());
+//            Logger.d("startDate.getDayOfYear()--->"+startDate.getDayOfYear());
+//            Logger.d("plusHours.getDayOfYear()--->"+plusHours.getDayOfYear());
+//            Logger.d("endDate.getDayOfYear()--->"+endDate.getDayOfYear());
+            if (minusHours.getYearOfCentury()<startDate.getYearOfCentury()){
+                dateTime = startDate;
+                mStartTime = "00:00";
+                mEndTime = plusHours.toString("HH:mm");
+            }else if (plusHours.getYearOfCentury()>endDate.getYearOfCentury()){
+                dateTime = startDate;
+                mStartTime = minusHours.toString("HH:mm");
+                mEndTime = "23:30";
+            }else {
+                if (minusHours.getDayOfYear()<startDate.getDayOfYear()){
+                    dateTime = startDate;
+                    mStartTime = "00:00";
+                    mEndTime = plusHours.toString("HH:mm");
+                }else if (plusHours.getDayOfYear()>endDate.getDayOfYear()){
+                    dateTime = startDate;
+                    mStartTime = minusHours.toString("HH:mm");
+                    mEndTime = "23:30";
+                }else if (minusHours.getDayOfYear()==startDate.getDayOfYear()&&plusHours.getDayOfYear()==endDate.getDayOfYear()){
+                    dateTime = startDate;
+                    mStartTime = minusHours.toString("HH:mm");
+                    mEndTime = plusHours.toString("HH:mm");
+                }
+            }
+
+            mTvDate.setText(dateTime.toString("yyyy-MM-dd"));
+            mTvTime.setText(getString(R.string.from) + " " + mStartTime + "\u3000" + getString(R.string.to) + " " +
+                    mEndTime);
+            Logger.d("startDate--->"+startDate.toString());
+            Logger.d("endDate--->"+endDate.toString());
+            pitch_size = intent.getStringExtra("size");
+            switch (pitch_size) {
+                case "5":
+                    mTvPitchSize.setText(getString(R.string.pitch_size_5));
+                    break;
+                case "7":
+                    mTvPitchSize.setText(getString(R.string.pitch_size_7));
+                    break;
+                case "11":
+                    mTvPitchSize.setText(getString(R.string.pitch_size_11));
+                    break;
+            }
+            Logger.d("傳值-->"+district_id+" "+region+" "+district+" "+start+" "+end+" "+pitch_size);
+            //不知為何,直接寫的話,值傳不到下個界面,所以加了一個定時器.
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mTvPartake.performClick();
+                }
+            }, 500);
+        }
+
     }
 
     /**

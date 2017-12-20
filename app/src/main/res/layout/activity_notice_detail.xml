@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:id="@+id/fl_parent"
     tools:context="com.football.freekick.activity.NoticeDetailActivity">
 
     <RelativeLayout
@@ -194,10 +194,10 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="80px"
-            tools:text="2017-11-27"
             android:textColor="@color/black"
             android:textSize="42px"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            tools:text="2017-11-27"/>
 
         <LinearLayout
             android:id="@+id/ll_location"
@@ -221,10 +221,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12px"
-                tools:text="何文田公關"
                 android:textColor="@color/black"
                 android:textSize="32px"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                tools:text="何文田公關"/>
         </LinearLayout>
 
         <TextView
@@ -234,10 +234,10 @@
             android:layout_below="@id/ll_location"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16px"
-            tools:text="19:00-21:00"
             android:textColor="@color/black"
             android:textSize="46px"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            tools:text="19:00-21:00"/>
 
         <LinearLayout
             android:id="@+id/ll_team"
@@ -270,9 +270,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="14px"
-                    tools:text="球隊名稱"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/text_24"/>
+                    android:textSize="@dimen/text_24"
+                    tools:text="球隊名稱"/>
 
                 <TextView
                     android:id="@+id/tv_home_num"
@@ -319,20 +319,19 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="14px"
-                    tools:text="球隊名稱"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/text_24"/>
+                    android:textSize="@dimen/text_24"
+                    tools:text="球隊名稱"/>
 
                 <LinearLayout
-                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="32px"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:visibility="gone"
                         android:id="@+id/tv_reduce"
                         android:layout_width="0dp"
                         android:layout_height="48px"
@@ -341,10 +340,10 @@
                         android:text="-"
                         android:textColor="@color/white"
                         android:textSize="30px"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
 
                     <TextView
-                        android:visibility="gone"
                         android:id="@+id/tv_visitor_num"
                         android:layout_width="49px"
                         android:layout_height="48px"
@@ -352,10 +351,10 @@
                         android:gravity="center"
                         android:text="9"
                         android:textColor="@color/white"
-                        android:textSize="20px"/>
+                        android:textSize="20px"
+                        android:visibility="gone"/>
 
                     <TextView
-                        android:visibility="gone"
                         android:id="@+id/tv_add"
                         android:layout_width="0dp"
                         android:layout_height="48px"
@@ -364,42 +363,54 @@
                         android:text="+"
                         android:textColor="@color/white"
                         android:textSize="30px"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
                 </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginBottom="30px"
             android:layout_width="520px"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30px"
-            android:layout_marginRight="24px"
+            android:layout_marginBottom="30px"
             android:layout_marginLeft="24px"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:layout_marginRight="24px"
+            android:layout_marginTop="30px"
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_btn_1"
                 android:layout_width="match_parent"
-                android:layout_height="80px"                android:layout_marginTop="30px"
-                android:background="@drawable/selector_corner_green_gray_bg"                android:gravity="center"
-                android:text="人黎，同朕check下其他球隊！"
+                android:layout_height="80px"
+                android:layout_marginTop="30px"
+                android:background="@drawable/selector_corner_green_gray_bg"
+                android:gravity="center"
+                android:text="@string/check_any_other_team_available"
                 android:textColor="@color/white"
                 android:textSize="30px"/>
+
             <TextView
+                android:id="@+id/tv_btn_2"
                 android:layout_width="match_parent"
-                android:layout_height="80px"                android:layout_marginTop="30px"
-                android:background="@drawable/selector_corner_green_gray_bg"                android:gravity="center"
-                android:text="唔急既，再等下先啦！"
+                android:layout_height="80px"
+                android:layout_marginTop="30px"
+                android:background="@drawable/selector_corner_green_gray_bg"
+                android:gravity="center"
+                android:text="@string/still_have_time_to_wait_another_team_to_join"
                 android:textColor="@color/white"
                 android:textSize="30px"/>
+
             <TextView
+                android:id="@+id/tv_btn_3"
                 android:layout_width="match_parent"
-                android:layout_height="80px"                android:layout_marginTop="30px"
-                android:background="@drawable/selector_corner_green_gray_bg"                android:gravity="center"
-                android:text="好叻咩，唔踢咪唔踢囉！"
+                android:layout_height="80px"
+                android:layout_marginTop="30px"
+                android:background="@drawable/selector_corner_green_gray_bg"
+                android:gravity="center"
+                android:text="@string/notice_cancel_the_match"
                 android:textColor="@color/white"
                 android:textSize="30px"/>
         </LinearLayout>
