@@ -5,6 +5,7 @@
               android:layout_height="wrap_content">
 
     <LinearLayout
+        android:layout_marginBottom="16px"
         android:orientation="vertical"
         android:layout_marginRight="24px"
         android:layout_marginLeft="24px"
@@ -15,7 +16,7 @@
             android:id="@+id/tv_time"
             android:textSize="@dimen/text_24"
             android:layout_marginBottom="20px"
-            android:layout_marginTop="32px"
+            android:layout_marginTop="16px"
             android:text="時間"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"

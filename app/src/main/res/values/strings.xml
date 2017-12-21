@@ -216,10 +216,10 @@
     <string name="trends">trends</string>
     <string name="focus">focus</string>
     <string name="attack">attack</string>
-    <string name="defend">defend</string>
-    <string name="punctuality">punctuality</string>
-    <string name="ability">ability</string>
-    <string name="quality">quality</string>
+    <string name="defend">defense</string>
+    <string name="punctuality">on time</string>
+    <string name="ability">technic</string>
+    <string name="quality">personality</string>
     <string name="decide_to_play">decide to play</string>
     <string name="basic_information">basic information</string>
     <string name="finished_match">finished match</string>
@@ -243,35 +243,35 @@
     <string name="still_have_time_to_wait_another_team_to_join">still  have time to wait another team to join</string>
     <string name="notice_cancel_the_match">cancel the match</string>
 
-    <string name="there_is_not_available_matches">無未落實球賽,請創建新球賽</string>
-    <string name="cancel_the_invitation">是否取消邀請?</string>
-    <string name="yes">是</string>
-    <string name="no">否</string>
-    <string name="withdraw_success">取消參與成功</string>
-    <string name="withdraw_failed">取消失敗</string>
-    <string name="comfirm_success">確認成功</string>
-    <string name="confirm_failed">確認失敗</string>
-    <string name="followed_teams">已關注球隊</string>
-    <string name="cancel_the_match">取消比賽</string>
-    <string name="withdraw_the_match">退出比賽</string>
-    <string name="message">消息</string>
+    <string name="there_is_not_available_matches">there is not available matches,please create a new match</string>
+    <string name="cancel_the_invitation">cancel the invitation?</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="withdraw_success">withdraw success</string>
+    <string name="withdraw_failed">withdraw failed</string>
+    <string name="comfirm_success">confirm success</string>
+    <string name="confirm_failed">confirm failed</string>
+    <string name="followed_teams">followed teams</string>
+    <string name="cancel_the_match">cancel the match</string>
+    <string name="withdraw_the_match">withdraw the match</string>
+    <string name="message">message</string>
     <string name="title_activity_maps">Map</string>
-    <string name="join_success_please_wait_to_confirm">參與成功,等待確認</string>
-    <string name="match_content">球賽內容頁</string>
-    <string name="cancel_match">取消比賽</string>
-    <string name="cancel_invite">取消邀請</string>
-    <string name="date_error">所選日期不可早於當前日期,請重新選擇!</string>
-    <string name="email_confirm">確認郵件已發到您的電子郵箱,請先確認之後繼續</string>
+    <string name="join_success_please_wait_to_confirm">join success,please wait to confirm</string>
+    <string name="match_content">match detail</string>
+    <string name="cancel_match">cancel the match</string>
+    <string name="cancel_invite">cancel the invitation</string>
+    <string name="date_error">The selected date cannot be earlier than the current date, please choose again!</string>
+    <string name="email_confirm">Confirmation email has been sent to your E-mail, please continue after confirmation.</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <!--
         This is the name that users will see when interacting with this channel.
         It should describe the category of notifications that will be sent through this channel
      -->
     <string name="default_notification_channel_name" translatable="true">News</string>
-    <string name="invite_friend">邀請好友</string>
-    <string name="short_message">短訊</string>
-    <string name="share">分享</string>
-    <string name="yesterday">昨天</string>
+    <string name="invite_friend">invite friend</string>
+    <string name="short_message">short message</string>
+    <string name="share">share</string>
+    <string name="yesterday">yesterday</string>
 
     <!--以下是即時通訊-->
     <!-- LogInActivity-->
@@ -282,13 +282,14 @@
     <!-- RegisterActivity-->
     <string name="error_fields_empty">Please make sure you enter display name, email and password!</string>
     <string name="error_incorrect_email_pass">Provide correct email and password with more than 6 characters.</string>
-    <string name="notice_open_success">消息通知已開啟</string>
-    <string name="notice_close_success">消息通知已關閉</string>
-    <string name="notice_open_failed">開啟失敗!</string>
-    <string name="notice_close_failed">關閉失敗!</string>
-    <string name="cancel_success">取消成功!</string>
-    <string name="rate">打分</string>
-    <string name="rate_success">打分成功!</string>
-    <string name="rate_already">你已經評分該球賽</string>
+    <string name="notice_open_success">notice open success</string>
+    <string name="notice_close_success">notice close success</string>
+    <string name="notice_open_failed">notice open failed!</string>
+    <string name="notice_close_failed">notice close failed!</string>
+    <string name="cancel_success">cancel success!</string>
+    <string name="rate">rate</string>
+    <string name="rate_success">rate success!</string>
+    <string name="rate_already">been rated already，return to record</string>
+    <string name="match_rate_pager">rating</string>
 
 </resources>

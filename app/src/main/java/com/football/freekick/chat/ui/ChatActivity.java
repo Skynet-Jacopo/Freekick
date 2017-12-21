@@ -137,7 +137,7 @@ public class ChatActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        messageChatListener = messageChatDatabase.limitToFirst(50).addChildEventListener(new ChildEventListener() {
+        messageChatListener = messageChatDatabase.limitToLast(50).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildKey) {
 
@@ -235,8 +235,10 @@ public class ChatActivity extends BaseActivity {
             unReadNum += 1;
             ChatMessage newMessage = new ChatMessage(senderMessage, mCurrentUserId, mRecipientId, new Date().getTime());
             messageChatDatabase.push().setValue(newMessage);
-            mUserRefDatabase.child(recipient_id).child("lastEditTime").setValue(-new Date().getTime());
-            mUserRefDatabase.child(mCurrentUserId).child("lastEditTime").setValue(-new Date().getTime());
+            mUserRefDatabase.child(recipient_id).child("lastEditTimeWith"+mCurrentUserId).setValue(-new Date().getTime());
+            mUserRefDatabase.child(mCurrentUserId).child("lastEditTimeWith"+mCurrentUserId).setValue(-new Date().getTime());
+            mUserRefDatabase.child(recipient_id).child("lastEditTimeWith").child("lastEditTimeWith"+mCurrentUserId).setValue(-new Date().getTime());
+            mUserRefDatabase.child(mCurrentUserId).child("lastEditTimeWith").child("lastEditTimeWith"+mCurrentUserId).setValue(-new Date().getTime());
             mUserMessageChatText.setText("");
             mUserRefDatabase.child(recipient_id).child("from"+mCurrentUserId+"unReadNum").setValue(unReadNum);
         }

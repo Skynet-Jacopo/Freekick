@@ -121,31 +121,38 @@ public class NoticeFragment extends BaseFragment {
 //                holder.setText(R.id.tv_content, Html.fromHtml(notificationBean.getBody()).toString());
                 holder.setText(R.id.tv_content, body);
                 holder.setTypeface(App.mTypeface, R.id.tv_icon_notice);
-                String notification_type = notificationBean.getNotification_type();
-                Intent intent = new Intent();
-                switch (notification_type) {
-                    case "N7b"://是在主隊確認客隊之後(球賽狀態是'已確認'), 客隊在球賽確認限期(confirm_end)后退出, 通知由主隊收到.
-                        intent.setClass(mContext, NoticeDetailActivity.class);
-                        intent.putExtra("notification_type", "N7b");
-                        intent.putExtra("match_id", notificationBean.getMatch_id() + "");
-                        startActivity(intent);
-                        break;
-                    case "N7c"://是在主隊確認客隊之後(球賽狀態是'已確認'), 客隊在球賽確認限期(confirm_end)前退出, 通知由主隊收到.
-                        intent.setClass(mContext, NoticeDetailActivity.class);
-                        intent.putExtra("notification_type", "N7c");
-                        intent.putExtra("match_id", notificationBean.getMatch_id() + "");
-                        startActivity(intent);
-                        break;
-                    case "N10"://在球賽完結后發出
-                        //先判斷有沒有打過分
-                        intent.setClass(mContext, MatchRateActivity.class);
-                        intent.putExtra("match_id",notificationBean.getMatch_id() + "");
+                final String notification_type = notificationBean.getNotification_type();
+                holder.setOnClickListener(R.id.ll_content, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent();
+                        switch (notification_type) {
+                            case "N7b"://是在主隊確認客隊之後(球賽狀態是'已確認'), 客隊在球賽確認限期(confirm_end)后退出, 通知由主隊收到.
+                                intent.setClass(mContext, NoticeDetailActivity.class);
+                                intent.putExtra("notification_type", "N7b");
+                                intent.putExtra("match_id", notificationBean.getMatch_id() + "");
+                                startActivity(intent);
+                                break;
+                            case "N7c"://是在主隊確認客隊之後(球賽狀態是'已確認'), 客隊在球賽確認限期(confirm_end)前退出, 通知由主隊收到.
+                                intent.setClass(mContext, NoticeDetailActivity.class);
+                                intent.putExtra("notification_type", "N7c");
+                                intent.putExtra("match_id", notificationBean.getMatch_id() + "");
+                                startActivity(intent);
+                                break;
+                            case "N10"://在球賽完結后發出
+                                //先判斷有沒有打過分
+                                intent.setClass(mContext, MatchRateActivity.class);
+                                intent.putExtra("match_id",notificationBean.getMatch_id() + "");
 //                        intent.putExtra("match_id",161 + "");
-                        startActivity(intent);
-                        break;
-                    default:
-                        break;
-                }
+                                startActivity(intent);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+
+
 //                holder.setOnClickListener(R.id.ll_content, new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View view) {

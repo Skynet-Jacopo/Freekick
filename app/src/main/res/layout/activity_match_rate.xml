@@ -30,7 +30,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="@string/match_invite"
+            android:text="@string/match_rate_pager"
             android:textColor="@color/white"
             android:textSize="36px"/>
 
@@ -255,7 +255,7 @@
                 android:layout_marginTop="17px">
 
                 <TextView
-                    android:layout_width="100px"
+                    android:layout_width="150px"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/attack"
@@ -304,7 +304,7 @@
                 android:layout_marginTop="4px">
 
                 <TextView
-                    android:layout_width="100px"
+                    android:layout_width="150px"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/defend"
@@ -353,7 +353,7 @@
                 android:layout_marginTop="4px">
 
                 <TextView
-                    android:layout_width="100px"
+                    android:layout_width="150px"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/punctuality"
@@ -402,7 +402,7 @@
                 android:layout_marginTop="4px">
 
                 <TextView
-                    android:layout_width="100px"
+                    android:layout_width="150px"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/ability"
@@ -451,7 +451,7 @@
                 android:layout_marginTop="4px">
 
                 <TextView
-                    android:layout_width="100px"
+                    android:layout_width="150px"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/quality"

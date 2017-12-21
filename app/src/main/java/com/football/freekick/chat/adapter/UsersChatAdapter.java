@@ -103,6 +103,23 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
 
             }
         });
+        mUserRefDatabase.child(fireChatUser.getTeam_id()).child("lastEditTimeWith"+team_id).addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+
+                }else {
+                    mUserRefDatabase.child(fireChatUser.getTeam_id()).child("lastEditTimeWith"+team_id).setValue(0);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         final String chatRef = fireChatUser.createUniqueChatRef(mCurrentUserCreatedAt, PrefUtils.getString(App
                 .APP_CONTEXT, "uid", null));
         messageChatDatabase = FirebaseDatabase.getInstance().getReference().child(chatRef);

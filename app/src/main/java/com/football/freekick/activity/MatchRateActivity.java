@@ -179,16 +179,24 @@ public class MatchRateActivity extends BaseActivity {
                         List<Ratings.RatingsBean> ratings = fromJson.getRatings();
                         if (ratings.size() <= 0) {
                             mTvConfirm.setText(getString(R.string.confirm));
-                            mTvConfirm.setClickable(true);
+
                             initDefultView();
                         } else {
                             mTvConfirm.setText(getString(R.string.confirm));
-                            mTvConfirm.setClickable(true);
                             for (int i = 0; i < ratings.size(); i++) {
                                 if (ratings.get(i).getTeam_id() == Integer.parseInt(team_id)) {
                                     mTvConfirm.setText(R.string.rate_already);
-                                    mTvConfirm.setClickable(false);
                                     refreshView(ratings.get(i));
+                                    mTvConfirm.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent();
+                                            intent.setClass(mContext, MainActivity.class);
+                                            intent.putExtra("which", 3);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
                                 }
                             }
                         }
@@ -207,36 +215,36 @@ public class MatchRateActivity extends BaseActivity {
      * 默認狀態
      */
     private void initDefultView() {
-        attack = 5;
-        defense = 5;
-        on_time = 5;
-        technic = 5;
-        personality = 5;
-        mIv11.setImageResource(R.drawable.icon_star_selected);
-        mIv12.setImageResource(R.drawable.icon_star_selected);
-        mIv13.setImageResource(R.drawable.icon_star_selected);
-        mIv14.setImageResource(R.drawable.icon_star_selected);
-        mIv15.setImageResource(R.drawable.icon_star_selected);
-        mIv21.setImageResource(R.drawable.icon_star_selected);
-        mIv22.setImageResource(R.drawable.icon_star_selected);
-        mIv23.setImageResource(R.drawable.icon_star_selected);
-        mIv24.setImageResource(R.drawable.icon_star_selected);
-        mIv25.setImageResource(R.drawable.icon_star_selected);
-        mIv31.setImageResource(R.drawable.icon_star_selected);
-        mIv32.setImageResource(R.drawable.icon_star_selected);
-        mIv33.setImageResource(R.drawable.icon_star_selected);
-        mIv34.setImageResource(R.drawable.icon_star_selected);
-        mIv35.setImageResource(R.drawable.icon_star_selected);
-        mIv41.setImageResource(R.drawable.icon_star_selected);
-        mIv42.setImageResource(R.drawable.icon_star_selected);
-        mIv43.setImageResource(R.drawable.icon_star_selected);
-        mIv44.setImageResource(R.drawable.icon_star_selected);
-        mIv45.setImageResource(R.drawable.icon_star_selected);
-        mIv51.setImageResource(R.drawable.icon_star_selected);
-        mIv52.setImageResource(R.drawable.icon_star_selected);
-        mIv53.setImageResource(R.drawable.icon_star_selected);
-        mIv54.setImageResource(R.drawable.icon_star_selected);
-        mIv55.setImageResource(R.drawable.icon_star_selected);
+        attack = 0;
+        defense = 0;
+        on_time = 0;
+        technic = 0;
+        personality = 0;
+        mIv11.setImageResource(R.drawable.icon_star_unselected);
+        mIv12.setImageResource(R.drawable.icon_star_unselected);
+        mIv13.setImageResource(R.drawable.icon_star_unselected);
+        mIv14.setImageResource(R.drawable.icon_star_unselected);
+        mIv15.setImageResource(R.drawable.icon_star_unselected);
+        mIv21.setImageResource(R.drawable.icon_star_unselected);
+        mIv22.setImageResource(R.drawable.icon_star_unselected);
+        mIv23.setImageResource(R.drawable.icon_star_unselected);
+        mIv24.setImageResource(R.drawable.icon_star_unselected);
+        mIv25.setImageResource(R.drawable.icon_star_unselected);
+        mIv31.setImageResource(R.drawable.icon_star_unselected);
+        mIv32.setImageResource(R.drawable.icon_star_unselected);
+        mIv33.setImageResource(R.drawable.icon_star_unselected);
+        mIv34.setImageResource(R.drawable.icon_star_unselected);
+        mIv35.setImageResource(R.drawable.icon_star_unselected);
+        mIv41.setImageResource(R.drawable.icon_star_unselected);
+        mIv42.setImageResource(R.drawable.icon_star_unselected);
+        mIv43.setImageResource(R.drawable.icon_star_unselected);
+        mIv44.setImageResource(R.drawable.icon_star_unselected);
+        mIv45.setImageResource(R.drawable.icon_star_unselected);
+        mIv51.setImageResource(R.drawable.icon_star_unselected);
+        mIv52.setImageResource(R.drawable.icon_star_unselected);
+        mIv53.setImageResource(R.drawable.icon_star_unselected);
+        mIv54.setImageResource(R.drawable.icon_star_unselected);
+        mIv55.setImageResource(R.drawable.icon_star_unselected);
     }
 
     /**
