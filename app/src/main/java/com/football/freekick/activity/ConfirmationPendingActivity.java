@@ -28,6 +28,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 import com.zhy.autolayout.utils.AutoUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -88,6 +89,9 @@ public class ConfirmationPendingActivity extends BaseActivity {
     }
 
     private void initData() {
+        if (join_matches != null) {
+            join_matches.clear();
+        }
         loadingShow();
         String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/";//+matchID
         Logger.d(url + id);
@@ -133,14 +137,19 @@ public class ConfirmationPendingActivity extends BaseActivity {
         mIvDressHome.setBackgroundColor(MyUtil.getColorInt(mMatch.getHome_team_color()));
         mTvHomeName.setText(mMatch.getHome_team().getTeam_name() == null ? "" : mMatch.getHome_team().getTeam_name());
 
-
-        join_matches = mMatch.getJoin_matches();
+        List<MatchDetail.MatchBean.JoinMatchesBean> join_matches1 = mMatch.getJoin_matches();
+        for (int i = 0; i < join_matches1.size(); i++) {
+            if (join_matches1.get(i).getStatus().equals("confirmation_pending")){
+                join_matches.add(join_matches1.get(i));
+            }
+        }
+//        join_matches = mMatch.getJoin_matches();
         if (mRecyclerConfirmationPending != null) {
             mRecyclerConfirmationPending.setHasFixedSize(true);
         }
         mRecyclerConfirmationPending.setLayoutManager(new LinearLayoutManager(mContext));
         CommonAdapter adapter = new CommonAdapter<MatchDetail.MatchBean.JoinMatchesBean>(mContext, R.layout
-                .item_confirmation_pending, join_matches) {
+                .item_confirmation_pending, ConfirmationPendingActivity.this.join_matches) {
 
 
             @Override
@@ -150,7 +159,7 @@ public class ConfirmationPendingActivity extends BaseActivity {
             }
 
             @Override
-            public void convert(ViewHolder holder, MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean) {
+            public void convert(ViewHolder holder, final MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean) {
                 final int itemPosition = holder.getItemPosition();
                 ImageView ivPic        = holder.getView(R.id.iv_pic);
                 ImageLoaderUtils.displayImage(MyUtil.getImageUrl(joinMatchesBean.getTeam().getImage().getUrl()),
@@ -162,6 +171,14 @@ public class ConfirmationPendingActivity extends BaseActivity {
                         //從參與的隊伍中取一隊決定作賽
 //                        http:// api.freekick.hk/api/en/join_matches/<joinmatchID>/confirm
                         confirm(itemPosition);
+                    }
+                });
+                holder.setOnClickListener(R.id.ll_content, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(mContext,TeamDetailActivity.class);
+                        intent.putExtra("id",joinMatchesBean.getJoin_team_id()+"");
+                        startActivity(intent);
                     }
                 });
             }
@@ -213,6 +230,8 @@ public class ConfirmationPendingActivity extends BaseActivity {
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
         mTvIconLocation.setTypeface(App.mTypeface);
+        join_matches = new ArrayList<>();
+
     }
 
     @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location})

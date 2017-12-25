@@ -95,6 +95,7 @@
             </LinearLayout>
         </LinearLayout>
         <ImageView
+            android:id="@+id/iv_pic1"
             android:layout_marginTop="12px"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/icon_retangle"
@@ -110,6 +111,7 @@
             android:layout_width="190px"
             android:layout_height="190px"/>
         <ImageView
+            android:id="@+id/iv_pic2"
             android:layout_marginBottom="12px"
             android:layout_gravity="center_horizontal|bottom"
             android:src="@drawable/icon_retangle"

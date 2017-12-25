@@ -1,6 +1,7 @@
 package com.football.freekick.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
+import com.football.freekick.activity.TeamDetailActivity;
 import com.football.freekick.beans.MatchesComing;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
@@ -61,7 +63,7 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        MatchesComing.MatchesBean matchesBean = mMatches.get(position);
+        final MatchesComing.MatchesBean matchesBean = mMatches.get(position);
         if (holder instanceof MyHolder1) {
             final MyHolder1 myHolder1 = (MyHolder1) holder;
             myHolder1.tvIconDelete.setTypeface(App.mTypeface);
@@ -139,7 +141,7 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         Logger.d("走了嗎  這裡");
                         myHolder1.tvIconDelete.setVisibility(View.GONE);
                         myHolder1.tvState.setText(R.string.confirmation_pending);
-                        myHolder1.tvState.setBackgroundResource(R.drawable.selector_corner_green_gray_bg);
+                        myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_green_gray_bg);
 //                        for (int i = 0; i < join_matches.size(); i++) {
 //                            if (join_matches.get(i).getStatus().equals("confirmation_pending")) {
 //                                final int finalI = i;
@@ -167,6 +169,12 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 click.Click(4, myHolder1.tvState, position, 0);//邀請(無邀請隊,無參與隊)
                             }
                         });
+                        myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                click.Click(9, myHolder1.lLContent, position, 0);//球賽詳情頁(無邀請,無主動參與隊伍)
+                            }
+                        });
                     }
                 } else {
                     myHolder1.tvState.setText(R.string.invite);
@@ -179,7 +187,16 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     });
                 }
             }
-
+            //主隊進入球隊詳情
+            myHolder1.lLHomeTeam.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, TeamDetailActivity.class);
+                    intent.putExtra("id", matchesBean.getHome_team().getId() + "");
+                    mContext.startActivity(intent);
+                }
+            });
         } else if (holder instanceof MyHolder2) {
             final MyHolder2 myHolder2 = (MyHolder2) holder;
             myHolder2.tvIconDelete.setTypeface(App.mTypeface);
@@ -203,7 +220,7 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class MyHolder1 extends RecyclerView.ViewHolder {
         private TextView tvDate, tvHomeName, tvLocation, tvTime, tvState, tvIconDelete;
-        private LinearLayout lLContent;
+        private LinearLayout lLContent,lLHomeTeam;
         private ImageView    ivHomeLogo;
 
         public MyHolder1(View itemView) {
@@ -215,6 +232,7 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ivHomeLogo = (ImageView) itemView.findViewById(R.id.iv_home_logo);
             tvState = (TextView) itemView.findViewById(R.id.tv_state);
             lLContent = (LinearLayout) itemView.findViewById(R.id.ll_content);
+            lLHomeTeam = (LinearLayout) itemView.findViewById(R.id.ll_home_team);
             tvIconDelete = (TextView) itemView.findViewById(R.id.tv_icon_delete);
         }
     }

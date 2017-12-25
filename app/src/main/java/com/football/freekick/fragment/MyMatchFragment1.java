@@ -62,16 +62,16 @@ public class MyMatchFragment1 extends LazyLoadFragment {
 
 
     public static final int REQUEST_CODE_INVITE = 1;
-    public static final int REQUEST_CODE_TO_1   = 2;
-    public static final int REQUEST_CODE_DETAIL   = 3;
+    public static final int REQUEST_CODE_TO_1 = 2;
+    public static final int REQUEST_CODE_DETAIL = 3;
     @Bind(R.id.recycler_my_match)
     RecyclerView mRecyclerMyMatch;
     @Bind(R.id.tv_icon_lines)
-    TextView     mTvIconLines;
+    TextView mTvIconLines;
     @Bind(R.id.recycler_lines)
     RecyclerView mRecyclerLines;
     @Bind(R.id.tv_icon_focus)
-    TextView     mTvIconFocus;
+    TextView mTvIconFocus;
     @Bind(R.id.recycler_focus)
     RecyclerView mRecyclerFocus;
     @Bind(R.id.ll_parent)
@@ -80,21 +80,21 @@ public class MyMatchFragment1 extends LazyLoadFragment {
     /**
      * 标志位，标志已经初始化完成
      */
-    private boolean      isPrepared;
+    private boolean isPrepared;
     /**
      * 是否已被加载过一次，第二次就不再去请求数据了
      */
-    private boolean      mHasLoadedOnce;
+    private boolean mHasLoadedOnce;
     private LinearLayout mFragmentView;
 
     private Context mContext;
     private String picUrl = "http://www.cnr.cn/china/xwwgf/201111/W020111128658021231674.jpg";
     private CommonAdapter mLineAdapter;
     private CommonAdapter mFocusAdapter;
-    private ArrayList<MatchesComing.MatchesBean> mMatches  = new ArrayList<>();
+    private ArrayList<MatchesComing.MatchesBean> mMatches = new ArrayList<>();
     private ArrayList<MatchesComing.MatchesBean> mListWait = new ArrayList<>();
     private MyMatchAdapter1 mMatchAdapter;
-    private List<Article.ArticleBean> news          = new ArrayList<>();
+    private List<Article.ArticleBean> news = new ArrayList<>();
     private List<Article.ArticleBean> point_of_view = new ArrayList<>();
 
     public MyMatchFragment1() {
@@ -261,6 +261,12 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                         intent.putExtra("type", 6);
                         startActivityForResult(intent, REQUEST_CODE_DETAIL);
                         break;
+                    case 9://球賽詳情頁(無邀請,無主動參與隊伍)
+                        intent.setClass(mContext, MatchContentActivity1.class);
+                        intent.putExtra("id", mListWait.get(position).getId() + "");
+                        intent.putExtra("type", 9);
+                        startActivityForResult(intent, REQUEST_CODE_DETAIL);
+                        break;
                 }
             }
         });
@@ -272,7 +278,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
 
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        TextView tvno  = (TextView) contentView.findViewById(R.id.tv_no);
+        TextView tvno = (TextView) contentView.findViewById(R.id.tv_no);
         TextView tvyes = (TextView) contentView.findViewById(R.id.tv_yes);
         tvno.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -319,7 +325,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
     private void withdrawJoin(int position, int secondPos) {
 //        http://api.freekick.hk/api/en/join_matches/<joinmatchID>/withdraw
         String withdrawUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "join_matches/" + mListWait.get
-                (position).getJoin_matches().get(secondPos).getJoin_team_id() + "/withdraw";
+                (position).getJoin_matches().get(secondPos).getId() + "/withdraw";
         Logger.d(withdrawUrl);
         loadingShow();
         OkGo.put(withdrawUrl)
@@ -328,7 +334,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson     gson     = new Gson();
+                        Gson gson = new Gson();
                         WithDraw fromJson = gson.fromJson(s, WithDraw.class);
                         if (fromJson.getJoin_match() != null) {
                             ToastUtil.toastShort(getString(R.string.withdraw_success));
@@ -368,7 +374,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
-                        Gson   gson   = new Gson();
+                        Gson gson = new Gson();
                         Invite invite = gson.fromJson(s, Invite.class);
                         if (invite.getSuccess() != null) {
                             ToastUtil.toastShort(invite.getSuccess());
@@ -427,10 +433,10 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
-                        loadingDismiss();
-                        Gson          gson = new Gson();
+                        Gson gson = new Gson();
                         if (!s.contains("[") && !s.contains("]")) {
                             NoMatches noMatches = gson.fromJson(s, NoMatches.class);
+                            loadingDismiss();
                             ToastUtil.toastShort(noMatches.getMatches());
                         } else {
                             MatchesComing json = gson.fromJson(s, MatchesComing.class);
@@ -447,7 +453,36 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                                     }
                                 }
                                 if (mMatches.get(i).getStatus().equals("w")) {
-                                    mListWait.add(mMatches.get(i));
+                                    List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = mMatches.get(i)
+                                            .getJoin_matches();
+                                    if (mMatches.get(i).getHome_team().getId() != Integer.parseInt(team_id)) {//主隊不是自己
+                                        boolean shouldAdd = false;
+                                        for (int j = 0; j < join_matches.size(); j++) {
+                                            if (join_matches.get(j).getStatus().equals("withdraw_join")) {
+                                                if (join_matches.get(j).getJoin_team_id() != Integer.parseInt
+                                                        (team_id)) {
+                                                    //客隊不是自己,添加
+                                                    shouldAdd = true;
+                                                } else {
+                                                    //客隊是自己,不能添加
+                                                }
+                                            } else if (join_matches.get(j).getStatus().equals("confirmation_pending")) {
+                                                if (join_matches.get(j).getJoin_team_id() != Integer.parseInt
+                                                        (team_id)) {
+                                                    //客隊不是自己,不能添加
+                                                } else {
+                                                    shouldAdd = true;
+                                                    //客隊是自己,能添加
+                                                }
+                                            }
+                                        }
+                                        if (shouldAdd) {
+                                            mListWait.add(mMatches.get(i));
+                                        }
+                                    }
+                                    if (mMatches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {//主隊是自己
+                                        mListWait.add(mMatches.get(i));
+                                    }
                                 }
                                 if (mMatches.get(i).getStatus().equals("i")) {
                                     List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = mMatches.get(i)
@@ -465,6 +500,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                                 }
                             }
                             mMatchAdapter.notifyDataSetChanged();
+                            loadingDismiss();
                         }
                     }
 
@@ -510,8 +546,8 @@ public class MyMatchFragment1 extends LazyLoadFragment {
             setRefresh();
         } else if (requestCode == REQUEST_CODE_TO_1 && resultCode == RESULT_OK) {
             setRefresh();
-            ((MineFragment)getParentFragment()).mViewpager.setCurrentItem(0,true);
-            ((MineFragment)getParentFragment()).setRefreshFragment1();
+            ((MineFragment) getParentFragment()).mViewpager.setCurrentItem(0, true);
+            ((MineFragment) getParentFragment()).setRefreshFragment1();
         } else if (requestCode == REQUEST_CODE_DETAIL && resultCode == RESULT_OK) {
             setRefresh();
         }

@@ -189,20 +189,20 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
                 break;
             case R.id.main_record:
-                if (mRecordFragment == null) {
+//                if (mRecordFragment == null) {
                     mRecordFragment = new RecordFragment();
                     ft.add(R.id.main_group, mRecordFragment);
-                } else {
-                    ft.show(mRecordFragment);
-                }
+//                } else {
+//                    ft.show(mRecordFragment);
+//                }
                 break;
             case R.id.main_mine:
-                if (mMineFragment == null) {
+//                if (mMineFragment == null) {
                     mMineFragment = new MineFragment();
                     ft.add(R.id.main_group, mMineFragment,"mMineFragment");
-                } else {
-                    ft.show(mMineFragment);
-                }
+//                } else {
+//                    ft.show(mMineFragment);
+//                }
                 break;
             case R.id.main_set_up:
                 if (mSetUpFragment == null) {

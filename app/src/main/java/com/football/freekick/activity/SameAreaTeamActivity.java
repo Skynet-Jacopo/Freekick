@@ -125,6 +125,7 @@ public class SameAreaTeamActivity extends BaseActivity {
      * 獲取已關注球隊與同區球隊做比較,得出關注與否
      */
     private void getFollowedTeams() {
+        loadingShow();
         String urlAttention = BaseUrl + (App.isChinese ? ZH_HK : EN) + "users/" + team_id + "/followings";
         Logger.d(urlAttention);
         OkGo.get(urlAttention)
@@ -144,6 +145,7 @@ public class SameAreaTeamActivity extends BaseActivity {
                                 }
                             }
                         }
+                        loadingDismiss();
                         mAdapter.notifyDataSetChanged();
                     }
 
@@ -151,6 +153,7 @@ public class SameAreaTeamActivity extends BaseActivity {
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
+                        loadingDismiss();
                     }
                 });
 
@@ -330,6 +333,9 @@ public class SameAreaTeamActivity extends BaseActivity {
                 //去創建球賽
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("which", 1);
+                intent.putExtra("team_id",mTeams.get(itemPosition).getId());
+                intent.putExtra("team_name",mTeams.get(itemPosition).getTeam_name());
+                intent.putExtra("team_url",mTeams.get(itemPosition).getImage().getUrl());
                 startActivity(intent);
                 finish();
             }

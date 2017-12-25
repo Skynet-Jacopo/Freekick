@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.activity.MatchContentActivity1;
+import com.football.freekick.activity.TeamDetailActivity;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
@@ -147,7 +148,7 @@ public class TeamDetailFragment2 extends BaseFragment {
             }
 
             @Override
-            public void convert(ViewHolder holder, MatchHistory.MatchesBean matchesBean) {
+            public void convert(ViewHolder holder, final MatchHistory.MatchesBean matchesBean) {
 
                 holder.setText(R.id.tv_location, matchesBean.getLocation());
                 holder.setText(R.id.tv_date, JodaTimeUtil.getDate2(matchesBean.getPlay_start()));
@@ -158,7 +159,7 @@ public class TeamDetailFragment2 extends BaseFragment {
                 ImageView ivHomeLogo = holder.getView(R.id.iv_home_logo);
                 ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
                         ivHomeLogo, R.drawable.icon_default);
-                List<MatchHistory.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
+                final List<MatchHistory.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
                 for (int i = 0; i < join_matches.size(); i++) {
                     if (join_matches.get(i).getStatus().equals("confirmed")) {
                         holder.setText(R.id.tv_visitor_name, join_matches.get(i).getTeam().getTeam_name());
@@ -166,8 +167,25 @@ public class TeamDetailFragment2 extends BaseFragment {
 
                         ImageLoaderUtils.displayImage(MyUtil.getImageUrl(join_matches.get(i).getTeam().getImage()
                                 .getUrl()), ivVisitorLogo, R.drawable.icon_default);
+                        final int finalI = i;
+                        holder.setOnClickListener(R.id.ll_visitor_team, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(mContext, TeamDetailActivity.class);
+                                intent.putExtra("id",join_matches.get(finalI).getJoin_team_id()+"");
+                                startActivity(intent);
+                            }
+                        });
                     }
                 }
+                holder.setOnClickListener(R.id.ll_home_team, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(mContext, TeamDetailActivity.class);
+                        intent.putExtra("id",matchesBean.getHome_team().getId()+"");
+                        startActivity(intent);
+                    }
+                });
             }
         };
         mRecorAdapter.setOnItemClickListener(new OnItemClickListener() {

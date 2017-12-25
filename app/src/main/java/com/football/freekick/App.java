@@ -2,7 +2,11 @@ package com.football.freekick;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Typeface;
+import android.util.Base64;
 import android.util.Log;
 
 import com.facebook.FacebookSdk;
@@ -25,6 +29,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import okhttp3.Call;
@@ -68,6 +74,8 @@ public class App extends Application {
         mConfig = LanguageConfig.newInstance(APP_CONTEXT);
         getAdvertisements();//獲取廣告
 //        getPitches();//獲取場地
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        gettingHashKey();
     }
 
     /**
@@ -165,5 +173,25 @@ public class App extends Application {
 //                .build();
 //        // 初始化ImageLoader
 //        ImageLoader.getInstance().init(config);
+    }
+    public void gettingHashKey(){
+
+        // Add code to print out the key hash
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.football.freekick",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                Logger.d("KeyHash:"+Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+
     }
 }

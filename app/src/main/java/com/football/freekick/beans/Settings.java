@@ -9,6 +9,7 @@ import java.util.List;
 public class Settings {
 
     private List<SettingBean> setting;
+    private List<String> errors;
 
     public List<SettingBean> getSetting() {
         return setting;
@@ -16,6 +17,14 @@ public class Settings {
 
     public void setSetting(List<SettingBean> setting) {
         this.setting = setting;
+    }
+
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<String> errors) {
+        this.errors = errors;
     }
 
     public static class SettingBean {

@@ -166,6 +166,32 @@ public class TeamDetailFragment1 extends Fragment {
     }
 
     private void initView() {
+        TeamDetail.TeamBean.Rating3monthBean rating_3month = mTeam.getRating_3month();
+        TeamDetail.TeamBean.Rating3monthBean ratings_all = mTeam.getRatings_all();
+        int attack_3_month = (int) (Float.parseFloat(rating_3month.getAttack()==null?"0":rating_3month.getAttack())*20);
+        int defence_3_month = (int) (Float.parseFloat(rating_3month.getDefence()==null?"0":rating_3month.getDefence())*20);
+        int on_time_3_month = (int) (Float.parseFloat(rating_3month.getOn_time()==null?"0":rating_3month.getOn_time())*20);
+        int technic_3_month = (int) (Float.parseFloat(rating_3month.getTechnic()==null?"0":rating_3month.getTechnic())*20);
+        int personality_3_month = (int) (Float.parseFloat(rating_3month.getPersonality()==null?"0":rating_3month.getPersonality())*20);
+
+        int attack_all = (int) (Float.parseFloat(ratings_all.getAttack()==null?"0":ratings_all.getAttack())*20);
+        int defence_all = (int) (Float.parseFloat(ratings_all.getDefence()==null?"0":ratings_all.getDefence())*20);
+        int on_time_all = (int) (Float.parseFloat(ratings_all.getOn_time()==null?"0":ratings_all.getOn_time())*20);
+        int technic_all = (int) (Float.parseFloat(ratings_all.getTechnic()==null?"0":ratings_all.getTechnic())*20);
+        int personality_all = (int) (Float.parseFloat(ratings_all.getPersonality()==null?"0":ratings_all.getPersonality())*20);
+        //全部stars
+        setRatingStars11(attack_all/20);
+        setRatingStars12(defence_all/20);
+        setRatingStars13(on_time_all/20);
+        setRatingStars14(technic_all/20);
+        setRatingStars15(personality_all/20);
+        //近三個月stars
+        setRatingStars21(attack_3_month/20);
+        setRatingStars22(defence_3_month/20);
+        setRatingStars23(on_time_3_month/20);
+        setRatingStars24(technic_3_month/20);
+        setRatingStars25(personality_3_month/20);
+
         mPolygonsView1.setVertexs(5);//設置頂點個數
         mPolygonsView1.setPolygonCount(5);//多邊形個數
         mPolygonsView1.setDiagonalsLineEnable(false);//对角线是否开启
@@ -184,11 +210,11 @@ public class TeamDetailFragment1 extends Fragment {
         mPolygonsView1.setVertexText(3, getString(R.string.quality));
         mPolygonsView1.setVertexText(4, getString(R.string.punctuality));
         //指示器進度
-        mPolygonsView1.setProgress(0, 10);
-        mPolygonsView1.setProgress(1, 60);
-        mPolygonsView1.setProgress(2, 70);
-        mPolygonsView1.setProgress(3, 80);
-        mPolygonsView1.setProgress(4, 100);
+        mPolygonsView1.setProgress(0, attack_3_month);
+        mPolygonsView1.setProgress(1, defence_3_month);
+        mPolygonsView1.setProgress(2, technic_3_month);
+        mPolygonsView1.setProgress(3, personality_3_month);
+        mPolygonsView1.setProgress(4, on_time_3_month);
         //多邊形顏色
         mPolygonsView1.setPolygonColor(0, Color.parseColor("#93bc69"));
         mPolygonsView1.setPolygonColor(1, Color.parseColor("#c1e69b"));
@@ -221,11 +247,11 @@ public class TeamDetailFragment1 extends Fragment {
         mPolygonsView2.setVertexText(3, getString(R.string.quality));
         mPolygonsView2.setVertexText(4, getString(R.string.punctuality));
         //指示器進度
-        mPolygonsView2.setProgress(0, 10);
-        mPolygonsView2.setProgress(1, 60);
-        mPolygonsView2.setProgress(2, 70);
-        mPolygonsView2.setProgress(3, 80);
-        mPolygonsView2.setProgress(4, 100);
+        mPolygonsView2.setProgress(0, attack_all);
+        mPolygonsView2.setProgress(1, defence_all);
+        mPolygonsView2.setProgress(2, technic_all);
+        mPolygonsView2.setProgress(3, personality_all);
+        mPolygonsView2.setProgress(4, on_time_all);
         //多邊形顏色
         mPolygonsView2.setPolygonColor(0, Color.parseColor("#93bc69"));
         mPolygonsView2.setPolygonColor(1, Color.parseColor("#c1e69b"));
@@ -285,6 +311,584 @@ public class TeamDetailFragment1 extends Fragment {
                 break;
             default:
                 mTvVsHobby.setText(getString(R.string.for_fun));
+                break;
+        }
+    }
+    /**
+     * 近三個月  球品
+     * @param i
+     */
+    private void setRatingStars25(int i) {
+        switch (i){
+            case 0:
+                mIv251.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv252.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv253.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv254.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv255.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 1:
+                mIv251.setImageResource(R.drawable.icon_star_selected);
+                mIv252.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv253.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv254.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv255.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 2:
+                mIv251.setImageResource(R.drawable.icon_star_selected);
+                mIv252.setImageResource(R.drawable.icon_star_selected);
+                mIv253.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv254.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv255.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 3:
+                mIv251.setImageResource(R.drawable.icon_star_selected);
+                mIv252.setImageResource(R.drawable.icon_star_selected);
+                mIv253.setImageResource(R.drawable.icon_star_selected);
+                mIv254.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv255.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 4:
+                mIv251.setImageResource(R.drawable.icon_star_selected);
+                mIv252.setImageResource(R.drawable.icon_star_selected);
+                mIv253.setImageResource(R.drawable.icon_star_selected);
+                mIv254.setImageResource(R.drawable.icon_star_selected);
+                mIv255.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 5:
+                mIv251.setImageResource(R.drawable.icon_star_selected);
+                mIv252.setImageResource(R.drawable.icon_star_selected);
+                mIv253.setImageResource(R.drawable.icon_star_selected);
+                mIv254.setImageResource(R.drawable.icon_star_selected);
+                mIv255.setImageResource(R.drawable.icon_star_selected);
+                break;
+            default:
+                mIv251.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv252.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv253.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv254.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv255.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+        }
+    }
+
+    /**
+     * 近三個月  球技
+     * @param i
+     */
+    private void setRatingStars24(int i) {
+        switch (i){
+            case 0:
+                mIv241.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv242.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv243.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv244.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv245.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 1:
+                mIv241.setImageResource(R.drawable.icon_star_selected);
+                mIv242.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv243.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv244.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv245.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 2:
+                mIv241.setImageResource(R.drawable.icon_star_selected);
+                mIv242.setImageResource(R.drawable.icon_star_selected);
+                mIv243.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv244.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv245.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 3:
+                mIv241.setImageResource(R.drawable.icon_star_selected);
+                mIv242.setImageResource(R.drawable.icon_star_selected);
+                mIv243.setImageResource(R.drawable.icon_star_selected);
+                mIv244.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv245.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 4:
+                mIv241.setImageResource(R.drawable.icon_star_selected);
+                mIv242.setImageResource(R.drawable.icon_star_selected);
+                mIv243.setImageResource(R.drawable.icon_star_selected);
+                mIv244.setImageResource(R.drawable.icon_star_selected);
+                mIv245.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 5:
+                mIv241.setImageResource(R.drawable.icon_star_selected);
+                mIv242.setImageResource(R.drawable.icon_star_selected);
+                mIv243.setImageResource(R.drawable.icon_star_selected);
+                mIv244.setImageResource(R.drawable.icon_star_selected);
+                mIv245.setImageResource(R.drawable.icon_star_selected);
+                break;
+            default:
+                mIv241.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv242.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv243.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv244.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv245.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+        }
+    }
+
+    /**
+     * 近三個月  準時
+     * @param i
+     */
+    private void setRatingStars23(int i) {
+        switch (i){
+            case 0:
+                mIv231.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv232.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv233.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv234.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv235.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 1:
+                mIv231.setImageResource(R.drawable.icon_star_selected);
+                mIv232.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv233.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv234.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv235.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 2:
+                mIv231.setImageResource(R.drawable.icon_star_selected);
+                mIv232.setImageResource(R.drawable.icon_star_selected);
+                mIv233.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv234.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv235.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 3:
+                mIv231.setImageResource(R.drawable.icon_star_selected);
+                mIv232.setImageResource(R.drawable.icon_star_selected);
+                mIv233.setImageResource(R.drawable.icon_star_selected);
+                mIv234.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv235.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 4:
+                mIv231.setImageResource(R.drawable.icon_star_selected);
+                mIv232.setImageResource(R.drawable.icon_star_selected);
+                mIv233.setImageResource(R.drawable.icon_star_selected);
+                mIv234.setImageResource(R.drawable.icon_star_selected);
+                mIv235.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 5:
+                mIv231.setImageResource(R.drawable.icon_star_selected);
+                mIv232.setImageResource(R.drawable.icon_star_selected);
+                mIv233.setImageResource(R.drawable.icon_star_selected);
+                mIv234.setImageResource(R.drawable.icon_star_selected);
+                mIv235.setImageResource(R.drawable.icon_star_selected);
+                break;
+            default:
+                mIv231.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv232.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv233.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv234.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv235.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+        }
+    }
+
+    /**
+     * 近三個月  防守
+     * @param i
+     */
+    private void setRatingStars22(int i) {
+        switch (i){
+            case 0:
+                mIv221.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv222.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv223.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv224.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv225.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 1:
+                mIv221.setImageResource(R.drawable.icon_star_selected);
+                mIv222.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv223.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv224.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv225.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 2:
+                mIv221.setImageResource(R.drawable.icon_star_selected);
+                mIv222.setImageResource(R.drawable.icon_star_selected);
+                mIv223.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv224.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv225.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 3:
+                mIv221.setImageResource(R.drawable.icon_star_selected);
+                mIv222.setImageResource(R.drawable.icon_star_selected);
+                mIv223.setImageResource(R.drawable.icon_star_selected);
+                mIv224.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv225.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 4:
+                mIv221.setImageResource(R.drawable.icon_star_selected);
+                mIv222.setImageResource(R.drawable.icon_star_selected);
+                mIv223.setImageResource(R.drawable.icon_star_selected);
+                mIv224.setImageResource(R.drawable.icon_star_selected);
+                mIv225.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 5:
+                mIv221.setImageResource(R.drawable.icon_star_selected);
+                mIv222.setImageResource(R.drawable.icon_star_selected);
+                mIv223.setImageResource(R.drawable.icon_star_selected);
+                mIv224.setImageResource(R.drawable.icon_star_selected);
+                mIv225.setImageResource(R.drawable.icon_star_selected);
+                break;
+            default:
+                mIv221.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv222.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv223.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv224.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv225.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+        }
+    }
+
+    /**
+     * 近三個月  進攻
+     * @param i
+     */
+    private void setRatingStars21(int i) {
+        switch (i){
+            case 0:
+                mIv211.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv212.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv213.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv214.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv215.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 1:
+                mIv211.setImageResource(R.drawable.icon_star_selected);
+                mIv212.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv213.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv214.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv215.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 2:
+                mIv211.setImageResource(R.drawable.icon_star_selected);
+                mIv212.setImageResource(R.drawable.icon_star_selected);
+                mIv213.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv214.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv215.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 3:
+                mIv211.setImageResource(R.drawable.icon_star_selected);
+                mIv212.setImageResource(R.drawable.icon_star_selected);
+                mIv213.setImageResource(R.drawable.icon_star_selected);
+                mIv214.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv215.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 4:
+                mIv211.setImageResource(R.drawable.icon_star_selected);
+                mIv212.setImageResource(R.drawable.icon_star_selected);
+                mIv213.setImageResource(R.drawable.icon_star_selected);
+                mIv214.setImageResource(R.drawable.icon_star_selected);
+                mIv215.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 5:
+                mIv211.setImageResource(R.drawable.icon_star_selected);
+                mIv212.setImageResource(R.drawable.icon_star_selected);
+                mIv213.setImageResource(R.drawable.icon_star_selected);
+                mIv214.setImageResource(R.drawable.icon_star_selected);
+                mIv215.setImageResource(R.drawable.icon_star_selected);
+                break;
+            default:
+                mIv211.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv212.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv213.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv214.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv215.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+        }
+    }
+    /**
+     * 全部  球品
+     * @param i
+     */
+    private void setRatingStars15(int i) {
+        switch (i){
+            case 0:
+                mIv151.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv152.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv153.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv154.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv155.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 1:
+                mIv151.setImageResource(R.drawable.icon_star_selected);
+                mIv152.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv153.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv154.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv155.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 2:
+                mIv151.setImageResource(R.drawable.icon_star_selected);
+                mIv152.setImageResource(R.drawable.icon_star_selected);
+                mIv153.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv154.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv155.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 3:
+                mIv151.setImageResource(R.drawable.icon_star_selected);
+                mIv152.setImageResource(R.drawable.icon_star_selected);
+                mIv153.setImageResource(R.drawable.icon_star_selected);
+                mIv154.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv155.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 4:
+                mIv151.setImageResource(R.drawable.icon_star_selected);
+                mIv152.setImageResource(R.drawable.icon_star_selected);
+                mIv153.setImageResource(R.drawable.icon_star_selected);
+                mIv154.setImageResource(R.drawable.icon_star_selected);
+                mIv155.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 5:
+                mIv151.setImageResource(R.drawable.icon_star_selected);
+                mIv152.setImageResource(R.drawable.icon_star_selected);
+                mIv153.setImageResource(R.drawable.icon_star_selected);
+                mIv154.setImageResource(R.drawable.icon_star_selected);
+                mIv155.setImageResource(R.drawable.icon_star_selected);
+                break;
+            default:
+                mIv151.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv152.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv153.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv154.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv155.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+        }
+    }
+
+    /**
+     * 全部  球技
+     * @param i
+     */
+    private void setRatingStars14(int i) {
+        switch (i){
+            case 0:
+                mIv141.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv142.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv143.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv144.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv145.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 1:
+                mIv141.setImageResource(R.drawable.icon_star_selected);
+                mIv142.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv143.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv144.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv145.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 2:
+                mIv141.setImageResource(R.drawable.icon_star_selected);
+                mIv142.setImageResource(R.drawable.icon_star_selected);
+                mIv143.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv144.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv145.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 3:
+                mIv141.setImageResource(R.drawable.icon_star_selected);
+                mIv142.setImageResource(R.drawable.icon_star_selected);
+                mIv143.setImageResource(R.drawable.icon_star_selected);
+                mIv144.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv145.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 4:
+                mIv141.setImageResource(R.drawable.icon_star_selected);
+                mIv142.setImageResource(R.drawable.icon_star_selected);
+                mIv143.setImageResource(R.drawable.icon_star_selected);
+                mIv144.setImageResource(R.drawable.icon_star_selected);
+                mIv145.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 5:
+                mIv141.setImageResource(R.drawable.icon_star_selected);
+                mIv142.setImageResource(R.drawable.icon_star_selected);
+                mIv143.setImageResource(R.drawable.icon_star_selected);
+                mIv144.setImageResource(R.drawable.icon_star_selected);
+                mIv145.setImageResource(R.drawable.icon_star_selected);
+                break;
+            default:
+                mIv141.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv142.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv143.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv144.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv145.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+        }
+    }
+
+    /**
+     * 全部  準時
+     * @param i
+     */
+    private void setRatingStars13(int i) {
+        switch (i){
+            case 0:
+                mIv131.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv132.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv133.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv134.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv135.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 1:
+                mIv131.setImageResource(R.drawable.icon_star_selected);
+                mIv132.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv133.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv134.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv135.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 2:
+                mIv131.setImageResource(R.drawable.icon_star_selected);
+                mIv132.setImageResource(R.drawable.icon_star_selected);
+                mIv133.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv134.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv135.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 3:
+                mIv131.setImageResource(R.drawable.icon_star_selected);
+                mIv132.setImageResource(R.drawable.icon_star_selected);
+                mIv133.setImageResource(R.drawable.icon_star_selected);
+                mIv134.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv135.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 4:
+                mIv131.setImageResource(R.drawable.icon_star_selected);
+                mIv132.setImageResource(R.drawable.icon_star_selected);
+                mIv133.setImageResource(R.drawable.icon_star_selected);
+                mIv134.setImageResource(R.drawable.icon_star_selected);
+                mIv135.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 5:
+                mIv131.setImageResource(R.drawable.icon_star_selected);
+                mIv132.setImageResource(R.drawable.icon_star_selected);
+                mIv133.setImageResource(R.drawable.icon_star_selected);
+                mIv134.setImageResource(R.drawable.icon_star_selected);
+                mIv135.setImageResource(R.drawable.icon_star_selected);
+                break;
+            default:
+                mIv131.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv132.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv133.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv134.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv135.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+        }
+    }
+
+    /**
+     * 全部  防守
+     * @param i
+     */
+    private void setRatingStars12(int i) {
+        switch (i){
+            case 0:
+                mIv121.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv122.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv123.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv124.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv125.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 1:
+                mIv121.setImageResource(R.drawable.icon_star_selected);
+                mIv122.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv123.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv124.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv125.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 2:
+                mIv121.setImageResource(R.drawable.icon_star_selected);
+                mIv122.setImageResource(R.drawable.icon_star_selected);
+                mIv123.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv124.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv125.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 3:
+                mIv121.setImageResource(R.drawable.icon_star_selected);
+                mIv122.setImageResource(R.drawable.icon_star_selected);
+                mIv123.setImageResource(R.drawable.icon_star_selected);
+                mIv124.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv125.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 4:
+                mIv121.setImageResource(R.drawable.icon_star_selected);
+                mIv122.setImageResource(R.drawable.icon_star_selected);
+                mIv123.setImageResource(R.drawable.icon_star_selected);
+                mIv124.setImageResource(R.drawable.icon_star_selected);
+                mIv125.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 5:
+                mIv121.setImageResource(R.drawable.icon_star_selected);
+                mIv122.setImageResource(R.drawable.icon_star_selected);
+                mIv123.setImageResource(R.drawable.icon_star_selected);
+                mIv124.setImageResource(R.drawable.icon_star_selected);
+                mIv125.setImageResource(R.drawable.icon_star_selected);
+                break;
+            default:
+                mIv121.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv122.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv123.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv124.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv125.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+        }
+    }
+
+    /**
+     * 全部  進攻
+     * @param i
+     */
+    private void setRatingStars11(int i) {
+        switch (i){
+            case 0:
+                mIv111.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv112.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv113.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv114.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv115.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 1:
+                mIv111.setImageResource(R.drawable.icon_star_selected);
+                mIv112.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv113.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv114.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv115.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 2:
+                mIv111.setImageResource(R.drawable.icon_star_selected);
+                mIv112.setImageResource(R.drawable.icon_star_selected);
+                mIv113.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv114.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv115.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 3:
+                mIv111.setImageResource(R.drawable.icon_star_selected);
+                mIv112.setImageResource(R.drawable.icon_star_selected);
+                mIv113.setImageResource(R.drawable.icon_star_selected);
+                mIv114.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv115.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 4:
+                mIv111.setImageResource(R.drawable.icon_star_selected);
+                mIv112.setImageResource(R.drawable.icon_star_selected);
+                mIv113.setImageResource(R.drawable.icon_star_selected);
+                mIv114.setImageResource(R.drawable.icon_star_selected);
+                mIv115.setImageResource(R.drawable.icon_star_unselected_white);
+                break;
+            case 5:
+                mIv111.setImageResource(R.drawable.icon_star_selected);
+                mIv112.setImageResource(R.drawable.icon_star_selected);
+                mIv113.setImageResource(R.drawable.icon_star_selected);
+                mIv114.setImageResource(R.drawable.icon_star_selected);
+                mIv115.setImageResource(R.drawable.icon_star_selected);
+                break;
+            default:
+                mIv111.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv112.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv113.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv114.setImageResource(R.drawable.icon_star_unselected_white);
+                mIv115.setImageResource(R.drawable.icon_star_unselected_white);
                 break;
         }
     }

@@ -265,14 +265,14 @@ public class DateUtil {
     }
 
     /**
-     * 时间前推一天,其中JJ天.
+     * 时间前推一天,其中JJ分鐘.
      */
     public static String getPreTime(String sj1, String jj) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String mydate1 = "";
         try {
             Date date1 = format.parse(sj1);
-            long Time = (date1.getTime() / 1000) - Integer.parseInt(jj) * 60 * 60 * 24;
+            long Time = (date1.getTime() / 1000) - Integer.parseInt(jj) * 60;
             date1.setTime(Time * 1000);
             mydate1 = format.format(date1);
         } catch (Exception e) {

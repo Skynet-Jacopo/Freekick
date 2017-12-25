@@ -236,6 +236,9 @@ public class FollowedTeamsActivity extends BaseActivity {
                 //去創建球賽
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("which", 1);
+                intent.putExtra("team_id",mFollowingTeams.get(itemPosition).getId());
+                intent.putExtra("team_name",mFollowingTeams.get(itemPosition).getTeam_name());
+                intent.putExtra("team_url",mFollowingTeams.get(itemPosition).getImage().getUrl());
                 startActivity(intent);
                 finish();
             }

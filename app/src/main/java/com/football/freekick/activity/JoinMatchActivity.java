@@ -414,6 +414,7 @@ public class JoinMatchActivity extends BaseActivity {
                         JoinMatch joinMatch = gson.fromJson(s, JoinMatch.class);
                         if (joinMatch.getJoin_match() != null) {
                             ToastUtil.toastShort(getString(R.string.join_success_please_wait_to_confirm));
+                            setResult(RESULT_OK);
                             finish();
                         } else {
 

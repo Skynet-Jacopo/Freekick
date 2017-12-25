@@ -40,6 +40,7 @@ import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
+import com.football.freekick.views.RoundImageView;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -73,8 +74,8 @@ public class TeamDetailActivity extends BaseActivity {
     CustomViewpager mViewpager;
     @Bind(R.id.iv_pic)
     ImageView mIvPic;
-    @Bind(R.id.tv_one_word)
-    TextView mTvOneWord;
+//    @Bind(R.id.tv_one_word)
+//    TextView mTvOneWord;
     @Bind(R.id.tl_top)
     RelativeLayout mTlTop;
     @Bind(R.id.tv_fight)
@@ -83,6 +84,8 @@ public class TeamDetailActivity extends BaseActivity {
     TextView mTvFollow;
     @Bind(R.id.rl_parent)
     RelativeLayout mRlParent;
+    @Bind(R.id.iv_team_logo)
+    RoundImageView mIvTeamLogo;
     private ArrayList<MatchesComing.MatchesBean> mListWait = new ArrayList<>();
     private MyFragmentAdapter fragmentPagerAdapter;
     private List<Fragment> listFragments;//定义要装fragment的列表
@@ -93,6 +96,7 @@ public class TeamDetailActivity extends BaseActivity {
 
     Context mContext;
     private String team_id;
+    private String owner_team_id;
     private TeamDetail.TeamBean mTeam;
     private boolean mIsFollowed;
 
@@ -103,6 +107,8 @@ public class TeamDetailActivity extends BaseActivity {
         mContext = TeamDetailActivity.this;
         ButterKnife.bind(this);
         team_id = getIntent().getStringExtra("id");
+        owner_team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
+
         initView();
         initData(team_id);
     }
@@ -111,6 +117,13 @@ public class TeamDetailActivity extends BaseActivity {
         mTvBack.setTypeface(App.mTypeface);
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
+        if (team_id.equals(owner_team_id)) {
+            mTvFollow.setVisibility(View.GONE);
+            mTvFight.setVisibility(View.GONE);
+        } else {
+            mTvFollow.setVisibility(View.VISIBLE);
+            mTvFight.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initData(String team_id) {
@@ -126,10 +139,11 @@ public class TeamDetailActivity extends BaseActivity {
                         Gson gson = new Gson();
                         TeamDetail json = gson.fromJson(s, TeamDetail.class);
                         mTeam = json.getTeam();
-                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mTeam.getImage().getUrl()), mIvPic, R
-                                .drawable.icon_default);
+//                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mTeam.getImage().getUrl()), mIvPic, R
+//                                .drawable.icon_default);
                         mTvTeamName.setText(mTeam.getTeam_name());
-                        mTvOneWord.setText(mTeam.getDistrict().getRegion().substring(0, 1));
+//                        mTvOneWord.setText(mTeam.getDistrict().getRegion().substring(0, 1));
+                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mTeam.getImage().getUrl()),mIvTeamLogo,R.drawable.icon_default);
                         initTabAndViewPager();
                         getFollowedTeams();
                     }
@@ -399,6 +413,9 @@ public class TeamDetailActivity extends BaseActivity {
                 //去創建球賽
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("which", 1);
+                intent.putExtra("team_id",mTeam.getId());
+                intent.putExtra("team_name",mTeam.getTeam_name());
+                intent.putExtra("team_url",mTeam.getImage().getUrl());
                 startActivity(intent);
                 finish();
             }
@@ -459,7 +476,8 @@ public class TeamDetailActivity extends BaseActivity {
                                     }
                                 }
                                 if (matches.get(i).getStatus().equals("w")
-                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains("confirmation_pending")
+                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains
+                                        ("confirmation_pending")
                                         && !gson.toJson(matches.get(i).getJoin_matches()).contains("invited")) {
                                     if (matches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {
                                         mListWait.add(matches.get(i));

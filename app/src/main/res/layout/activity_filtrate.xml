@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/ll_parent"
     android:fitsSystemWindows="true"
     tools:context="com.football.freekick.activity.FiltrateActivity">
 
@@ -57,7 +58,7 @@
                     android:textColor="@color/text_black"
                     android:textSize="24px"/>
 
-                <EditText
+                <TextView
                     android:singleLine="true"
                     android:id="@+id/edt_start_time"
                     android:layout_width="144px"
@@ -88,7 +89,7 @@
                     android:textColor="@color/text_black"
                     android:textSize="24px"/>
 
-                <EditText
+                <TextView
                     android:singleLine="true"
                     android:id="@+id/edt_end_time"
                     android:layout_width="144px"
@@ -149,7 +150,7 @@
                     android:textColor="#0C1E76"
                     android:textSize="24px"/>
 
-                <EditText
+                <TextView
                     android:singleLine="true"
                     android:id="@+id/edt_location"
                     android:layout_width="280px"

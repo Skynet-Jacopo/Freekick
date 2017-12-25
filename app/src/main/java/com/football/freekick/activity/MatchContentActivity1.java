@@ -2,6 +2,7 @@ package com.football.freekick.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -64,6 +65,8 @@ import okhttp3.Response;
  * 5.我被邀請,還未接受邀請(match status = i,join match status = invited)
  * 6.我已邀請別人,別人還未確認(match status = i,join match status = invited)
  * 7.我不是主隊,也不是客隊,只是來瀏覽的(match status = m,join match status = confirmed?(還不確定))
+ * 8.我是主隊或客隊,球賽完成後在作賽記錄頁進入
+ * 9.球賽詳情頁(無邀請,無主動參與隊伍)
  */
 public class MatchContentActivity1 extends BaseActivity {
 
@@ -156,6 +159,8 @@ public class MatchContentActivity1 extends BaseActivity {
 
     private ChildEventListener mChildEventListener;
     private List<Advertisements.AdvertisementsBean> mAdvertisementsList;//广告列表
+    private int visitorNum;
+    private String join_team_color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,6 +242,7 @@ public class MatchContentActivity1 extends BaseActivity {
          * 6.我已邀請別人,別人還未確認(match status = i,join match status = invited)
          * 7.我不是主隊,也不是客隊,只是來瀏覽的(match status = m,join match status = confirmed?(還不確定))
          * 8.我是主隊或客隊,球賽完成後在作賽記錄頁進入
+         * 9.球賽詳情頁(無邀請,無主動參與隊伍)
          */
         List<MatchDetail.MatchBean.JoinMatchesBean> join_matches = mMatch.getJoin_matches();
         switch (type) {
@@ -368,28 +374,40 @@ public class MatchContentActivity1 extends BaseActivity {
                 mTvIconShareLeft.setVisibility(View.GONE);
                 mTvIconShareRight.setVisibility(View.GONE);
                 mTvIconNoticeRight.setVisibility(View.GONE);
-                mTvBtn.setText(R.string.decide_to_play);
-                for (int i = 0; i < join_matches.size(); i++) {
-                    if (mMatch.getHome_team().getId() == Integer.parseInt(team_id) && join_matches.get(i).getStatus()
-                            .equals("confirmation_pending")) {
-                        MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
-                        mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
-                        mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
-                                .getJoin_team_color()));
-                        mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
-                    }
-                }
+                mTvBtn.setText(R.string.cancel_match);
+
+                mIvVisitorDress.setImageResource(R.drawable.ic_dress_unknow);
+                mIvVisitorDress.setBackgroundColor(Color.parseColor("#37AC51"));
+                mTvVisitorName.setText("");
+                mTvVisitorNum.setText("？");
                 mTvBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(mContext, ConfirmationPendingActivity.class);
-                        intent.putExtra("id", id);
-                        startActivityForResult(intent, REQUEST_CODE_REFRESH);
+                        cancelMatch();//主隊取消球賽
                     }
                 });
+//                for (int i = 0; i < join_matches.size(); i++) {
+//                    if (mMatch.getHome_team().getId() == Integer.parseInt(team_id) && join_matches.get(i).getStatus()
+//                            .equals("confirmation_pending")) {
+//                        MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
+//                        mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
+//                        mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
+//                                .getJoin_team_color()));
+//                        mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
+//                    }
+//                }
+//                mTvBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent intent = new Intent(mContext, ConfirmationPendingActivity.class);
+//                        intent.putExtra("id", id);
+//                        startActivityForResult(intent, REQUEST_CODE_REFRESH);
+//                    }
+//                });
                 break;
             case 5://我被邀請,還未接受邀請(match status = i,join match status = invited)
-
+                mTvReduce.setVisibility(View.VISIBLE);
+                mTvAdd.setVisibility(View.VISIBLE);
                 mTvIconNoticeLeft.setVisibility(View.GONE);
                 mTvIconShareLeft.setVisibility(View.GONE);
                 mTvIconShareRight.setVisibility(View.GONE);
@@ -402,7 +420,9 @@ public class MatchContentActivity1 extends BaseActivity {
                         mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
                         mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
                                 .getJoin_team_color()));
+                        join_team_color = joinMatchesBean.getJoin_team_color();
                         mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
+                        visitorNum = joinMatchesBean.getTeam().getSize();
                     }
                 }
                 mTvBtn.setOnClickListener(new View.OnClickListener() {
@@ -472,34 +492,48 @@ public class MatchContentActivity1 extends BaseActivity {
                     }
                 }
                 break;
-
+            case 9://球賽詳情頁(無邀請,無主動參與隊伍)
+                mTvIconNoticeLeft.setVisibility(View.GONE);
+                mTvIconShareLeft.setVisibility(View.GONE);
+                mTvIconShareRight.setVisibility(View.GONE);
+                mTvIconNoticeRight.setVisibility(View.GONE);
+                mTvBtn.setText(R.string.cancel_match);
+                mIvVisitorDress.setImageResource(R.drawable.ic_dress_unknow);
+                mIvVisitorDress.setBackgroundColor(Color.parseColor("#37AC51"));
+                mTvVisitorName.setText("");
+                mTvVisitorNum.setText("？");
+                mTvBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        cancelMatch();//主隊取消球賽
+                    }
+                });
+                break;
         }
-
     }
 
     private void getMatchRatings() {
 //        http://api.freekick.hk/api/en/matches/<matchID>/match_ratings
 //        http://api.freekick.hk/api/zh_Hk/matches/<matchID>/match_ratings
         loadingShow();
-        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/"+id+"/match_ratings";
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "matches/" + id + "/match_ratings";
         Logger.d(url);
         OkGo.get(url)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
-                        loadingDismiss();
                         Logger.json(s);
                         Gson gson = new Gson();
                         Ratings fromJson = gson.fromJson(s, Ratings.class);
                         List<Ratings.RatingsBean> ratings = fromJson.getRatings();
-                        if (ratings.size()<=0){
+                        if (ratings.size() <= 0) {
                             mTvBtn.setText(R.string.rate);//打分
                             mTvBtn.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             mTvBtn.setText(R.string.rate);//打分
                             mTvBtn.setVisibility(View.VISIBLE);
                             for (int i = 0; i < ratings.size(); i++) {
-                                if (ratings.get(i).getTeam_id() == Integer.parseInt(team_id)){
+                                if (ratings.get(i).getTeam_id() == Integer.parseInt(team_id)) {
                                     mTvBtn.setVisibility(View.GONE);
                                 }
                             }
@@ -507,11 +541,12 @@ public class MatchContentActivity1 extends BaseActivity {
                         mTvBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Intent intent = new Intent(mContext,MatchRateActivity.class);
-                                intent.putExtra("match_id",id);
+                                Intent intent = new Intent(mContext, MatchRateActivity.class);
+                                intent.putExtra("match_id", id);
                                 startActivity(intent);
                             }
                         });
+                        loadingDismiss();
                     }
 
                     @Override
@@ -539,7 +574,7 @@ public class MatchContentActivity1 extends BaseActivity {
         mTvIconShareRight.setTypeface(App.mTypeface);
 
         mAdvertisementsList = App.mAdvertisementsBean;
-        for (int i = 0; i <mAdvertisementsList.size(); i++) {
+        for (int i = 0; i < mAdvertisementsList.size(); i++) {
             switch (mAdvertisementsList.get(i).getScreen()) {
                 case Url.MATCH_DETAIL_001:
                     if (mAdvertisementsList.get(i).getImage() != null && !mAdvertisementsList.get(i).getImage()
@@ -553,7 +588,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     mIvTop1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            Intent intent = new Intent(mContext, AdvertisementDetailActivity.class);
                             intent.putExtra("name", mAdvertisementsList.get(finalI).getName());
                             intent.putExtra("url", mAdvertisementsList.get(finalI).getUrl());
                             startActivity(intent);
@@ -572,7 +607,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     mIvTop2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            Intent intent = new Intent(mContext, AdvertisementDetailActivity.class);
                             intent.putExtra("name", mAdvertisementsList.get(finalI1).getName());
                             intent.putExtra("url", mAdvertisementsList.get(finalI1).getUrl());
                             startActivity(intent);
@@ -590,7 +625,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     mIvRight1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            Intent intent = new Intent(mContext, AdvertisementDetailActivity.class);
                             intent.putExtra("name", mAdvertisementsList.get(finalI2).getName());
                             intent.putExtra("url", mAdvertisementsList.get(finalI2).getUrl());
                             startActivity(intent);
@@ -609,7 +644,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     mIvRight2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            Intent intent = new Intent(mContext, AdvertisementDetailActivity.class);
                             intent.putExtra("name", mAdvertisementsList.get(finalI3).getName());
                             intent.putExtra("url", mAdvertisementsList.get(finalI3).getUrl());
                             startActivity(intent);
@@ -628,7 +663,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     mIvRight3.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            Intent intent = new Intent(mContext, AdvertisementDetailActivity.class);
                             intent.putExtra("name", mAdvertisementsList.get(finalI4).getName());
                             intent.putExtra("url", mAdvertisementsList.get(finalI4).getUrl());
                             startActivity(intent);
@@ -647,7 +682,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     mIvBottom1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            Intent intent = new Intent(mContext, AdvertisementDetailActivity.class);
                             intent.putExtra("name", mAdvertisementsList.get(finalI5).getName());
                             intent.putExtra("url", mAdvertisementsList.get(finalI5).getUrl());
                             startActivity(intent);
@@ -666,7 +701,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     mIvBottom2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            Intent intent = new Intent(mContext, AdvertisementDetailActivity.class);
                             intent.putExtra("name", mAdvertisementsList.get(finalI6).getName());
                             intent.putExtra("url", mAdvertisementsList.get(finalI6).getUrl());
                             startActivity(intent);
@@ -685,7 +720,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     mIvLeft1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            Intent intent = new Intent(mContext, AdvertisementDetailActivity.class);
                             intent.putExtra("name", mAdvertisementsList.get(finalI7).getName());
                             intent.putExtra("url", mAdvertisementsList.get(finalI7).getUrl());
                             startActivity(intent);
@@ -704,7 +739,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     mIvLeft2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            Intent intent = new Intent(mContext, AdvertisementDetailActivity.class);
                             intent.putExtra("name", mAdvertisementsList.get(finalI8).getName());
                             intent.putExtra("url", mAdvertisementsList.get(finalI8).getUrl());
                             startActivity(intent);
@@ -723,7 +758,7 @@ public class MatchContentActivity1 extends BaseActivity {
                     mIvLeft3.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext,AdvertisementDetailActivity.class);
+                            Intent intent = new Intent(mContext, AdvertisementDetailActivity.class);
                             intent.putExtra("name", mAdvertisementsList.get(finalI9).getName());
                             intent.putExtra("url", mAdvertisementsList.get(finalI9).getUrl());
                             startActivity(intent);
@@ -735,10 +770,10 @@ public class MatchContentActivity1 extends BaseActivity {
     }
 
     @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location, R.id.iv_top_1, R.id.iv_top_2, R.id
-            .iv_left_1, R.id
-            .iv_left_2, R.id.iv_left_3, R.id.iv_right_1, R.id.iv_right_2, R.id.iv_right_3, R.id.iv_bottom_1, R.id
+            .iv_left_1, R.id.iv_left_2, R.id.iv_left_3, R.id.iv_right_1, R.id.iv_right_2, R.id.iv_right_3, R.id
+            .iv_bottom_1, R.id
             .iv_bottom_2, R.id.tv_icon_share_left, R.id.tv_icon_notice_left, R.id.tv_icon_share_right, R.id
-            .tv_icon_notice_right, R.id.tv_btn})
+            .tv_icon_notice_right, R.id.tv_btn, R.id.tv_reduce, R.id.tv_add})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -760,6 +795,18 @@ public class MatchContentActivity1 extends BaseActivity {
                 intent.putExtra("location", mMatch.getLocation());
                 intent.putExtra("pitch_name", mMatch.getPitch_name());
                 startActivity(intent);
+                break;
+            case R.id.tv_reduce:
+                if (visitorNum <= 1) {
+                    return;
+                } else {
+                    visitorNum -= 1;
+                }
+                mTvVisitorNum.setText(visitorNum + "");
+                break;
+            case R.id.tv_add:
+                visitorNum += 1;
+                mTvVisitorNum.setText(visitorNum + "");
                 break;
             case R.id.iv_top_1:
                 break;
@@ -815,13 +862,13 @@ public class MatchContentActivity1 extends BaseActivity {
                         Gson gson = new Gson();
                         CancelMatch fromJson = gson.fromJson(s, CancelMatch.class);
                         if (fromJson.getMatch() != null) {
-                            ToastUtil.toastShort(getString(R.string.withdraw_success));
+                            ToastUtil.toastShort(getString(R.string.cancel_success));
                             setResult(RESULT_OK);
                             finish();
                         } else if (fromJson.getErrors() != null) {
                             ToastUtil.toastShort(fromJson.getErrors());
                         } else {
-                            ToastUtil.toastShort(getString(R.string.withdraw_failed));
+                            ToastUtil.toastShort(getString(R.string.cancel_failed));
                         }
                     }
 
@@ -830,7 +877,7 @@ public class MatchContentActivity1 extends BaseActivity {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
                         loadingDismiss();
-                        ToastUtil.toastShort(getString(R.string.withdraw_failed));
+                        ToastUtil.toastShort(getString(R.string.cancel_failed));
                     }
                 });
     }
@@ -882,6 +929,8 @@ public class MatchContentActivity1 extends BaseActivity {
                 "/confirm_invite";
         JsonObject object = new JsonObject();
         object.addProperty("match_id", mMatch.getId() + "");
+        object.addProperty("join_team_color", join_team_color);
+        object.addProperty("size", visitorNum + "");
         Logger.d(confirmInviteUrl);
         loadingShow();
         OkGo.put(confirmInviteUrl)

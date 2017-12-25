@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import com.football.freekick.R;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.orhanobut.logger.Logger;
@@ -119,6 +121,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setLocationSource(mLocationSource);
+        Logger.d("onMapReady");
 //        mMap.setOnMapLongClickListener(mLocationSource);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
                 .PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission
@@ -132,10 +135,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        Logger.d("展示");
         mMap.setMyLocationEnabled(true);
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(latitude,longitude);
+        LatLng sydney = new LatLng(longitude,latitude);
         mMap.addMarker(new MarkerOptions().position(sydney).title(location).snippet(pitch_name));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//            @Override
+//            public boolean onMarkerClick(Marker marker) {
+//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),10));
+//                return false;
+//            }
+//        });
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,10));
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,10));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,8));
     }
 }

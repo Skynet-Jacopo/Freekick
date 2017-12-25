@@ -41,6 +41,15 @@ public class Recommended {
         private int id;
         private String team_name;
         private ImageBean image;
+        private boolean attention;
+
+        public boolean isAttention() {
+            return attention;
+        }
+
+        public void setAttention(boolean attention) {
+            this.attention = attention;
+        }
 
         public int getId() {
             return id;

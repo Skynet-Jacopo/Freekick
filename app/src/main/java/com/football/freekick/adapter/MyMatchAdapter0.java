@@ -103,6 +103,19 @@ public class MyMatchAdapter0 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         click.Click(3, myHolder2.lLContent, position, 0);
                     }
                 });
+                myHolder2.lLHomeTeam.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        click.Click(5,myHolder2.lLHomeTeam,position,0);
+                    }
+                });
+                final int finalSecondPos1 = secondPos;
+                myHolder2.lLVisitorTeam.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        click.Click(6,myHolder2.lLHomeTeam,position, finalSecondPos1);
+                    }
+                });
             } else {
                 //主隊位置是自己
                 myHolder2.tvState.setText("已落實");
@@ -123,6 +136,12 @@ public class MyMatchAdapter0 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         click.Click(4, myHolder2.lLContent, position, 0);
                     }
                 });
+                myHolder2.lLHomeTeam.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        click.Click(5,myHolder2.lLHomeTeam,position,0);
+                    }
+                });
             }
 
             for (int i = 0; i < join_matches.size(); i++) {
@@ -132,6 +151,13 @@ public class MyMatchAdapter0 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     myHolder2.tvVisitorName.setText(team.getTeam_name());
                     ImageLoaderUtils.displayImage(MyUtil.getImageUrl(team.getImage().getUrl()),
                             myHolder2.ivVisitorLogo, R.drawable.icon_default);
+                    final int finalI = i;
+                    myHolder2.lLVisitorTeam.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            click.Click(6,myHolder2.lLHomeTeam,position, finalI);
+                        }
+                    });
                 }
             }
         }
@@ -172,7 +198,7 @@ public class MyMatchAdapter0 extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class MyHolder2 extends RecyclerView.ViewHolder {
         private TextView tvDate, tvHomeName, tvLocation, tvTime, tvIconDelete, tvVisitorName, tvState;
-        private LinearLayout lLContent;
+        private LinearLayout lLContent,lLHomeTeam,lLVisitorTeam;
         private ImageView ivHomeLogo, ivVisitorLogo;
 
         public MyHolder2(View itemView) {
@@ -187,6 +213,8 @@ public class MyMatchAdapter0 extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ivVisitorLogo = (ImageView) itemView.findViewById(R.id.iv_visitor_logo);
             tvState = (TextView) itemView.findViewById(R.id.tv_state);
             lLContent = (LinearLayout) itemView.findViewById(R.id.ll_content);
+            lLHomeTeam = (LinearLayout) itemView.findViewById(R.id.ll_home_team);
+            lLVisitorTeam = (LinearLayout) itemView.findViewById(R.id.ll_visitor_team);
         }
     }
 

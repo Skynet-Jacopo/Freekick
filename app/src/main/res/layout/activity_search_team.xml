@@ -13,8 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="88px"
         android:background="#070D44"
-        android:focusable="false"
-        android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
         <TextView
@@ -45,6 +43,7 @@
                 android:textSize="24px"/>
 
             <EditText
+                android:focusable="true"
                 android:imeOptions="actionSearch"
                 android:id="@+id/edt_search_team"
                 android:layout_width="match_parent"

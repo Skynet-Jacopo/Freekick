@@ -48,7 +48,7 @@
         android:paddingRight="24px">
 
         <LinearLayout
-            android:id="@+id/ll_1"
+            android:id="@+id/ll_home_team"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -79,7 +79,7 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="50px"
-            android:layout_toRightOf="@+id/ll_1"
+            android:layout_toRightOf="@+id/ll_home_team"
             android:gravity="center"
             android:orientation="vertical">
 

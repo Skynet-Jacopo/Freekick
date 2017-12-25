@@ -37,15 +37,17 @@
         android:background="#ececec"/>
 
     <RelativeLayout
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="30px"
-        android:paddingLeft="110px"
-        android:paddingRight="104px">
+        android:paddingLeft="50px"
+        android:paddingRight="50px">
 
         <LinearLayout
+            android:clickable="true"
             android:paddingTop="32px"
-            android:id="@+id/ll_1"
+            android:id="@+id/ll_home_team"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -70,10 +72,8 @@
         <LinearLayout
 
             android:id="@+id/ll_2"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="96px"
-            android:layout_toRightOf="@+id/ll_1"
-            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_width="400px"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -87,6 +87,7 @@
                 android:textSize="30px"/>
 
             <TextView
+                android:gravity="center"
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,9 +101,10 @@
 
 
         <LinearLayout
+            android:clickable="true"
+            android:id="@+id/ll_visitor_team"
             android:paddingTop="32px"
-            android:layout_marginLeft="104px"
-            android:layout_toRightOf="@+id/ll_2"
+            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

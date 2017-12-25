@@ -20,6 +20,7 @@ import com.football.freekick.http.Url;
 import com.football.freekick.language.LanguageConfig;
 import com.football.freekick.language.LanguageCountry;
 import com.football.freekick.language.LanguageObservable;
+import com.football.freekick.utils.PrefUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -69,6 +70,7 @@ public class FirstPageActivity extends BaseActivity {
     AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;
 
+    private boolean isSecondRun;
     @Override
     public LoaderManager getLoaderManager() {
         return super.getLoaderManager();
@@ -77,6 +79,11 @@ public class FirstPageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isSecondRun = PrefUtils.getBoolean(App.APP_CONTEXT, "isSecondRun", false);
+        if (isSecondRun){
+            startActivity(new Intent(this,OneTimePagerActivity.class));
+            finish();
+        }
         setContentView(R.layout.activity_firstpage);
         mContext = FirstPageActivity.this;
         ButterKnife.bind(this);

@@ -311,11 +311,11 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
-                        loadingDismiss();
                         Logger.json(s);
                         Gson gson = new Gson();
                         if (!s.contains("[") && !s.contains("]")) {
                             NoMatches noMatches = gson.fromJson(s, NoMatches.class);
+                            loadingDismiss();
                             ToastUtil.toastShort(noMatches.getMatches());
                         } else {
                             MatchesComing json = gson.fromJson(s, MatchesComing.class);
@@ -342,6 +342,7 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                                 }
                             }
                             mMatchAdapter.notifyDataSetChanged();
+                            loadingDismiss();
                         }
                     }
 

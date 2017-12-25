@@ -5,6 +5,7 @@
               android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="128px"
         android:background="@drawable/selector_rectangle_white_gray_bg"

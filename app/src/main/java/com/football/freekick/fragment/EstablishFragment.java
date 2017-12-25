@@ -129,6 +129,9 @@ public class EstablishFragment extends BaseFragment {
     private String district_id = "";
     private DateTime mDateTime;
     private List<Pitches.PitchesBean> mPitchesList;
+    private int invited_team_id;
+    private String invited_team_name;
+    private String invited_team_url;
 
     public EstablishFragment() {
         // Required empty public constructor
@@ -149,8 +152,19 @@ public class EstablishFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mTvIconDate.setTypeface(App.mTypeface);
+        getFrontPageData();
         initView();
         initData();
+    }
+
+    /**
+     * 邀請球隊進入新球賽
+     */
+    private void getFrontPageData() {
+        Intent intent = getActivity().getIntent();
+        invited_team_id = intent.getIntExtra("team_id", 0);
+        invited_team_name = intent.getStringExtra("team_name");
+        invited_team_url = intent.getStringExtra("team_url");
     }
 
     /**
@@ -402,17 +416,18 @@ public class EstablishFragment extends BaseFragment {
 //            return;
 //        }
         String size = "";
-        if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_5))) {
-            size = "5";
-        } else if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_7))) {
-            size = "7";
-        } else if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_11))) {
-            size = "11";
-        }
+//        if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_5))) {
+//            size = "5";
+//        } else if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_7))) {
+//            size = "7";
+//        } else if (StringUtils.getEditText(mTvPitchSize).equals(getString(R.string.pitch_size_11))) {
+//            size = "11";
+//        }
+        size = StringUtils.getEditText(mTvPeopleNum);
         String play_start = "";
         play_start = StringUtils.getEditText(mTvDate) + " " + mStartTime + ":00";
         String play_end = StringUtils.getEditText(mTvDate) + " " + mEndTime + ":00";
-        String confirm_end = DateUtil.getPreTime(play_start, "1");//play_start前一天
+        String confirm_end = DateUtil.getPreTime(play_start, "1");//play_start前一分鐘
 
         loadingShow();
         JsonObject object = new JsonObject();
@@ -465,6 +480,9 @@ public class EstablishFragment extends BaseFragment {
                             int id = match.getId();
                             Intent intent = new Intent(mContext, MatchInviteActivity.class);
                             intent.putExtra("match_id", id + "");
+                            intent.putExtra("invited_team_id",invited_team_id);
+                            intent.putExtra("invited_team_name",invited_team_name);
+                            intent.putExtra("invited_team_url",invited_team_url);
                             startActivity(intent);
                         } else if (matches.getMatch() == null && matches.getErrors() != null) {
                             ToastUtil.toastShort(matches.getErrors().get(0));

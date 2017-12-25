@@ -34,15 +34,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "onMessageReceived: "+data.toString());
 
         data = remoteMessage.getData();
-        String title = remoteMessage.getNotification().getTitle();
-        String message = remoteMessage.getNotification().getBody();
-        String imageUrl = (String) data.get("image");
-        String action = (String) data.get("action");
-        Log.i(TAG, "onMessageReceived: title : "+title);
-        Log.i(TAG, "onMessageReceived: message : "+message);
-        Log.i(TAG, "onMessageReceived: imageUrl : "+imageUrl);
-        Log.i(TAG, "onMessageReceived: action : "+action);
-
+//        String title = remoteMessage.getNotification().getTitle();
+//        String message = remoteMessage.getNotification().getBody();
+//        String imageUrl = (String) data.get("image");
+        String message = (String) data.get("message");
+//        Log.i(TAG, "onMessageReceived: title : "+title);
+//        Log.i(TAG, "onMessageReceived: message : "+message);
+//        Log.i(TAG, "onMessageReceived: imageUrl : "+imageUrl);
+//        Log.i(TAG, "onMessageReceived: action : "+action);
+        sendNotification(message);
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 

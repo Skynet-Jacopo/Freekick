@@ -52,11 +52,11 @@ public class CalenderActivity extends AutoLayoutActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calender);
         ButterKnife.bind(this);
-        now = new DateTime();
         mTvLeft.setTypeface(App.mTypeface);
         mTvRight.setTypeface(App.mTypeface);
         mSelectDate = (DateTime) getIntent().getSerializableExtra("dateTime") == null ? new DateTime() : (DateTime)
                 getIntent().getSerializableExtra("dateTime");
+        now = new DateTime();
         Logger.d(mSelectDate.toString());
         initMonthCalendar();
     }

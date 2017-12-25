@@ -19,12 +19,15 @@ import com.football.freekick.R;
 import com.football.freekick.activity.ChangeTeamInfoActivity0;
 import com.football.freekick.activity.NoticeActivity;
 import com.football.freekick.activity.SettingDetailActivity;
+import com.football.freekick.activity.registerlogin.FirstPageActivity;
+import com.football.freekick.activity.registerlogin.LoginPager2Activity;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.beans.Logout;
 import com.football.freekick.beans.RegisterResponse;
 import com.football.freekick.beans.Settings;
 import com.football.freekick.http.Url;
 import com.football.freekick.language.SelectLanguageActivity;
+import com.football.freekick.utils.ActyUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
@@ -362,7 +365,8 @@ public class SetUpFragment extends BaseFragment {
                         Gson gson = new Gson();
                         Logout logout = gson.fromJson(s, Logout.class);
                         if (logout.isSuccess()) {
-                            getActivity().finish();
+                            startActivity(new Intent(mContext, LoginPager2Activity.class));
+                            ActyUtil.finishAllActivity();
 //                            ToastUtil.toastShort(logout.getMessage());
                         } else {
                             ToastUtil.toastShort(logout.getMessage());

@@ -49,12 +49,16 @@ public class RegisterPager1Activity extends BaseActivity {
     private Context mContext;
     private String mEmail;
     private String mPassword;
+    private String social_token;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_pager1);
         mContext = RegisterPager1Activity.this;
+        social_token = getIntent().getStringExtra("social_token");
+        username = getIntent().getStringExtra("username");
         ButterKnife.bind(this);
         initView();
         initData();
@@ -72,9 +76,80 @@ public class RegisterPager1Activity extends BaseActivity {
 
     @OnClick(R.id.tv_next)
     public void onViewClicked() {
-        next();
+        if (social_token != null && !social_token.equals("")) {
+            mEdtUserName.setText(username);
+            loginByFacebook();
+        } else {
+            next();
+        }
+
 //        putNameAndPhone();
 //        startActivity(new Intent(mContext, RegisterPager2Activity.class));
+    }
+
+    /**
+     * 請求一遍登錄接口(有必要么?)
+     */
+    private void loginByFacebook() {
+        loadingShow();
+        JsonObject object = new JsonObject();
+        JsonObject object1 = new JsonObject();
+        object1.addProperty("facebook-token", social_token);
+        object1.addProperty("provider", "facebook");
+        object.add("user", object1);
+        Logger.json(object.toString());
+        String url = App.isChinese ? "http://api.freekick.hk/api/zh_HK/auth/sign_in" :
+                "http://api.freekick.hk/api/en/auth/sign_in";
+        Logger.d(url);
+        OkGo.post(url)
+                .upJson(object.toString())
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Login login = gson.fromJson(s, Login.class);
+                        if (login.getUser() != null) {
+                            Login.UserBean user = login.getUser();
+                            if (user.getLogin_fail() == 0) {
+                                //登錄成功
+                                Headers headers = response.headers();
+                                String access_token = headers.get("access-token");
+                                String client = headers.get("client");
+                                String uid = headers.get("uid");
+                                String expiry = headers.get("expiry");
+                                Logger.d("access-token=" + access_token + "   client=" + client + "   uid=" + uid + "" +
+                                        "   expiry=" + expiry);
+                                HttpHeaders header = new HttpHeaders();
+                                header.put("access-token", access_token);
+                                header.put("client", client);
+                                header.put("uid", uid);
+                                header.put("expiry", expiry);
+                                OkGo.getInstance().addCommonHeaders(header);
+                                PrefUtils.putString(App.APP_CONTEXT, "access_token", access_token);
+                                PrefUtils.putString(App.APP_CONTEXT, "client", client);
+                                PrefUtils.putString(App.APP_CONTEXT, "uid", uid);
+                                PrefUtils.putString(App.APP_CONTEXT, "expiry", expiry);
+
+                                putNameAndPhone();
+                            } else {
+
+                            }
+                        } else {//data為null,登錄失敗
+                            if (login.getErrors() != null) {
+                                ToastUtil.toastShort(login.getErrors().get(0));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                    }
+                });
     }
 
     /**
@@ -181,6 +256,8 @@ public class RegisterPager1Activity extends BaseActivity {
                             Intent intent = new Intent(mContext, RegisterPager2Activity.class);
                             intent.putExtra("email", mEmail);
                             intent.putExtra("password", mPassword);
+                            PrefUtils.putString(App.APP_CONTEXT, "mobile_no", StringUtils.getEditText(mEdtPhoneNum));
+                            PrefUtils.putString(App.APP_CONTEXT, "username", StringUtils.getEditText(mEdtUserName));
                             startActivity(intent);
                         } else if (json.getStatus().equals("error")) {
                             RegisterResponse.ErrorsBean errors = json.getErrors();
@@ -194,7 +271,8 @@ public class RegisterPager1Activity extends BaseActivity {
                                 ToastUtil.toastShort(errors.getRegister_type().get(0));
                             }
                         } else {
-                            ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
+                            if (StringUtils.isEmpty(social_token))
+                                ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
                         }
                     }
 
@@ -202,7 +280,8 @@ public class RegisterPager1Activity extends BaseActivity {
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
-                        ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
+                        if (StringUtils.isEmpty(social_token))
+                            ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
                         loadingDismiss();
                     }
                 });

@@ -19,6 +19,7 @@ import com.football.freekick.R;
 import com.football.freekick.activity.ArticleActivity;
 import com.football.freekick.activity.MatchContentActivity;
 import com.football.freekick.activity.MatchContentActivity1;
+import com.football.freekick.activity.TeamDetailActivity;
 import com.football.freekick.adapter.MyMatchAdapter0;
 import com.football.freekick.adapter.MyMatchAdapter1;
 import com.football.freekick.baseadapter.ViewHolder;
@@ -210,6 +211,8 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                  * 2.主隊取消比賽
                  * 3.(客隊)球賽內容頁
                  * 4.(主隊)球賽內容頁
+                 * 5.主隊球隊詳情
+                 * 6.客隊球隊詳情
                  */
                 Intent intent = new Intent();
                 MatchesComing.MatchesBean matchesBean = mListMatch.get(position);
@@ -231,6 +234,16 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                         intent.putExtra("id", mListMatch.get(position).getId() + "");
                         intent.putExtra("type", 1);
                         startActivityForResult(intent, REQUEST_CODE_REFRESH);
+                        break;
+                    case 5:
+                        intent.setClass(mContext, TeamDetailActivity.class);
+                        intent.putExtra("id", mListMatch.get(position).getHome_team().getId() + "");
+                        startActivity(intent);
+                        break;
+                    case 6:
+                        intent.setClass(mContext, TeamDetailActivity.class);
+                        intent.putExtra("id", mListMatch.get(position).getJoin_matches().get(secondPos).getJoin_team_id() + "");
+                        startActivity(intent);
                         break;
                 }
             }
@@ -349,11 +362,11 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
-                        loadingDismiss();
                         Logger.json(s);
                         Gson gson = new Gson();
                         if (!s.contains("[") && !s.contains("]")) {
                             NoMatches noMatches = gson.fromJson(s, NoMatches.class);
+                            loadingDismiss();
                             ToastUtil.toastShort(noMatches.getMatches());
                         } else {
                             MatchesComing json = gson.fromJson(s, MatchesComing.class);
@@ -373,6 +386,7 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                                 }
                             }
                             mMatchAdapter.notifyDataSetChanged();
+                            loadingDismiss();
                         }
                     }
 

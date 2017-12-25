@@ -28,11 +28,16 @@ import com.facebook.login.widget.LoginButton;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
+import com.football.freekick.beans.RegisterResponse;
 import com.football.freekick.utils.StringUtils;
+import com.football.freekick.utils.ToastUtil;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
@@ -47,6 +52,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class LoginPage1Activity extends BaseActivity {
 
@@ -77,11 +84,11 @@ public class LoginPage1Activity extends BaseActivity {
     private void initView() {
         mTvBack.setTypeface(App.mTypeface);
 
-        mFacebook.setReadPermissions("email");
+//        mFacebook.setReadPermissions("email");
         // If using in a fragment
 //        mFacebook.setFragment(this);
         mCallbackManager = CallbackManager.Factory.create();
-
+        mFacebook.setReadPermissions("email","public_profile","user_friends");
         mFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -89,9 +96,9 @@ public class LoginPage1Activity extends BaseActivity {
                 mEdtLog.setText(gson.toJson(loginResult));
                 Logger.json(gson.toJson(loginResult));
                 getLoginInfo(loginResult.getAccessToken());
-                List<String> str = new ArrayList<String>();
-                str.add("public_profile");
-                final AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
+//                List<String> str = new ArrayList<String>();
+//                str.add("public_profile");
+//                final AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
             }
 
             @Override
@@ -146,7 +153,7 @@ public class LoginPage1Activity extends BaseActivity {
         AccessToken mAccessToken = AccessToken.getCurrentAccessToken();
         Log.e("token", "token :" + mAccessToken.getToken() + "," + "user_id" + mAccessToken.getUserId());
     }
-    public void getLoginInfo(AccessToken accessToken) {
+    public void getLoginInfo(final AccessToken accessToken) {
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
@@ -167,6 +174,7 @@ public class LoginPage1Activity extends BaseActivity {
                     Toast.makeText(mContext, "" + object.toString(), Toast.LENGTH_SHORT).show();
                     mEdtLog.setText(object.toString());
 //                    LoginManager.getInstance().logInWithReadPermissions(LoginPage1Activity.this,Arrays.asList("public_profile"));
+                    registerByFaceBook(accessToken,name);
                 }
             }
         });
@@ -176,5 +184,65 @@ public class LoginPage1Activity extends BaseActivity {
                 "age_range,first_name,last_name");
         request.setParameters(parameters);
         request.executeAsync();
+    }
+
+    /**
+     * 通過Facebook註冊
+     * @param accessToken
+     * @param name
+     */
+    private void registerByFaceBook(final AccessToken accessToken, final String name) {
+//        { "user": { "social_token": "asdfghjqwertyuytrewq", "username": "test_user",  "provider":"facebook"}}
+        String url;
+        if (App.isChinese)
+            url = "http://api.freekick.hk/api/zh_HK/auth";
+        else
+            url = "http://api.freekick.hk/api/en/auth";
+        loadingShow();
+        JsonObject object = new JsonObject();
+        JsonObject object1 = new JsonObject();
+        object1.addProperty("social_token",accessToken.getToken());
+        object1.addProperty("username",name);
+        object1.addProperty("provider","facebook");
+        object.add("user", object1);
+        OkGo.post(url)
+                .upJson(object.toString())
+//                .upJson(str)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        RegisterResponse registerResponse = gson.fromJson(s, RegisterResponse.class);
+                        if (registerResponse.getStatus().equals("success")) {
+
+//                            ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
+                            Intent intent = new Intent(mContext, RegisterPager1Activity.class);
+                            intent.putExtra("social_token", accessToken.getToken());
+                            intent.putExtra("username", name);
+                            startActivity(intent);
+                        }else if (registerResponse.getStatus().equals("error")){
+                            RegisterResponse.ErrorsBean errors = registerResponse.getErrors();
+                            if (errors.getFull_messages()!=null&&errors.getFull_messages().size()!=0){
+                                ToastUtil.toastShort(errors.getFull_messages().get(0));
+                            }else if (errors.getMobile_no()!=null&&errors.getMobile_no().size()!=0){
+                                ToastUtil.toastShort(errors.getMobile_no().get(0));
+                            }else if (errors.getPassword()!=null&&errors.getPassword().size()!=0){
+                                ToastUtil.toastShort(errors.getPassword().get(0));
+                            }else if (errors.getRegister_type()!=null&&errors.getRegister_type().size()!=0){
+                                ToastUtil.toastShort(errors.getRegister_type().get(0));
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                    }
+                });
     }
 }

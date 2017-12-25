@@ -24,6 +24,8 @@ import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
+import com.football.freekick.beans.Attention;
+import com.football.freekick.beans.Follow;
 import com.football.freekick.beans.Invite;
 import com.football.freekick.beans.MatchDetail;
 import com.football.freekick.beans.Recommended;
@@ -90,18 +92,33 @@ public class MatchInviteActivity extends BaseActivity {
     private CommonAdapter mAdapter;
     private String match_id;
     private MatchDetail.MatchBean mMatch;
-
+    private String team_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_invite);
         mContext = MatchInviteActivity.this;
         ButterKnife.bind(this);
+        team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
         initView();
-        initData();
+        initMatchData();
+//        intent.putExtra("invited_team_id",invited_team_id);
+//        intent.putExtra("invited_team_name",invited_team_name);
+//        intent.putExtra("invited_team_url",invited_team_url);
+        if (getIntent().getStringExtra("invited_team_name") == null) {
+            //沒有邀請球隊進行新球賽
+            initRecommendData();//獲取推薦球隊列表
+        }else {
+            //邀請球隊進入新球賽
+            initInvitedTeam();
+        }
+
     }
 
-    private void initData() {
+    /**
+     * 獲取球賽詳情
+     */
+    private void initMatchData() {
         if (mList != null) {
             mList.clear();
         }
@@ -131,6 +148,33 @@ public class MatchInviteActivity extends BaseActivity {
                     }
                 });
 
+    }
+
+    /**
+     * 初始化邀請的單個球隊數據
+     */
+    private void initInvitedTeam() {
+        if (mList != null) {
+            mList.clear();
+        }
+        int invited_team_id = getIntent().getIntExtra("invited_team_id", 0);
+        String invited_team_name = getIntent().getStringExtra("invited_team_name");
+        String invited_team_url = getIntent().getStringExtra("invited_team_url");
+        Recommended.TeamsBean teamsBean = new Recommended.TeamsBean();
+        teamsBean.setId(invited_team_id);
+        teamsBean.setTeam_name(invited_team_name);
+        Recommended.TeamsBean.ImageBean imageBean = new Recommended.TeamsBean.ImageBean();
+        imageBean.setUrl(invited_team_url);
+        teamsBean.setImage(imageBean);
+
+        mList.add(teamsBean);
+        mAdapter.notifyDataSetChanged();
+
+        getFollowedTeams();
+    }
+
+    private void initRecommendData() {
+//        loadingShow();
         Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id +
                 "/get_recommended_joiner");
         OkGo.get(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "matches/" + match_id + "/get_recommended_joiner")
@@ -138,6 +182,7 @@ public class MatchInviteActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
+//                        loadingDismiss();
                         // TODO: 2017/11/19 暫用假數據
                         String str = "{\"teams\":[{\"id\":19,\"team_name\":\"Star\"," +
                                 "\"image\":{\"url\":\"/uploads/team/image/19/upload-image-8843737-1509546403.\"}}]}";
@@ -147,12 +192,14 @@ public class MatchInviteActivity extends BaseActivity {
                             List<Recommended.TeamsBean> teams = recommended.getTeams();
                             mList.addAll(teams);
                             mAdapter.notifyDataSetChanged();
+                            getFollowedTeams();
                         }
                     }
 
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
+                        loadingDismiss();
                         Logger.d(e.getMessage());
                     }
                 });
@@ -179,6 +226,7 @@ public class MatchInviteActivity extends BaseActivity {
                 .getTime2(mMatch.getPlay_end()));
         mTvHomeName.setText(mMatch.getHome_team().getTeam_name() == null ? "" : mMatch.getHome_team().getTeam_name());
         mIvDressHome.setBackgroundColor(MyUtil.getColorInt(mMatch.getHome_team_color()));
+        loadingDismiss();
     }
 
     private void initView() {
@@ -203,7 +251,7 @@ public class MatchInviteActivity extends BaseActivity {
             }
 
             @Override
-            public void convert(ViewHolder holder, Recommended.TeamsBean teamsBean) {
+            public void convert(ViewHolder holder, final Recommended.TeamsBean teamsBean) {
                 final int itemPosition = holder.getItemPosition();
                 ImageView ivPic = holder.getView(R.id.iv_pic);
                 ImageLoaderUtils.displayImage(teamsBean.getImage().getUrl(), ivPic);
@@ -211,14 +259,39 @@ public class MatchInviteActivity extends BaseActivity {
                 holder.setOnClickListener(R.id.tv_invite, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        invitePopup(itemPosition);
-
+                        if (getIntent().getStringExtra("invited_team_name") == null){
+                            invitePopup(itemPosition);
+                        }else {
+                            invite(0);//直接邀請這支隊伍進行這場球賽
+                        }
                     }
                 });
-                holder.setOnClickListener(R.id.tv_attention, new View.OnClickListener() {
+                if (teamsBean.isAttention()) {
+                    holder.setText(R.id.tv_attention, getString(R.string.unfollow));
+                    holder.setOnClickListener(R.id.tv_attention, new View.OnClickListener() {
+                        //已關注
+                        @Override
+                        public void onClick(View view) {
+                            unfollow(itemPosition);
+                        }
+                    });
+                } else {
+                    holder.setText(R.id.tv_attention, getString(R.string.follow));
+                    holder.setOnClickListener(R.id.tv_attention, new View.OnClickListener() {
+                        //關注
+                        @Override
+                        public void onClick(View view) {
+                            follow(itemPosition);
+                        }
+                    });
+                }
+                holder.setOnClickListener(R.id.ll_content, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        payAttention(itemPosition);
+                        Intent intent = new Intent();
+                        intent.setClass(mContext,TeamDetailActivity.class);
+                        intent.putExtra("id",teamsBean.getId()+"");
+                        startActivity(intent);
                     }
                 });
             }
@@ -226,32 +299,6 @@ public class MatchInviteActivity extends BaseActivity {
         };
         mRecyclerRecommended.setAdapter(mAdapter);
     }
-
-    /**
-     * 關注
-     *
-     * @param position
-     */
-    // TODO: 2017/11/19 這裡是不是缺少字段(判斷是否已關注的)
-    private void payAttention(int position) {
-        Logger.d(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mList.get(position).getId() +
-                "/follow");
-        OkGo.post(Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + mList.get(position).getId() +
-                "/follow")
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(String s, Call call, Response response) {
-                        Logger.json(s);
-                    }
-
-                    @Override
-                    public void onError(Call call, Response response, Exception e) {
-                        super.onError(call, response, e);
-                        Logger.d(e.getMessage());
-                    }
-                });
-    }
-
     @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
@@ -359,6 +406,11 @@ public class MatchInviteActivity extends BaseActivity {
                         if (invite.getSuccess() != null) {
                             ToastUtil.toastShort(invite.getSuccess());
                             setResult(RESULT_OK);
+                            Intent intent = new Intent(mContext, MainActivity.class);
+
+                            intent.putExtra("which", 4);
+                            intent.putExtra("toPage","1");
+                            startActivity(intent);
                             finish();
                         } else if (invite.getErrors() != null) {
                             ToastUtil.toastShort(invite.getErrors());
@@ -385,5 +437,114 @@ public class MatchInviteActivity extends BaseActivity {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
         getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 獲取已關注球隊與同區球隊做比較,得出關注與否
+     */
+    private void getFollowedTeams() {
+//        loadingShow();
+        String urlAttention = BaseUrl + (App.isChinese ? ZH_HK : EN) + "users/" + team_id + "/followings";
+        Logger.d(urlAttention);
+        OkGo.get(urlAttention)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Attention attention = gson.fromJson(s, Attention.class);
+                        List<Attention.TeamsBean> attentionTeams = attention.getTeams();
+                        for (int i = 0; i < attentionTeams.size(); i++) {
+                            for (int j = 0; j < mList.size(); j++) {
+                                if (attentionTeams.get(i).getId() == mList.get(j).getId()) {
+                                    mList.get(j).setAttention(true);
+                                } else {
+//                                    mTeams.get(j).setAttention(false);
+                                }
+                            }
+                        }
+                        mAdapter.notifyDataSetChanged();
+                        loadingDismiss();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                    }
+                });
+
+    }
+    /**
+     * 取消關注
+     *
+     * @param position
+     */
+    private void unfollow(final int position) {
+        loadingShow();
+        Logger.d(BaseUrl + (App.isChinese ? ZH_HK : EN) + "teams/" + mList.get(position).getId() +
+                "/unfollow");
+        OkGo.delete(BaseUrl + (App.isChinese ? ZH_HK : EN) + "teams/" + mList.get(position).getId() +
+                "/unfollow")
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Follow follow = gson.fromJson(s, Follow.class);
+                        if (follow.getSuccess() != null) {
+                            ToastUtil.toastShort(follow.getSuccess());
+                            mList.get(position).setAttention(false);
+                            mAdapter.notifyDataSetChanged();
+                        } else if (follow.getErrors() != null) {
+                            ToastUtil.toastShort(follow.getErrors());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                    }
+                });
+    }
+    /**
+     * 關注
+     *
+     * @param position
+     */
+    // TODO: 2017/11/19 這裡是不是缺少字段(判斷是否已關注的)
+    private void follow(final int position) {
+        loadingShow();
+        Logger.d(BaseUrl + (App.isChinese ? ZH_HK : EN) + "teams/" + mList.get(position).getId() +
+                "/follow");
+        OkGo.post(BaseUrl + (App.isChinese ? ZH_HK : EN) + "teams/" + mList.get(position).getId() +
+                "/follow")
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Follow follow = gson.fromJson(s, Follow.class);
+                        if (follow.getSuccess() != null) {
+                            ToastUtil.toastShort(follow.getSuccess());
+                            mList.get(position).setAttention(true);
+                            mAdapter.notifyDataSetChanged();
+                        } else if (follow.getErrors() != null) {
+                            ToastUtil.toastShort(follow.getErrors());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                    }
+                });
     }
 }

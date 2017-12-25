@@ -121,8 +121,10 @@ public class RegisterPager3Activity extends BaseActivity {
     private void initView() {
         mColorPickerHome.selectCenter();
         mColorPickerVisitor.selectCenter();
-        color1 = mColorPickerHome.getColorHtml();
-        color2 = mColorPickerVisitor.getColorHtml();
+        color1 = "F0AA16";
+        color2 = "93D456";
+//        color1 = mColorPickerHome.getColorHtml();
+//        color2 = mColorPickerVisitor.getColorHtml();
         mTvBack.setTypeface(App.mTypeface);
         mColorPickerHome.setColorListener(new ColorListener() {
             @Override

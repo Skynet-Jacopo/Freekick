@@ -187,117 +187,11 @@ public class PartakeListFragment extends BaseFragment {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        String str = "{\n" +
-                                "    \"matches\": [\n" +
-                                "        {\n" +
-                                "            \"id\": 7,\n" +
-                                "            \"play_start\": \"2017-11-20T06:00:00.000Z\",\n" +
-                                "            \"play_end\": \"2017-11-20T09:00:00.000Z\",\n" +
-                                "            \"pitch_id\": 1,\n" +
-                                "            \"home_team_color\": \"ff00ff\",\n" +
-                                "            \"status\": \"w\",\n" +
-                                "            \"size\": \"5\",\n" +
-                                "            \"home_team\": {\n" +
-                                "                \"id\": 33,\n" +
-                                "                \"image\": {\n" +
-                                "                    \"url\": " +
-                                "\"/uploads/team/image/46/image.jpeg\"\n" +
-                                "                }\n" +
-                                "            },\n" +
-                                "            \"join_matches\": [\n" +
-                                "                {\n" +
-                                "                    \"join_team_id\": 48,\n" +
-                                "                    \"status\": \"confirmation_pending\",\n" +
-                                "                    \"join_team_color\": \"ffc300\",\n" +
-                                "                    \"team\": {\n" +
-                                "                        \"team_name\": \"Lions9dd875\",\n" +
-                                "                        \"size\": 5,\n" +
-                                "                        \"image\": {\n" +
-                                "                            \"url\": \"/uploads/team/image/46/image.jpeg\"\n" +
-                                "                        },\n" +
-                                "                        \"district\": {\n" +
-                                "                            \"id\": 72,\n" +
-                                "                            \"district\": \"Yuen Long\",\n" +
-                                "                            \"region\": \"New Territories\"\n" +
-                                "                        }\n" +
-                                "                    }\n" +
-                                "                }\n" +
-                                "            ]\n" +
-                                "        },\n" +
-                                "        {\n" +
-                                "            \"id\": 7,\n" +
-                                "            \"play_start\": \"2017-11-20T12:00:00.000Z\",\n" +
-                                "            \"play_end\": \"2017-11-20T01:00:00.000Z\",\n" +
-                                "            \"pitch_id\": 1,\n" +
-                                "            \"home_team_color\": \"ffffff\",\n" +
-                                "            \"status\": \"m\",\n" +
-                                "            \"size\": \"5\",\n" +
-                                "            \"home_team\": {\n" +
-                                "                \"id\": 33,\n" +
-                                "                \"image\": {\n" +
-                                "                    \"url\": \"/uploads/team/image/46/image.jpeg\"\n" +
-                                "                }\n" +
-                                "            },\n" +
-                                "            \"join_matches\": [\n" +
-                                "                {\n" +
-                                "                    \"join_team_id\": 48,\n" +
-                                "                    \"status\": \"confirmed\",\n" +
-                                "                    \"join_team_color\": \"ffc300\",\n" +
-                                "                    \"team\": {\n" +
-                                "                        \"team_name\": \"Lions9dd875\",\n" +
-                                "                        \"size\": 5,\n" +
-                                "                        \"image\": {\n" +
-                                "                            \"url\": \"/uploads/team/image/46/image.jpeg\"\n" +
-                                "                        },\n" +
-                                "                        \"district\": {\n" +
-                                "                            \"id\": 72,\n" +
-                                "                            \"district\": \"Yuen Long\",\n" +
-                                "                            \"region\": \"New Territories\"\n" +
-                                "                        }\n" +
-                                "                    }\n" +
-                                "                }\n" +
-                                "            ]\n" +
-                                "        },\n" +
-                                "        {\n" +
-                                "            \"id\": 7,\n" +
-                                "            \"play_start\": \"2017-11-20T12:00:00.000Z\",\n" +
-                                "            \"play_end\": \"2017-11-20T01:00:00.000Z\",\n" +
-                                "            \"pitch_id\": 1,\n" +
-                                "            \"home_team_color\": \"ffffff\",\n" +
-                                "            \"status\": \"m\",\n" +
-                                "            \"size\": \"5\",\n" +
-                                "            \"home_team\": {\n" +
-                                "                \"id\": 33,\n" +
-                                "                \"image\": {\n" +
-                                "                    \"url\": \"/uploads/team/image/46/image.jpeg\"\n" +
-                                "                }\n" +
-                                "            },\n" +
-                                "            \"join_matches\": [\n" +
-                                "                {\n" +
-                                "                    \"join_team_id\": 48,\n" +
-                                "                    \"status\": \"confirmed\",\n" +
-                                "                    \"join_team_color\": \"ffc300\",\n" +
-                                "                    \"team\": {\n" +
-                                "                        \"team_name\": \"Lions9dd875\",\n" +
-                                "                        \"size\": 5,\n" +
-                                "                        \"image\": {\n" +
-                                "                            \"url\": \"/uploads/team/image/46/image.jpeg\"\n" +
-                                "                        },\n" +
-                                "                        \"district\": {\n" +
-                                "                            \"id\": 72,\n" +
-                                "                            \"district\": \"Yuen Long\",\n" +
-                                "                            \"region\": \"New Territories\"\n" +
-                                "                        }\n" +
-                                "                    }\n" +
-                                "                }\n" +
-                                "            ]\n" +
-                                "        }\n" +
-                                "    ]\n" +
-                                "}";
-//                        Logger.json(str);
                         Gson gson = new Gson();
                         if (!s.contains("[") && !s.contains("]")) {
                             NoMatches noMatches = gson.fromJson(s, NoMatches.class);
+                            mMatchList.clear();
+                            mAdapter.notifyDataSetChanged();
                             ToastUtil.toastShort(noMatches.getMatches());
                         } else {
                             AvailableMatches matches = gson.fromJson(s, AvailableMatches.class);
@@ -309,7 +203,7 @@ public class PartakeListFragment extends BaseFragment {
                                 mMatchList.addAll(matches.getMatches());
                                 AvailableMatches.MatchesBean matchesBean = new AvailableMatches.MatchesBean();
                                 for (int i = 0; i < App.mAdvertisementsBean.size(); i++) {
-                                    if (App.mAdvertisementsBean.get(i).getScreen().equals(Url.SEARCH_RESULT_001)){
+                                    if (App.mAdvertisementsBean.get(i).getScreen().equals(Url.SEARCH_RESULT_001)) {
                                         matchesBean.setDefault_image(MyUtil.getImageUrl(App.mAdvertisementsBean.get(i)
                                                 .getImage()));
                                     }
@@ -361,7 +255,7 @@ public class PartakeListFragment extends BaseFragment {
                                             case 2:
                                                 intent.setClass(mContext, JoinMatchActivity.class);
                                                 intent.putExtra("matchesBean", matchesBean);
-                                                startActivity(intent);
+                                                startActivityForResult(intent, REQUEST_CODE_DETAIL);
 //                                            joinMatch(position);//參與球賽
                                                 break;
                                             case 3://成功約賽的,應該是沒啥用了
@@ -374,9 +268,11 @@ public class PartakeListFragment extends BaseFragment {
                                             case 5://廣告
                                                 // TODO: 2017/11/30 分享
                                                 for (int i = 0; i < App.mAdvertisementsBean.size(); i++) {
-                                                    if (App.mAdvertisementsBean.get(i).getScreen().equals(Url.SEARCH_RESULT_001)){
+                                                    if (App.mAdvertisementsBean.get(i).getScreen().equals(Url
+                                                            .SEARCH_RESULT_001)) {
                                                         intent.setClass(mContext, AdvertisementDetailActivity.class);
-                                                        intent.putExtra("name", App.mAdvertisementsBean.get(i).getName());
+                                                        intent.putExtra("name", App.mAdvertisementsBean.get(i)
+                                                                .getName());
                                                         intent.putExtra("url", App.mAdvertisementsBean.get(i).getUrl());
                                                         startActivity(intent);
                                                     }
@@ -465,6 +361,13 @@ public class PartakeListFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.tv_icon_filtrate:
                 intent.setClass(mContext, FiltrateActivity.class);//篩選界面
+                intent.putExtra("start_time", mStartTime);
+                intent.putExtra("end_time", mEndTime);
+                intent.putExtra("district_id", district_id);
+                intent.putExtra("size", size);
+                intent.putExtra("average_height", average_height);
+                intent.putExtra("age_range", age_range);
+                intent.putExtra("style", style);
                 startActivityForResult(intent, FILTRATE_REQUEST_CODE);
                 break;
             case R.id.tv_friend:
@@ -632,7 +535,7 @@ public class PartakeListFragment extends BaseFragment {
                 age_range = data.getStringExtra("age_range");
             if (!StringUtils.isEmpty(data.getStringExtra("style")))
                 style = data.getStringExtra("style");
-
+            getAvailableAatches();
         } else if (requestCode == CHOOSE_DATE && resultCode == RESULT_OK) {
             String day = data.getStringExtra("day");
             String month = data.getStringExtra("month");

@@ -62,6 +62,17 @@ public class TeamDetail {
         private String color1;
         private List<String> style;
         private List<String> battle_preference;
+        /**
+         * rating_3month : {"technic":"4.5","attack":"2.0","personality":"3.5","defence":"3.0","on_time":"3.0"}
+         */
+
+        private Rating3monthBean rating_3month;
+        /**
+         * ratings_all : {"technic":"4.5","attack":"2.0","personality":"3.5","defence":"3.0","on_time":"3.0"}
+         */
+
+        private Rating3monthBean ratings_all;
+
 
         public int getAverage_height() {
             return average_height;
@@ -191,6 +202,22 @@ public class TeamDetail {
             this.battle_preference = battle_preference;
         }
 
+        public Rating3monthBean getRating_3month() {
+            return rating_3month;
+        }
+
+        public void setRating_3month(Rating3monthBean rating_3month) {
+            this.rating_3month = rating_3month;
+        }
+
+        public Rating3monthBean getRatings_all() {
+            return ratings_all;
+        }
+
+        public void setRatings_all(Rating3monthBean ratings_all) {
+            this.ratings_all = ratings_all;
+        }
+
         public static class ImageBean implements Serializable {
             /**
              * url : /uploads/team/image/51/image.jpeg
@@ -276,6 +303,62 @@ public class TeamDetail {
 
             public void setUsername(String username) {
                 this.username = username;
+            }
+        }
+
+        public static class Rating3monthBean implements Serializable {
+            /**
+             * technic : 4.5
+             * attack : 2.0
+             * personality : 3.5
+             * defence : 3.0
+             * on_time : 3.0
+             */
+
+            private String technic;
+            private String attack;
+            private String personality;
+            private String defence;
+            private String on_time;
+
+            public String getTechnic() {
+                return technic;
+            }
+
+            public void setTechnic(String technic) {
+                this.technic = technic;
+            }
+
+            public String getAttack() {
+                return attack;
+            }
+
+            public void setAttack(String attack) {
+                this.attack = attack;
+            }
+
+            public String getPersonality() {
+                return personality;
+            }
+
+            public void setPersonality(String personality) {
+                this.personality = personality;
+            }
+
+            public String getDefence() {
+                return defence;
+            }
+
+            public void setDefence(String defence) {
+                this.defence = defence;
+            }
+
+            public String getOn_time() {
+                return on_time;
+            }
+
+            public void setOn_time(String on_time) {
+                this.on_time = on_time;
             }
         }
     }
