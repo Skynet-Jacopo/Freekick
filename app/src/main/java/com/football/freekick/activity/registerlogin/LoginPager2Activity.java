@@ -88,10 +88,10 @@ public class LoginPager2Activity extends BaseActivity {
         ButterKnife.bind(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 //        mEdtEmail.setText("huo@yopmail.com");
-        mEdtEmail.setText("yue@yopmail.com");
+//        mEdtEmail.setText("yue@yopmail.com");
 //        mEdtEmail.setText("lei@yopmail.com");
 //        mEdtEmail.setText("wei@yopmail.com");
-        mEdtPassWord.setText("123456");
+//        mEdtPassWord.setText("123456");
         initView();
 
     }
