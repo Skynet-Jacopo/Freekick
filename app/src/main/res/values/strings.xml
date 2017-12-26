@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Freekick</string>
-    <string name="facebook_app_id">923107371174162</string>
-    <!--<string name="facebook_app_id">164526007493077</string>-->
-    <string name="fb_login_protocol_scheme">fb923107371174162</string>
-    <!--<string name="fb_login_protocol_scheme">fb164526007493077</string>-->
+    <!--<string name="facebook_app_id">923107371174162</string>-->
+    <string name="facebook_app_id">125420471585876</string>
+    <!--<string name="fb_login_protocol_scheme">fb923107371174162</string>-->
+    <string name="fb_login_protocol_scheme">fb125420471585876</string>
 
     <string name="test">&#xe643;</string>
     <!--我的(人形圖標)-->
@@ -295,5 +295,6 @@
     <string name="cancel_failed">cancel failed!</string>
     <string name="warning">warning：</string>
     <string name="login_has_expired">Your account login has expired, please login again.</string>
+    <string name="share_to">share to</string>
 
 </resources>

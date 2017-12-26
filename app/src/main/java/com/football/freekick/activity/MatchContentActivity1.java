@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.Bind;
@@ -829,13 +831,15 @@ public class MatchContentActivity1 extends BaseActivity {
             case R.id.iv_bottom_2:
                 break;
             case R.id.tv_icon_share_left:
-                showShare();
+//                showShare();
+                shareMsg(getString(R.string.share_to),"快來看一看","快來看比賽了\u3000\u3000http://www.baidu.com",null);
                 break;
             case R.id.tv_icon_notice_left:
 
                 break;
             case R.id.tv_icon_share_right:
-                showShare();
+//                showShare();
+                shareMsg(getString(R.string.share_to),"快來看一看","快來看比賽了\u3000\u3000http://www.baidu.com",null);
                 break;
             case R.id.tv_icon_notice_right:
                 break;
@@ -843,7 +847,37 @@ public class MatchContentActivity1 extends BaseActivity {
                 break;
         }
     }
-
+    /**
+     * 分享功能(文字圖片無法調和)
+     * 微信朋友圈:用圖片可加文字,但此時其他三方應用就只有圖片,沒有文字,故而
+     *
+     * @param activityTitle
+     *            Activity的名字
+     * @param msgTitle
+     *            消息标题
+     * @param msgText
+     *            消息内容
+     * @param imgPath
+     *            图片路径，不分享图片则传null
+     */
+    public void shareMsg(String activityTitle, String msgTitle, String msgText,
+                         String imgPath) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        if (imgPath == null || imgPath.equals("")) {
+            intent.setType("text/plain"); // 纯文本
+        } else {
+            File f = new File(imgPath);
+            if (f != null && f.exists() && f.isFile()) {
+                intent.setType("image/*");
+                Uri u = Uri.fromFile(f);
+                intent.putExtra(Intent.EXTRA_STREAM, u);
+            }
+        }
+        intent.putExtra(Intent.EXTRA_SUBJECT, msgTitle);
+        intent.putExtra(Intent.EXTRA_TEXT, msgText);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(intent, activityTitle));
+    }
     /**
      * 主隊取消比賽(是不是只可以在已落實球賽進到這個界面)
      */

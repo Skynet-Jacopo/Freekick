@@ -81,6 +81,7 @@ public class OneTimePagerActivity extends BaseActivity {
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
+                        showDialog();
                     }
                 });
     }
@@ -119,6 +120,7 @@ public class OneTimePagerActivity extends BaseActivity {
             }
         });
         builder.create();
+        builder.setCancelable(false);
         builder.show();
     }
 }
