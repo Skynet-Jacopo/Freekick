@@ -59,7 +59,7 @@
                 android:id="@+id/iv_home_logo"
                 android:scaleType="fitXY"
                 android:layout_width="72px"
-                android:layout_height="86px"
+                android:layout_height="84px"
                 tools:src="@color/black"/>
 
             <TextView
@@ -103,7 +103,7 @@
                 android:id="@+id/iv_visitor_logo"
                 android:scaleType="fitXY"
                 android:layout_width="72px"
-                android:layout_height="86px"
+                android:layout_height="84px"
                 android:src="@color/black"/>
 
             <TextView

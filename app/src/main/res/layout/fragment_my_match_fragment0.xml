@@ -4,6 +4,8 @@
               android:layout_height="match_parent"
               android:background="#ECECEC"
               android:orientation="vertical"
+              android:id="@+id/ll_parent"
+              android:visibility="gone"
               tools:context="com.football.freekick.fragment.MyMatchFragment1">
 
     <android.support.v4.widget.NestedScrollView

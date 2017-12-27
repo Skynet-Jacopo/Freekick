@@ -22,7 +22,6 @@ import com.football.freekick.R;
 import com.football.freekick.activity.FriendActivity;
 import com.football.freekick.activity.NoticeActivity;
 import com.football.freekick.adapter.MyFragmentAdapter;
-import com.football.freekick.adapter.MyMatchAdapter0;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.beans.Article;
 import com.football.freekick.beans.MatchesComing;
@@ -56,6 +55,8 @@ public class MineFragment extends BaseFragment {
     TabLayout mTabLayout;
     @Bind(R.id.viewpager)
     ViewPager mViewpager;
+    @Bind(R.id.ll_parent)
+    LinearLayout mLlParent;
 
     private MyFragmentAdapter fragmentPagerAdapter;
     private List<Fragment> listFragments;//定义要装fragment的列表
@@ -70,6 +71,7 @@ public class MineFragment extends BaseFragment {
 
     private ArrayList<Article.ArticleBean> news = new ArrayList<>();
     private ArrayList<Article.ArticleBean> point_of_view = new ArrayList<>();
+
     public MineFragment() {
         // Required empty public constructor
     }
@@ -96,10 +98,10 @@ public class MineFragment extends BaseFragment {
 
     private void getDataFromNotice() {
         String toPage = getActivity().getIntent().getStringExtra("toPage");
-        if (toPage==null){
+        if (toPage == null) {
             return;
-        }else {
-            switch (toPage){
+        } else {
+            switch (toPage) {
                 case "0":
                     mViewpager.setCurrentItem(0);
                     break;
@@ -142,6 +144,7 @@ public class MineFragment extends BaseFragment {
                                 point_of_view.add(articleList.get(i));
                             }
                         }
+                        mLlParent.setVisibility(View.VISIBLE);
                         initTabAndViewPager();
                         getDataFromNotice();
                     }
@@ -151,6 +154,7 @@ public class MineFragment extends BaseFragment {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
                         loadingDismiss();
+                        mLlParent.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -166,11 +170,11 @@ public class MineFragment extends BaseFragment {
         Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.tv_friend:
-                intent.setClass(mContext,FriendActivity.class);
+                intent.setClass(mContext, FriendActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_notice:
-                intent.setClass(mContext,NoticeActivity.class);
+                intent.setClass(mContext, NoticeActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -279,7 +283,8 @@ public class MineFragment extends BaseFragment {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value,
                 context.getResources().getDisplayMetrics());
     }
-    public void setRefreshFragment1(){
-        ((MyMatchFragment0)listFragments.get(0)).setRefresh();
+
+    public void setRefreshFragment1() {
+        ((MyMatchFragment0) listFragments.get(0)).setRefresh();
     }
 }

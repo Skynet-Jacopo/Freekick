@@ -17,11 +17,9 @@ import android.widget.TextView;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.activity.ArticleActivity;
-import com.football.freekick.activity.MatchContentActivity;
 import com.football.freekick.activity.MatchContentActivity1;
 import com.football.freekick.activity.TeamDetailActivity;
 import com.football.freekick.adapter.MyMatchAdapter0;
-import com.football.freekick.adapter.MyMatchAdapter1;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
 import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
@@ -66,6 +64,8 @@ public class MyMatchFragment0 extends LazyLoadFragment {
     TextView mTvIconFocus;
     @Bind(R.id.recycler_focus)
     RecyclerView mRecyclerFocus;
+    @Bind(R.id.ll_parent)
+    LinearLayout mLlParent;
 
     /**
      * 标志位，标志已经初始化完成
@@ -242,7 +242,8 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                         break;
                     case 6:
                         intent.setClass(mContext, TeamDetailActivity.class);
-                        intent.putExtra("id", mListMatch.get(position).getJoin_matches().get(secondPos).getJoin_team_id() + "");
+                        intent.putExtra("id", mListMatch.get(position).getJoin_matches().get(secondPos)
+                                .getJoin_team_id() + "");
                         startActivity(intent);
                         break;
                 }
@@ -386,6 +387,7 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                                 }
                             }
                             mMatchAdapter.notifyDataSetChanged();
+                            mLlParent.setVisibility(View.VISIBLE);
                             loadingDismiss();
                         }
                     }
@@ -395,6 +397,7 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                         super.onError(call, response, e);
                         loadingDismiss();
                         Logger.d(e.getMessage());
+                        mLlParent.setVisibility(View.VISIBLE);
                     }
                 });
     }

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 
 import com.football.freekick.R;
 import com.football.freekick.utils.LoadingDialogUtil;
+import com.football.freekick.utils.LoadingDialogUtil1;
 
 /**
  * Created by liuqun on 12/22/2016.
@@ -28,5 +29,13 @@ public class BaseFragment extends Fragment {
 
     protected void loadingDismiss() {
         LoadingDialogUtil.closeDialog(mLoadingDialog);
+    }
+
+    protected void loadingShow1() {
+        mLoadingDialog = LoadingDialogUtil1.createLoadingDialog(getActivity(), getString(R.string.loading));
+    }
+
+    protected void loadingDismiss1() {
+        LoadingDialogUtil1.closeDialog(mLoadingDialog);
     }
 }

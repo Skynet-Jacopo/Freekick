@@ -138,7 +138,6 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         }
                     } else if (!toJson.contains("invited") && toJson.contains("confirmation_pending")) {//無邀請的隊伍
                         // (有主動參與的隊伍)
-                        Logger.d("走了嗎  這裡");
                         myHolder1.tvIconDelete.setVisibility(View.GONE);
                         myHolder1.tvState.setText(R.string.confirmation_pending);
                         myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_green_gray_bg);
@@ -176,13 +175,19 @@ public class MyMatchAdapter1 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             }
                         });
                     }
-                } else {
+                } else {//join_matches.size() == 0
                     myHolder1.tvState.setText(R.string.invite);
                     myHolder1.tvIconDelete.setVisibility(View.GONE);
                     myHolder1.tvState.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             click.Click(4, myHolder1.tvState, position, 0);//邀請(無邀請隊,無參與隊)
+                        }
+                    });
+                    myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            click.Click(9, myHolder1.lLContent, position, 0);//球賽詳情頁(無邀請,無主動參與隊伍)
                         }
                     });
                 }

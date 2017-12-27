@@ -191,7 +191,16 @@ public class PartakeListFragment extends BaseFragment {
                         if (!s.contains("[") && !s.contains("]")) {
                             NoMatches noMatches = gson.fromJson(s, NoMatches.class);
                             mMatchList.clear();
-                            mAdapter.notifyDataSetChanged();
+                            if (mAdapter!=null){
+                                mAdapter.notifyDataSetChanged();
+                            }else {
+                                mAdapter = new PartakeAdapter(mMatchList, mContext);
+                                mRecyclerPartake.setLayoutManager(new LinearLayoutManager(mContext));
+                                if (mTvIconRight != null) {
+                                    mRecyclerPartake.setHasFixedSize(true);
+                                }
+                                mRecyclerPartake.setAdapter(mAdapter);
+                            }
                             ToastUtil.toastShort(noMatches.getMatches());
                         } else {
                             AvailableMatches matches = gson.fromJson(s, AvailableMatches.class);

@@ -15,6 +15,7 @@ import com.football.freekick.MainActivity;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.Settings;
+import com.football.freekick.utils.PrefUtils;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -114,6 +115,7 @@ public class OneTimePagerActivity extends BaseActivity {
         builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                PrefUtils.putBoolean(App.APP_CONTEXT, "isSecondRun", false);//此屬性添加以重新請求球場,廣告等信息.
                 Intent intent = new Intent(mContext,LoginPager2Activity.class);
                 startActivity(intent);
                 finish();

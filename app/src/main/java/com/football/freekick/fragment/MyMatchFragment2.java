@@ -64,6 +64,8 @@ public class MyMatchFragment2 extends LazyLoadFragment {
     TextView mTvIconFocus;
     @Bind(R.id.recycler_focus)
     RecyclerView mRecyclerFocus;
+    @Bind(R.id.ll_parent)
+    LinearLayout mLlParent;
 
     /**
      * 标志位，标志已经初始化完成
@@ -342,6 +344,7 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                                 }
                             }
                             mMatchAdapter.notifyDataSetChanged();
+                            mLlParent.setVisibility(View.VISIBLE);
                             loadingDismiss();
                         }
                     }
@@ -350,6 +353,7 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
+                        mLlParent.setVisibility(View.VISIBLE);
                         loadingDismiss();
                     }
                 });

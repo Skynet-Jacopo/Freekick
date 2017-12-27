@@ -46,7 +46,7 @@
         <ImageView
             android:id="@+id/iv_logo"
             android:layout_width="90px"
-            android:layout_height="118px"
+            android:layout_height="105px"
             android:layout_centerVertical="true"
             android:layout_marginLeft="32px"
             android:background="@color/transparent"

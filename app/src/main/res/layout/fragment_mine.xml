@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="#ECECEC"
     android:fitsSystemWindows="true"
+    android:id="@+id/ll_parent"
+    android:visibility="gone"
     android:orientation="vertical"
     tools:context="com.football.freekick.activity.MatchInviteActivity">
 

@@ -16,10 +16,10 @@ import android.widget.TextView;
 
 import com.football.freekick.App;
 import com.football.freekick.R;
-import com.football.freekick.activity.SearchTeamActivity;
 import com.football.freekick.activity.FollowedTeamsActivity;
 import com.football.freekick.activity.MatchContentActivity1;
 import com.football.freekick.activity.SameAreaTeamActivity;
+import com.football.freekick.activity.SearchTeamActivity;
 import com.football.freekick.activity.TeamDetailActivity;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.baseadapter.ViewHolder;
@@ -38,6 +38,7 @@ import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
+import com.zhy.autolayout.AutoLinearLayout;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -57,11 +58,11 @@ public class RecordFragment extends BaseFragment {
 
     public static final int REQUEST_CODE_TO_REFRESH = 1;
     @Bind(R.id.tv_icon_search)
-    TextView     mTvIconSearch;
+    TextView mTvIconSearch;
     @Bind(R.id.edt_search_team)
-    TextView     mEdtSearchTeam;
+    TextView mEdtSearchTeam;
     @Bind(R.id.iv_pic)
-    ImageView    mIvPic;
+    ImageView mIvPic;
     @Bind(R.id.recycler_record)
     RecyclerView mRecyclerRecord;
     @Bind(R.id.ll_same_area_more)
@@ -72,19 +73,21 @@ public class RecordFragment extends BaseFragment {
     LinearLayout mLlAttentionMore;
     @Bind(R.id.recycler_attention)
     RecyclerView mRecyclerAttention;
+    @Bind(R.id.ll_parent)
+    AutoLinearLayout mLlParent;
 
-    private Context                        mContext;
+    private Context mContext;
     private List<MatchHistory.MatchesBean> mMatches;
     private List<MatchHistory.MatchesBean> mListFinished;
     private List<String> datas = new ArrayList<>();
-    private CommonAdapter              mRecorAdapter;
-    private List<SameArea.TeamBean>    mTeams;
-    private CommonAdapter              mSameAreaAdapter;
+    private CommonAdapter mRecorAdapter;
+    private List<SameArea.TeamBean> mTeams;
+    private CommonAdapter mSameAreaAdapter;
     private List<Followings.TeamsBean> mFollowingTeams;
-    private CommonAdapter              mAttentionAdapter;
-    private String                     team_id;
-    private String                     district_id;
-    private ArrayList<SameArea.TeamBean>    AllTeams;
+    private CommonAdapter mAttentionAdapter;
+    private String team_id;
+    private String district_id;
+    private ArrayList<SameArea.TeamBean> AllTeams;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -214,7 +217,7 @@ public class RecordFragment extends BaseFragment {
 
                 holder.setText(R.id.tv_date, JodaTimeUtil.getDate2(matchesBean.getPlay_start()));
                 String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
-                String end   = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
+                String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
                 holder.setText(R.id.tv_time, start + " - " + end);
                 holder.setText(R.id.tv_home_name, matchesBean.getHome_team().getTeam_name());
                 ImageView ivHomeLogo = holder.getView(R.id.iv_home_logo);
@@ -232,8 +235,8 @@ public class RecordFragment extends BaseFragment {
                         holder.setOnClickListener(R.id.ll_visitor_team, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Intent intent = new Intent(mContext,TeamDetailActivity.class);
-                                intent.putExtra("id",join_matches.get(finalI).getJoin_team_id()+"");
+                                Intent intent = new Intent(mContext, TeamDetailActivity.class);
+                                intent.putExtra("id", join_matches.get(finalI).getJoin_team_id() + "");
                                 startActivity(intent);
                             }
                         });
@@ -242,8 +245,8 @@ public class RecordFragment extends BaseFragment {
                 holder.setOnClickListener(R.id.ll_home_team, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(mContext,TeamDetailActivity.class);
-                        intent.putExtra("id",matchesBean.getHome_team().getId()+"");
+                        Intent intent = new Intent(mContext, TeamDetailActivity.class);
+                        intent.putExtra("id", matchesBean.getHome_team().getId() + "");
                         startActivity(intent);
                     }
                 });
@@ -279,7 +282,7 @@ public class RecordFragment extends BaseFragment {
         if (AllTeams != null) {
             AllTeams.clear();
         }
-        loadingShow();
+        loadingShow1();
         team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
         String url = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id + "/matches_history";
         Logger.d(url);
@@ -287,7 +290,7 @@ public class RecordFragment extends BaseFragment {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
-                        loadingDismiss();
+
                         Logger.json(s);
                         String str = "{\"matches\":[{\"id\":7,\"play_start\":\"2017-11-13T12:00:00.000Z\"," +
                                 "\"play_end\":\"2017-11-22T01:00:00.000Z\",\"pitch_id\":1," +
@@ -297,7 +300,7 @@ public class RecordFragment extends BaseFragment {
                                 "\"join_team_color\":\"ffc300\",\"team\":{\"team_name\":\"Lions9dd875\",\"size\":5," +
                                 "\"image\":{\"url\":null},\"district\":{\"id\":72,\"district\":\"Yuen Long\"," +
                                 "\"region\":\"New Territories\"}}}]}]}";
-                        Gson         gson = new Gson();
+                        Gson gson = new Gson();
                         MatchHistory json = gson.fromJson(s, MatchHistory.class);
                         mMatches.addAll(json.getMatches());
                         for (int i = 0; i < mMatches.size(); i++) {
@@ -314,13 +317,16 @@ public class RecordFragment extends BaseFragment {
                             }
                         }
                         mRecorAdapter.notifyDataSetChanged();
+//                        mLlParent.setVisibility(View.VISIBLE);
+                        loadingDismiss1();
                     }
 
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
-                        loadingDismiss();
+//                        mLlParent.setVisibility(View.VISIBLE);
+                        loadingDismiss1();
                     }
                 });
         //接口B7 已改做 http://api.freekick.hk/api/en/teams/get_all_teams  查所有球隊, 代替原來柑同區球隊
@@ -331,12 +337,13 @@ public class RecordFragment extends BaseFragment {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
-                        Gson     gson = new Gson();
+                        Gson gson = new Gson();
                         SameArea json = gson.fromJson(s, SameArea.class);
                         AllTeams.addAll(json.getTeam());
                         if (AllTeams.size() > 0)
                             for (int i = 0; i < AllTeams.size(); i++) {
-                                if (AllTeams.get(i).getDistrict() != null && Integer.parseInt(district_id) == AllTeams.get(i)
+                                if (AllTeams.get(i).getDistrict() != null && Integer.parseInt(district_id) ==
+                                        AllTeams.get(i)
                                         .getDistrict().getId()) {
                                     mTeams.add(AllTeams.get(i));
                                 }
@@ -358,7 +365,7 @@ public class RecordFragment extends BaseFragment {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
-                        Gson       gson     = new Gson();
+                        Gson gson = new Gson();
                         Followings fromJson = gson.fromJson(s, Followings.class);
                         if (fromJson.getTeams().size() > 0) {
                             mFollowingTeams.addAll(fromJson.getTeams());
@@ -389,7 +396,7 @@ public class RecordFragment extends BaseFragment {
         ButterKnife.unbind(this);
     }
 
-    @OnClick({R.id.iv_pic, R.id.ll_same_area_more, R.id.ll_attention_more,R.id.edt_search_team})
+    @OnClick({R.id.iv_pic, R.id.ll_same_area_more, R.id.ll_attention_more, R.id.edt_search_team})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -406,7 +413,7 @@ public class RecordFragment extends BaseFragment {
                 break;
             case R.id.edt_search_team:
                 intent.setClass(mContext, SearchTeamActivity.class);
-                intent.putParcelableArrayListExtra("allTeams",AllTeams);
+                intent.putParcelableArrayListExtra("allTeams", AllTeams);
                 startActivity(intent);
                 break;
         }
@@ -428,7 +435,7 @@ public class RecordFragment extends BaseFragment {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson       gson     = new Gson();
+                        Gson gson = new Gson();
                         Followings fromJson = gson.fromJson(s, Followings.class);
                         if (fromJson.getTeams().size() > 0) {
                             mFollowingTeams.addAll(fromJson.getTeams());

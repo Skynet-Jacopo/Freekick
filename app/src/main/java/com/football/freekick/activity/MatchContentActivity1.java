@@ -208,6 +208,7 @@ public class MatchContentActivity1 extends BaseActivity {
                         loadingDismiss();
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
+                        mFlParent.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -294,6 +295,7 @@ public class MatchContentActivity1 extends BaseActivity {
                         startActivity(intent);
                     }
                 });
+                mFlParent.setVisibility(View.VISIBLE);
                 break;
             case 2://已落實,我是客隊
                 mTvIconNoticeLeft.setVisibility(View.VISIBLE);
@@ -343,6 +345,7 @@ public class MatchContentActivity1 extends BaseActivity {
                         startActivity(intent);
                     }
                 });
+                mFlParent.setVisibility(View.VISIBLE);
                 break;
             case 3://我已參與,主隊未確認
                 mTvIconNoticeLeft.setVisibility(View.GONE);
@@ -370,6 +373,7 @@ public class MatchContentActivity1 extends BaseActivity {
                             withdrawJoin(join_match_id);//客隊取消參與
                     }
                 });
+                mFlParent.setVisibility(View.VISIBLE);
                 break;
             case 4://我是主隊,有隊伍參與,我還未確認(match status = w,join match status = confirmation_pending)
                 mTvIconNoticeLeft.setVisibility(View.GONE);
@@ -406,6 +410,7 @@ public class MatchContentActivity1 extends BaseActivity {
 //                        startActivityForResult(intent, REQUEST_CODE_REFRESH);
 //                    }
 //                });
+                mFlParent.setVisibility(View.VISIBLE);
                 break;
             case 5://我被邀請,還未接受邀請(match status = i,join match status = invited)
                 mTvReduce.setVisibility(View.VISIBLE);
@@ -433,6 +438,7 @@ public class MatchContentActivity1 extends BaseActivity {
                         confirmInvite();
                     }
                 });
+                mFlParent.setVisibility(View.VISIBLE);
                 break;
             case 6://我已邀請別人,別人還未確認(match status = i,join match status = invited)
                 mTvIconNoticeLeft.setVisibility(View.GONE);
@@ -457,6 +463,7 @@ public class MatchContentActivity1 extends BaseActivity {
                         showCancelInvitePop();
                     }
                 });
+                mFlParent.setVisibility(View.VISIBLE);
                 break;
             case 7://我不是主隊,也不是客隊,只是來瀏覽的(match status = m,join match status = confirmed?(還不確定))
                 mTvIconNoticeLeft.setVisibility(View.GONE);
@@ -475,6 +482,7 @@ public class MatchContentActivity1 extends BaseActivity {
                         mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
                     }
                 }
+                mFlParent.setVisibility(View.VISIBLE);
                 break;
             case 8://我是主隊或客隊,球賽完成後在作賽記錄頁進入
                 getMatchRatings();//判斷是否已打分
@@ -493,6 +501,7 @@ public class MatchContentActivity1 extends BaseActivity {
                         mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
                     }
                 }
+
                 break;
             case 9://球賽詳情頁(無邀請,無主動參與隊伍)
                 mTvIconNoticeLeft.setVisibility(View.GONE);
@@ -510,6 +519,7 @@ public class MatchContentActivity1 extends BaseActivity {
                         cancelMatch();//主隊取消球賽
                     }
                 });
+                mFlParent.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -549,6 +559,7 @@ public class MatchContentActivity1 extends BaseActivity {
                             }
                         });
                         loadingDismiss();
+                        mFlParent.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -556,6 +567,7 @@ public class MatchContentActivity1 extends BaseActivity {
                         super.onError(call, response, e);
                         loadingDismiss();
                         Logger.d(e.getMessage());
+                        mFlParent.setVisibility(View.VISIBLE);
                     }
                 });
     }

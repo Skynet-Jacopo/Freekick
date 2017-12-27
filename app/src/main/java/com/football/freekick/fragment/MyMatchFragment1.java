@@ -500,6 +500,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                                 }
                             }
                             mMatchAdapter.notifyDataSetChanged();
+                            mLlParent.setVisibility(View.VISIBLE);
                             loadingDismiss();
                         }
                     }
@@ -508,6 +509,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
+                        mLlParent.setVisibility(View.VISIBLE);
                         loadingDismiss();
                     }
                 });
