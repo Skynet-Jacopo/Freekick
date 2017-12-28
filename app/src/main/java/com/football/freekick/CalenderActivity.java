@@ -203,7 +203,7 @@ public class CalenderActivity extends AutoLayoutActivity {
             case R.id.tv_confirm:
                 Intent intent = getIntent();
 
-                if (now.minusMinutes(10).getMillis() > mSelectDate.getMillis()) {
+                if (now.minusDays(1).getMillis() > mSelectDate.getMillis()) {
                     ToastUtil.toastShort(getString(R.string.date_error));
                     return;
                 }

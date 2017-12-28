@@ -88,6 +88,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
         ButterKnife.bind(this);
+        if (App.mConfig.getCountryNameValue().equals("zh")) {
+            App.isChinese = true;
+        } else {
+            App.isChinese = false;
+        }
         EventBus.getDefault().register(this);
         initView();
 //        /**

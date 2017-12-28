@@ -22,6 +22,7 @@
     -->
     <!--<string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBuhSn04gZspnw443jUdJlgs5QMIC5q8hI</string>-->
     <!--我的-->
-    <!--<string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDEP1uifOh-tPzZVnxlXmv5I-xCO_DIAL0</string>-->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false"> AIzaSyAQ1djGI9-yE53h1UAEtlBaUb8emPQehKw</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAnxLxt5k-nT382sQKmpTkmhvayCvZCCck</string>
+    <!--<string name="google_maps_key" templateMergeStrategy="preserve" translatable="false"> AIzaSyAQ1djGI9-yE53h1UAEtlBaUb8emPQehKw</string>-->
+    <!--<string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyA7K8eVRxJgN8049W-m3-qNZpLHMVo5f1M</string>-->
 </resources>

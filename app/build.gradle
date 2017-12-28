@@ -28,6 +28,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [ map_key:"AIzaSyAnxLxt5k-nT382sQKmpTkmhvayCvZCCck" ]
+        }
+        debug {
+            manifestPlaceholders = [ map_key:"AIzaSyAnxLxt5k-nT382sQKmpTkmhvayCvZCCck" ]
         }
     }
 }

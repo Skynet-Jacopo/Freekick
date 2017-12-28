@@ -2,16 +2,21 @@ package com.football.freekick.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 
 import com.football.freekick.R;
+import com.football.freekick.utils.ToastUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,6 +33,7 @@ import com.orhanobut.logger.Logger;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    public static final int LOCATION = 1;
     private GoogleMap mMap;
     private double longitude;
     private double latitude;
@@ -88,7 +94,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         latitude = getIntent().getDoubleExtra("latitude", 22.286725);
         location = getIntent().getStringExtra("location");
         pitch_name = getIntent().getStringExtra("pitch_name");
-        Logger.d("longitude-->"+longitude+"  latitude-->"+latitude+"  location-->"+location+"  pitch_name-->"+pitch_name);
+        Logger.d("longitude-->" + longitude + "  latitude-->" + latitude + "  location-->" + location + "  " +
+                "pitch_name-->" + pitch_name);
         mLocationSource = new LongPressLocationSource();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -123,23 +130,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setLocationSource(mLocationSource);
         Logger.d("onMapReady");
 //        mMap.setOnMapLongClickListener(mLocationSource);
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
+//                .PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission
+//                .ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+        //权限检查
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
                 .PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission
                 .ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Logger.d("展示");
-        mMap.setMyLocationEnabled(true);
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(longitude,latitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title(location).snippet(pitch_name));
+            //没有权限，请求权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest
+                    .permission.ACCESS_COARSE_LOCATION}, LOCATION);
+        } else {
+            Logger.d("展示");
+            mMap.setMyLocationEnabled(true);
+            // Add a marker in Sydney and move the camera
+            LatLng sydney = new LatLng(longitude, latitude);
+//        LatLng sydney = new LatLng(latitude,longitude);
+            mMap.addMarker(new MarkerOptions().position(sydney).title(location).snippet(pitch_name));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 //        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 //            @Override
@@ -150,6 +166,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        });
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,10));
 //        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,10));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,8));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 18));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Logger.d("展示");
+                    // Add a marker in Sydney and move the camera
+                    LatLng sydney = new LatLng(longitude, latitude);
+                    mMap.addMarker(new MarkerOptions().position(sydney).title(location).snippet(pitch_name));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 18));
+                } else {
+                    ToastUtil.toastShort("您没有给予授权");
+                }
+                break;
+        }
     }
 }
