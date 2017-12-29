@@ -180,10 +180,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.MatchContentActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name=".activity.TeamDetailActivity"
             android:screenOrientation="portrait">
         </activity>
@@ -273,12 +269,13 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
-        <!--<meta-data-->
-            <!--android:name="com.google.android.geo.API_KEY"-->
-            <!--android:value="@string/google_maps_key"/>-->
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.geo.API_KEY" -->
+        <!-- android:value="@string/google_maps_key"/> -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${map_key}"/>
+
         <activity
             android:name=".activity.MapsActivity"
             android:label="@string/title_activity_maps">
@@ -359,9 +356,14 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         </activity>
-        <activity android:name=".activity.AdvertisementDetailActivity">
+        <activity android:name=".activity.AdvertisementDetailActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.NoticeDetailActivity">
+        <activity android:name=".activity.NoticeDetailActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.registerlogin.ForgetPasswordActivity"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.football.freekick.App;
@@ -42,6 +44,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 import com.zhy.autolayout.utils.AutoUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,11 +84,15 @@ public class MatchInviteActivity extends BaseActivity {
     @Bind(R.id.recycler_recommended)
     RecyclerView mRecyclerRecommended;
     @Bind(R.id.ll_parent)
-    LinearLayout mLlParent;
+    RelativeLayout mLlParent;
     @Bind(R.id.tv_home_name)
     TextView mTvHomeName;
     @Bind(R.id.tv_visitor_name)
     TextView mTvVisitorName;
+    @Bind(R.id.tv_icon_share)
+    TextView mTvIconShare;
+    @Bind(R.id.ll_share)
+    LinearLayout mLlShare;
 
     private Context mContext;
     private List<Recommended.TeamsBean> mList = new ArrayList<>();
@@ -93,6 +100,7 @@ public class MatchInviteActivity extends BaseActivity {
     private String match_id;
     private MatchDetail.MatchBean mMatch;
     private String team_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +116,7 @@ public class MatchInviteActivity extends BaseActivity {
         if (getIntent().getStringExtra("invited_team_name") == null) {
             //沒有邀請球隊進行新球賽
             initRecommendData();//獲取推薦球隊列表
-        }else {
+        } else {
             //邀請球隊進入新球賽
             initInvitedTeam();
         }
@@ -187,10 +195,14 @@ public class MatchInviteActivity extends BaseActivity {
                         String str = "{\"teams\":[{\"id\":19,\"team_name\":\"Star\"," +
                                 "\"image\":{\"url\":\"/uploads/team/image/19/upload-image-8843737-1509546403.\"}}]}";
                         Gson gson = new Gson();
-                        Recommended recommended = gson.fromJson(str, Recommended.class);
+                        Recommended recommended = gson.fromJson(s, Recommended.class);
                         if (recommended.getTeams() != null) {
                             List<Recommended.TeamsBean> teams = recommended.getTeams();
-                            mList.addAll(teams);
+                            if (teams.size() > 0) {
+                                mList.addAll(teams);
+                            } else {
+
+                            }
                             mAdapter.notifyDataSetChanged();
                             getFollowedTeams();
                         }
@@ -234,6 +246,7 @@ public class MatchInviteActivity extends BaseActivity {
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
         mTvIconLocation.setTypeface(App.mTypeface);
+        mTvIconShare.setTypeface(App.mTypeface);
         mTvHomeName.setText(PrefUtils.getString(App.APP_CONTEXT, "team_name", null));
         mIvDressHome.setBackgroundColor(Color.parseColor("#" + PrefUtils.getString(App.APP_CONTEXT, "color1", null)));
         mIvDressVisitor.setImageDrawable(getResources().getDrawable(R.drawable.ic_dress_unknow));
@@ -259,9 +272,9 @@ public class MatchInviteActivity extends BaseActivity {
                 holder.setOnClickListener(R.id.tv_invite, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (getIntent().getStringExtra("invited_team_name") == null){
+                        if (getIntent().getStringExtra("invited_team_name") == null) {
                             invitePopup(itemPosition);
-                        }else {
+                        } else {
                             invite(0);//直接邀請這支隊伍進行這場球賽
                         }
                     }
@@ -289,8 +302,8 @@ public class MatchInviteActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent();
-                        intent.setClass(mContext,TeamDetailActivity.class);
-                        intent.putExtra("id",teamsBean.getId()+"");
+                        intent.setClass(mContext, TeamDetailActivity.class);
+                        intent.putExtra("id", teamsBean.getId() + "");
                         startActivity(intent);
                     }
                 });
@@ -299,7 +312,8 @@ public class MatchInviteActivity extends BaseActivity {
         };
         mRecyclerRecommended.setAdapter(mAdapter);
     }
-    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location})
+
+    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location, R.id.tv_icon_share, R.id.ll_share,R.id.tv_to_not_matched})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -316,7 +330,48 @@ public class MatchInviteActivity extends BaseActivity {
                 break;
             case R.id.ll_location:
                 break;
+            case R.id.tv_icon_share:
+                shareMsg(getString(R.string.share_to), "快來看一看", "我建球賽,等你來戰!\u3000\u3000" + mMatch.getMatch_url(), null);
+                break;
+            case R.id.ll_share:
+                shareMsg(getString(R.string.share_to), "快來看一看", "我建球賽,等你來戰!\u3000\u3000" + mMatch.getMatch_url(), null);
+                break;
+            case R.id.tv_to_not_matched:
+                intent.setClass(mContext, MainActivity.class);
+                intent.putExtra("which", 4);
+                intent.putExtra("toPage", "1");
+                startActivity(intent);
+                finish();
+                break;
         }
+    }
+
+    /**
+     * 分享功能(文字圖片無法調和)
+     * 微信朋友圈:用圖片可加文字,但此時其他三方應用就只有圖片,沒有文字,故而
+     *
+     * @param activityTitle Activity的名字
+     * @param msgTitle      消息标题
+     * @param msgText       消息内容
+     * @param imgPath       图片路径，不分享图片则传null
+     */
+    public void shareMsg(String activityTitle, String msgTitle, String msgText,
+                         String imgPath) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        if (imgPath == null || imgPath.equals("")) {
+            intent.setType("text/plain"); // 纯文本
+        } else {
+            File f = new File(imgPath);
+            if (f != null && f.exists() && f.isFile()) {
+                intent.setType("image/*");
+                Uri u = Uri.fromFile(f);
+                intent.putExtra(Intent.EXTRA_STREAM, u);
+            }
+        }
+        intent.putExtra(Intent.EXTRA_SUBJECT, msgTitle);
+        intent.putExtra(Intent.EXTRA_TEXT, msgText);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(intent, activityTitle));
     }
 
     /**
@@ -409,7 +464,7 @@ public class MatchInviteActivity extends BaseActivity {
                             Intent intent = new Intent(mContext, MainActivity.class);
 
                             intent.putExtra("which", 4);
-                            intent.putExtra("toPage","1");
+                            intent.putExtra("toPage", "1");
                             startActivity(intent);
                             finish();
                         } else if (invite.getErrors() != null) {
@@ -476,6 +531,7 @@ public class MatchInviteActivity extends BaseActivity {
                 });
 
     }
+
     /**
      * 取消關注
      *
@@ -511,6 +567,7 @@ public class MatchInviteActivity extends BaseActivity {
                     }
                 });
     }
+
     /**
      * 關注
      *

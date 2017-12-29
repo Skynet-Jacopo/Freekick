@@ -67,7 +67,16 @@ public class Matches {
         private String created_at;
         private int home_team_id;
         private String cancel_at_by_home;
+        private String match_url;
         private int pitch_id;
+
+        public String getMatch_url() {
+            return match_url;
+        }
+
+        public void setMatch_url(String match_url) {
+            this.match_url = match_url;
+        }
 
         public String getPlay_end() {
             return play_end;

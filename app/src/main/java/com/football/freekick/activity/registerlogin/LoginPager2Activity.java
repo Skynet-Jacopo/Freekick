@@ -29,6 +29,7 @@ import com.football.freekick.beans.Pitches;
 import com.football.freekick.chat.FireChatHelper.ChatHelper;
 import com.football.freekick.chat.adapter.UsersChatAdapter;
 import com.football.freekick.chat.model.User;
+import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
@@ -146,6 +147,7 @@ public class LoginPager2Activity extends BaseActivity {
                 login();
                 break;
             case R.id.tv_forget_pass_word:
+                startActivity(new Intent(mContext,ForgetPasswordActivity.class));
                 break;
             case R.id.tv_back:
                 finish();
@@ -161,8 +163,16 @@ public class LoginPager2Activity extends BaseActivity {
             ToastUtil.toastShort(getString(R.string.please_enter_your_email));
             return;
         }
+        if (!MyUtil.checkEmail(StringUtils.getEditText(mEdtEmail))){
+            ToastUtil.toastShort(getString(R.string.email_error));
+            return;
+        }
         if (StringUtils.isEmpty(mEdtPassWord)) {
             ToastUtil.toastShort(getString(R.string.please_enter_your_password));
+            return;
+        }
+        if (StringUtils.getEditText(mEdtPassWord).length()<6) {
+            ToastUtil.toastShort(getString(R.string.password_error));
             return;
         }
         loadingShow();

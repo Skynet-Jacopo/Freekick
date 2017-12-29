@@ -1,225 +1,266 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ECECEC"
     android:id="@+id/ll_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
+    android:background="#ECECEC"
     tools:context="com.football.freekick.activity.MatchInviteActivity">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="88px"
-        android:background="#070D44"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:paddingLeft="24px"
-            android:paddingRight="30px"
-            android:text="@string/icon_left_big"
-            android:textColor="@color/white"
-            android:textSize="36px"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="@string/match_invite"
-            android:textColor="@color/white"
-            android:textSize="36px"/>
-
-        <TextView
-            android:id="@+id/tv_friend"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/tv_notice"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="20px"
-            android:text="@string/icon_friend"
-            android:textColor="@color/white"
-            android:textSize="36px"/>
-
-        <TextView
-            android:id="@+id/tv_notice"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:paddingLeft="20px"
-            android:paddingRight="24px"
-            android:text="@string/icon_notice"
-            android:textColor="@color/white"
-            android:textSize="36px"/>
-    </RelativeLayout>
-
     <LinearLayout
+        android:layout_marginBottom="50dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:paddingBottom="32px"
-        android:paddingLeft="24px"
-        android:paddingTop="32px">
-
-        <ImageView
-
-            android:id="@+id/iv_pic"
-            android:layout_width="340px"
-            android:layout_height="240px"
-            android:scaleType="fitXY"
-            android:src="@drawable/one_time_bg"/>
+        android:layout_height="match_parent"
+        android:background="#ECECEC"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        tools:context="com.football.freekick.activity.MatchInviteActivity">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50px"
-            android:layout_marginRight="50px">
+            android:layout_height="88px"
+            android:background="#070D44"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="24px"
+                android:paddingRight="30px"
+                android:text="@string/icon_left_big"
+                android:textColor="@color/white"
+                android:textSize="36px"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
                 android:gravity="center"
-                android:id="@+id/tv_pitch_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="巴富街運動dsdsdsdsdsdsd場"
-                android:textColor="@color/text_black"
-                android:textSize="@dimen/text_30"
-                android:textStyle="bold"/>
-
-            <LinearLayout
-                android:id="@+id/ll_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_pitch_name"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="12px">
-
-                <TextView
-                    android:id="@+id/tv_icon_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10px"
-                    android:singleLine="true"
-                    android:text="@string/icon_location"
-                    android:textColor="#6c6c6c"
-                    android:textSize="@dimen/text_18"/>
-
-                <TextView
-                    android:id="@+id/tv_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="東菀市城區"
-                    android:textColor="#6c6c6c"
-                    android:textSize="@dimen/text_18"/>
-            </LinearLayout>
+                android:text="@string/match_invite"
+                android:textColor="@color/white"
+                android:textSize="36px"/>
 
             <TextView
-                android:id="@+id/tv_time"
+                android:id="@+id/tv_friend"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ll_location"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="12px"
-                android:text="19:00-21:00"
-                android:textColor="@color/text_black"
-                android:textSize="@dimen/text_30"/>
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/tv_notice"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="20px"
+                android:text="@string/icon_friend"
+                android:textColor="@color/white"
+                android:textSize="36px"/>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingLeft="20px"
+                android:paddingRight="24px"
+                android:text="@string/icon_notice"
+                android:textColor="@color/white"
+                android:textSize="36px"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:paddingBottom="32px"
+            android:paddingLeft="24px"
+            android:paddingTop="32px">
+
+            <FrameLayout
+                android:layout_width="340px"
+                android:layout_height="240px">
+                <ImageView
+                    android:id="@+id/iv_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/one_time_bg"/>
+                <LinearLayout
+                    android:id="@+id/ll_share"
+                    android:paddingBottom="20px"
+                    android:paddingRight="15px"
+                    android:paddingTop="15px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:clickable="true"
+                        android:id="@+id/tv_icon_share"
+                        android:layout_width="58px"
+                        android:layout_height="40px"
+                        android:background="@drawable/selector_half_corner_blue_gray_bg"
+                        android:gravity="center"
+                        android:text="@string/icon_share"
+                        android:textColor="@color/white"
+                        android:textSize="28px"/>
+                </LinearLayout>
+            </FrameLayout>
+
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_time"
-                android:layout_marginTop="10px"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:id="@+id/iv_dress_home"
-                        android:layout_width="90px"
-                        android:layout_height="100px"
-                        android:background="@color/black"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_dress_home"/>
-                    <TextView
-                        android:id="@+id/tv_home_name"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="6px"
-                        android:text="名字"
-                        android:textColor="@color/text_black"
-                        android:textSize="14px"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-
+                android:layout_marginLeft="50px"
+                android:layout_marginRight="50px">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="VS"
-                    android:textColor="@color/text_black"
-                    android:textSize="@dimen/text_24"
-                    android:textStyle="bold"/>
-                <LinearLayout
-                    android:orientation="vertical"
+                    android:id="@+id/tv_pitch_name"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:id="@+id/iv_dress_visitor"
-                        android:layout_width="90px"
-                        android:layout_height="100px"
-                        android:background="@color/black"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_dress_visitor"/>
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="巴富街運動dsdsdsdsdsdsd場"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_30"
+                    android:textStyle="bold"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_pitch_name"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12px">
+
                     <TextView
-                        android:id="@+id/tv_visitor_name"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="6px"
-                        android:text=""
-                        android:textColor="@color/text_black"
-                        android:textSize="14px"
+                        android:id="@+id/tv_icon_location"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:paddingRight="10px"
+                        android:singleLine="true"
+                        android:text="@string/icon_location"
+                        android:textColor="#6c6c6c"
+                        android:textSize="@dimen/text_18"/>
+
+                    <TextView
+                        android:id="@+id/tv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="東菀市城區"
+                        android:textColor="#6c6c6c"
+                        android:textSize="@dimen/text_18"/>
                 </LinearLayout>
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ll_location"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12px"
+                    android:text="19:00-21:00"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_30"/>
 
-        </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_time"
+                    android:layout_marginTop="10px"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/iv_dress_home"
+                            android:layout_width="90px"
+                            android:layout_height="100px"
+                            android:background="@color/black"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_dress_home"/>
+                        <TextView
+                            android:id="@+id/tv_home_name"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="6px"
+                            android:text="名字"
+                            android:textColor="@color/text_black"
+                            android:textSize="14px"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="VS"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_24"
+                        android:textStyle="bold"/>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/iv_dress_visitor"
+                            android:layout_width="90px"
+                            android:layout_height="100px"
+                            android:background="@color/black"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_dress_visitor"/>
+                        <TextView
+                            android:id="@+id/tv_visitor_name"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="6px"
+                            android:text=""
+                            android:textColor="@color/text_black"
+                            android:textSize="14px"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1px"
+            android:layout_marginTop="16px"
+            android:background="@color/white"
+            android:paddingBottom="24px"
+            android:paddingLeft="24px"
+            android:paddingTop="24px"
+            android:text="你可能感興趣的球隊"
+            android:textColor="@color/text_black"
+            android:textSize="28px"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_recommended"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
-
     <TextView
+        android:clickable="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/tv_to_not_matched"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="1px"
-        android:layout_marginTop="16px"
-        android:background="@color/white"
-        android:paddingBottom="24px"
-        android:paddingLeft="24px"
-        android:paddingTop="24px"
-        android:text="你可能感興趣的球隊"
-        android:textColor="@color/text_black"
-        android:textSize="28px"/>
+        android:layout_height="50dp"
+        android:background="@drawable/selector_rectangle_blue_gray_bg"
+        android:gravity="center"
+        android:text="去到未落實球賽頁"
+        android:textColor="@color/white"
+        android:textSize="32px"/>
+</RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_recommended"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
-
-    </android.support.v7.widget.RecyclerView>
-</LinearLayout>

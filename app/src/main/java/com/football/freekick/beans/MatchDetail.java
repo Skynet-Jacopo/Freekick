@@ -55,6 +55,15 @@ public class MatchDetail {
         private double longitude;
         private double latitude;
         private String pitch_image;
+        private String match_url;
+
+        public String getMatch_url() {
+            return match_url;
+        }
+
+        public void setMatch_url(String match_url) {
+            this.match_url = match_url;
+        }
 
         public double getLongitude() {
             return longitude;

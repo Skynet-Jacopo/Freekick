@@ -844,14 +844,14 @@ public class MatchContentActivity1 extends BaseActivity {
                 break;
             case R.id.tv_icon_share_left:
 //                showShare();
-                shareMsg(getString(R.string.share_to),"快來看一看","快來看比賽了\u3000\u3000http://www.baidu.com",null);
+                shareMsg(getString(R.string.share_to),"快來看一看","快來看比賽了\u3000\u3000"+mMatch.getMatch_url(),null);
                 break;
             case R.id.tv_icon_notice_left:
 
                 break;
             case R.id.tv_icon_share_right:
 //                showShare();
-                shareMsg(getString(R.string.share_to),"快來看一看","快來看比賽了\u3000\u3000http://www.baidu.com",null);
+                shareMsg(getString(R.string.share_to),"快來看一看","快來看比賽了\u3000\u3000"+mMatch.getMatch_url(),null);
                 break;
             case R.id.tv_icon_notice_right:
                 break;

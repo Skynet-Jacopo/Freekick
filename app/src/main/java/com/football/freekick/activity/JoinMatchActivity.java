@@ -398,7 +398,7 @@ public class JoinMatchActivity extends BaseActivity {
         object1.addProperty("match_id", mMatchesBean.getId() + "");
         object1.addProperty("join_team_id", PrefUtils.getString(App.APP_CONTEXT, "team_id", null));
         object1.addProperty("join_team_color", PrefUtils.getString(App.APP_CONTEXT, "color2", null));
-        object1.addProperty("size", PrefUtils.getString(App.APP_CONTEXT, "size", null));
+        object1.addProperty("size", StringUtils.getEditText(mTvVisitorNum));
         object.add("join_match", object1);
 
         Logger.json(object.toString());

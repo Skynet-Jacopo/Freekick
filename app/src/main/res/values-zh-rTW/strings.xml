@@ -212,4 +212,5 @@
     <string name="warning">提示：</string>
     <string name="login_has_expired">您的賬戶登錄已過期,請重新登錄!</string>
     <string name="share_to">分享到</string>
+    <string name="cannot_find_user">找不到相關用戶!</string>
 </resources>

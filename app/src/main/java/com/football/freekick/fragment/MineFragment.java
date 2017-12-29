@@ -71,6 +71,7 @@ public class MineFragment extends BaseFragment {
 
     private ArrayList<Article.ArticleBean> news = new ArrayList<>();
     private ArrayList<Article.ArticleBean> point_of_view = new ArrayList<>();
+    private List<Article.ArticleBean> mArticleList;
 
     public MineFragment() {
         // Required empty public constructor
@@ -93,7 +94,21 @@ public class MineFragment extends BaseFragment {
 //        initData();
         mTvFriend.setTypeface(App.mTypeface);
         mTvNotice.setTypeface(App.mTypeface);
-        initDatas();//初始化動態和焦點
+        if (App.mArticleList.size()>0){//動態和焦點若已加載過,則不重新加載
+            mArticleList =App.mArticleList;
+            for (int i = 0; i < mArticleList.size(); i++) {
+                if (mArticleList.get(i).getCategory().equals(Url.NEWS)) {
+                    news.add(mArticleList.get(i));
+                } else if (mArticleList.get(i).getCategory().equals(Url.POINT_OF_VIEW)) {
+                    point_of_view.add(mArticleList.get(i));
+                }
+            }
+            mLlParent.setVisibility(View.VISIBLE);
+            initTabAndViewPager();
+            getDataFromNotice();
+        }else {
+            initDatas();//初始化動態和焦點
+        }
     }
 
     private void getDataFromNotice() {
@@ -136,12 +151,12 @@ public class MineFragment extends BaseFragment {
                         Logger.json(s);
                         Gson gson = new Gson();
                         Article article = gson.fromJson(s, Article.class);
-                        List<Article.ArticleBean> articleList = article.getArticle();
-                        for (int i = 0; i < articleList.size(); i++) {
-                            if (articleList.get(i).getCategory().equals(Url.NEWS)) {
-                                news.add(articleList.get(i));
-                            } else if (articleList.get(i).getCategory().equals(Url.POINT_OF_VIEW)) {
-                                point_of_view.add(articleList.get(i));
+                        mArticleList = article.getArticle();
+                        for (int i = 0; i < mArticleList.size(); i++) {
+                            if (mArticleList.get(i).getCategory().equals(Url.NEWS)) {
+                                news.add(mArticleList.get(i));
+                            } else if (mArticleList.get(i).getCategory().equals(Url.POINT_OF_VIEW)) {
+                                point_of_view.add(mArticleList.get(i));
                             }
                         }
                         mLlParent.setVisibility(View.VISIBLE);

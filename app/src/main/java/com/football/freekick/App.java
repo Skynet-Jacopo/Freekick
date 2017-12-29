@@ -8,11 +8,14 @@ import android.content.pm.Signature;
 import android.graphics.Typeface;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.football.freekick.beans.Advertisements;
+import com.football.freekick.beans.Article;
 import com.football.freekick.beans.Pitches;
+import com.football.freekick.beans.SameArea;
 import com.football.freekick.http.Url;
 import com.football.freekick.language.LanguageConfig;
 import com.football.freekick.language.LanguageCountry;
@@ -31,6 +34,7 @@ import com.orhanobut.logger.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -53,7 +57,8 @@ public class App extends Application {
     public static boolean isChinese = false;
     public static List<Advertisements.AdvertisementsBean> mAdvertisementsBean;
     public static List<Pitches.PitchesBean> mPitchesBeanList;
-
+    public static ArrayList<SameArea.TeamBean> AllTeams = new ArrayList<>();
+    public static List<Article.ArticleBean> mArticleList = new ArrayList<>();
     @Override
     public void onCreate() {
         APP_CONTEXT = this;
@@ -186,12 +191,10 @@ public class App extends Application {
                 md.update(signature.toByteArray());
                 Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
                 Logger.d("KeyHash:"+Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//                Toast.makeText(APP_CONTEXT, "KeyHash:--->"+Base64.encodeToString(md.digest(), Base64.DEFAULT), Toast.LENGTH_SHORT).show();
             }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
+        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
 
         }
-
     }
 }

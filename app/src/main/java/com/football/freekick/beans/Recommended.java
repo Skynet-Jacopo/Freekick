@@ -1,5 +1,7 @@
 package com.football.freekick.beans;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -42,6 +44,11 @@ public class Recommended {
         private String team_name;
         private ImageBean image;
         private boolean attention;
+        /**
+         * district : {"region":"Hong Kong","district":"Central and Western","id":19}
+         */
+
+        private DistrictBean district;
 
         public boolean isAttention() {
             return attention;
@@ -75,6 +82,14 @@ public class Recommended {
             this.image = image;
         }
 
+        public DistrictBean getDistrict() {
+            return district;
+        }
+
+        public void setDistrict(DistrictBean district) {
+            this.district = district;
+        }
+
         public static class ImageBean {
             /**
              * url : /uploads/team/image/19/upload-image-8843737-1509546403.
@@ -88,6 +103,43 @@ public class Recommended {
 
             public void setUrl(String url) {
                 this.url = url;
+            }
+        }
+
+        public static class DistrictBean {
+            /**
+             * region : Hong Kong
+             * district : Central and Western
+             * id : 19
+             */
+
+            private String region;
+            private String district;
+            @SerializedName("id")
+            private int idX;
+
+            public String getRegion() {
+                return region;
+            }
+
+            public void setRegion(String region) {
+                this.region = region;
+            }
+
+            public String getDistrict() {
+                return district;
+            }
+
+            public void setDistrict(String district) {
+                this.district = district;
+            }
+
+            public int getIdX() {
+                return idX;
+            }
+
+            public void setIdX(int idX) {
+                this.idX = idX;
             }
         }
     }

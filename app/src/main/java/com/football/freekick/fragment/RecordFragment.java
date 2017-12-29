@@ -109,10 +109,10 @@ public class RecordFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         district_id = PrefUtils.getString(App.APP_CONTEXT, "district_id", null);
         initView();
-        initData();
         initRecordList();//初始化作戰記錄列表
         initSameAreaList();//初始化同區球隊列表
         initAttention();//初始化已關注球隊列表
+        initData();
     }
 
     private void initAttention() {
@@ -331,35 +331,19 @@ public class RecordFragment extends BaseFragment {
                         loadingDismiss1();
                     }
                 });
-        //接口B7 已改做 http://api.freekick.hk/api/en/teams/get_all_teams  查所有球隊, 代替原來柑同區球隊
-        String urlSameArea = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/get_all_teams";
-        Logger.d(urlSameArea);
-        OkGo.get(urlSameArea)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(String s, Call call, Response response) {
-                        Logger.json(s);
-                        Gson gson = new Gson();
-                        SameArea json = gson.fromJson(s, SameArea.class);
-                        AllTeams.addAll(json.getTeam());
-                        if (AllTeams.size() > 0)
-                            for (int i = 0; i < AllTeams.size(); i++) {
-                                if (AllTeams.get(i).getDistrict() != null && Integer.parseInt(district_id) ==
-                                        AllTeams.get(i)
-                                                .getDistrict().getId()) {
-                                    mTeams.add(AllTeams.get(i));
-                                }
-                            }
-                        mSameAreaAdapter.notifyDataSetChanged();
+        if (App.AllTeams.size()>0){//如果已經加載過一遍,不再重新加載.
+            AllTeams = App.AllTeams;
+            if (AllTeams.size() > 0)
+                for (int i = 0; i < AllTeams.size(); i++) {
+                    if (AllTeams.get(i).getDistrict() != null && Integer.parseInt(district_id) ==
+                            AllTeams.get(i).getDistrict().getId()) {
+                        mTeams.add(AllTeams.get(i));
                     }
-
-                    @Override
-                    public void onError(Call call, Response response, Exception e) {
-                        super.onError(call, response, e);
-                        Logger.d(e.getMessage());
-                    }
-                });
-
+                }
+            mSameAreaAdapter.notifyDataSetChanged();
+        }else {
+            getAllTeams();
+        }
         String urlAttention = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "users/" + team_id + "/followings";
         Logger.d(urlAttention);
         OkGo.get(urlAttention)
@@ -373,6 +357,37 @@ public class RecordFragment extends BaseFragment {
                             mFollowingTeams.addAll(fromJson.getTeams());
                         }
                         mAttentionAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
+    }
+
+    private void getAllTeams() {
+        //接口B7 已改做 http://api.freekick.hk/api/en/teams/get_all_teams  查所有球隊, 代替原來柑同區球隊
+        String urlSameArea = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/get_all_teams";
+        Logger.d(urlSameArea);
+        OkGo.get(urlSameArea)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        SameArea json = gson.fromJson(s, SameArea.class);
+                        AllTeams.addAll(json.getTeam());
+                        App.AllTeams =AllTeams;
+                        if (AllTeams.size() > 0)
+                            for (int i = 0; i < AllTeams.size(); i++) {
+                                if (AllTeams.get(i).getDistrict() != null && Integer.parseInt(district_id) ==
+                                        AllTeams.get(i).getDistrict().getId()) {
+                                    mTeams.add(AllTeams.get(i));
+                                }
+                            }
+                        mSameAreaAdapter.notifyDataSetChanged();
                     }
 
                     @Override
