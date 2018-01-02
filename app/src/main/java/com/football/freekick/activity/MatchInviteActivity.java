@@ -93,6 +93,8 @@ public class MatchInviteActivity extends BaseActivity {
     TextView mTvIconShare;
     @Bind(R.id.ll_share)
     LinearLayout mLlShare;
+    @Bind(R.id.tv_to_not_matched)
+    TextView mTvToNotMatched;
 
     private Context mContext;
     private List<Recommended.TeamsBean> mList = new ArrayList<>();
@@ -114,6 +116,11 @@ public class MatchInviteActivity extends BaseActivity {
 //        intent.putExtra("invited_team_name",invited_team_name);
 //        intent.putExtra("invited_team_url",invited_team_url);
         if (getIntent().getStringExtra("invited_team_name") == null) {
+            if (getIntent().getBooleanExtra("from_unmatched", false)) {
+                mTvToNotMatched.setVisibility(View.GONE);
+            }else {
+                mTvToNotMatched.setVisibility(View.VISIBLE);
+            }
             //沒有邀請球隊進行新球賽
             initRecommendData();//獲取推薦球隊列表
         } else {
@@ -313,7 +320,8 @@ public class MatchInviteActivity extends BaseActivity {
         mRecyclerRecommended.setAdapter(mAdapter);
     }
 
-    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location, R.id.tv_icon_share, R.id.ll_share,R.id.tv_to_not_matched})
+    @OnClick({R.id.tv_back, R.id.tv_friend, R.id.tv_notice, R.id.ll_location, R.id.tv_icon_share, R.id.ll_share, R.id
+            .tv_to_not_matched})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {

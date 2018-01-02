@@ -239,7 +239,7 @@
             android:paddingBottom="24px"
             android:paddingLeft="24px"
             android:paddingTop="24px"
-            android:text="你可能感興趣的球隊"
+            android:text="@string/teams_you_may_be_interested_in"
             android:textColor="@color/text_black"
             android:textSize="28px"/>
 
@@ -257,9 +257,9 @@
         android:id="@+id/tv_to_not_matched"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/selector_rectangle_blue_gray_bg"
+        android:background="@drawable/selector_rectangle_green_gray_bg"
         android:gravity="center"
-        android:text="去到未落實球賽頁"
+        android:text="@string/skip"
         android:textColor="@color/white"
         android:textSize="32px"/>
 </RelativeLayout>

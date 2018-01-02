@@ -167,6 +167,9 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
             case "attack":
                 mTvTeamStyle.setText(getString(R.string.attack));
                 break;
+            case "defensive":
+                mTvTeamStyle.setText(getString(R.string.defensive));
+                break;
             default:
                 mTvTeamStyle.setText(getString(R.string.short_pass));
                 break;
@@ -269,7 +272,7 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
                 .getString(App.APP_CONTEXT, "establish_year", null);
         DateTime time = new DateTime();
         if (establish_year.equals(time.getYear())) {
-            mTvYear.setText("今年");
+            mTvYear.setText(getString(R.string.this_year));
         } else {
             mTvYear.setText(establish_year);
         }
@@ -279,14 +282,15 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
         DateTime dateTime = new DateTime();
         int year = dateTime.getYear() - 30;
         for (int i = 0; i < 30; i++) {
-            mYears.add((year + i) + " 年");
+            mYears.add((year + i) + "");
         }
-        mYears.add("今年");
+        mYears.add(getString(R.string.this_year));
 
         mTeamStyle = new ArrayList<>();//風格
         mTeamStyle.add(getString(R.string.main_attack));
         mTeamStyle.add(getString(R.string.long_pass));
         mTeamStyle.add(getString(R.string.short_pass));
+        mTeamStyle.add(getString(R.string.defensive));
 
         mTeamLike = new ArrayList<>();
         mTeamLike.add(getString(R.string.for_fun));
@@ -422,7 +426,7 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
         String team_name = StringUtils.getEditText(mEdtTeamName);
         String establish_year;
         // TODO: 2017/11/19 是否要把這裡的漢字改成雙語言?
-        if (StringUtils.getEditText(mTvYear).equals("今年")) {
+        if (StringUtils.getEditText(mTvYear).equals(getString(R.string.this_year))) {
             DateTime time = new DateTime();
             establish_year = time.getYear() + "";
         } else {
@@ -433,6 +437,8 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
             style = "short_pass";
         } else if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.long_pass))) {
             style = "long_pass";
+        } else if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.main_attack))) {
+            style = "attack";
         } else if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.main_attack))) {
             style = "attack";
         }

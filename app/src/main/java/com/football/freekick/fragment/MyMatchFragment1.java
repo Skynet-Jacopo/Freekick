@@ -26,6 +26,7 @@ import com.football.freekick.activity.ConfirmationPendingActivity;
 import com.football.freekick.activity.MatchContentActivity1;
 import com.football.freekick.activity.MatchInviteActivity;
 import com.football.freekick.adapter.MyMatchAdapter1;
+import com.football.freekick.adapter.PartakeAdapter;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
 import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
@@ -238,6 +239,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                     case 4:
                         intent.setClass(mContext, MatchInviteActivity.class);
                         intent.putExtra("match_id", mListWait.get(position).getId() + "");
+                        intent.putExtra("from_unmatched", true);
                         startActivityForResult(intent, REQUEST_CODE_INVITE);
                         break;
                     case 5:
@@ -322,7 +324,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
      * @param position
      * @param secondPos
      */
-    private void withdrawJoin(int position, int secondPos) {
+    private void withdrawJoin(final int position, int secondPos) {
 //        http://api.freekick.hk/api/en/join_matches/<joinmatchID>/withdraw
         String withdrawUrl = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "join_matches/" + mListWait.get
                 (position).getJoin_matches().get(secondPos).getId() + "/withdraw";
@@ -338,7 +340,8 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                         WithDraw fromJson = gson.fromJson(s, WithDraw.class);
                         if (fromJson.getJoin_match() != null) {
                             ToastUtil.toastShort(getString(R.string.withdraw_success));
-
+                            mListWait.remove(position);
+                            mMatchAdapter.notifyDataSetChanged();
                         } else {
                             ToastUtil.toastShort(getString(R.string.withdraw_failed));
                         }
@@ -349,6 +352,7 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
                         loadingDismiss();
+                        ToastUtil.toastShort(getString(R.string.withdraw_failed));
                     }
                 });
     }
@@ -437,7 +441,18 @@ public class MyMatchFragment1 extends LazyLoadFragment {
                         if (!s.contains("[") && !s.contains("]")) {
                             NoMatches noMatches = gson.fromJson(s, NoMatches.class);
                             loadingDismiss();
+                            mLlParent.setVisibility(View.VISIBLE);
                             ToastUtil.toastShort(noMatches.getMatches());
+                            if (mMatchAdapter!=null){
+                                mMatchAdapter.notifyDataSetChanged();
+                            }else {
+                                mMatchAdapter = new MyMatchAdapter1(mListWait, mContext);
+                                mRecyclerMyMatch.setLayoutManager(new LinearLayoutManager(mContext));
+                                if (mRecyclerMyMatch != null) {
+                                    mRecyclerMyMatch.setHasFixedSize(true);
+                                }
+                                mRecyclerMyMatch.setAdapter(mMatchAdapter);
+                            }
                         } else {
                             MatchesComing json = gson.fromJson(s, MatchesComing.class);
                             mMatches.addAll(json.getMatches());

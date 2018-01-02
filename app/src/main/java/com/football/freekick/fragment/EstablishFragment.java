@@ -176,6 +176,29 @@ public class EstablishFragment extends BaseFragment {
     }
 
     /**
+     *應要求,點擊時,將數據清空
+     * @param hidden
+     */
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden) {
+            mTvDate.setText("");
+            mTvTime.setText("");
+            mTvPitchSize.setText(getString(R.string.pitch_size_7));
+            mTvArea.setText("");
+            mTvPitchName.setText("");
+            mTvPeopleNum.setText("7");
+            mDateTime = null;
+            mStartTime = "00:00";
+            mEndTime = "00:00";
+            regionPos = 0;
+            districtPos = 0;
+            mPitchPos = 0;
+        }
+        super.onHiddenChanged(hidden);
+    }
+
+    /**
      * 初始化广告位图片
      */
     private void initAdvertisements() {
@@ -480,9 +503,9 @@ public class EstablishFragment extends BaseFragment {
                             int id = match.getId();
                             Intent intent = new Intent(mContext, MatchInviteActivity.class);
                             intent.putExtra("match_id", id + "");
-                            intent.putExtra("invited_team_id",invited_team_id);
-                            intent.putExtra("invited_team_name",invited_team_name);
-                            intent.putExtra("invited_team_url",invited_team_url);
+                            intent.putExtra("invited_team_id", invited_team_id);
+                            intent.putExtra("invited_team_name", invited_team_name);
+                            intent.putExtra("invited_team_url", invited_team_url);
                             startActivity(intent);
                         } else if (matches.getMatch() == null && matches.getErrors() != null) {
                             ToastUtil.toastShort(matches.getErrors().get(0));

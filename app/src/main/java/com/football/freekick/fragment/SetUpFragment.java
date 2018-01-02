@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +19,16 @@ import com.football.freekick.activity.ChangeTeamInfoActivity0;
 import com.football.freekick.activity.NoticeActivity;
 import com.football.freekick.activity.SettingDetailActivity;
 import com.football.freekick.activity.registerlogin.FirstPageActivity;
+import com.football.freekick.activity.registerlogin.LoginPage1Activity;
 import com.football.freekick.activity.registerlogin.LoginPager2Activity;
 import com.football.freekick.app.BaseFragment;
 import com.football.freekick.beans.Logout;
 import com.football.freekick.beans.RegisterResponse;
 import com.football.freekick.beans.Settings;
-import com.football.freekick.http.Url;
 import com.football.freekick.language.SelectLanguageActivity;
 import com.football.freekick.utils.ActyUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
-import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.ToggleButton;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
@@ -365,7 +363,7 @@ public class SetUpFragment extends BaseFragment {
                         Gson gson = new Gson();
                         Logout logout = gson.fromJson(s, Logout.class);
                         if (logout.isSuccess()) {
-                            startActivity(new Intent(mContext, LoginPager2Activity.class));
+                            startActivity(new Intent(mContext, FirstPageActivity.class));
                             ActyUtil.finishAllActivity();
 //                            ToastUtil.toastShort(logout.getMessage());
                         } else {

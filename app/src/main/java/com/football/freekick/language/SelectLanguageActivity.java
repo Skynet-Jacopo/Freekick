@@ -17,6 +17,7 @@ import android.widget.CheckedTextView;
 import android.widget.ListView;
 
 import com.football.freekick.R;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +86,7 @@ public class SelectLanguageActivity extends AppCompatActivity implements Adapter
         String languageWithCountry = item.getLanguageWithCountry();
         String language            = item.getLanguage();
         Intent intent              = getIntent();
+        Logger.d("language--->"+language+"   "+languageName+"   "+languageWithCountry);
         intent.putExtra("language", language);
         intent.putExtra("languageName", languageName);
         intent.putExtra("languageWithCountry", languageWithCountry);

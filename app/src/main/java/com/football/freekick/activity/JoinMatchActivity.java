@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.football.freekick.App;
+import com.football.freekick.MainActivity;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.Advertisements;
@@ -415,6 +416,11 @@ public class JoinMatchActivity extends BaseActivity {
                         if (joinMatch.getJoin_match() != null) {
                             ToastUtil.toastShort(getString(R.string.join_success_please_wait_to_confirm));
                             setResult(RESULT_OK);
+                            Intent intent = new Intent();
+                            intent.setClass(mContext, MainActivity.class);//去到未落實球賽頁
+                            intent.putExtra("which", 4);
+                            intent.putExtra("toPage", "1");
+                            startActivity(intent);
                             finish();
                         } else {
 

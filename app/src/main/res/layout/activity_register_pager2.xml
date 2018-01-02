@@ -154,7 +154,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="今年"
+                            android:text="@string/this_year"
                             android:textColor="#88beff"
                             android:textSize="30px"/>
 

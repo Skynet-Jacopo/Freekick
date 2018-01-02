@@ -13,9 +13,8 @@ import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.RegisterResponse;
 import com.football.freekick.chat.FireChatHelper.ChatHelper;
-import com.football.freekick.chat.adapter.UsersChatAdapter;
-import com.football.freekick.chat.model.User;
-import com.football.freekick.event.AccountEvent;
+import com.football.freekick.adapter.UsersChatAdapter;
+import com.football.freekick.beans.User;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
@@ -30,10 +29,6 @@ import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
-
-import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Date;
 

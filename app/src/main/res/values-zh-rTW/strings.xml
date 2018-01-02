@@ -48,6 +48,7 @@
     <string name="main_attack">主攻</string>
     <string name="long_pass">長傳</string>
     <string name="short_pass">短傳</string>
+    <string name="defensive">防守</string>
     <string name="for_fun">強隊免問</string>
     <string name="become_strong">志在出汗</string>
     <string name="team_logo">球隊標誌</string>
@@ -213,4 +214,27 @@
     <string name="login_has_expired">您的賬戶登錄已過期,請重新登錄!</string>
     <string name="share_to">分享到</string>
     <string name="cannot_find_user">找不到相關用戶!</string>
+    <string name="this_year">今年</string>
+    <string name="team_jersey_color">球隊波衫顏色</string>
+    <string name="home">主場</string>
+    <string name="away">作客</string>
+    <string name="done">完成</string>
+    <string name="choose_your_enue">選擇球場</string>
+    <string name="all">全部</string>
+    <string name="last_3_months">近三個月</string>
+    <string name="confirmed">已落實</string>
+    <string name="sign_up_with_email">使用電子郵件進行註冊</string>
+    <string name="email">電郵地址</string>
+    <string name="password">密碼</string>
+    <string name="teams_you_may_be_interested_in">你可能感興趣的球隊</string>
+    <string name="welcome_back">歡迎回來！</string>
+    <string name="log_in_with_facebook">使用facebook登入</string>
+    <string name="or">或</string>
+    <string name="please_login">請登入</string>
+    <string name="forget_password">忘記密碼?</string>
+    <string name="discover_football_match">尋找你的愛好</string>
+    <string name="already_a_freekicker">已經是會員了嗎? 登入</string>
+    <string name="filter">篩選</string>
+    <string name="invitations">邀請</string>
+    <string name="skip">略過</string>
 </resources>

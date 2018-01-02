@@ -110,7 +110,7 @@
             android:id="@+id/tv_pitch_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="7人場"
+            android:text="@string/pitch_size_7"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"/>
     </LinearLayout>
@@ -140,10 +140,12 @@
             android:textStyle="bold"/>
 
         <TextView
+            android:gravity="right"
+            android:textColorHint="@color/text_black"
             android:id="@+id/tv_area"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/please_choose_the_district"
+            android:hint="@string/please_choose_the_district"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_24"/>
     </LinearLayout>

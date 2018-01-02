@@ -153,6 +153,17 @@ public class PartakeListFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        Logger.d("可見嗎--->"+hidden);
+        if (mPartakeFragment.isPartake) {//因為有可能回退到上個界面修改數據,然後這個Fragment只是被隱藏了,不是被銷毀了,所以在onResume里執行此操作
+            mText.performClick();
+            mPartakeFragment.isPartake = false;
+            getAvailableAatches();
+        }
+        super.onHiddenChanged(hidden);
+    }
+
     private void getAvailableAatches() {
         if (mMatchList != null) {
             mMatchList.clear();
@@ -270,7 +281,10 @@ public class PartakeListFragment extends BaseFragment {
 //                                            joinMatch(position);//參與球賽
                                                 break;
                                             case 3://成功約賽的,應該是沒啥用了
-
+                                                intent.setClass(mContext,MatchContentActivity1.class);
+                                                intent.putExtra("id",matchesBean.getId()+"");
+                                                intent.putExtra("type",10);
+                                                startActivity(intent);
                                                 break;
                                             case 4://分享
                                                 // TODO: 2017/11/30 分享
@@ -412,7 +426,7 @@ public class PartakeListFragment extends BaseFragment {
                 break;
             case R.id.tv_pitch_size:
             case R.id.tv_icon_down:
-                ToastUtil.toastShort("球場大小");
+//                ToastUtil.toastShort("球場大小");
                 choosePitchSize();
                 break;
             case R.id.text://模擬點擊獲取上頁數據

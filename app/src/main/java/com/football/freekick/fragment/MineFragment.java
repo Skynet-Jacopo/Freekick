@@ -237,7 +237,7 @@ public class MineFragment extends BaseFragment {
         //TabLayout加载viewpager
         mTabLayout.setupWithViewPager(mViewpager);
         mTabLayout.setTabsFromPagerAdapter(fragmentPagerAdapter);
-        setIndicator(mContext, mTabLayout, 10, 10);
+        setIndicator(mContext, mTabLayout, 0, 0);
         mViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

@@ -69,6 +69,7 @@
     <!-- 透明白 -->
     <color name="trans_white_login">#3fff</color>
 
-    <color name="bottom_blue_bg">#15549e</color>
+    <!--<color name="bottom_blue_bg">#15549e</color>-->
+    <color name="bottom_blue_bg">#070D44</color>
     <color name="status_bar_color">#182175</color>
 </resources>

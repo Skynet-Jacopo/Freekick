@@ -69,10 +69,11 @@
             android:id="@+id/tab_layout"
             android:layout_width="wrap_content"
             android:layout_height="88px"
-            app:tabGravity="center"
+            app:tabGravity="fill"
             app:tabIndicatorColor="#070D44"
             app:tabIndicatorHeight="1dp"
             app:tabMode="fixed"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"
             app:tabSelectedTextColor="#070D44"
             app:tabTextColor="@color/text_black"/>
 

@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="140px"
-            android:text="尋找你的愛好"
+            android:text="@string/discover_football_match"
             android:textColor="@color/white"
             android:textSize="@dimen/text_36"/>
 
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="88px"
                 android:gravity="center"
-                android:text="使用facebook登入"
+                android:text="@string/log_in_with_facebook"
                 android:textColor="@color/white"
                 android:textSize="30px"/>
 
@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="32px"
-            android:text="或"
+            android:text="@string/or"
             android:textColor="@color/white"
             android:textSize="@dimen/text_30"/>
 
@@ -97,7 +97,7 @@
             android:background="@drawable/selector_corner_transparent_gray"
             android:clickable="true"
             android:gravity="center"
-            android:text="使用電子郵件進行註冊"
+            android:text="@string/sign_up_with_email"
             android:textColor="@color/white"
             android:textSize="30px"/>
 
@@ -127,7 +127,7 @@
         android:paddingLeft="30px"
         android:paddingRight="30px"
         android:paddingTop="30px"
-        android:text="已經是會員了嗎? 登入"
+        android:text="@string/already_a_freekicker"
         android:textColor="@color/white"
         android:textSize="@dimen/text_24"/>
 </RelativeLayout>

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -17,7 +16,6 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.football.freekick.App;
@@ -27,8 +25,8 @@ import com.football.freekick.beans.Advertisements;
 import com.football.freekick.beans.Login;
 import com.football.freekick.beans.Pitches;
 import com.football.freekick.chat.FireChatHelper.ChatHelper;
-import com.football.freekick.chat.adapter.UsersChatAdapter;
-import com.football.freekick.chat.model.User;
+import com.football.freekick.adapter.UsersChatAdapter;
+import com.football.freekick.beans.User;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
@@ -49,7 +47,6 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 

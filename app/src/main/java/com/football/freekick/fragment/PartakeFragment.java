@@ -231,6 +231,22 @@ public class PartakeFragment extends BaseFragment {
         initAdvertisements();
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden){
+            mTvDate.setText("");
+            mTvTime.setText("");
+            mTvPitchSize.setText(getString(R.string.pitch_size_7));
+            mTvArea.setText("");
+            dateTime = null;
+            mStartTime = "00:00";
+            mEndTime = "00:00";
+            regionPos = 0;
+            districtPos = 0;
+        }
+        super.onHiddenChanged(hidden);
+    }
+
     /**
      * 初始化广告位图片
      */

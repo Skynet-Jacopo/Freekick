@@ -175,14 +175,15 @@ public class RegisterPager2Activity extends BaseActivity {
         DateTime dateTime = new DateTime();
         int year = dateTime.getYear() - 30;
         for (int i = 0; i < 30; i++) {
-            mYears.add((year + i) + " 年");
+            mYears.add((year + i) + "");
         }
-        mYears.add("今年");
+        mYears.add(getString(R.string.this_year));
 
         mTeamStyle = new ArrayList<>();//風格
         mTeamStyle.add(getString(R.string.main_attack));
         mTeamStyle.add(getString(R.string.long_pass));
         mTeamStyle.add(getString(R.string.short_pass));
+        mTeamStyle.add(getString(R.string.defensive));
 
         mTeamLike = new ArrayList<>();
         mTeamLike.add(getString(R.string.for_fun));
@@ -318,7 +319,7 @@ public class RegisterPager2Activity extends BaseActivity {
         String team_name = StringUtils.getEditText(mEdtTeamName);
         String establish_year;
         // TODO: 2017/11/19 是否要把這裡的漢字改成雙語言?
-        if (StringUtils.getEditText(mTvYear).equals("今年")) {
+        if (StringUtils.getEditText(mTvYear).equals(getString(R.string.this_year))) {
             DateTime time = new DateTime();
             establish_year = time.getYear() + "";
         } else {
@@ -331,6 +332,8 @@ public class RegisterPager2Activity extends BaseActivity {
             style = "long_pass";
         } else if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.main_attack))) {
             style = "attack";
+        }else if (StringUtils.getEditText(mTvTeamStyle).equals(getString(R.string.defensive))){
+            style = "defensive";
         }
         String battle_preference = "";
         if (StringUtils.getEditText(mTvTeamLike).equals(getString(R.string.for_fun))) {

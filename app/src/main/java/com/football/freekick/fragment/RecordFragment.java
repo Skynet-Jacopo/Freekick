@@ -213,7 +213,7 @@ public class RecordFragment extends BaseFragment {
 
             @Override
             public void convert(ViewHolder holder, final MatchHistory.MatchesBean matchesBean) {
-                holder.setText(R.id.tv_location, matchesBean.getLocation());
+                holder.setText(R.id.tv_location, matchesBean.getPitch_name());
 
                 holder.setText(R.id.tv_date, JodaTimeUtil.getDate2(matchesBean.getPlay_start()));
                 String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());

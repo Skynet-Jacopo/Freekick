@@ -144,8 +144,8 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     }
                     myHolder1.tvState.setText(R.string.match_success);
-//                    myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_red_gray_bg);
-                    myHolder1.tvState.setBackgroundResource(R.drawable.shape_round_light_red);
+                    myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_red_gray_bg);
+//                    myHolder1.tvState.setBackgroundResource(R.drawable.shape_round_light_red);
                     myHolder1.tvState.setOnClickListener(new View.OnClickListener() {//應該是沒用了
                         @Override
                         public void onClick(View view) {

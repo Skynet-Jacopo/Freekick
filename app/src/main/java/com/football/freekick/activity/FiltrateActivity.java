@@ -143,7 +143,8 @@ public class FiltrateActivity extends BaseActivity {
                 if (mAreaRegions.get(i).getDistricts().get(j).getDistrict_id().equals(district_id)) {
                     regionPos = i;
                     districtPos = j;
-                    mEdtLocation.setText(mAreaRegions.get(i).getDistricts().get(j).getDistrict());
+                    mEdtLocation.setText(mAreaRegions.get(i).getDistricts().get(j).getDistrict().replace
+                            ("$", " "));
                 }
             }
         }

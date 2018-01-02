@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="230px"
-            android:text="歡迎回來"
+            android:text="@string/welcome_back"
             android:textColor="@color/white"
             android:textSize="@dimen/text_36"/>
 
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="88px"
                 android:gravity="center"
-                android:text="使用facebook登入"
+                android:text="@string/log_in_with_facebook"
                 android:textColor="@color/white"
                 android:textSize="30px"/>
 
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="32px"
-            android:text="或"
+            android:text="@string/or"
             android:textColor="@color/white"
             android:textSize="@dimen/text_30"/>
 
@@ -84,7 +84,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:hint="電郵地址"
+                android:hint="@string/email"
                 android:textColor="@color/black"
                 android:textColorHint="#c1c1c1"
                 android:textSize="30px"/>
@@ -104,7 +104,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:hint="密碼"
+                android:hint="@string/password"
                 android:textColor="@color/black"
                 android:textColorHint="#c1c1c1"
                 android:textSize="30px"/>
@@ -120,7 +120,7 @@
             android:background="@drawable/selector_corner_green_gray"
             android:clickable="true"
             android:gravity="center"
-            android:text="請登入"
+            android:text="@string/please_login"
             android:textColor="@color/white"
             android:textSize="30px"/>
 
@@ -131,7 +131,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="32px"
             android:padding="32px"
-            android:text="忘記密碼?"
+            android:text="@string/forget_password"
             android:textColor="@color/white"
             android:textSize="@dimen/text_24"/>
     </LinearLayout>

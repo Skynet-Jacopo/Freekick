@@ -29,8 +29,7 @@ import com.football.freekick.beans.MatchDetail;
 import com.football.freekick.beans.Ratings;
 import com.football.freekick.beans.WithDraw;
 import com.football.freekick.chat.FireChatHelper.ExtraIntent;
-import com.football.freekick.chat.model.User;
-import com.football.freekick.chat.ui.ChatActivity;
+import com.football.freekick.beans.User;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.MyUtil;
@@ -229,7 +228,7 @@ public class MatchContentActivity1 extends BaseActivity {
         }
         loadingDismiss();
         mTvDate.setText(JodaTimeUtil.getDate(mMatch.getPlay_start()));
-        mTvLocation.setText(mMatch.getLocation());
+        mTvLocation.setText(mMatch.getPitch_name());
         mTvTime.setText(JodaTimeUtil.getTime2(mMatch.getPlay_start()) + "-" + JodaTimeUtil
                 .getTime2(mMatch.getPlay_end()));
         mTvHomeName.setText(mMatch.getHome_team().getTeam_name() == null ? "" : mMatch.getHome_team().getTeam_name());
@@ -246,6 +245,7 @@ public class MatchContentActivity1 extends BaseActivity {
          * 7.我不是主隊,也不是客隊,只是來瀏覽的(match status = m,join match status = confirmed?(還不確定))
          * 8.我是主隊或客隊,球賽完成後在作賽記錄頁進入
          * 9.球賽詳情頁(無邀請,無主動參與隊伍)
+         * 10.我不是主隊也不是客隊,只是瀏覽已落實的球賽(如果在搵場篩選結果頁)
          */
         List<MatchDetail.MatchBean.JoinMatchesBean> join_matches = mMatch.getJoin_matches();
         switch (type) {
@@ -519,6 +519,25 @@ public class MatchContentActivity1 extends BaseActivity {
                         cancelMatch();//主隊取消球賽
                     }
                 });
+                mFlParent.setVisibility(View.VISIBLE);
+                break;
+            case 10://我不是主隊也不是客隊,是來瀏覽別人已落實球賽的(入口在搵場篩選結果頁)
+                mTvIconNoticeLeft.setVisibility(View.GONE);
+                mTvIconShareLeft.setVisibility(View.GONE);
+                mTvIconShareRight.setVisibility(View.GONE);
+                mTvIconNoticeRight.setVisibility(View.GONE);
+                mTvBtn.setVisibility(View.GONE);
+                for (int i = 0; i < join_matches.size(); i++) {
+                    if (mMatch.getStatus().equals("m") && join_matches.get(i).getStatus()
+                            .equals("confirmed")) {
+                        join_match_id = join_matches.get(i).getId() + "";
+                        MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean = join_matches.get(i);
+                        mTvVisitorName.setText(joinMatchesBean.getTeam().getTeam_name());
+                        mIvVisitorDress.setBackgroundColor(MyUtil.getColorInt(joinMatchesBean
+                                .getJoin_team_color()));
+                        mTvVisitorNum.setText(joinMatchesBean.getTeam().getSize() + "");
+                    }
+                }
                 mFlParent.setVisibility(View.VISIBLE);
                 break;
         }

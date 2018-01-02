@@ -265,7 +265,7 @@ public class TeamDetailFragment1 extends Fragment {
         mPolygonsView2.setVertexTextSize(3, 20f);
         mPolygonsView2.setVertexTextSize(4, 20f);
 
-        mTvDistrict.setText(mTeam.getDistrict().getRegion() + mTeam.getDistrict().getDistrict());
+        mTvDistrict.setText(/*mTeam.getDistrict().getRegion() +*/ mTeam.getDistrict().getDistrict());
         mTvEstablishTime.setText(mTeam.getEstablish_year() + "");
         mTvTeamNum.setText(mTeam.getSize() + "");
         int average_height = mTeam.getAverage_height();
@@ -296,6 +296,9 @@ public class TeamDetailFragment1 extends Fragment {
                 break;
             case "attack":
                 mTvTeamStyle.setText(getString(R.string.main_attack));
+                break;
+            case "defensive":
+                mTvTeamStyle.setText(getString(R.string.defensive));
                 break;
             default:
                 mTvTeamStyle.setText(getString(R.string.short_pass));

@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.football.freekick.app.BaseActivity;
+import com.football.freekick.beans.Pitches;
 import com.football.freekick.event.MainEvent;
 import com.football.freekick.fragment.EstablishFragment;
 import com.football.freekick.fragment.MineFragment;
@@ -24,6 +25,10 @@ import com.football.freekick.fragment.PartakeListFragment;
 import com.football.freekick.fragment.RecordFragment;
 import com.football.freekick.fragment.SetUpFragment;
 import com.football.freekick.utils.ActyUtil;
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,6 +39,8 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * 主界面(替代FragmentTabHosts)
@@ -88,11 +95,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
         ButterKnife.bind(this);
-        if (App.mConfig.getCountryNameValue().equals("zh")) {
+        if (App.mConfig.getLanguageValue().equals("zh")) {
             App.isChinese = true;
         } else {
             App.isChinese = false;
         }
+        getPitches();//切換語言后,MainActivity重新創建,獲取到對應語言版本的球場信息.
+        Logger.d("language--->"+App.mConfig.getLanguageValue());
+        Logger.d("language--->"+App.isChinese);
         EventBus.getDefault().register(this);
         initView();
 //        /**
@@ -109,7 +119,30 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //        }
 
     }
+    /**
+     * 獲取場地
+     */
+    private void getPitches() {
+        Logger.d("中文還是英文--->"+App.isChinese);
+        String url = BaseUrl + (App.isChinese ? ZH_HK : EN) + "pitches";
+        Logger.d(url);
+        OkGo.get(url)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        Pitches pitches = gson.fromJson(s, Pitches.class);
+                        App.mPitchesBeanList = pitches.getPitches();
+                    }
 
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                    }
+                });
+    }
     private void initView() {
         fm = getSupportFragmentManager();
         mainRadiogroup.setOnCheckedChangeListener(this);
@@ -193,7 +226,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 }
 
                 break;
-            case R.id.main_record:
+            case R.id.main_record://應要求,記錄頁和我的主牆頁每次點擊都刷新
 //                if (mRecordFragment == null) {
                     mRecordFragment = new RecordFragment();
                     ft.add(R.id.main_group, mRecordFragment);

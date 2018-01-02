@@ -18,6 +18,7 @@ import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.activity.ArticleActivity;
 import com.football.freekick.activity.MatchContentActivity1;
+import com.football.freekick.adapter.MyMatchAdapter1;
 import com.football.freekick.adapter.MyMatchAdapter2;
 import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
@@ -318,7 +319,18 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                         if (!s.contains("[") && !s.contains("]")) {
                             NoMatches noMatches = gson.fromJson(s, NoMatches.class);
                             loadingDismiss();
+                            mLlParent.setVisibility(View.VISIBLE);
                             ToastUtil.toastShort(noMatches.getMatches());
+                            if (mMatchAdapter!=null){
+                                mMatchAdapter.notifyDataSetChanged();
+                            }else {
+                                mMatchAdapter = new MyMatchAdapter2(mListInvite, mContext);
+                                mRecyclerMyMatch.setLayoutManager(new LinearLayoutManager(mContext));
+                                if (mRecyclerMyMatch != null) {
+                                    mRecyclerMyMatch.setHasFixedSize(true);
+                                }
+                                mRecyclerMyMatch.setAdapter(mMatchAdapter);
+                            }
                         } else {
                             MatchesComing json = gson.fromJson(s, MatchesComing.class);
                             mMatches.addAll(json.getMatches());

@@ -118,7 +118,7 @@ public class MyMatchAdapter0 extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
             } else {
                 //主隊位置是自己
-                myHolder2.tvState.setText("已落實");
+                myHolder2.tvState.setText(R.string.confirmed);
                 myHolder2.tvState.setBackgroundResource(R.drawable.shape_corner_green);
                 myHolder2.tvState.setClickable(false);
                 myHolder2.tvIconDelete.setVisibility(View.VISIBLE);
