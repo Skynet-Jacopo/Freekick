@@ -30,6 +30,7 @@ import com.football.freekick.beans.MatchesComing;
 import com.football.freekick.beans.NoMatches;
 import com.football.freekick.beans.WithDraw;
 import com.football.freekick.http.Url;
+import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.gson.Gson;
@@ -88,6 +89,7 @@ public class MyMatchFragment0 extends LazyLoadFragment {
     private ArrayList<MatchesComing.MatchesBean> mMatches = new ArrayList<>();
     private ArrayList<MatchesComing.MatchesBean> mListMatch = new ArrayList<>();
     private MyMatchAdapter0 mMatchAdapter;
+    private String team_id;
 
     public MyMatchFragment0() {
         // Required empty public constructor
@@ -371,9 +373,9 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                             mLlParent.setVisibility(View.VISIBLE);
                             loadingDismiss();
                             ToastUtil.toastShort(noMatches.getMatches());
-                            if (mMatchAdapter!=null){
+                            if (mMatchAdapter != null) {
                                 mMatchAdapter.notifyDataSetChanged();
-                            }else {
+                            } else {
                                 mMatchAdapter = new MyMatchAdapter0(mListMatch, mContext);
                                 mRecyclerMyMatch.setLayoutManager(new LinearLayoutManager(mContext));
                                 if (mRecyclerMyMatch != null) {
@@ -395,7 +397,21 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                                     }
                                 }
                                 if (mMatches.get(i).getStatus().equals("m")) {
-                                    mListMatch.add(mMatches.get(i));
+                                    if (mMatches.get(i).getHome_team().getId() == Integer.parseInt(team_id)){//主隊是自己,添加
+                                        mListMatch.add(mMatches.get(i));
+                                    }else {//判斷客隊是否有自己,有則添加,沒有則不添加
+                                        boolean shouldAdd = false;
+                                        List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = mMatches.get(i)
+                                                .getJoin_matches();
+                                        for (int j = 0; j < join_matches.size(); j++) {
+                                            if (join_matches.get(j).getJoin_team_id() == Integer.parseInt(team_id)){
+                                                shouldAdd = true;
+                                            }
+                                        }
+                                        if (shouldAdd) {
+                                            mListMatch.add(mMatches.get(i));
+                                        }
+                                    }
                                 }
                             }
                             mMatchAdapter.notifyDataSetChanged();
@@ -417,6 +433,7 @@ public class MyMatchFragment0 extends LazyLoadFragment {
     private void initView() {
         mTvIconFocus.setTypeface(App.mTypeface);
         mTvIconLines.setTypeface(App.mTypeface);
+        team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
     }
 
     @Override

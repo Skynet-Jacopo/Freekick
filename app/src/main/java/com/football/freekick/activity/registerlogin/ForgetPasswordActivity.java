@@ -69,12 +69,12 @@ public class ForgetPasswordActivity extends BaseActivity {
             return;
         }
         loadingShow();
+//        http://api.freekick.hk/api/en/users/change_password
 //        http://api.freekick.hk/api/en/auth/password
-        String url = App.isChinese ? "http://api.freekick.hk/api/zh_HK/auth/password" : "http://api.freekick" +
-                ".hk/api/en/auth/password";
+        String url = App.isChinese ? "http://api.freekick.hk/api/zh_HK/users/change_password" : "http://api.freekick.hk/api/en/users/change_password";
         JsonObject object = new JsonObject();
         object.addProperty("email", StringUtils.getEditText(mEdtEmail));
-        OkGo.post(url)
+        OkGo.put(url)
                 .upJson(object.toString())
                 .execute(new StringCallback() {
                     @Override

@@ -19,6 +19,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.football.freekick.App;
+import com.football.freekick.MainActivity;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.Advertisements;
@@ -1009,7 +1010,11 @@ public class MatchContentActivity1 extends BaseActivity {
                         ConfirmInvite fromJson = gson.fromJson(s, ConfirmInvite.class);
                         if (fromJson.getJoin_match() != null) {
                             ToastUtil.toastShort(getString(R.string.comfirm_success));
-                            setResult(RESULT_OK);
+//                            setResult(RESULT_OK);//因從搵場結果頁篩選出的接受邀請不好處理,故而強行跳轉.應該對我的主牆頁的邏輯沒有影響吧
+                            Intent intent = new Intent(mContext, MainActivity.class);
+                            intent.putExtra("which", 4);
+                            intent.putExtra("toPage", "0");//跳轉到已落實球賽頁
+                            startActivity(intent);
                             finish();
                         } else if (fromJson.getError() != null) {
                             ToastUtil.toastShort(fromJson.getError());

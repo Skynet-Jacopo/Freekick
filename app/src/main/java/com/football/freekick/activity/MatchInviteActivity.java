@@ -274,7 +274,7 @@ public class MatchInviteActivity extends BaseActivity {
             public void convert(ViewHolder holder, final Recommended.TeamsBean teamsBean) {
                 final int itemPosition = holder.getItemPosition();
                 ImageView ivPic = holder.getView(R.id.iv_pic);
-                ImageLoaderUtils.displayImage(teamsBean.getImage().getUrl(), ivPic);
+                ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivPic,R.drawable.icon_default);
                 holder.setText(R.id.tv_team_name, teamsBean.getTeam_name());
                 holder.setOnClickListener(R.id.tv_invite, new View.OnClickListener() {
                     @Override

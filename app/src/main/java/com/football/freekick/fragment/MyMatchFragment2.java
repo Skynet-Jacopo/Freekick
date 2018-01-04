@@ -217,7 +217,11 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                 pos = position;
                 switch (state) {
                     case 1:
-                        confirmInvite(position);
+//                        confirmInvite(position);//因為有個修改參賽人數要提交,所以將兩者換成一樣
+                        intent.setClass(mContext, MatchContentActivity1.class);
+                        intent.putExtra("id", mListInvite.get(position).getId() + "");
+                        intent.putExtra("type", 5);
+                        startActivityForResult(intent, REQUEST_CODE_TO_1);
                         break;
                     case 2:
                         intent.setClass(mContext, MatchContentActivity1.class);
@@ -349,7 +353,7 @@ public class MyMatchFragment2 extends LazyLoadFragment {
                                     List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = mMatches.get(i)
                                             .getJoin_matches();
                                     for (int j = 0; j < join_matches.size(); j++) {
-                                        if (join_matches.get(j).getJoin_team_id() == Integer.parseInt(team_id)) {
+                                        if (join_matches.get(j).getJoin_team_id() == Integer.parseInt(team_id)&&join_matches.get(j).getStatus().equals("invited")) {
                                             mListInvite.add(mMatches.get(i));
                                         }
                                     }

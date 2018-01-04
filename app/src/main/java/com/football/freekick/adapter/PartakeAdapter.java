@@ -94,13 +94,41 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             String status = matchesBean.getStatus();
             List<AvailableMatches.MatchesBean.JoinMatchesBean> join_matches = matchesBean.getJoin_matches();
+            boolean haveMe = false;
             switch (status) {
                 case "i"://已邀請
+                    myHolder1.ivDressVisitor.setImageResource(R.drawable.ic_dress_unknow);
+                    myHolder1.ivDressVisitor.setBackgroundResource(R.color.black);
+                    myHolder1.tvVisitorName.setText("");
+
+                    for (int i = 0; i < join_matches.size(); i++) {
+                        if (join_matches.get(i).getJoin_team_id() == Integer.parseInt(team_id) && join_matches.get(i)
+                                .getStatus().equals("invited")) {
+                            haveMe = true;
+                        }
+                    }
+                    if (haveMe){
+                        myHolder1.tvState.setText(R.string.accept_the_invitation);
+                        myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_green_gray_bg);
+                        myHolder1.tvState.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                click.Clike(9, myHolder1.tvState, position);
+                            }
+                        });
+                        myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                click.Clike(10, myHolder1.lLContent, position);
+                            }
+                        });
+                    }
+                    break;
                 case "w":
                     myHolder1.ivDressVisitor.setImageResource(R.drawable.ic_dress_unknow);
                     myHolder1.ivDressVisitor.setBackgroundResource(R.color.black);
                     myHolder1.tvVisitorName.setText("");
-                    boolean haveMe = false;
+//                    boolean haveMe = false;
                     for (int i = 0; i < join_matches.size(); i++) {
                         if (join_matches.get(i).getJoin_team_id() == Integer.parseInt(team_id) && join_matches.get(i)
                                 .getStatus().equals("confirmation_pending")) {
@@ -137,6 +165,21 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 case "m":
                     for (int i = 0; i < join_matches.size(); i++) {
                         if (join_matches.get(i).getStatus().equals("confirmed")) {
+                            if (join_matches.get(i).getJoin_team_id() == Integer.parseInt(team_id)) {
+                                myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        click.Clike(7, myHolder1.lLContent, position);
+                                    }
+                                });
+                            } else {
+                                myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        click.Clike(8, myHolder1.lLContent, position);
+                                    }
+                                });
+                            }
                             myHolder1.ivDressVisitor.setBackgroundColor(MyUtil.getColorInt(join_matches.get(i)
                                     .getJoin_team_color()));
                             myHolder1.tvVisitorName.setText(join_matches.get(i).getTeam().getTeam_name());
@@ -152,12 +195,7 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             click.Clike(3, myHolder1.tvState, position);
                         }
                     });
-                    myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            click.Clike(7, myHolder1.lLContent, position);
-                        }
-                    });
+
                     break;
                 case "f":
 

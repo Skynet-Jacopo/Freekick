@@ -69,7 +69,7 @@ public class MyMatchAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolde
             myHolder1.tvIconDelete.setVisibility(View.GONE);
             myHolder1.tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
             ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
-                    myHolder1.ivHomeLogo);
+                    myHolder1.ivHomeLogo,R.drawable.icon_default);
 
             String date = JodaTimeUtil.getDate2(matchesBean.getPlay_start());
             myHolder1.tvDate.setText(date);

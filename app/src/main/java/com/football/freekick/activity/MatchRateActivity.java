@@ -470,7 +470,7 @@ public class MatchRateActivity extends BaseActivity {
                             }
                             loadingDismiss();
                             mTvDate.setText(JodaTimeUtil.getDate(mMatch.getPlay_start()));
-                            mTvLocation.setText(mMatch.getLocation());
+                            mTvLocation.setText(mMatch.getPitch_name());
                             mTvTime.setText(JodaTimeUtil.getTime2(mMatch.getPlay_start()) + "-" + JodaTimeUtil
                                     .getTime2(mMatch.getPlay_end()));
                             mTvHomeNum.setText(mMatch.getSize() + "");

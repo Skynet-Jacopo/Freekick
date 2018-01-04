@@ -356,8 +356,12 @@ public class SearchTeamActivity extends BaseActivity {
             public void onClick(View view) {
                 popupWindow.dismiss();
                 //去創建球賽
+                //去創建球賽
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("which", 1);
+                intent.putExtra("team_id",mSearchTeams.get(itemPosition).getId());
+                intent.putExtra("team_name",mSearchTeams.get(itemPosition).getTeam_name());
+                intent.putExtra("team_url",mSearchTeams.get(itemPosition).getImage().getUrl());
                 startActivity(intent);
                 finish();
             }

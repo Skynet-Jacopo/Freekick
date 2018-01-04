@@ -309,11 +309,29 @@ public class PartakeListFragment extends BaseFragment {
                                                 intent.putExtra("type", 3);
                                                 startActivityForResult(intent, REQUEST_CODE_DETAIL);
                                                 break;
-                                            case 7://已參與,且已確認
+                                            case 7://已參與,且已確認(自己是客隊)
                                                 intent.setClass(mContext, MatchContentActivity1.class);
                                                 intent.putExtra("id", mMatchList.get(position).getId() + "");
                                                 intent.putExtra("type", 2);
                                                 startActivityForResult(intent, REQUEST_CODE_DETAIL);
+                                                break;
+                                            case 8://已確認(不包含自己)
+                                                intent.setClass(mContext,MatchContentActivity1.class);
+                                                intent.putExtra("id",matchesBean.getId()+"");
+                                                intent.putExtra("type",10);
+                                                startActivity(intent);
+                                                break;
+                                            case 9://按鈕:接收邀請
+                                                intent.setClass(mContext, MatchContentActivity1.class);
+                                                intent.putExtra("id", matchesBean.getId() + "");
+                                                intent.putExtra("type", 5);
+                                                startActivity(intent);
+                                                break;
+                                            case 10://已被邀請,進入球賽詳情頁
+                                                intent.setClass(mContext, MatchContentActivity1.class);
+                                                intent.putExtra("id", matchesBean.getId() + "");
+                                                intent.putExtra("type", 5);
+                                                startActivity(intent);
                                                 break;
                                         }
                                     }

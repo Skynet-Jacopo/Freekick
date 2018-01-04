@@ -22,6 +22,7 @@ import com.football.freekick.activity.registerlogin.FirstPageActivity;
 import com.football.freekick.activity.registerlogin.LoginPage1Activity;
 import com.football.freekick.activity.registerlogin.LoginPager2Activity;
 import com.football.freekick.app.BaseFragment;
+import com.football.freekick.beans.Area;
 import com.football.freekick.beans.Logout;
 import com.football.freekick.beans.RegisterResponse;
 import com.football.freekick.beans.Settings;
@@ -38,6 +39,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -169,7 +171,7 @@ public class SetUpFragment extends BaseFragment {
         } else {
             mToggleButton.setToggleOff();
         }
-        Logger.d("mToggleButton"+mToggleButton.isToggleOn());
+        Logger.d("mToggleButton" + mToggleButton.isToggleOn());
         mToggleButton.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
             @Override
             public void onToggle(boolean on) {
@@ -184,8 +186,18 @@ public class SetUpFragment extends BaseFragment {
         ImageLoaderUtils.displayImage(MyUtil.getImageUrl(PrefUtils.getString(App.APP_CONTEXT, "logourl", null)),
                 mIvLogo, R.drawable.icon_default);
         mTvTeamName.setText(PrefUtils.getString(App.APP_CONTEXT, "team_name", null));
-        mTvTeamArea.setText(PrefUtils.getString(App.APP_CONTEXT, "district", null));
-
+        String district_id = PrefUtils.getString(App.APP_CONTEXT, "district_id", null);
+        String string = getString(R.string.text_area).trim();
+        Gson gson = new Gson();
+        Area area = gson.fromJson(string, Area.class);
+        if (district_id != null)
+            for (int i = 0; i < area.getRegions().size(); i++) {
+                for (int j = 0; j < area.getRegions().get(i).getDistricts().size(); j++) {
+                    if (area.getRegions().get(i).getDistricts().get(j).getDistrict_id().equals(district_id)) {
+                        mTvTeamArea.setText(area.getRegions().get(i).getDistricts().get(j).getDistrict());
+                    }
+                }
+            }
     }
 
     /**
