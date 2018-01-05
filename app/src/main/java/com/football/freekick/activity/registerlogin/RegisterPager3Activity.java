@@ -241,7 +241,8 @@ public class RegisterPager3Activity extends BaseActivity {
      * 註冊FirebaseDatabase
      */
     private void registerFirebaseDatabase(final CreateTeam.TeamBean team) {
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(mEmail, mPassword)
+//        FirebaseAuth.getInstance().createUserWithEmailAndPassword(mEmail, mPassword)
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(PrefUtils.getString(App.APP_CONTEXT,"uid",null)+"@yopmail.com", PrefUtils.getString(App.APP_CONTEXT,"uid",null))
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -260,7 +261,8 @@ public class RegisterPager3Activity extends BaseActivity {
     }
 
     private void loginFirebaseDatabase(final CreateTeam.TeamBean team) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(mEmail, mPassword)
+//        FirebaseAuth.getInstance().signInWithEmailAndPassword(mEmail, mPassword)
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(PrefUtils.getString(App.APP_CONTEXT,"uid",null)+"@yopmail.com", PrefUtils.getString(App.APP_CONTEXT,"uid",null))
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

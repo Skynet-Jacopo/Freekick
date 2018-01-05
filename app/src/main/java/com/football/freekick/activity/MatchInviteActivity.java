@@ -118,7 +118,7 @@ public class MatchInviteActivity extends BaseActivity {
         if (getIntent().getStringExtra("invited_team_name") == null) {
             if (getIntent().getBooleanExtra("from_unmatched", false)) {
                 mTvToNotMatched.setVisibility(View.GONE);
-            }else {
+            } else {
                 mTvToNotMatched.setVisibility(View.VISIBLE);
             }
             //沒有邀請球隊進行新球賽
@@ -274,7 +274,10 @@ public class MatchInviteActivity extends BaseActivity {
             public void convert(ViewHolder holder, final Recommended.TeamsBean teamsBean) {
                 final int itemPosition = holder.getItemPosition();
                 ImageView ivPic = holder.getView(R.id.iv_pic);
-                ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivPic,R.drawable.icon_default);
+                if (teamsBean.getDistrict() != null && teamsBean.getDistrict().getDistrict() != null)
+                    holder.setText(R.id.tv_district, teamsBean.getDistrict().getDistrict());
+                ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivPic, R.drawable
+                        .icon_default);
                 holder.setText(R.id.tv_team_name, teamsBean.getTeam_name());
                 holder.setOnClickListener(R.id.tv_invite, new View.OnClickListener() {
                     @Override

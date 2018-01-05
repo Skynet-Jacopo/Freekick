@@ -61,11 +61,11 @@ import okhttp3.Response;
 public class SearchTeamActivity extends BaseActivity {
 
     @Bind(R.id.tv_back)
-    TextView     mTvBack;
+    TextView mTvBack;
     @Bind(R.id.tv_icon_search)
-    TextView     mTvIconSearch;
+    TextView mTvIconSearch;
     @Bind(R.id.edt_search_team)
-    EditText     mEdtSearchTeam;
+    EditText mEdtSearchTeam;
     @Bind(R.id.recycler_search_teams)
     RecyclerView mRecyclerSearchTeams;
     @Bind(R.id.ll_parent)
@@ -75,7 +75,7 @@ public class SearchTeamActivity extends BaseActivity {
     private List<SameArea.TeamBean> mSearchTeams;
 
     private CommonAdapter mAdapter;
-    private Context       mContext;
+    private Context mContext;
     private String team_id;
 
     @Override
@@ -100,7 +100,7 @@ public class SearchTeamActivity extends BaseActivity {
                     }
                     String editText = StringUtils.getEditText(mEdtSearchTeam);
                     for (int i = 0; i < mAllTeams.size(); i++) {
-                        if (mAllTeams.get(i).getTeam_name().contains(editText)){
+                        if (mAllTeams.get(i).getTeam_name().contains(editText)) {
                             mSearchTeams.add(mAllTeams.get(i));
                         }
                     }
@@ -130,7 +130,7 @@ public class SearchTeamActivity extends BaseActivity {
             public void afterTextChanged(Editable editable) {
                 String editText = StringUtils.getEditText(mEdtSearchTeam);
                 for (int i = 0; i < mAllTeams.size(); i++) {
-                    if (mAllTeams.get(i).getTeam_name().contains(editText)){
+                    if (mAllTeams.get(i).getTeam_name().contains(editText)) {
                         mSearchTeams.add(mAllTeams.get(i));
                     }
                 }
@@ -160,7 +160,9 @@ public class SearchTeamActivity extends BaseActivity {
             @Override
             public void convert(ViewHolder holder, SameArea.TeamBean teamsBean) {
                 final int itemPosition = holder.getItemPosition();
-                ImageView ivPic        = holder.getView(R.id.iv_pic);
+                if (teamsBean.getDistrict() != null && teamsBean.getDistrict().getDistrict() != null)
+                    holder.setText(R.id.tv_district, teamsBean.getDistrict().getDistrict());
+                ImageView ivPic = holder.getView(R.id.iv_pic);
                 ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivPic, R.drawable
                         .icon_default);
                 if (teamsBean.isAttention()) {
@@ -220,6 +222,7 @@ public class SearchTeamActivity extends BaseActivity {
                 break;
         }
     }
+
     /**
      * 獲取已關注球隊與同區球隊做比較,得出關注與否
      */
@@ -233,8 +236,8 @@ public class SearchTeamActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson                      gson           = new Gson();
-                        Attention                 attention      = gson.fromJson(s, Attention.class);
+                        Gson gson = new Gson();
+                        Attention attention = gson.fromJson(s, Attention.class);
                         List<Attention.TeamsBean> attentionTeams = attention.getTeams();
                         for (int i = 0; i < attentionTeams.size(); i++) {
                             for (int j = 0; j < mAllTeams.size(); j++) {
@@ -257,6 +260,7 @@ public class SearchTeamActivity extends BaseActivity {
                 });
 
     }
+
     /**
      * 取消關注
      *
@@ -273,7 +277,7 @@ public class SearchTeamActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson   gson   = new Gson();
+                        Gson gson = new Gson();
                         Follow follow = gson.fromJson(s, Follow.class);
                         if (follow.getSuccess() != null) {
                             ToastUtil.toastShort(follow.getSuccess());
@@ -310,7 +314,7 @@ public class SearchTeamActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson   gson   = new Gson();
+                        Gson gson = new Gson();
                         Follow follow = gson.fromJson(s, Follow.class);
                         if (follow.getSuccess() != null) {
                             ToastUtil.toastShort(follow.getSuccess());
@@ -343,7 +347,7 @@ public class SearchTeamActivity extends BaseActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         TextView tviconclose = (TextView) contentView.findViewById(R.id.tv_icon_close);
         tviconclose.setTypeface(App.mTypeface);
-        TextView tvnewmatch         = (TextView) contentView.findViewById(R.id.tv_new_match);
+        TextView tvnewmatch = (TextView) contentView.findViewById(R.id.tv_new_match);
         TextView tvpartakethismatch = (TextView) contentView.findViewById(R.id.tv_partake_this_match);
         tviconclose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -359,9 +363,9 @@ public class SearchTeamActivity extends BaseActivity {
                 //去創建球賽
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("which", 1);
-                intent.putExtra("team_id",mSearchTeams.get(itemPosition).getId());
-                intent.putExtra("team_name",mSearchTeams.get(itemPosition).getTeam_name());
-                intent.putExtra("team_url",mSearchTeams.get(itemPosition).getImage().getUrl());
+                intent.putExtra("team_id", mSearchTeams.get(itemPosition).getId());
+                intent.putExtra("team_name", mSearchTeams.get(itemPosition).getTeam_name());
+                intent.putExtra("team_url", mSearchTeams.get(itemPosition).getImage().getUrl());
                 startActivity(intent);
                 finish();
             }
@@ -412,8 +416,8 @@ public class SearchTeamActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         Logger.json(s);
                         loadingDismiss();
-                        Gson                            gson    = new Gson();
-                        MatchesComing                   json    = gson.fromJson(s, MatchesComing.class);
+                        Gson gson = new Gson();
+                        MatchesComing json = gson.fromJson(s, MatchesComing.class);
                         List<MatchesComing.MatchesBean> matches = json.getMatches();
                         if (matches != null && matches.size() > 0)
                             for (int i = 0; i < matches.size(); i++) {
@@ -424,7 +428,8 @@ public class SearchTeamActivity extends BaseActivity {
                                     }
                                 }
                                 if (matches.get(i).getStatus().equals("w")
-                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains("confirmation_pending")
+                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains
+                                        ("confirmation_pending")
                                         && !gson.toJson(matches.get(i).getJoin_matches()).contains("invited")) {
                                     if (matches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {
                                         mListWait.add(matches.get(i));
@@ -459,13 +464,13 @@ public class SearchTeamActivity extends BaseActivity {
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
-        TextView                  tvnewmatch  = (TextView) contentView.findViewById(R.id.tv_new_match);
-        TextView                  tvstate     = (TextView) contentView.findViewById(R.id.tv_state);
-        TextView                  tvLocation  = (TextView) contentView.findViewById(R.id.tv_location);
-        TextView                  tvTime      = (TextView) contentView.findViewById(R.id.tv_time);
-        TextView                  tvHomeName  = (TextView) contentView.findViewById(R.id.tv_home_name);
-        ImageView                 ivHomeLogo  = (ImageView) contentView.findViewById(R.id.iv_home_logo);
-        TextView                  tvDate      = (TextView) contentView.findViewById(R.id.tv_date);
+        TextView tvnewmatch = (TextView) contentView.findViewById(R.id.tv_new_match);
+        TextView tvstate = (TextView) contentView.findViewById(R.id.tv_state);
+        TextView tvLocation = (TextView) contentView.findViewById(R.id.tv_location);
+        TextView tvTime = (TextView) contentView.findViewById(R.id.tv_time);
+        TextView tvHomeName = (TextView) contentView.findViewById(R.id.tv_home_name);
+        ImageView ivHomeLogo = (ImageView) contentView.findViewById(R.id.iv_home_logo);
+        TextView tvDate = (TextView) contentView.findViewById(R.id.tv_date);
         MatchesComing.MatchesBean matchesBean = mListWait.get(0);
         tvHomeName.setText(matchesBean.getHome_team().getTeam_name());
         ImageLoaderUtils.displayImage(MyUtil.getImageUrl(matchesBean.getHome_team().getImage().getUrl()),
@@ -474,7 +479,7 @@ public class SearchTeamActivity extends BaseActivity {
         String date = JodaTimeUtil.getDate2(matchesBean.getPlay_start());
         tvDate.setText(date);
         String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
-        String end   = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
+        String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
         tvTime.setText(start + " - " + end);
         tvLocation.setText(matchesBean.getLocation());
         tvstate.setOnClickListener(new View.OnClickListener() {
@@ -539,7 +544,7 @@ public class SearchTeamActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson   gson   = new Gson();
+                        Gson gson = new Gson();
                         Invite invite = gson.fromJson(s, Invite.class);
                         if (invite.getSuccess() != null) {
                             ToastUtil.toastShort(invite.getSuccess());

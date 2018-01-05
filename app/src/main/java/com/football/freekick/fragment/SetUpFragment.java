@@ -194,7 +194,7 @@ public class SetUpFragment extends BaseFragment {
             for (int i = 0; i < area.getRegions().size(); i++) {
                 for (int j = 0; j < area.getRegions().get(i).getDistricts().size(); j++) {
                     if (area.getRegions().get(i).getDistricts().get(j).getDistrict_id().equals(district_id)) {
-                        mTvTeamArea.setText(area.getRegions().get(i).getDistricts().get(j).getDistrict());
+                        mTvTeamArea.setText(area.getRegions().get(i).getDistricts().get(j).getDistrict().replace("$"," "));
                     }
                 }
             }

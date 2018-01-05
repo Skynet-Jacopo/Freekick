@@ -28,16 +28,20 @@ import com.facebook.login.widget.LoginButton;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
+import com.football.freekick.beans.Login;
 import com.football.freekick.beans.RegisterResponse;
+import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.StringUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpHeaders;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
@@ -53,6 +57,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
+import okhttp3.Headers;
 import okhttp3.Response;
 
 public class LoginPage1Activity extends BaseActivity {
@@ -88,7 +93,7 @@ public class LoginPage1Activity extends BaseActivity {
         // If using in a fragment
 //        mFacebook.setFragment(this);
         mCallbackManager = CallbackManager.Factory.create();
-        mFacebook.setReadPermissions("email","public_profile","user_friends");
+        mFacebook.setReadPermissions("email", "public_profile", "user_friends");
         mFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -98,7 +103,8 @@ public class LoginPage1Activity extends BaseActivity {
                 getLoginInfo(loginResult.getAccessToken());
 //                List<String> str = new ArrayList<String>();
 //                str.add("public_profile");
-//                final AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
+//                final AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken()
+// .getToken());
             }
 
             @Override
@@ -130,6 +136,7 @@ public class LoginPage1Activity extends BaseActivity {
         switch (view.getId()) {
             case R.id.fl_login_by_facebook:
                 mFacebook.performClick();
+//                registerByFaceBook("108927019898582","yue");
                 break;
             case R.id.tv_login_by_email:
                 startActivity(new Intent(mContext, RegisterByEmailActivity.class));
@@ -149,11 +156,13 @@ public class LoginPage1Activity extends BaseActivity {
         mCallbackManager.onActivityResult(requestCode,
                 resultCode, data);
     }
+
     public void getFaceBookToken(View view) {
         AccessToken mAccessToken = AccessToken.getCurrentAccessToken();
         Log.e("token", "token :" + mAccessToken.getToken() + "," + "user_id" + mAccessToken.getUserId());
     }
-    public void getLoginInfo(final AccessToken accessToken) {
+
+    public void getLoginInfo(AccessToken accessToken) {
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
@@ -173,8 +182,9 @@ public class LoginPage1Activity extends BaseActivity {
                     Logger.json(object.toString());
                     Toast.makeText(mContext, "" + object.toString(), Toast.LENGTH_SHORT).show();
                     mEdtLog.setText(object.toString());
-//                    LoginManager.getInstance().logInWithReadPermissions(LoginPage1Activity.this,Arrays.asList("public_profile"));
-                    registerByFaceBook(accessToken,name);
+//                    LoginManager.getInstance().logInWithReadPermissions(LoginPage1Activity.this,Arrays.asList
+// ("public_profile"));
+                    registerByFaceBook(id, name);
                 }
             }
         });
@@ -188,22 +198,25 @@ public class LoginPage1Activity extends BaseActivity {
 
     /**
      * 通過Facebook註冊
-     * @param accessToken
+     *
+     * @param id
      * @param name
      */
-    private void registerByFaceBook(final AccessToken accessToken, final String name) {
+    private void registerByFaceBook(final String id, final String name) {
 //        { "user": { "social_token": "asdfghjqwertyuytrewq", "username": "test_user",  "provider":"facebook"}}
         String url;
         if (App.isChinese)
-            url = "http://api.freekick.hk/api/zh_HK/auth";
+//            url = "http://api.freekick.hk/api/zh_HK/auth";
+            url = "http://api.freekick.hk/api/zh_HK/social_authentication/authentication_success";
         else
-            url = "http://api.freekick.hk/api/en/auth";
+            url = "http://api.freekick.hk/api/en/social_authentication/authentication_success";
         loadingShow();
         JsonObject object = new JsonObject();
         JsonObject object1 = new JsonObject();
-        object1.addProperty("social_token",accessToken.getToken());
-        object1.addProperty("username",name);
-        object1.addProperty("provider","facebook");
+        object1.addProperty("social_token", id);
+        object1.addProperty("android_device_token", FirebaseInstanceId.getInstance().getToken());
+//        object1.addProperty("username",name);
+        object1.addProperty("provider", "facebook");
         object.add("user", object1);
         OkGo.post(url)
                 .upJson(object.toString())
@@ -211,29 +224,100 @@ public class LoginPage1Activity extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {
-                        loadingDismiss();
+//                        loadingDismiss();
+//                        Logger.json(s);
+//                        Gson gson = new Gson();
+//                        RegisterResponse registerResponse = gson.fromJson(s, RegisterResponse.class);
+//                        if (registerResponse.getStatus().equals("success")) {
+//
+////                            ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
+//                            Intent intent = new Intent(mContext, RegisterPager1Activity.class);
+//                            intent.putExtra("social_token", id);
+//                            intent.putExtra("username", name);
+//                            startActivity(intent);
+//                        }else if (registerResponse.getStatus().equals("error")){
+//                            RegisterResponse.ErrorsBean errors = registerResponse.getErrors();
+//                            if (errors.getFull_messages()!=null&&errors.getFull_messages().size()!=0){
+//                                ToastUtil.toastShort(errors.getFull_messages().get(0));
+//                            }else if (errors.getMobile_no()!=null&&errors.getMobile_no().size()!=0){
+//                                ToastUtil.toastShort(errors.getMobile_no().get(0));
+//                            }else if (errors.getPassword()!=null&&errors.getPassword().size()!=0){
+//                                ToastUtil.toastShort(errors.getPassword().get(0));
+//                            }else if (errors.getRegister_type()!=null&&errors.getRegister_type().size()!=0){
+//                                ToastUtil.toastShort(errors.getRegister_type().get(0));
+//                            }
+//
+//                        }
+
                         Logger.json(s);
                         Gson gson = new Gson();
-                        RegisterResponse registerResponse = gson.fromJson(s, RegisterResponse.class);
-                        if (registerResponse.getStatus().equals("success")) {
+                        Login login = gson.fromJson(s, Login.class);
+                        if (login.getUser() != null) {
+                            Login.UserBean user = login.getUser();
+                            if (user.getLogin_fail() == 0) {
+                                //登錄成功
+                                Headers headers = response.headers();
+                                String access_token = headers.get("access-token");
+                                String client = headers.get("client");
+                                String uid = headers.get("uid");
+                                String expiry = headers.get("expiry");
+                                Logger.d("access-token=" + access_token + "   client=" + client + "   uid=" + uid + "" +
+                                        "   expiry=" + expiry);
+                                HttpHeaders header = new HttpHeaders();
+                                header.put("access-token", access_token);
+                                header.put("client", client);
+                                header.put("uid", uid);
+                                header.put("expiry", expiry);
+                                OkGo.getInstance().addCommonHeaders(header);
+                                PrefUtils.putString(App.APP_CONTEXT, "access_token", access_token);
+                                PrefUtils.putString(App.APP_CONTEXT, "client", client);
+                                PrefUtils.putString(App.APP_CONTEXT, "uid", uid);
+                                PrefUtils.putString(App.APP_CONTEXT, "expiry", expiry);
 
-//                            ToastUtil.toastShort(getString(R.string.please_verify_your_account_first));
-                            Intent intent = new Intent(mContext, RegisterPager1Activity.class);
-                            intent.putExtra("social_token", accessToken.getToken());
-                            intent.putExtra("username", name);
-                            startActivity(intent);
-                        }else if (registerResponse.getStatus().equals("error")){
-                            RegisterResponse.ErrorsBean errors = registerResponse.getErrors();
-                            if (errors.getFull_messages()!=null&&errors.getFull_messages().size()!=0){
-                                ToastUtil.toastShort(errors.getFull_messages().get(0));
-                            }else if (errors.getMobile_no()!=null&&errors.getMobile_no().size()!=0){
-                                ToastUtil.toastShort(errors.getMobile_no().get(0));
-                            }else if (errors.getPassword()!=null&&errors.getPassword().size()!=0){
-                                ToastUtil.toastShort(errors.getPassword().get(0));
-                            }else if (errors.getRegister_type()!=null&&errors.getRegister_type().size()!=0){
-                                ToastUtil.toastShort(errors.getRegister_type().get(0));
+                                PrefUtils.putString(App.APP_CONTEXT, "mobile_no", user.getMobile_no() + "");
+                                PrefUtils.putString(App.APP_CONTEXT, "username", user.getUsername() + "");
+                                if (user.getTeams() != null && user.getTeams().size() <= 0) {//沒有球队則去註冊三頁
+                                    Intent intent = new Intent(mContext, RegisterPager1Activity.class);
+                                    intent.putExtra("social_token", id);
+                                    intent.putExtra("username", name);
+                                    PrefUtils.putString(App.APP_CONTEXT, "username", name);
+                                    loadingDismiss();
+                                    startActivity(intent);
+
+                                } else {//有用戶名則直接進入應用
+                                    List<Login.UserBean.TeamsBean> teams = user.getTeams();
+                                    Login.UserBean.TeamsBean teamsBean = teams.get(teams.size() - 1);
+                                    PrefUtils.putString(App.APP_CONTEXT, "team_id", teamsBean.getId() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "color1", teamsBean.getColor1() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "color2", teamsBean.getColor2() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "logourl", teamsBean.getImage().getUrl() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "team_name", teamsBean.getTeam_name() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "size", teamsBean.getSize() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "age_range_max", teamsBean.getAge_range_max
+                                            () + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "age_range_min", teamsBean.getAge_range_min
+                                            () + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "establish_year", teamsBean
+                                            .getEstablish_year() + "");
+                                    PrefUtils.putString(App.APP_CONTEXT, "average_height", teamsBean
+                                            .getAverage_height() + "");
+                                    if (teamsBean.getDistrict() != null) {
+                                        PrefUtils.putString(App.APP_CONTEXT, "district", teamsBean.getDistrict()
+                                                .getDistrict() + "");
+                                        PrefUtils.putString(App.APP_CONTEXT, "district_id", teamsBean.getDistrict()
+                                                .getId() + "");
+                                    }
+                                    loadingDismiss();
+                                    startActivity(new Intent(mContext, OneTimePagerActivity.class));
+                                }
+                            } else {
+
                             }
-
+                        } else {//data為null,登錄失敗
+                            loadingDismiss();
+                            if (login.getErrors() != null) {
+                                ToastUtil.toastShort(login.getErrors().get(0));
+                            }
                         }
                     }
 

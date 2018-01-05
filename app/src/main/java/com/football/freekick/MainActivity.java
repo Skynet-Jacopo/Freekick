@@ -119,6 +119,26 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //        }
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Api-19的手機底部導航欄在中英文切換時不變,故而手動改變
+        if (App.isChinese){
+            mMainEstablish.setText("開場");
+            mMainPartake.setText("搵場");
+            mMainRecord.setText("作賽記錄");
+            mMainMine.setText("我的主牆");
+            mMainSetUp.setText("設定");
+        }else {
+            mMainEstablish.setText("Create Match");
+            mMainPartake.setText("Join Match");
+            mMainRecord.setText("Records");
+            mMainMine.setText("My Wall");
+            mMainSetUp.setText("Settings");
+        }
+    }
+
     /**
      * 獲取場地
      */

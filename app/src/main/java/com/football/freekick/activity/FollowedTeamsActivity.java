@@ -136,6 +136,8 @@ public class FollowedTeamsActivity extends BaseActivity {
                 final int itemPosition = holder.getItemPosition();
                 ImageView ivPic = holder.getView(R.id.iv_pic);
                 holder.setText(R.id.tv_attention, getString(R.string.unfollow));
+                if (teamsBean.getDistrict() != null && teamsBean.getDistrict().getDistrict() != null)
+                    holder.setText(R.id.tv_district, teamsBean.getDistrict().getDistrict());
                 ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivPic, R.drawable
                         .icon_default);
                 holder.setText(R.id.tv_team_name, teamsBean.getTeam_name());
@@ -236,9 +238,9 @@ public class FollowedTeamsActivity extends BaseActivity {
                 //去創建球賽
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("which", 1);
-                intent.putExtra("team_id",mFollowingTeams.get(itemPosition).getId());
-                intent.putExtra("team_name",mFollowingTeams.get(itemPosition).getTeam_name());
-                intent.putExtra("team_url",mFollowingTeams.get(itemPosition).getImage().getUrl());
+                intent.putExtra("team_id", mFollowingTeams.get(itemPosition).getId());
+                intent.putExtra("team_name", mFollowingTeams.get(itemPosition).getTeam_name());
+                intent.putExtra("team_url", mFollowingTeams.get(itemPosition).getImage().getUrl());
                 startActivity(intent);
                 finish();
             }
@@ -301,7 +303,8 @@ public class FollowedTeamsActivity extends BaseActivity {
                                     }
                                 }
                                 if (matches.get(i).getStatus().equals("w")
-                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains("confirmation_pending")
+                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains
+                                        ("confirmation_pending")
                                         && !gson.toJson(matches.get(i).getJoin_matches()).contains("invited")) {
                                     if (matches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {
                                         mListWait.add(matches.get(i));

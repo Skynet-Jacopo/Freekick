@@ -178,6 +178,7 @@ public class SameAreaTeamActivity extends BaseActivity {
             public void convert(ViewHolder holder, SameArea.TeamBean teamsBean) {
                 final int itemPosition = holder.getItemPosition();
                 ImageView ivPic = holder.getView(R.id.iv_pic);
+                holder.setText(R.id.tv_district,teamsBean.getDistrict().getDistrict());
                 ImageLoaderUtils.displayImage(MyUtil.getImageUrl(teamsBean.getImage().getUrl()), ivPic, R.drawable
                         .icon_default);
                 if (teamsBean.isAttention()) {

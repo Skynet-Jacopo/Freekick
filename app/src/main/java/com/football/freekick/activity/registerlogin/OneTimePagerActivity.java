@@ -116,7 +116,7 @@ public class OneTimePagerActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 PrefUtils.putBoolean(App.APP_CONTEXT, "isSecondRun", false);//此屬性添加以重新請求球場,廣告等信息.
-                Intent intent = new Intent(mContext,LoginPager2Activity.class);
+                Intent intent = new Intent(mContext,FirstPageActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -43,38 +43,38 @@ import okhttp3.Response;
 public class ConfirmationPendingActivity extends BaseActivity {
 
     @Bind(R.id.tv_back)
-    TextView     mTvBack;
+    TextView mTvBack;
     @Bind(R.id.tv_friend)
-    TextView     mTvFriend;
+    TextView mTvFriend;
     @Bind(R.id.tv_notice)
-    TextView     mTvNotice;
+    TextView mTvNotice;
     @Bind(R.id.iv_pic)
-    ImageView    mIvPic;
+    ImageView mIvPic;
     @Bind(R.id.tv_pitch_name)
-    TextView     mTvPitchName;
+    TextView mTvPitchName;
     @Bind(R.id.tv_icon_location)
-    TextView     mTvIconLocation;
+    TextView mTvIconLocation;
     @Bind(R.id.tv_location)
-    TextView     mTvLocation;
+    TextView mTvLocation;
     @Bind(R.id.ll_location)
     LinearLayout mLlLocation;
     @Bind(R.id.tv_time)
-    TextView     mTvTime;
+    TextView mTvTime;
     @Bind(R.id.iv_dress_home)
-    ImageView    mIvDressHome;
+    ImageView mIvDressHome;
     @Bind(R.id.tv_home_name)
-    TextView     mTvHomeName;
+    TextView mTvHomeName;
     @Bind(R.id.iv_dress_visitor)
-    ImageView    mIvDressVisitor;
+    ImageView mIvDressVisitor;
     @Bind(R.id.tv_visitor_name)
-    TextView     mTvVisitorName;
+    TextView mTvVisitorName;
     @Bind(R.id.recycler_confirmation_pending)
     RecyclerView mRecyclerConfirmationPending;
     @Bind(R.id.ll_parent)
     LinearLayout mLlParent;
-    private String                                      id;
-    private MatchDetail.MatchBean                       mMatch;
-    private Context                                     mContext;
+    private String id;
+    private MatchDetail.MatchBean mMatch;
+    private Context mContext;
     private List<MatchDetail.MatchBean.JoinMatchesBean> join_matches;
 
     @Override
@@ -101,7 +101,7 @@ public class ConfirmationPendingActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson        gson     = new Gson();
+                        Gson gson = new Gson();
                         MatchDetail fromJson = gson.fromJson(s, MatchDetail.class);
                         if (fromJson.getMatch() != null) {
                             mMatch = fromJson.getMatch();
@@ -139,7 +139,7 @@ public class ConfirmationPendingActivity extends BaseActivity {
 
         List<MatchDetail.MatchBean.JoinMatchesBean> join_matches1 = mMatch.getJoin_matches();
         for (int i = 0; i < join_matches1.size(); i++) {
-            if (join_matches1.get(i).getStatus().equals("confirmation_pending")){
+            if (join_matches1.get(i).getStatus().equals("confirmation_pending")) {
                 join_matches.add(join_matches1.get(i));
             }
         }
@@ -161,9 +161,12 @@ public class ConfirmationPendingActivity extends BaseActivity {
             @Override
             public void convert(ViewHolder holder, final MatchDetail.MatchBean.JoinMatchesBean joinMatchesBean) {
                 final int itemPosition = holder.getItemPosition();
-                ImageView ivPic        = holder.getView(R.id.iv_pic);
+                ImageView ivPic = holder.getView(R.id.iv_pic);
                 ImageLoaderUtils.displayImage(MyUtil.getImageUrl(joinMatchesBean.getTeam().getImage().getUrl()),
                         ivPic, R.drawable.icon_default);
+                if (joinMatchesBean.getTeam().getDistrict() != null && joinMatchesBean.getTeam().getDistrict()
+                        .getDistrict() != null)
+                    holder.setText(R.id.tv_district, joinMatchesBean.getTeam().getDistrict().getDistrict());
                 holder.setText(R.id.tv_team_name, joinMatchesBean.getTeam().getTeam_name());
                 holder.setOnClickListener(R.id.tv_confirm, new View.OnClickListener() {
                     @Override
@@ -176,8 +179,8 @@ public class ConfirmationPendingActivity extends BaseActivity {
                 holder.setOnClickListener(R.id.ll_content, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(mContext,TeamDetailActivity.class);
-                        intent.putExtra("id",joinMatchesBean.getJoin_team_id()+"");
+                        Intent intent = new Intent(mContext, TeamDetailActivity.class);
+                        intent.putExtra("id", joinMatchesBean.getJoin_team_id() + "");
                         startActivity(intent);
                     }
                 });
@@ -202,7 +205,7 @@ public class ConfirmationPendingActivity extends BaseActivity {
                     public void onSuccess(String s, Call call, Response response) {
                         loadingDismiss();
                         Logger.json(s);
-                        Gson         gson     = new Gson();
+                        Gson gson = new Gson();
                         ConfirmMatch fromJson = gson.fromJson(s, ConfirmMatch.class);
                         if (fromJson.getJoin_match() != null) {
                             ToastUtil.toastShort(getString(R.string.match_success));

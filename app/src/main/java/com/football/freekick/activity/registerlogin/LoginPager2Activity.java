@@ -16,6 +16,7 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.football.freekick.App;
@@ -47,6 +48,7 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -136,9 +138,13 @@ public class LoginPager2Activity extends BaseActivity {
         switch (view.getId()) {
             case R.id.fl_login_by_facebook:
                 mFacebook.performClick();
-//                LoginManager.getInstance().logInWithReadPermissions(LoginPager2Activity.this, Arrays.asList
-//                        ("public_profile"));
-
+                LoginManager.getInstance().logInWithReadPermissions(LoginPager2Activity.this, Arrays.asList
+                        ("public_profile"));
+                AccessToken mAccessToken = AccessToken.getCurrentAccessToken();
+                loginByFacebook(mAccessToken.getUserId());
+//                loginByFacebook(PrefUtils.getString(App.APP_CONTEXT,"uid",null));
+//                loginByFacebook("108927019898582");
+//                loginTest();
                 break;
             case R.id.tv_login:
                 login();
@@ -416,7 +422,7 @@ public class LoginPager2Activity extends BaseActivity {
                     //获取地域信息
                     String locale = object.optString("locale");   //zh_CN 代表中文简体
 
-                    loginByFacebook(accessToken.getToken());
+                    loginByFacebook(id);
 //                    Toast.makeText(mContext, "" + object.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -429,17 +435,21 @@ public class LoginPager2Activity extends BaseActivity {
         request.executeAsync();
     }
 
-    private void loginByFacebook(String token) {
+    private void loginByFacebook(final String id) {
         loadingShow();
         JsonObject object = new JsonObject();
         JsonObject object1 = new JsonObject();
-        object1.addProperty("facebook-token", token);
+        object1.addProperty("social_token",id);
         object1.addProperty("android_device_token", FirebaseInstanceId.getInstance().getToken());
-        object1.addProperty("provider", "facebook");
+//        object1.addProperty("username",name);
+        object1.addProperty("provider","facebook");
         object.add("user", object1);
         Logger.json(object.toString());
-        String url = App.isChinese ? "http://api.freekick.hk/api/zh_HK/auth/sign_in" :
-                "http://api.freekick.hk/api/en/auth/sign_in";
+        String url;
+        if (App.isChinese)
+            url = "http://api.freekick.hk/api/zh_HK/social_authentication/authentication_success";
+        else
+            url = "http://api.freekick.hk/api/en/social_authentication/authentication_success";
         Logger.d(url);
         OkGo.post(url)
                 .upJson(object.toString())
@@ -482,7 +492,7 @@ public class LoginPager2Activity extends BaseActivity {
                                 }
                                 if (user.getTeams() != null && user.getTeams().size() <= 0) {//沒有球队則去註冊三頁
                                     Intent intent = new Intent(mContext, RegisterPager1Activity.class);
-                                    intent.putExtra("email", StringUtils.getEditText(mEdtEmail));
+                                    intent.putExtra("social_token", PrefUtils.getString(App.APP_CONTEXT,"social_token",null));
                                     intent.putExtra("password", StringUtils.getEditText(mEdtPassWord));
                                     loadingDismiss();
                                     startActivity(intent);
@@ -512,7 +522,7 @@ public class LoginPager2Activity extends BaseActivity {
                                     }
                                     loadingDismiss();
                                     //註冊FirebaseDatabase
-                                    loginFirebaseDatabase(user.getUsername(), teamsBean);
+                                    loginFirebaseDatabaseByFacebook(id,user.getUsername(), teamsBean);
 //                                    registerFirebaseDatabase(user.getUsername(),teamsBean.getId()+"");
                                     startActivity(new Intent(mContext, OneTimePagerActivity.class));
                                 }
@@ -532,6 +542,47 @@ public class LoginPager2Activity extends BaseActivity {
                         super.onError(call, response, e);
                         Logger.d(e.getMessage());
                         loadingDismiss();
+                    }
+                });
+    }
+
+    private void loginFirebaseDatabaseByFacebook(String id, final String username, final Login.UserBean.TeamsBean teamsBean) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(id+"@yopmail.com", id)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Logger.d("登錄FirebaseDatabase成功了");
+                            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                                Logger.json(new Gson().toJson(task));
+                                FirebaseDatabase.getInstance()
+                                        .getReference().
+                                        child("users").
+                                        child(teamsBean.getId() + "").
+                                        child("connection").
+                                        setValue(UsersChatAdapter.ONLINE);
+                                FirebaseDatabase.getInstance()
+                                        .getReference().
+                                        child("users").
+                                        child(teamsBean.getId() + "").
+                                        child("displayName").
+                                        setValue(username + "（" + teamsBean.getTeam_name() + "）");
+                                FirebaseDatabase.getInstance()
+                                        .getReference().
+                                        child("users").
+                                        child(teamsBean.getId() + "").
+                                        child("team_url").
+                                        setValue(teamsBean.getImage().getUrl());
+                                FirebaseDatabase.getInstance()
+                                        .getReference().
+                                        child("users").
+                                        child(teamsBean.getId() + "").
+                                        child("team_id").
+                                        setValue(teamsBean.getId() + "");
+                            }
+                        } else {
+                            Logger.d(task.getException().getMessage());
+                        }
                     }
                 });
     }

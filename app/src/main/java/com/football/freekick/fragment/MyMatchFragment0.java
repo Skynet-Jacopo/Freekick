@@ -397,14 +397,15 @@ public class MyMatchFragment0 extends LazyLoadFragment {
                                     }
                                 }
                                 if (mMatches.get(i).getStatus().equals("m")) {
-                                    if (mMatches.get(i).getHome_team().getId() == Integer.parseInt(team_id)){//主隊是自己,添加
+                                    if (mMatches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {//主隊是自己,添加
                                         mListMatch.add(mMatches.get(i));
-                                    }else {//判斷客隊是否有自己,有則添加,沒有則不添加
+                                    } else {//判斷客隊是否有自己,有則添加,沒有則不添加
                                         boolean shouldAdd = false;
                                         List<MatchesComing.MatchesBean.JoinMatchesBean> join_matches = mMatches.get(i)
                                                 .getJoin_matches();
                                         for (int j = 0; j < join_matches.size(); j++) {
-                                            if (join_matches.get(j).getJoin_team_id() == Integer.parseInt(team_id)){
+                                            if (join_matches.get(j).getJoin_team_id() == Integer.parseInt(team_id) &&
+                                                    join_matches.get(j).getStatus().equals("confirmed")) {
                                                 shouldAdd = true;
                                             }
                                         }

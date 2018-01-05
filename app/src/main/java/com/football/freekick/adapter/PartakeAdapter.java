@@ -19,6 +19,7 @@ import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.views.ClickableImageView;
 import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.List;
@@ -107,6 +108,7 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             haveMe = true;
                         }
                     }
+                    Logger.d("有你事兒么--->"+haveMe);
                     if (haveMe){
                         myHolder1.tvState.setText(R.string.accept_the_invitation);
                         myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_green_gray_bg);
@@ -120,6 +122,21 @@ public class PartakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             @Override
                             public void onClick(View view) {
                                 click.Clike(10, myHolder1.lLContent, position);
+                            }
+                        });
+                    }else {
+                        myHolder1.tvState.setText(R.string.join_match);
+                        myHolder1.tvState.setBackgroundResource(R.drawable.selector_round_green_gray_bg);
+                        myHolder1.tvState.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                click.Clike(2, myHolder1.tvState, position);
+                            }
+                        });
+                        myHolder1.lLContent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                click.Clike(1, myHolder1.lLContent, position);
                             }
                         });
                     }
