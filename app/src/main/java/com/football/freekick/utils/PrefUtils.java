@@ -71,11 +71,23 @@ public class PrefUtils {
         pref.edit().putInt(key, value).commit();
     }
 
+    public static void putLong(Context ctx, String key, long value) {
+        SharedPreferences pref = ctx.getSharedPreferences(SHARE_PREFS_NAME,
+                Context.MODE_PRIVATE);
+
+        pref.edit().putLong(key, value).commit();
+    }
     public static int getInt(Context ctx, String key, int defaultValue) {
         SharedPreferences pref = ctx.getSharedPreferences(SHARE_PREFS_NAME,
                 Context.MODE_PRIVATE);
 
         return pref.getInt(key, defaultValue);
+    }
+    public static long getLong(Context ctx, String key, long defaultValue) {
+        SharedPreferences pref = ctx.getSharedPreferences(SHARE_PREFS_NAME,
+                Context.MODE_PRIVATE);
+
+        return pref.getLong(key, defaultValue);
     }
     public static void putCityName(Context ctx ,String cityName){
         putString(ctx,"cityName",cityName);

@@ -46,6 +46,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpHeaders;
 import com.orhanobut.logger.Logger;
 
+import org.joda.time.DateTime;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -106,7 +107,8 @@ public class LoginPager2Activity extends BaseActivity {
             public void onSuccess(LoginResult loginResult) {
                 Gson gson = new Gson();
                 Logger.json(gson.toJson(loginResult));
-                getLoginInfo(loginResult.getAccessToken());
+//                getLoginInfo(loginResult.getAccessToken());
+                loginByFacebook(loginResult.getAccessToken().getUserId());
             }
 
             @Override
@@ -137,11 +139,16 @@ public class LoginPager2Activity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fl_login_by_facebook:
-                mFacebook.performClick();
-                LoginManager.getInstance().logInWithReadPermissions(LoginPager2Activity.this, Arrays.asList
-                        ("public_profile"));
-                AccessToken mAccessToken = AccessToken.getCurrentAccessToken();
-                loginByFacebook(mAccessToken.getUserId());
+//                if ((new DateTime().getMillis() - (31 * 24 * 60 * 60 * 1000)) > PrefUtils.getLong(App.APP_CONTEXT,
+//                        "FacebookTime", 0)) {
+                    mFacebook.performClick();
+//                } else {
+////                    LoginManager.getInstance().logInWithReadPermissions(LoginPager2Activity.this, Arrays.asList
+////                            ("public_profile"));
+//                    AccessToken mAccessToken = AccessToken.getCurrentAccessToken();
+//                    loginByFacebook(mAccessToken.getUserId());
+//                }
+
 //                loginByFacebook(PrefUtils.getString(App.APP_CONTEXT,"uid",null));
 //                loginByFacebook("108927019898582");
 //                loginTest();
@@ -150,7 +157,7 @@ public class LoginPager2Activity extends BaseActivity {
                 login();
                 break;
             case R.id.tv_forget_pass_word:
-                startActivity(new Intent(mContext,ForgetPasswordActivity.class));
+                startActivity(new Intent(mContext, ForgetPasswordActivity.class));
                 break;
             case R.id.tv_back:
                 finish();
@@ -166,7 +173,7 @@ public class LoginPager2Activity extends BaseActivity {
             ToastUtil.toastShort(getString(R.string.please_enter_your_email));
             return;
         }
-        if (!MyUtil.checkEmail(StringUtils.getEditText(mEdtEmail))){
+        if (!MyUtil.checkEmail(StringUtils.getEditText(mEdtEmail))) {
             ToastUtil.toastShort(getString(R.string.email_error));
             return;
         }
@@ -174,7 +181,7 @@ public class LoginPager2Activity extends BaseActivity {
             ToastUtil.toastShort(getString(R.string.please_enter_your_password));
             return;
         }
-        if (StringUtils.getEditText(mEdtPassWord).length()<6) {
+        if (StringUtils.getEditText(mEdtPassWord).length() < 6) {
             ToastUtil.toastShort(getString(R.string.password_error));
             return;
         }
@@ -439,10 +446,10 @@ public class LoginPager2Activity extends BaseActivity {
         loadingShow();
         JsonObject object = new JsonObject();
         JsonObject object1 = new JsonObject();
-        object1.addProperty("social_token",id);
+        object1.addProperty("social_token", id);
         object1.addProperty("android_device_token", FirebaseInstanceId.getInstance().getToken());
 //        object1.addProperty("username",name);
-        object1.addProperty("provider","facebook");
+        object1.addProperty("provider", "facebook");
         object.add("user", object1);
         Logger.json(object.toString());
         String url;
@@ -462,6 +469,7 @@ public class LoginPager2Activity extends BaseActivity {
                         if (login.getUser() != null) {
                             Login.UserBean user = login.getUser();
                             if (user.getLogin_fail() == 0) {
+                                PrefUtils.putLong(App.APP_CONTEXT,"FacebookTime",new DateTime().getMillis());
                                 //登錄成功
                                 Headers headers = response.headers();
                                 String access_token = headers.get("access-token");
@@ -492,7 +500,8 @@ public class LoginPager2Activity extends BaseActivity {
                                 }
                                 if (user.getTeams() != null && user.getTeams().size() <= 0) {//沒有球队則去註冊三頁
                                     Intent intent = new Intent(mContext, RegisterPager1Activity.class);
-                                    intent.putExtra("social_token", PrefUtils.getString(App.APP_CONTEXT,"social_token",null));
+                                    intent.putExtra("social_token", PrefUtils.getString(App.APP_CONTEXT,
+                                            "social_token", null));
                                     intent.putExtra("password", StringUtils.getEditText(mEdtPassWord));
                                     loadingDismiss();
                                     startActivity(intent);
@@ -522,7 +531,7 @@ public class LoginPager2Activity extends BaseActivity {
                                     }
                                     loadingDismiss();
                                     //註冊FirebaseDatabase
-                                    loginFirebaseDatabaseByFacebook(id,user.getUsername(), teamsBean);
+                                    loginFirebaseDatabaseByFacebook(id, user.getUsername(), teamsBean);
 //                                    registerFirebaseDatabase(user.getUsername(),teamsBean.getId()+"");
                                     startActivity(new Intent(mContext, OneTimePagerActivity.class));
                                 }
@@ -546,8 +555,9 @@ public class LoginPager2Activity extends BaseActivity {
                 });
     }
 
-    private void loginFirebaseDatabaseByFacebook(String id, final String username, final Login.UserBean.TeamsBean teamsBean) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(id+"@yopmail.com", id)
+    private void loginFirebaseDatabaseByFacebook(String id, final String username, final Login.UserBean.TeamsBean
+            teamsBean) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(id + "@yopmail.com", id)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

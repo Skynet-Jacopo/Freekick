@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.football.freekick.App;
 import com.football.freekick.MainActivity;
 import com.football.freekick.R;
@@ -116,6 +117,7 @@ public class OneTimePagerActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 PrefUtils.putBoolean(App.APP_CONTEXT, "isSecondRun", false);//此屬性添加以重新請求球場,廣告等信息.
+                LoginManager.getInstance().logOut();
                 Intent intent = new Intent(mContext,FirstPageActivity.class);
                 startActivity(intent);
                 finish();

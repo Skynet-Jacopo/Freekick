@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.activity.ChangeTeamInfoActivity0;
@@ -377,6 +378,7 @@ public class SetUpFragment extends BaseFragment {
                         if (logout.isSuccess()) {
                             startActivity(new Intent(mContext, FirstPageActivity.class));
                             ActyUtil.finishAllActivity();
+                            LoginManager.getInstance().logOut();
 //                            ToastUtil.toastShort(logout.getMessage());
                         } else {
                             ToastUtil.toastShort(logout.getMessage());

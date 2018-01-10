@@ -44,6 +44,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpHeaders;
 import com.orhanobut.logger.Logger;
 
+import org.joda.time.DateTime;
 import org.json.JSONObject;
 
 
@@ -255,6 +256,7 @@ public class LoginPage1Activity extends BaseActivity {
                         if (login.getUser() != null) {
                             Login.UserBean user = login.getUser();
                             if (user.getLogin_fail() == 0) {
+                                PrefUtils.putLong(App.APP_CONTEXT,"FacebookTime",new DateTime().getMillis());
                                 //登錄成功
                                 Headers headers = response.headers();
                                 String access_token = headers.get("access-token");
