@@ -36,8 +36,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -80,6 +84,9 @@ public class LoginPager2Activity extends BaseActivity {
     private Context mContext;
     private CallbackManager mCallbackManager;
     private boolean isSecondRun;//記錄是否已登錄,以獲取廣告,場地等信息
+    private DatabaseReference mUsers;
+    private FirebaseAuth mAuth;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +95,8 @@ public class LoginPager2Activity extends BaseActivity {
         mContext = LoginPager2Activity.this;
         ButterKnife.bind(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mUsers = mDatabase.child("users");
+        mAuth = FirebaseAuth.getInstance();
 //        mEdtEmail.setText("huo@yopmail.com");
 //        mEdtEmail.setText("yue@yopmail.com");
 //        mEdtEmail.setText("lei@yopmail.com");
@@ -141,7 +150,7 @@ public class LoginPager2Activity extends BaseActivity {
             case R.id.fl_login_by_facebook:
 //                if ((new DateTime().getMillis() - (31 * 24 * 60 * 60 * 1000)) > PrefUtils.getLong(App.APP_CONTEXT,
 //                        "FacebookTime", 0)) {
-                    mFacebook.performClick();
+                mFacebook.performClick();
 //                } else {
 ////                    LoginManager.getInstance().logInWithReadPermissions(LoginPager2Activity.this, Arrays.asList
 ////                            ("public_profile"));
@@ -302,6 +311,7 @@ public class LoginPager2Activity extends BaseActivity {
                             Logger.d("登錄FirebaseDatabase成功了");
                             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                                 Logger.json(new Gson().toJson(task));
+                                initDatabase(teamsBean.getId());
                                 FirebaseDatabase.getInstance()
                                         .getReference().
                                         child("users").
@@ -469,7 +479,7 @@ public class LoginPager2Activity extends BaseActivity {
                         if (login.getUser() != null) {
                             Login.UserBean user = login.getUser();
                             if (user.getLogin_fail() == 0) {
-                                PrefUtils.putLong(App.APP_CONTEXT,"FacebookTime",new DateTime().getMillis());
+                                PrefUtils.putLong(App.APP_CONTEXT, "FacebookTime", new DateTime().getMillis());
                                 //登錄成功
                                 Headers headers = response.headers();
                                 String access_token = headers.get("access-token");
@@ -565,35 +575,84 @@ public class LoginPager2Activity extends BaseActivity {
                             Logger.d("登錄FirebaseDatabase成功了");
                             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                                 Logger.json(new Gson().toJson(task));
-                                FirebaseDatabase.getInstance()
-                                        .getReference().
-                                        child("users").
+                                initDatabase(teamsBean.getId());
+                                DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
+                                users.
                                         child(teamsBean.getId() + "").
                                         child("connection").
                                         setValue(UsersChatAdapter.ONLINE);
-                                FirebaseDatabase.getInstance()
-                                        .getReference().
-                                        child("users").
+                                users.
                                         child(teamsBean.getId() + "").
                                         child("displayName").
                                         setValue(username + "（" + teamsBean.getTeam_name() + "）");
-                                FirebaseDatabase.getInstance()
-                                        .getReference().
-                                        child("users").
+                                users.
                                         child(teamsBean.getId() + "").
                                         child("team_url").
                                         setValue(teamsBean.getImage().getUrl());
-                                FirebaseDatabase.getInstance()
-                                        .getReference().
-                                        child("users").
+                                users.
                                         child(teamsBean.getId() + "").
                                         child("team_id").
                                         setValue(teamsBean.getId() + "");
+
                             }
                         } else {
                             Logger.d(task.getException().getMessage());
                         }
                     }
                 });
+    }
+
+    private void initDatabase(final int id) {
+
+        mDatabase.child("users").limitToFirst(50).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if(dataSnapshot.exists()){
+                    mUser = dataSnapshot.getValue(User.class);
+                    Logger.d(dataSnapshot.getKey()+"<--->"+id);
+                    if (dataSnapshot.getKey().equals(id+"")){
+                        Logger.d("這裡走了????");
+                        PrefUtils.putLong(App.APP_CONTEXT,"createdAt", mUser.getCreatedAt());
+                    }
+                    mDatabase.child("users").child(mUser.getTeam_id()).child("lastEditTimeWith"+id).addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()){
+
+                            }else {
+                                mUsers.child(mUser.getTeam_id()).child("lastEditTimeWith"+id).setValue(0);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

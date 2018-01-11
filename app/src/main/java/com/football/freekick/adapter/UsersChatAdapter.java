@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -52,6 +53,8 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
         mContext = context;
         mUserRefDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         team_id = PrefUtils.getString(App.APP_CONTEXT,"team_id",null);
+        mCurrentUserCreatedAt = PrefUtils.getLong(App.APP_CONTEXT,"createdAt",0);
+        Logger.d("mCurrentUserCreatedAt--->"+mCurrentUserCreatedAt);
     }
 
     @Override
@@ -97,27 +100,26 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
 
             }
         });
-        mUserRefDatabase.child(fireChatUser.getTeam_id()).child("lastEditTimeWith"+team_id).addListenerForSingleValueEvent(new ValueEventListener() {
-
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-
-                }else {
-                    mUserRefDatabase.child(fireChatUser.getTeam_id()).child("lastEditTimeWith"+team_id).setValue(0);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        final String chatRef = fireChatUser.createUniqueChatRef(mCurrentUserCreatedAt, PrefUtils.getString(App
+//        mUserRefDatabase.child(fireChatUser.getTeam_id()).child("lastEditTimeWith"+team_id).addListenerForSingleValueEvent(new ValueEventListener() {
+//
+//
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()){
+//
+//                }else {
+//                    mUserRefDatabase.child(fireChatUser.getTeam_id()).child("lastEditTimeWith"+team_id).setValue(0);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+        String chatRef = fireChatUser.createUniqueChatRef(mCurrentUserCreatedAt, PrefUtils.getString(App
                 .APP_CONTEXT, "uid", null));
         messageChatDatabase = FirebaseDatabase.getInstance().getReference().child(chatRef);
-
         messageChatDatabase.limitToLast(1).addChildEventListener(new ChildEventListener() {
             int count = 0;
 
@@ -188,7 +190,7 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
     public void setCurrentUserInfo(String userUid, String email, long createdAt) {
         mCurrentUserId = userUid;
         mCurrentUserEmail = email;
-        mCurrentUserCreatedAt = createdAt;
+//        mCurrentUserCreatedAt = createdAt;
     }
 
     public void clear() {
