@@ -187,7 +187,7 @@ public class EstablishFragment extends BaseFragment {
             mTvPitchSize.setText(getString(R.string.pitch_size_7));
             mTvArea.setText("");
             mTvPitchName.setText("");
-            mTvPeopleNum.setText("7");
+            mTvPeopleNum.setText("7人");
             mDateTime = null;
             mStartTime = "00:00";
             mEndTime = "00:00";
@@ -392,6 +392,10 @@ public class EstablishFragment extends BaseFragment {
                 chooseArea();
                 break;
             case R.id.ll_pitch_name:
+                if (StringUtils.isEmpty(mTvArea)){
+                    ToastUtil.toastShort(getString(R.string.please_choose_your_district));
+                    return;
+                }
                 choosePitchName();
                 break;
             case R.id.tv_reduce:

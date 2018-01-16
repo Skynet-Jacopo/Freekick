@@ -34,6 +34,7 @@ import com.football.freekick.beans.Attention;
 import com.football.freekick.beans.Follow;
 import com.football.freekick.beans.Invite;
 import com.football.freekick.beans.MatchesComing;
+import com.football.freekick.beans.NoMatches;
 import com.football.freekick.beans.SameArea;
 import com.football.freekick.http.Url;
 import com.football.freekick.utils.JodaTimeUtil;
@@ -417,26 +418,32 @@ public class SearchTeamActivity extends BaseActivity {
                         Logger.json(s);
                         loadingDismiss();
                         Gson gson = new Gson();
-                        MatchesComing json = gson.fromJson(s, MatchesComing.class);
-                        List<MatchesComing.MatchesBean> matches = json.getMatches();
-                        if (matches != null && matches.size() > 0)
-                            for (int i = 0; i < matches.size(); i++) {
-                                for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
-                                    if (matches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()) {
-                                        matches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
-                                        matches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
+                        if (!s.contains("[") && !s.contains("]")) {
+                            NoMatches noMatches = gson.fromJson(s, NoMatches.class);
+//                            ToastUtil.toastShort(noMatches.getMatches());
+
+                        } else {
+                            MatchesComing json = gson.fromJson(s, MatchesComing.class);
+                            List<MatchesComing.MatchesBean> matches = json.getMatches();
+                            if (matches != null && matches.size() > 0)
+                                for (int i = 0; i < matches.size(); i++) {
+                                    for (int j = 0; j < App.mPitchesBeanList.size(); j++) {
+                                        if (matches.get(i).getPitch_id() == App.mPitchesBeanList.get(j).getId()) {
+                                            matches.get(i).setLocation(App.mPitchesBeanList.get(j).getLocation());
+                                            matches.get(i).setPitch_name(App.mPitchesBeanList.get(j).getName());
+                                        }
+                                    }
+                                    if (matches.get(i).getStatus().equals("w")
+                                            && !gson.toJson(matches.get(i).getJoin_matches()).contains
+                                            ("confirmation_pending")
+                                            && !gson.toJson(matches.get(i).getJoin_matches()).contains("invited")) {
+                                        if (matches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {
+                                            mListWait.add(matches.get(i));
+                                            //是否要把主動參與的隊伍去除之後取第一條未落實球賽
+                                        }
                                     }
                                 }
-                                if (matches.get(i).getStatus().equals("w")
-                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains
-                                        ("confirmation_pending")
-                                        && !gson.toJson(matches.get(i).getJoin_matches()).contains("invited")) {
-                                    if (matches.get(i).getHome_team().getId() == Integer.parseInt(team_id)) {
-                                        mListWait.add(matches.get(i));
-                                        //是否要把主動參與的隊伍去除之後取第一條未落實球賽
-                                    }
-                                }
-                            }
+                        }
                         if (mListWait.size() <= 0) {
                             ToastUtil.toastShort(getString(R.string.there_is_not_available_matches));
                         } else {
@@ -481,7 +488,7 @@ public class SearchTeamActivity extends BaseActivity {
         String start = JodaTimeUtil.getTime2(matchesBean.getPlay_start());
         String end = JodaTimeUtil.getTime2(matchesBean.getPlay_end());
         tvTime.setText(start + " - " + end);
-        tvLocation.setText(matchesBean.getLocation());
+        tvLocation.setText(matchesBean.getPitch_name());
         tvstate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

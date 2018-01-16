@@ -18,7 +18,9 @@ import com.football.freekick.baseadapter.ViewHolder;
 import com.football.freekick.baseadapter.recyclerview.CommonAdapter;
 import com.football.freekick.baseadapter.recyclerview.OnItemClickListener;
 import com.football.freekick.adapter.UsersChatAdapter;
+import com.football.freekick.beans.ChatMessage;
 import com.football.freekick.beans.User;
+import com.football.freekick.utils.JodaTimeUtil;
 import com.football.freekick.utils.PrefUtils;
 import com.football.freekick.utils.ToastUtil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,7 +56,7 @@ public class MessageFragment extends BaseFragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mUserRefDatabase;
-
+    private DatabaseReference messageChatDatabase;
     private ChildEventListener mChildEventListener;
     private UsersChatAdapter mUsersChatAdapter;
     private String userUID;
@@ -197,9 +199,46 @@ public class MessageFragment extends BaseFragment {
                         User currentUser = dataSnapshot.getValue(User.class);
                         mUsersChatAdapter.setCurrentUserInfo(userUid, currentUser.getEmail(), currentUser.getCreatedAt());
                     }else {
-                        User recipient = dataSnapshot.getValue(User.class);
+
+                        final User recipient = dataSnapshot.getValue(User.class);
                         recipient.setRecipientId(userUid);
                         mUsersKeyList.add(userUid);
+//                        String chatRef = recipient.createUniqueChatRef(PrefUtils.getLong(App.APP_CONTEXT,"createdAt",0), PrefUtils.getString(App
+//                                .APP_CONTEXT, "uid", null));
+//                        messageChatDatabase = FirebaseDatabase.getInstance().getReference().child(chatRef);
+//                        messageChatDatabase.limitToLast(1).addChildEventListener(new ChildEventListener() {
+//
+//                            @Override
+//                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                                if (dataSnapshot.exists()) {
+//                                    ChatMessage newMessage = dataSnapshot.getValue(ChatMessage.class);
+//                                    recipient.setLastMsg(newMessage.getMessage());
+//                                } else {
+//                                    recipient.setLastMsg(null);
+//                                }
+//                                mUsersChatAdapter.notifyData();
+//                            }
+//
+//                            @Override
+//                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(DatabaseError databaseError) {
+//
+//                            }
+//                        });
                         mUsersChatAdapter.refill(recipient);
                     }
                 }

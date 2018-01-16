@@ -52,6 +52,9 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/tv_invite"
+        android:clickable="true"
+        android:background="@drawable/selector_rectangle_white_gray_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10px"
@@ -68,6 +71,7 @@
         android:background="#344a64"/>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_facebook"
         android:clickable="true"
         android:background="@drawable/selector_rectangle_white_gray_bg"
@@ -94,6 +98,7 @@
             android:textStyle="bold"/>
     </LinearLayout>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_whatsapp"
         android:clickable="true"
         android:background="@drawable/selector_rectangle_white_gray_bg"
@@ -120,6 +125,7 @@
             android:textStyle="bold"/>
     </LinearLayout>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_wechat"
         android:clickable="true"
         android:background="@drawable/selector_rectangle_white_gray_bg"
@@ -146,6 +152,7 @@
             android:textStyle="bold"/>
     </LinearLayout>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_short_msg"
         android:clickable="true"
         android:background="@drawable/selector_rectangle_white_gray_bg"
@@ -171,6 +178,7 @@
             android:textSize="36px"/>
     </LinearLayout>
     <TextView
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10px"
@@ -180,11 +188,13 @@
         android:textColor="@color/text_black"
         android:textSize="30px"/>
     <View
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginBottom="16px"
         android:background="#344a64"/>
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_facebook_wall"
         android:clickable="true"
         android:background="@drawable/selector_rectangle_white_gray_bg"

@@ -216,8 +216,8 @@ public class ChangeTeamInfoActivity2 extends BaseActivity {
                             PrefUtils.putString(App.APP_CONTEXT, "age_range_min", team.getAge_range_min() + "");
                             PrefUtils.putString(App.APP_CONTEXT, "age_range_max", team.getAge_range_max() + "");
                             PrefUtils.putString(App.APP_CONTEXT, "establish_year", team.getEstablish_year() + "");
-                            PrefUtils.putString(App.APP_CONTEXT, "style", team.getStyle() + "");
-                            PrefUtils.putString(App.APP_CONTEXT, "battle_preference", team.getBattle_preference() + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "style", team.getStyle().get(0) + "");
+                            PrefUtils.putString(App.APP_CONTEXT, "battle_preference", team.getBattle_preference().get(0) + "");
                             PrefUtils.putString(App.APP_CONTEXT, "district", team.getDistrict().getDistrict() + "");
                             PrefUtils.putString(App.APP_CONTEXT, "district_id", team.getDistrict().getId() + "");
                             ToastUtil.toastShort(getString(R.string.change_success));

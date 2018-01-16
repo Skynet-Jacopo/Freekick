@@ -35,6 +35,8 @@ import com.football.freekick.App;
 import com.football.freekick.R;
 import com.football.freekick.app.BaseActivity;
 import com.football.freekick.beans.Area;
+import com.football.freekick.beans.TeamDetail;
+import com.football.freekick.http.Url;
 import com.football.freekick.utils.ImageUtil;
 import com.football.freekick.utils.MyUtil;
 import com.football.freekick.utils.PrefUtils;
@@ -46,6 +48,8 @@ import com.football.freekick.views.imageloader.ImageLoaderUtils;
 import com.football.freekick.views.loopview.LoopView;
 import com.football.freekick.views.loopview.OnItemSelectedListener;
 import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
 import com.orhanobut.logger.Logger;
 
 import org.joda.time.DateTime;
@@ -57,6 +61,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Response;
 
 import static com.football.freekick.R.string.cancel;
 import static com.football.freekick.R.string.team_name;
@@ -138,6 +144,7 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
     private String age_range_max = "";
     private String image = "";
     private String district = "";
+    private TeamDetail.TeamBean mTeam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +152,8 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
         setContentView(R.layout.activity_change_team_info);
         mContext = ChangeTeamInfoActivity1.this;
         ButterKnife.bind(this);
-        initView();
+//        initView();
+        initData(PrefUtils.getString(App.APP_CONTEXT,"team_id",null));
         Logger.d("access-token--->" + PrefUtils.getString(App.APP_CONTEXT, "access_token", null));
         Logger.d("client--->" + PrefUtils.getString(App.APP_CONTEXT, "client", null));
         Logger.d("uid--->" + PrefUtils.getString(App.APP_CONTEXT, "uid", null));
@@ -153,10 +161,12 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
     }
 
     private void initView() {
-        district = PrefUtils.getString(App.APP_CONTEXT, "district_id", null);
-        mTvTeamArea.setText(PrefUtils.getString(App.APP_CONTEXT, "district", null) == null ? "" : PrefUtils.getString
-                (App.APP_CONTEXT, "district", null));
-        String style = PrefUtils.getString(App.APP_CONTEXT, "style", "");
+//        district = PrefUtils.getString(App.APP_CONTEXT, "district_id", null);
+        district = mTeam.getDistrict().getId()+"";
+//        mTvTeamArea.setText(PrefUtils.getString(App.APP_CONTEXT, "district", null) == null ? "" : PrefUtils.getString
+//                (App.APP_CONTEXT, "district", null));
+        mTvTeamArea.setText(mTeam.getDistrict().getDistrict() == null ? "" : mTeam.getDistrict().getDistrict());
+        String style = mTeam.getStyle().get(0);
         switch (style) {
             case "short_pass":
                 mTvTeamStyle.setText(getString(R.string.short_pass));
@@ -174,8 +184,9 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
                 mTvTeamStyle.setText(getString(R.string.short_pass));
                 break;
         }
-        num = Integer.parseInt(PrefUtils.getString(App.APP_CONTEXT, "size", "7"));
-        String battle_preference = PrefUtils.getString(App.APP_CONTEXT, "battle_preference", "");
+//        num = Integer.parseInt(PrefUtils.getString(App.APP_CONTEXT, "size", "7"));
+        num = mTeam.getSize();
+        String battle_preference = mTeam.getBattle_preference().get(0);
         switch (battle_preference) {
             case "for_fun":
                 mTvTeamLike.setText(getString(R.string.for_fun));
@@ -315,6 +326,32 @@ public class ChangeTeamInfoActivity1 extends BaseActivity {
         mDistricts = mAreaRegions.get(0).getDistricts();
     }
 
+    private void initData(String team_id) {
+        loadingShow();
+        String url = Url.BaseUrl + (App.isChinese ? Url.ZH_HK : Url.EN) + "teams/" + team_id;
+        Logger.d(url);
+        OkGo.get(url)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        loadingDismiss();
+                        Logger.json(s);
+                        Gson gson = new Gson();
+                        TeamDetail json = gson.fromJson(s, TeamDetail.class);
+                        mTeam = json.getTeam();
+//                        ImageLoaderUtils.displayImage(MyUtil.getImageUrl(mTeam.getImage().getUrl()), mIvPic, R
+//                                .drawable.icon_default);
+                        initView();
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logger.d(e.getMessage());
+                        loadingDismiss();
+                    }
+                });
+    }
     @OnClick({R.id.tv_back, R.id.tv_team_area, R.id.tv_upload_pic, R.id.iv_logo, R.id.ll_year, R.id.tv_reduce, R.id
             .tv_add, R.id.tv_height_1, R.id.tv_height_2, R.id.tv_height_3, R.id.tv_height_4, R.id.ll_team_style, R.id
             .ll_team_like, R.id.tv_next})

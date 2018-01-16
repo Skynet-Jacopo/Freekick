@@ -45,6 +45,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
         ButterKnife.bind(this);
+        mTvBack.setTypeface(App.mTypeface);
     }
 
     @OnClick({R.id.tv_confirm, R.id.tv_back})

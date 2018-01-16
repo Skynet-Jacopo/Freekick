@@ -20,6 +20,15 @@ public class User implements Serializable {
     private long lastEditTime;
     private String team_url;
     private String team_id;
+    private String lastMsg;
+
+    public String getLastMsg() {
+        return lastMsg;
+    }
+
+    public void setLastMsg(String lastMsg) {
+        this.lastMsg = lastMsg;
+    }
 
     private String mRecipientId;
 

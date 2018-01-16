@@ -52,9 +52,9 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
         mUsers = fireChatUsers;
         mContext = context;
         mUserRefDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-        team_id = PrefUtils.getString(App.APP_CONTEXT,"team_id",null);
-        mCurrentUserCreatedAt = PrefUtils.getLong(App.APP_CONTEXT,"createdAt",0);
-        Logger.d("mCurrentUserCreatedAt--->"+mCurrentUserCreatedAt);
+        team_id = PrefUtils.getString(App.APP_CONTEXT, "team_id", null);
+        mCurrentUserCreatedAt = PrefUtils.getLong(App.APP_CONTEXT, "createdAt", 0);
+        Logger.d("mCurrentUserCreatedAt--->" + mCurrentUserCreatedAt);
     }
 
     @Override
@@ -77,21 +77,65 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
         long unReadNum = fireChatUser.getUnReadNum();
 
         String s = mUserRefDatabase.child(team_id).child("from" + fireChatUser.getTeam_id() + "unReadNum").toString();
-        mUserRefDatabase.child(team_id).child("from" + fireChatUser.getTeam_id() + "unReadNum").addListenerForSingleValueEvent(new ValueEventListener() {
+        mUserRefDatabase.child(team_id).child("from" + fireChatUser.getTeam_id() + "unReadNum")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            long num = (long) dataSnapshot.getValue();
+                            if (num <= 0) {
+                                holder.mTvMsgNum.setVisibility(View.GONE);
+                            } else {
+                                holder.mTvMsgNum.setVisibility(View.VISIBLE);
+                                holder.mTvMsgNum.setText(num + "");
+                            }
+                        } else {
+                            holder.mTvMsgNum.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+        mUserRefDatabase.child(fireChatUser.getTeam_id()).child("lastMsgWith" + team_id)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            holder.mTvTime.setVisibility(View.VISIBLE);
+                            holder.mTvContent.setText((String) dataSnapshot.getValue());
+                        } else {
+                            holder.mTvTime.setVisibility(View.GONE);
+                            holder.mTvContent.setText("");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+//        String lastMsg = fireChatUser.getLastMsg();
+//        if (lastMsg == null){
+//            holder.mTvTime.setVisibility(View.GONE);
+//            holder.mTvContent.setText("");
+//        }else {
+//            holder.mTvTime.setVisibility(View.VISIBLE);
+//            holder.mTvContent.setText(lastMsg);
+//        }
+        mUserRefDatabase.child(fireChatUser.getTeam_id()).child("lastEditTimeWith"+team_id)
+ .addListenerForSingleValueEvent(new ValueEventListener() {
 
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    long num = (long) dataSnapshot.getValue();
-                    if (num <= 0) {
-                        holder.mTvMsgNum.setVisibility(View.GONE);
-                    } else {
-                        holder.mTvMsgNum.setVisibility(View.VISIBLE);
-                        holder.mTvMsgNum.setText(num + "");
-                    }
-                }else {
-                    holder.mTvMsgNum.setVisibility(View.GONE);
+                    holder.mTvTime.setText(JodaTimeUtil.progressDate1(mContext, -(long)dataSnapshot.getValue()));
                 }
             }
 
@@ -100,16 +144,52 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
 
             }
         });
-//        mUserRefDatabase.child(fireChatUser.getTeam_id()).child("lastEditTimeWith"+team_id).addListenerForSingleValueEvent(new ValueEventListener() {
-//
+        String chatRef = fireChatUser.createUniqueChatRef(mCurrentUserCreatedAt, PrefUtils.getString(App
+                .APP_CONTEXT, "uid", null));
+//        messageChatDatabase = FirebaseDatabase.getInstance().getReference().child(chatRef);
+//        messageChatDatabase.limitToLast(1).addChildEventListener(new ChildEventListener() {
+//            int count = 0;
 //
 //            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()){
-//
-//                }else {
-//                    mUserRefDatabase.child(fireChatUser.getTeam_id()).child("lastEditTimeWith"+team_id).setValue(0);
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                if (dataSnapshot.exists()) {
+//                    ChatMessage newMessage = dataSnapshot.getValue(ChatMessage.class);
+//                    holder.mTvContent.setText(newMessage.getMessage());
+//                    holder.mTvTime.setVisibility(View.VISIBLE);
+//                    holder.mTvTime.setText(JodaTimeUtil.progressDate1(mContext, newMessage.getCreatedAt()));
+//                } else {
+//                    holder.mTvTime.setVisibility(View.GONE);
 //                }
+////                if (msgs.size() > 0) {
+////                    holder.mTvContent.setText(msgs.get(msgs.size() - 1).getMessage());
+////                    count+=1;
+////                    int num = count - PrefUtils.getInt(App.APP_CONTEXT, chatRef, 0);
+////                    if (num > 0) {
+////                        holder.mTvMsgNum.setVisibility(View.VISIBLE);
+////                        holder.mTvMsgNum.setText(num + "");
+////                        holder.mTvTime.setVisibility(View.GONE);
+////                    } else {
+////                        holder.mTvMsgNum.setVisibility(View.GONE);
+////                        holder.mTvTime.setVisibility(View.VISIBLE);
+////                        holder.mTvTime.setText(JodaTimeUtil.progressDate1(mContext, msgs.get(msgs.size() - 1)
+////                                .getCreatedAt()));
+////                    }
+////                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
 //            }
 //
 //            @Override
@@ -117,59 +197,6 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
 //
 //            }
 //        });
-        String chatRef = fireChatUser.createUniqueChatRef(mCurrentUserCreatedAt, PrefUtils.getString(App
-                .APP_CONTEXT, "uid", null));
-        messageChatDatabase = FirebaseDatabase.getInstance().getReference().child(chatRef);
-        messageChatDatabase.limitToLast(1).addChildEventListener(new ChildEventListener() {
-            int count = 0;
-
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.exists()) {
-                    ChatMessage newMessage = dataSnapshot.getValue(ChatMessage.class);
-                    holder.mTvContent.setText(newMessage.getMessage());
-                    holder.mTvTime.setVisibility(View.VISIBLE);
-                    holder.mTvTime.setText(JodaTimeUtil.progressDate1(mContext, newMessage.getCreatedAt()));
-                } else {
-                    holder.mTvTime.setVisibility(View.GONE);
-                }
-//                if (msgs.size() > 0) {
-//                    holder.mTvContent.setText(msgs.get(msgs.size() - 1).getMessage());
-//                    count+=1;
-//                    int num = count - PrefUtils.getInt(App.APP_CONTEXT, chatRef, 0);
-//                    if (num > 0) {
-//                        holder.mTvMsgNum.setVisibility(View.VISIBLE);
-//                        holder.mTvMsgNum.setText(num + "");
-//                        holder.mTvTime.setVisibility(View.GONE);
-//                    } else {
-//                        holder.mTvMsgNum.setVisibility(View.GONE);
-//                        holder.mTvTime.setVisibility(View.VISIBLE);
-//                        holder.mTvTime.setText(JodaTimeUtil.progressDate1(mContext, msgs.get(msgs.size() - 1)
-//                                .getCreatedAt()));
-//                    }
-//                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override
@@ -179,6 +206,10 @@ public class UsersChatAdapter extends RecyclerView.Adapter<UsersChatAdapter.View
 
     public void refill(User users) {
         mUsers.add(users);
+        notifyDataSetChanged();
+    }
+
+    public void notifyData() {
         notifyDataSetChanged();
     }
 

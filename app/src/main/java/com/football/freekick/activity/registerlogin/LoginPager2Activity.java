@@ -101,6 +101,7 @@ public class LoginPager2Activity extends BaseActivity {
 //        mEdtEmail.setText("yue@yopmail.com");
 //        mEdtEmail.setText("lei@yopmail.com");
 //        mEdtEmail.setText("wei@yopmail.com");
+//        mEdtEmail.setText("freekick.test1@gmail.com");
 //        mEdtPassWord.setText("123456");
         initView();
 
@@ -607,14 +608,16 @@ public class LoginPager2Activity extends BaseActivity {
         mDatabase.child("users").limitToFirst(50).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Logger.d("dataSnapshot--->"+dataSnapshot.getValue());
+                Logger.d("dataSnapshot--s->"+s);
                 if(dataSnapshot.exists()){
-                    mUser = dataSnapshot.getValue(User.class);
+                    final User mUser = dataSnapshot.getValue(User.class);
                     Logger.d(dataSnapshot.getKey()+"<--->"+id);
                     if (dataSnapshot.getKey().equals(id+"")){
                         Logger.d("這裡走了????");
                         PrefUtils.putLong(App.APP_CONTEXT,"createdAt", mUser.getCreatedAt());
                     }
-                    mDatabase.child("users").child(mUser.getTeam_id()).child("lastEditTimeWith"+id).addListenerForSingleValueEvent(new ValueEventListener() {
+                    mDatabase.child("users").child(mUser.getTeam_id()).child("lastEditTimeWith"+id).addValueEventListener(new ValueEventListener() {
 
 
                         @Override

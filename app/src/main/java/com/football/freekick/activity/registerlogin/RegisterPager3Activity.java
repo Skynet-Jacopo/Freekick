@@ -77,6 +77,8 @@ public class RegisterPager3Activity extends BaseActivity {
     private DatabaseReference mDatabase;
     private String mEmail;
     private String mPassword;
+    private String mUid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +108,7 @@ public class RegisterPager3Activity extends BaseActivity {
         if (!intent.getStringExtra("image").equals("")) {
             uploadImageToBase64(intent.getStringExtra("image"));
         }
+        mUid = PrefUtils.getString(App.APP_CONTEXT, "uid", null);
     }
 
     private void initView() {
@@ -188,7 +191,11 @@ public class RegisterPager3Activity extends BaseActivity {
                         CreateTeam createTeam = gson.fromJson(s, CreateTeam.class);
                         if (createTeam.getTeam() != null) {
                             CreateTeam.TeamBean team = createTeam.getTeam();
-                            registerFirebaseDatabase(team);
+                            if (mUid.contains("@")) {//郵箱註冊
+                                registerFirebaseDatabase(team, "email");
+                            } else {//facebook用戶
+                                registerFirebaseDatabase(team, "facebook");
+                            }
                             int id = team.getId();
                             String color1 = team.getColor1();
                             String color2 = team.getColor2();
@@ -241,20 +248,30 @@ public class RegisterPager3Activity extends BaseActivity {
     /**
      * 註冊FirebaseDatabase
      */
-    private void registerFirebaseDatabase(final CreateTeam.TeamBean team) {
-//        FirebaseAuth.getInstance().createUserWithEmailAndPassword(mEmail, mPassword)
-        String uid = PrefUtils.getString(App.APP_CONTEXT, "uid", null);
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(uid.contains("@") ? uid : uid + "@yopmail.com", uid)
+    private void registerFirebaseDatabase(final CreateTeam.TeamBean team, final String type) {
+        Task<AuthResult> mCreateUser = null;
+        switch (type) {
+            case "email":
+                mCreateUser = FirebaseAuth.getInstance().createUserWithEmailAndPassword
+                        (mEmail, mPassword);
+                break;
+            case "facebook":
+                mCreateUser = FirebaseAuth.getInstance().createUserWithEmailAndPassword(mUid.contains("@") ? mUid :
+                        mUid + "@yopmail.com", mUid);
+                break;
+        }
+        mCreateUser
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Logger.d("註冊FirebaseDatabase成功了");
-                            User user = new User("", mEmail, UsersChatAdapter.ONLINE, ChatHelper
+                            User user = new User(team.getUser().getUsername() + "（" + team.getTeam_name() + "）",
+                                    mEmail, UsersChatAdapter.ONLINE, ChatHelper
                                     .generateRandomAvatarForUser(),
                                     new Date().getTime(), 0);
                             mDatabase.child("users").child(team.getId() + "").setValue(user);
-                            loginFirebaseDatabase(team);
+                            loginFirebaseDatabase(team,type);
                         } else {
                             Logger.d(task.getException().getMessage());
                         }
@@ -262,10 +279,19 @@ public class RegisterPager3Activity extends BaseActivity {
                 });
     }
 
-    private void loginFirebaseDatabase(final CreateTeam.TeamBean team) {
-//        FirebaseAuth.getInstance().signInWithEmailAndPassword(mEmail, mPassword)
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(PrefUtils.getString(App.APP_CONTEXT, "uid", null) +
-                "@yopmail.com", PrefUtils.getString(App.APP_CONTEXT, "uid", null))
+    private void loginFirebaseDatabase(final CreateTeam.TeamBean team, String type) {
+        switch (type) {
+            case "email":
+
+                break;
+            case "facebook":
+                mEmail = PrefUtils.getString(App.APP_CONTEXT, "uid", null) +"@yopmail.com";
+                mPassword = PrefUtils.getString(App.APP_CONTEXT, "uid", null);
+                break;
+        }
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(mEmail, mPassword)
+//        FirebaseAuth.getInstance().signInWithEmailAndPassword(PrefUtils.getString(App.APP_CONTEXT, "uid", null) +
+//                "@yopmail.com", PrefUtils.getString(App.APP_CONTEXT, "uid", null))
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

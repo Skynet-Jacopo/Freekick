@@ -234,12 +234,14 @@ public class ChatActivity extends BaseActivity {
             ChatMessage newMessage = new ChatMessage(senderMessage, mCurrentUserId, mRecipientId, new Date().getTime());
             messageChatDatabase.push().setValue(newMessage);
             mUserRefDatabase.child(recipient_id).child("lastEditTimeWith"+mCurrentUserId).setValue(-new Date().getTime());
-            mUserRefDatabase.child(mCurrentUserId).child("lastEditTimeWith"+mCurrentUserId).setValue(-new Date().getTime());
+            mUserRefDatabase.child(mCurrentUserId).child("lastEditTimeWith"+recipient_id).setValue(-new Date().getTime());
             //以下兩句是為了維護ios的數據,非要跟我對著幹,牛逼的不行
             mUserRefDatabase.child(recipient_id).child("lastEditTimeWith").child("lastEditTimeWith"+mCurrentUserId).setValue(-new Date().getTime());
             mUserRefDatabase.child(mCurrentUserId).child("lastEditTimeWith").child("lastEditTimeWith"+mCurrentUserId).setValue(-new Date().getTime());
             mUserMessageChatText.setText("");
             mUserRefDatabase.child(recipient_id).child("from"+mCurrentUserId+"unReadNum").setValue(unReadNum);
+            mUserRefDatabase.child(recipient_id).child("lastMsgWith"+mCurrentUserId).setValue(senderMessage);
+            mUserRefDatabase.child(mCurrentUserId).child("lastMsgWith"+recipient_id).setValue(senderMessage);
         }
     }
 }
