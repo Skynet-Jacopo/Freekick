@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.football.freekick.App;
@@ -49,26 +50,9 @@ public class FirstPageActivity extends BaseActivity {
     @Bind(R.id.tv_register)
     TextView mTvRegister;
     @Bind(R.id.tv_token)
-    TextView mTvToken;
+    EditText mTvToken;
 
     private Context mContext;
-
-    public static final String EXTRA_MESSAGE = "message";
-    public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "appVersion";
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    /**
-     * Substitute you own sender ID here. This is the project number you got
-     * from the API Console, as described in "Getting Started."
-     */
-    String SENDER_ID = "259337742082";
-
-    /**
-     * Tag used on log messages.
-     */
-    static final String TAG = "GCMDemo";
-    AtomicInteger msgId = new AtomicInteger();
-    SharedPreferences prefs;
 
     private boolean isSecondRun;
     @Override
@@ -92,20 +76,15 @@ public class FirstPageActivity extends BaseActivity {
 
         if (App.mConfig.getLanguageValue().equals("zh")) {
             App.isChinese = true;
-//            setLanguage("zh_TW","CN", this);
-//            LanguageObservable.getInstance().notifyObservers();
         } else {
             App.isChinese = false;
-//            setLanguage("en","US", this);
-//            LanguageObservable.getInstance().notifyObservers();
         }
 
         Logger.d("google可用么" + GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext()));
-//        Logger.d("getToken---->"+ FirebaseInstanceId.getInstance().getToken());
-//        int success = ConnectionResult.SUCCESS;
         String token =FirebaseInstanceId.getInstance().getToken();
         Logger.d("token--->" + token);
         mTvToken.setText(token);
+        mTvToken.setVisibility(View.GONE);
         getPitches();
     }
 
